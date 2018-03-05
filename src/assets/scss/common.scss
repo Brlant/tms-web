@@ -61,4 +61,15 @@
   }
 }
 
+// 下拉组件长度
+.el-select {
+  display: block;
+  position: relative;
+}
+
+// 日期组件长度
+.el-date-editor.el-input {
+  width: 100%;
+}
+
 

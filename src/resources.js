@@ -57,6 +57,13 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+// 车辆档案对象
+export const CarArchives = resource('/car-archives', http, {
+  checkPlateNumber: (params) => {
+    return http.get('/car-archives/check/plate-number', {params});
+  }
+});
+
 // 库存移库记录对象
 export const StockMoveLog = resource('/stock-move-log', http, {});
 

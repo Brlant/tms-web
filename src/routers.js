@@ -34,6 +34,18 @@ export const routes = [
     component: require('./components/index.vue'),
     children: [
       {
+        path: '/baseInfo',
+        component: resolve => require(['./components/base-info/index.vue'], resolve),
+        meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'warehouse', perm: 'wms-warehouse-manager'},
+        children: [
+          {
+            path: '/baseInfo/car-archives',
+            component: resolve => require(['./components/base-info/car-archives/index.vue'], resolve),
+            meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'stock-in-watch'}
+          }
+        ]
+      },
+      {
         path: '/permission',
         component: () => import('./components/system/index.vue'),
         meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'wms-system-config'},
