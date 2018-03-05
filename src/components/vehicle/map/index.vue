@@ -53,6 +53,11 @@
     height: 100%;
     margin-bottom: 20px;
   }
+  .table-hover {
+    >tbody > tr {
+      cursor: pointer;
+    }
+  }
 </style>
 <template>
   <div>
@@ -70,7 +75,7 @@
         </el-col>
         <el-col :span="16" class="text-right">
           <el-button-group>
-            <el-button plain size="small" @click="showPart(0)">生产派送</el-button>
+            <el-button plain size="small" @click="showPart(0)">生成派送</el-button>
             <el-button plain size="small">显示当天任务</el-button>
           </el-button-group>
         </el-col>
@@ -90,7 +95,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="item in dataRows" :class="{active: item.isChecked}">
+                <tr v-for="item in dataRows" :class="{active: item.isChecked}" @click="rowClick(item)">
                   <td>
                     <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                   </td>
@@ -175,6 +180,10 @@
     methods: {
       scrollLoadingData (event) {
         this.$scrollLoadingData(event);
+      },
+      rowClick (item) {
+        item.isChecked = !item.isChecked;
+        this.changeCheckStatus(item);
       },
       resetRightBox () {
         this.showIndex = -1;

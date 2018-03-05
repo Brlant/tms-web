@@ -10,11 +10,10 @@
     background: #ffffff;
     padding-top: 10px;
     padding-right: 10px;
-    margin: 10px 0;
   }
 </style>
 <template>
-  <div class="opera-btn-group" :class="{up:!showSearch}">
+  <div class="opera-btn-group">
     <div class="opera-icon">
       <el-col :span="2">
         <h2 class="header f-dib">派送查询</h2>
@@ -33,7 +32,7 @@
         </el-button-group>
       </el-col>
     </div>
-    <el-form v-show="showSearch" class="advanced-query-form" onsubmit="return false">
+    <el-form class="advanced-query-form" onsubmit="return false">
       <el-row>
         <el-col :span="8">
           <oms-form-row label="当前节点" :span="5">
@@ -57,58 +56,60 @@
             <oms-input placeholder="请输入运单号"></oms-input>
           </oms-form-row>
         </el-col>
-        <el-col :span="8">
-          <oms-form-row label="始发地" :span="5">
-            <oms-input placeholder="请输入运单号"></oms-input>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
-          <oms-form-row label="目的地" :span="5">
-            <oms-input placeholder="请输入运单号"></oms-input>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
-          <oms-form-row label="运单类型" :span="5">
-            <el-select filterable remote placeholder="请选择运单类型" :clearable="true" v-model="searchCondition.piont">
-              <el-option :value="center.id" :key="center.id" :label="center.name"
-                         v-for="center in list"></el-option>
-            </el-select>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
-          <oms-form-row label="收货单位" :span="5">
-            <el-select filterable remote placeholder="请选择收货单位" :clearable="true" v-model="searchCondition.piont">
-              <el-option :value="center.id" :key="center.id" :label="center.name"
-                         v-for="center in list"></el-option>
-            </el-select>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
-          <oms-form-row label="收货地址" :span="5">
-            <oms-input placeholder="请输入收货地址"></oms-input>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
-          <oms-form-row label="运单状态" :span="5">
-            <el-select filterable remote placeholder="请选择运单状态" :clearable="true" v-model="searchCondition.piont">
-              <el-option :value="center.id" :key="center.id" :label="center.name"
-                         v-for="center in list"></el-option>
-            </el-select>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
-          <oms-form-row label="发货人" :span="5">
-            <oms-input placeholder="请输入发货人"></oms-input>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
-          <oms-form-row label="发运方式" :span="5">
-            <el-select filterable remote placeholder="请选择发运方式" :clearable="true" v-model="searchCondition.piont">
-              <el-option :value="center.id" :key="center.id" :label="center.name"
-                         v-for="center in list"></el-option>
-            </el-select>
-          </oms-form-row>
-        </el-col>
+        <div v-show="showSearch">
+          <el-col :span="8">
+            <oms-form-row label="始发地" :span="5">
+              <oms-input placeholder="请输入运单号"></oms-input>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="8">
+            <oms-form-row label="目的地" :span="5">
+              <oms-input placeholder="请输入运单号"></oms-input>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="8">
+            <oms-form-row label="运单类型" :span="5">
+              <el-select filterable remote placeholder="请选择运单类型" :clearable="true" v-model="searchCondition.piont">
+                <el-option :value="center.id" :key="center.id" :label="center.name"
+                           v-for="center in list"></el-option>
+              </el-select>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="8">
+            <oms-form-row label="收货单位" :span="5">
+              <el-select filterable remote placeholder="请选择收货单位" :clearable="true" v-model="searchCondition.piont">
+                <el-option :value="center.id" :key="center.id" :label="center.name"
+                           v-for="center in list"></el-option>
+              </el-select>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="8">
+            <oms-form-row label="收货地址" :span="5">
+              <oms-input placeholder="请输入收货地址"></oms-input>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="8">
+            <oms-form-row label="运单状态" :span="5">
+              <el-select filterable remote placeholder="请选择运单状态" :clearable="true" v-model="searchCondition.piont">
+                <el-option :value="center.id" :key="center.id" :label="center.name"
+                           v-for="center in list"></el-option>
+              </el-select>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="8">
+            <oms-form-row label="发货人" :span="5">
+              <oms-input placeholder="请输入发货人"></oms-input>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="8">
+            <oms-form-row label="发运方式" :span="5">
+              <el-select filterable remote placeholder="请选择发运方式" :clearable="true" v-model="searchCondition.piont">
+                <el-option :value="center.id" :key="center.id" :label="center.name"
+                           v-for="center in list"></el-option>
+              </el-select>
+            </oms-form-row>
+          </el-col>
+        </div>
       </el-row>
     </el-form>
 
@@ -118,7 +119,7 @@
   export default {
     data: function () {
       return {
-        showSearch: true,
+        showSearch: false,
         searchCondition: {},
         list: [],
         times: []
