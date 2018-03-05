@@ -61,10 +61,10 @@
         return title;
       },
       exceptionType: function () {
-        return this.$store.state.dict['exceptionType'];
+        return this.$getDict('exceptionType');
       },
       executionBody: function () {
-        return this.$store.state.dict['executionBody'];
+        return this.$getDict('executionBody');
       }
     },
     props: ['formItem', 'action', 'actionType'],

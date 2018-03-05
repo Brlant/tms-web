@@ -21,7 +21,8 @@ const state = {
   bodyHeight: 0,
   isShowGoodsList: false,
   bottomLoading: false,
-  menuParentIds: [] // 所有非叶子节点菜单
+  menuParentIds: [], // 所有非叶子节点菜单
+  requestingDictAry: []
 };
 
 const mutations = {
@@ -80,6 +81,9 @@ const mutations = {
   },
   initBottomLoading(state, data) {
     state.bottomLoading = data;
+  },
+  initRequestingDictAry (state, data) {
+    state.requestingDictAry = data;
   }
 };
 

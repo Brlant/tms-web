@@ -126,7 +126,7 @@
       },
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return height  + 'px';
+        return height + 'px';
       }
     },
     beforeRouteEnter(to, form, next) {
@@ -169,10 +169,9 @@
       }).then(() => {
         utils.removeClass(document.getElementsByTagName('body')[0], 'overflow-hidden');
         this.loading = false;
-        DictGroup.getAll().then(data => {
-          this.$store.commit('initDict', data);
-
-        });
+        // DictGroup.getAll().then(data => {
+        //   this.$store.commit('initDict', data);
+        // });
       });
       window.addEventListener('resize', (e) => {
         this.setBodyHeight();

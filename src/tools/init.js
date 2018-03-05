@@ -59,6 +59,8 @@ export function init (Vue) {
       return result;
     }
   });
+
+  // 滚动加载
   Vue.prototype.$scrollLoadingData = function (event) {
     let e = event ? event : window.event;
     let target = e.target || e.srcElement;
@@ -71,6 +73,30 @@ export function init (Vue) {
         this.$store.commit('initBottomLoading', true);
         this.getMore();
       }
+    }
+  };
+  // 取字典
+  Vue.prototype.$getDict = function (groupName) {
+    if (!groupName) return;
+    const state = this.$store.state;
+    if (state.dict[groupName]) {
+      return state.dict[groupName];
+    } else {
+      const ary = state.requestingDictAry;
+      if (ary.includes(groupName)) return;
+      ary.push(groupName);
+      this.$store.commit('initRequestingDictAry', ary);
+      this.$http.get(`/dictGroup/${groupName}/items`).then(res => {
+        state.dict[groupName] = res.data;
+        this.$store.commit('initDict', state.dict);
+        const ary_new = state.requestingDictAry;
+        let index = ary_new.indexOf(groupName);
+        if (index !== -1) {
+          ary_new.splice(index, 1);
+        }
+        this.$store.commit('initRequestingDictAry', ary_new);
+      });
+      return [];
     }
   };
 }
