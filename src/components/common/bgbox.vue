@@ -8,7 +8,7 @@
     > div {
       padding: 10px;
       .bg-box-title {
-        font-weigth: bold;
+        font-weight: bold;
         font-size: 16px;
         line-height: 20px;
         padding-bottom: 10px;
