@@ -1,0 +1,22 @@
+.comment-box {
+  textarea {
+    border: 0;
+  }
+  border: 1px solid #eee;
+  .comment-box-submit {
+    border-top: 1px solid #eee;
+    text-align: right;
+    button {
+      border-radius: 0;
+    }
+  }
+  &.quality-check-box {
+    .el-input {
+      input {
+        border: 0;
+        border-bottom: 1px solid #eee;
+        border-radius: 0;
+      }
+    }
+  }
+}

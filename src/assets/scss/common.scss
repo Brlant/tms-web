@@ -1,0 +1,64 @@
+@import "mixins";
+[v-cloak] {
+  display: none
+}
+
+.app-body {
+  position: relative;
+  box-sizing: border-box;
+  padding-top: 62px;
+}
+.main-body {
+  min-height: 300px;
+}
+.sub-menu {
+  background: #eee;
+}
+.search-left-box {
+  padding: 5px;
+}
+.page-main-body {
+  font-size: 14px;
+  .el-row {
+    margin-bottom: 10px;
+    line-height: 20px;
+  }
+  .order-list-item {
+    .el-row {
+      margin-bottom: 0;
+    }
+  }
+}
+// 二级菜单样式
+.sub-menu {
+  padding: 5px 0;
+  .btn-sub-menu {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 8px 10px;
+    border-radius: 20px;
+    &.active, &:hover {
+      background: $activeColor;
+      color: $activeColorFont;
+    }
+  }
+}
+
+// 加载中背景无色
+.loading-rotation {
+  .el-loading-mask {
+    background-color: transparent;
+  }
+}
+
+
+// 滚动容器
+.d-table-col-wrap {
+  overflow: hidden;
+  .el-scrollbar__wrap {
+    overflow: hidden;
+    overflow-y: auto;
+  }
+}
+
+

@@ -1,0 +1,93 @@
+.btn-circle {
+  border: 1px solid #eee;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  &:hover {
+    color: #fff;
+    background: $activeColor;
+  }
+  &.btn-opera {
+    line-height: 20px;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    i {
+      font-size: 12px;
+    }
+  }
+}
+
+
+.btn-search-toggle {
+  cursor: pointer;
+  white-space: nowrap;
+  > input {
+    display: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    &:hover, &:focus, &:active {
+      outline: none;
+      border: 0;
+    }
+  }
+  &.open > input {
+    display: inline-block;
+    width: 120px;
+    padding-left: 10px;
+    line-height: 30px;
+    position: relative;
+    top: -2px;
+    background: none;
+  }
+  border: 1px solid #eee;
+  border-radius: 15px;
+  line-height: 30px;
+  height: 30px;
+  display: inline-block;
+  min-width: 20px;
+  text-align: center;
+  padding: 0 5px;
+  &.open:hover {
+    background: none;
+    color: #333;
+  }
+  &:hover {
+    background: $activeColor;
+    color: $activeColorFont;
+  }
+}
+
+.opera-btn-group {
+
+  border: 2px solid #eeeeee;
+  margin: 10px -5px;
+  .opera-icon {
+    line-height: 50px;
+    height: 50px;
+    padding: 0 10px;
+    border-bottom: 2px solid #eeeeee;
+  }
+  .switching-icon {
+    cursor: pointer;
+    .el-icon-arrow-up {
+      transition: all .5s ease-in-out;
+    }
+  }
+  &.up {
+    .advanced-query-form {
+      display: none;
+    }
+    .opera-icon {
+      border-bottom: 0;
+    }
+    .el-icon-arrow-up {
+      transform: rotate(180deg);
+    }
+  }
+}
