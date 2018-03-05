@@ -20,6 +20,7 @@
     "qs": "^6.5.1",
     "vue": "^2.5.13",
     "vue-echarts": "^2.6.0",
+    "vue-baidu-map": "^0.20.7",
     "vue-moment": "^2.2.0",
     "vue-router": "^2.8.1",
     "vuex": "^2.5.0"

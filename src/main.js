@@ -17,6 +17,13 @@ Vue.use(require('vue-moment'), {moment});
 Vue.use(tinyVue);
 Vue.use(Vuex);
 
+import BaiduMap from 'vue-baidu-map';
+
+Vue.use(BaiduMap, {
+  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+  ak: 'ey4Q8mftyglv0vmy7MQz6Qhec8igNgkn'
+});
+
 new Vue({
   template: '<router-view id="app"></router-view>',
   router,

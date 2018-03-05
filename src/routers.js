@@ -54,6 +54,18 @@ export const routes = [
             meta: {moduleId: 'permission', title: '本地配置', perm: 'show'}
           }
         ]
+      },
+      {
+        path: '/vehicle',
+        component: () => import('./components/common/parent-route.vue'),
+        meta: {moduleId: 'vehicle', title: '车辆管理', icon: 'setting', perm: 'wms-system-config'},
+        children: [
+          {
+            path: '/vehicle/map/delivery',
+            component: () => import('./components/vehicle/map/index.vue'),
+            meta: {moduleId: 'vehicle', title: '地图派送', perm: 'show'}
+          }
+        ]
       }
     ]
   },
