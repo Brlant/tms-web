@@ -8,16 +8,7 @@
 </style>
 <template>
   <div>
-    <!--<div class="order-list-status container">-->
-    <!--<div class="status-item" :class="{'active':key==activeStatus} "-->
-    <!--v-for="(item,key) in orgType"-->
-    <!--@click="changeType(key,item)">-->
-    <!--<div class="status-bg" :class="['b_color_'+key]"></div>-->
-    <!--<div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{item.title}}<span-->
-    <!--class="status-num">{{item.num}}</span></div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <div class="container d-table">
+    <div class="d-table">
       <div class="d-table-left">
         <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
           <h2 class="header">

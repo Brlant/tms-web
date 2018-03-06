@@ -86,13 +86,16 @@ import {
   orgSelect,
   orgGoodsSelect,
   goodsSelect,
-  statusList
+  statusList,
+  TwoColumn,
+  DesBtn
 } from '@dtop/dtop-web-common';
 
 import upload from '../components/common/upload/upload.vue';
 import uploadRelation from '../components/common/upload/upload.relation.vue';
 import perm from '../components/common/perm.vue';
 import ElForm from '../components/common/form/src/form.vue';
+
 const tinyVue = [
   Pagination,
   Dialog,
@@ -178,7 +181,9 @@ const tinyVue = [
   orgSelect,
   orgGoodsSelect,
   goodsSelect,
-  statusList
+  statusList,
+  TwoColumn,
+  DesBtn
 ];
 
 const install = function (Vue, opts = {}) {

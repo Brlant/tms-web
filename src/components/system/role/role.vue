@@ -49,7 +49,7 @@
       <status-list :activeStatus="filters.usableStatus" :statusList="orgType"
                    :checkStatus="changeType" :isShowNum="false" :isShowIcon="isShowIcon"
                    :formatClass="formatClass"></status-list>
-      <div class="container d-table">
+      <div class="d-table">
         <div class="d-table-left">
           <div class="d-table-col-wrap">
             <h2 class="header">

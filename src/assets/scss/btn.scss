@@ -64,7 +64,6 @@
 }
 
 .opera-btn-group {
-
   border: 2px solid #eeeeee;
   margin: 10px -5px;
   .opera-icon {
@@ -88,6 +87,23 @@
     }
     .el-icon-arrow-up {
       transform: rotate(180deg);
+    }
+  }
+}
+
+.btn-group-right {
+  position: absolute;
+  right: 0;
+  top: 30px
+}
+
+.des-btn {
+  cursor: pointer;
+  &:hover {
+    color: $activeColor;
+    .btn-circle {
+      color: #fff;
+      background: $activeColor;
     }
   }
 }

@@ -402,6 +402,12 @@ table th[class*="col-"] {
 .mr-10 {
   margin-right: 10px;
 }
+.mb-10 {
+  margin-bottom: 10px;
+}
+.ml-10 {
+  margin-left: 10px;
+}
 
 .f20 {
   font-size: 20px;

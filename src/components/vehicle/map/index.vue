@@ -61,7 +61,7 @@
 </style>
 <template>
   <div>
-    <div class="container ">
+    <div>
       <search-part @search="searchResult"></search-part>
       <el-row class="second-part clearfix">
         <el-col :span="2">
@@ -80,7 +80,7 @@
           </el-button-group>
         </el-col>
       </el-row>
-      <div class="container d-table">
+      <div class="d-table">
         <div class="d-table-left">
           <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
             <div class="m-list">
@@ -116,14 +116,14 @@
           </div>
         </div>
         <div class="d-table-right">
-          <div :style="'height:'+bodyHeight">
+          <div>
             <baidu-map ref="bmap" class="b-view" :center="{lng: 121.480539, lat: 31.235929}" :zoom="10"
                        :scroll-wheel-zoom="true" :pinch-to-zoom="true" :dragging="true">
               <bm-scale anchor="BMAP_ANCHOR_BOTTOM_LEFT"></bm-scale>
               <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>
               <bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP', ]"
                            anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-map-type>
-              <bm-view class="b-map"></bm-view>
+              <bm-view class="b-map" :style="'height:'+ bodyHeight"></bm-view>
             </baidu-map>
           </div>
         </div>
@@ -167,7 +167,7 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height - 120) + 'px';
+        return (height - 70) + 'px';
       },
       map () {
         return this.$refs['bmap'].map;
