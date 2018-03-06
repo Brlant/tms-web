@@ -42,14 +42,6 @@
           <el-form-item label="货主编号" prop="orgCode" v-show="user.type===1">
             <oms-input v-model="user.orgCode"></oms-input>
           </el-form-item>
-          <el-form-item label="物流中心">
-            <el-select filterable remote placeholder="请输入名称搜索物流中心"
-                       :clearable="true" style="width: 100%"
-                       v-model="logisticsCentreId">
-              <el-option :value="center.id" :key="center.id" :label="center.name"
-                         v-for="center in logisticsCenters"></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="用户名" prop="username">
             <oms-input v-model="user.username" placeholder="手机号/邮箱/用户名"></oms-input>
           </el-form-item>
@@ -96,7 +88,6 @@
           type: 0,
           orgCode: ''
         },
-        logisticsCentreId: window.localStorage.getItem('logisticsCentreId') || '',
         loading: false,
         codeUrl: '',
         showCode: false,
@@ -107,9 +98,6 @@
           ],
           password: [
             {required: true, message: '请输入密码', trigger: 'blur'}
-          ],
-          logisticsCentreId: [
-            {required: true, message: '请选择物流中心', trigger: 'change'}
           ]
         },
         logisticsCenters: []
@@ -122,7 +110,6 @@
             this.btnString = '登陆中..';
             this.loading = true;
             Auth.login(this.user).then(response => {
-              this.setLogisticsCenter();
               let userId = window.localStorage.getItem('userId');
               this.$store.commit('initUser', response.data);
               this.$nextTick(function () {
@@ -154,25 +141,9 @@
       getCode: function () {
         this.showCode = true;
         this.codeUrl = process.env.NODE_API + '/foundation/CAPTCHA?' + Math.random();
-      },
-      filterLogisticsCenter (query) { // 查物流中心
-        let param = Object.assign({}, {
-          keyWord: query,
-          deleteFlag: false
-        });
-        LogisticsCenter.query(param).then(res => {
-          this.logisticsCenters = res.data;
-        });
-      },
-      setLogisticsCenter () {
-        window.localStorage.setItem('logisticsCentreId', this.logisticsCentreId);
-        let obj = this.logisticsCenters.filter(f => f.id === this.logisticsCentreId)[0];
-        let name = obj && obj.name || '';
-        window.localStorage.setItem('logisticsCentreName', name);
       }
     },
     mounted: function () {
-      this.filterLogisticsCenter();
       // document.addEventListener('touchmove', function (e) {
       //   e.preventDefault();
       // });

@@ -35,12 +35,11 @@
         <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
           <div style="overflow: hidden">
             <span class="pull-left" style="clear: right">{{user.name}}</span>
+            <span class="select-other-info pull-left">
+              <span>部门:</span>{{user.companyDepartmentName}}
+            </span>
           </div>
-          <div style="overflow: hidden">
-              <span class="select-other-info pull-left">
-                <span>部门:</span>{{user.companyDepartmentName}}
-              </span>
-          </div>
+
         </el-option>
       </el-select>
     </el-form-item>

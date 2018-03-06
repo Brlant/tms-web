@@ -49,6 +49,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
+
   export default {
     components: {
       SearchPart
@@ -67,6 +68,8 @@
       };
     },
     methods: {
+      searchResult: function () {
+      },
       checkStatus () {
 
       },
