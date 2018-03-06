@@ -294,6 +294,12 @@
             carriageWidth: '',
             carriageHeight: ''
           }, val.carDetailDto);
+          if (this.form.carDto.ascriptionCompanyName) {
+            this.filterCustomer(this.form.carDto.ascriptionCompanyName);
+          }
+          if (this.form.carDto.defaultDriverName) {
+            this.filterUser(this.form.carDto.defaultDriverName);
+          }
         }
       },
       actionType: function (val) {
