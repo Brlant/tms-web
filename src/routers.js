@@ -36,29 +36,29 @@ export const routes = [
       {
         path: '/baseInfo',
         component: resolve => require(['./components/base-info/index.vue'], resolve),
-        meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'warehouse', perm: 'wms-warehouse-manager'},
+        meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'warehouse', perm: 'tms-base-info'},
         children: [
           {
             path: '/baseInfo/car-archives',
             component: resolve => require(['./components/base-info/car-archives/index.vue'], resolve),
-            meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'show'}
+            meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'tms-car-archives-watch'}
           }
         ]
       },
       {
         path: '/permission',
         component: () => import('./components/system/index.vue'),
-        meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'wms-system-config'},
+        meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'tms-system-config'},
         children: [
           {
             path: '/permission/user',
             component: () => import('./components/system/user/user.vue'),
-            meta: {moduleId: 'permission', title: '用户管理', perm: 'wms-platform-user-manager'}
+            meta: {moduleId: 'permission', title: '用户管理', perm: 'tms-platform-user-manager'}
           },
           {
             path: '/permission/role',
             component: () => import('./components/system/role/role.vue'),
-            meta: {moduleId: 'permission', title: '角色管理', perm: 'wms-access-role-manager'}
+            meta: {moduleId: 'permission', title: '角色管理', perm: 'tms-access-role-watch'}
           },
           {
             path: '/permission/configuration',
@@ -70,7 +70,7 @@ export const routes = [
       {
         path: '/vehicle',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'vehicle', title: '车辆管理', icon: 'setting', perm: 'wms-system-config'},
+        meta: {moduleId: 'vehicle', title: '车辆管理', icon: 'setting', perm: 'tms-system-config'},
         children: [
           {
             path: '/vehicle/map/delivery',
