@@ -234,7 +234,7 @@ export const User = resource('/oms/user', http, {
 // 角色管理对象
 export const Access = resource('/oms/access', http, {
   getRoleMenus: () => {
-    return http.get('/oms/access/menus/tree', {params: {objectId: 'wms-system'}});
+    return http.get('/oms/access/menus/tree', {params: {objectId: 'tms-system'}});
   },
   getOrgRoleMenus: (orgId) => {
     return http.get('/oms/access/org/' + orgId + '/admin/menus/tree');
@@ -265,7 +265,7 @@ export const Auth = {
     }
   },
   permission: () => {
-    return http.get('/oms/access/permissions', {params: {objectId: 'wms-system'}}); // TODO 改成wms-system
+    return http.get('/oms/access/permissions', {params: {objectId: 'tms-system'}}); // TODO 改成tms-system
   }
 };
 

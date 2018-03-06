@@ -54,7 +54,7 @@
           <div class="d-table-col-wrap">
             <h2 class="header">
                 <span class="pull-right">
-                  <perm label="wms-access-role-add">
+                  <perm label="tms-access-role-add">
                     <a href="#" class="btn-circle" @click.stop.prevent="addType"><i class="el-icon-t-plus"></i> </a>
                   </perm>
                     <a href="#" class="btn-circle" @click.prevent="searchType"><i
@@ -72,7 +72,7 @@
               <ul class="show-list">
                 <li v-for="item in showTypeList" class="list-item" @click="showType(item)"
                     :class="{'active':item.id===currentItem.id}">
-                  <perm label="wms-access-role-delete">
+                  <perm label="tms-access-role-delete">
                     <oms-remove :item="item" @removed="removeType" :tips='"确认删除角色\""+item.title +"\"?"'
                                 class="hover-show"><i
                       class="el-icon-t-delete"></i></oms-remove>
@@ -97,26 +97,26 @@
               <h2 class="clearfix">
               <span class="pull-right">
                <el-button-group>
-                 <perm label="wms-access-role-edit">
+                 <perm label="tms-access-role-edit">
                    <el-button @click="edit()">
                      <i class="el-icon-t-edit"></i>
                      编辑
                    </el-button>
                  </perm>
-                <perm label="wms-access-role-stop">
+                 <perm label="tms-access-role-stop">
                   <el-button @click="forbid()" v-show="resData.usableStatus == 1">
                     <i class="el-icon-t-forbidden"></i>
                     停用
                   </el-button>
-                </perm>
-                 <perm label="wms-access-role-start">
+                 </perm>
+                 <perm label="tms-access-role-start">
                    <el-button @click="useNormal()" v-show="resData.usableStatus == 0">
                      <i class="el-icon-t-start"></i>启用
                    </el-button>
                  </perm>
-                <perm label="wms-access-role-delete">
+                 <perm label="tms-access-role-delete">
                    <el-button @click="remove()"><i class="el-icon-t-delete"></i>删除</el-button>
-                </perm>
+                 </perm>
                 </el-button-group>
               </span>
               </h2>
@@ -284,7 +284,7 @@
         let param = Object.assign({}, {
           keyword: this.typeTxt,
           deleteFlag: false,
-          objectId: 'wms-system'
+          objectId: 'tms-system'
         }, this.filters);
         Access.query(param).then(res => {
           this.showTypeList = res.data.list;
