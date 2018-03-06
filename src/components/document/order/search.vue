@@ -1,10 +1,5 @@
-<style lang="scss" scoped>
-  .header {
-    font-size: 18px;
-  }
-</style>
 <template>
-  <div class="opera-btn-group">
+  <div class="opera-btn-group" :class="{up: showSearch}">
     <div class="opera-icon">
       <el-col :span="2">
         <h2 class="header f-dib">订单查询</h2>
@@ -18,8 +13,8 @@
       </el-col>
       <el-col :span="4" class="text-right">
         <el-button-group>
-          <el-button plain size="small" @click="search">查询结果</el-button>
-          <el-button plain size="small" @click="showSearch = true">高级检索</el-button>
+          <el-button type="primary" plain size="small" @click="search">查询结果</el-button>
+          <el-button type="primary" plain size="small" @click="showSearch = true">高级检索</el-button>
         </el-button-group>
       </el-col>
     </div>
