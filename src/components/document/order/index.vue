@@ -82,9 +82,6 @@
       },
       add () {
 
-      },
-      searchResult () {
-
       }
     }
   };
