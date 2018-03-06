@@ -57,6 +57,10 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+// tmsOrder 对象
+export const TmsOrder = resource('/tms-order', http, {
+});
+
 // 车辆档案对象
 export const CarArchives = resource('/car-archives', http, {
   checkPlateNumber: (params) => {

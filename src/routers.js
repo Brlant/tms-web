@@ -48,7 +48,7 @@ export const routes = [
       {
         path: '/document',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'document', title: '单据管理', icon: 'setting', perm: 'wms-system-config'},
+        meta: {moduleId: 'document', title: '单据管理', icon: 'setting', perm: 'tms-system-config'},
         children: [
           {
             path: '/document/order',
@@ -65,7 +65,7 @@ export const routes = [
       {
         path: '/vehicle',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'vehicle', title: '车辆管理', icon: 'setting', perm: 'wms-system-config'},
+        meta: {moduleId: 'vehicle', title: '车辆管理', icon: 'setting', perm: 'tms-system-config'},
         children: [
           {
             path: '/vehicle/map/delivery',
