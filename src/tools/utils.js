@@ -2,7 +2,7 @@ import {Address} from '@dtop/dtop-web-common';
 export default {
   address: Address.value,
   orderType: {
-    0: {'title': '待生成运单', state: null, num: '0'},
+    0: {'title': '待生成运单', state: null, num: ''},
     1: {'title': '待派车', state: '1', num: ''},
     2: {'title': '待启运', state: '2', num: ''},
     3: {'title': '待签收', state: '3', num: ''},

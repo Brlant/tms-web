@@ -30,6 +30,7 @@
 
   .header {
     margin: 0;
+    font-size: 18px;
   }
 
   .btn-search-toggle {
@@ -141,7 +142,6 @@
 <script>
   import mapMixin from '@/mixins/mapMixin';
   import SearchPart from './search';
-  import DeliveryForm from './delivery-form';
   export default {
     mixins: [mapMixin],
     components: {
@@ -160,7 +160,7 @@
         showIndex: false,
         currentPart: null,
         dialogComponents: {
-          0: DeliveryForm
+          0: () => import('./delivery-form')
         }
       };
     },

@@ -1,30 +1,10 @@
 <style lang="scss" scoped>
-
-  @import '../../../assets/scss/mixins';
-
   .content-part {
     .content-right {
       > h3 {
         left: 0;
       }
       left: 0;
-    }
-  }
-  .section-part {
-    padding: 0 10px;
-    .header {
-      line-height: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      .sign {
-        width: 4px;
-        background: $primary-color;
-        height: 100%;
-      }
-      .tit {
-        margin: 0 0 0 10px;
-      }
     }
   }
   .info-part {
@@ -38,7 +18,7 @@
     <div class="content-right content-padding">
       <h3>生成派送</h3>
       <el-form class="clearfix" label-width="100px" onsubmit="return false">
-        <div class="section-part">
+        <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib">车辆选择</h3>
@@ -46,7 +26,7 @@
           <div class="content">
             <div class="info-part">
               <el-form-item label="当前节点">
-                <el-select filterable remote placeholder="请选择当前节点" :clearable="true">
+                <el-select value="" filterable remote placeholder="请选择当前节点" :clearable="true">
                   <el-option :value="center.id" :key="center.id" :label="center.name"
                              v-for="center in list"></el-option>
                 </el-select>
@@ -79,7 +59,7 @@
           </div>
           <div class="hr mb-10"></div>
         </div>
-        <div class="section-part">
+        <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib">车辆选择</h3>
@@ -131,8 +111,8 @@
               <oms-input placeholder="请输入"></oms-input>
             </el-form-item>
           </div>
+          <div class="hr mb-10"></div>
         </div>
-        <div class="hr mb-10"></div>
         <el-row class="text-right">
           <el-form-item>
             <el-button type="primary">保存</el-button>

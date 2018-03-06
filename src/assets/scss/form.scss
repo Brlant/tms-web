@@ -1,0 +1,20 @@
+.form-header-part {
+  padding: 0 10px;
+  .header {
+    line-height: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    .sign {
+      width: 4px;
+      background: $primary-color;
+      height: 100%;
+    }
+    .tit {
+      margin: 0 0 0 10px;
+      &.active {
+        color: $activeColor
+      }
+    }
+  }
+}

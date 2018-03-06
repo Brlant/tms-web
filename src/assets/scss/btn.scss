@@ -64,8 +64,8 @@
 }
 
 .opera-btn-group {
-  border: 2px solid #eeeeee;
-  margin: 10px -5px;
+  border: 1px solid #eeeeee;
+  margin: 10px 0;
   .opera-icon {
     line-height: 50px;
     height: 50px;
@@ -88,6 +88,16 @@
     .el-icon-arrow-up {
       transform: rotate(180deg);
     }
+  },
+  .header {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+  .advanced-query-form {
+    background: #ffffff;
+    padding-top: 10px;
+    padding-right: 10px;
   }
 }
 
@@ -95,6 +105,15 @@
   position: absolute;
   right: 0;
   top: 30px
+}
+
+.btn-group-lt-bm-part {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  text-align: center;
 }
 
 .des-btn {
@@ -107,3 +126,4 @@
     }
   }
 }
+
