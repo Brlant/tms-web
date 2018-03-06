@@ -79,20 +79,21 @@
     }
   }
   &.up {
-    .advanced-query-form {
-      display: none;
-    }
-    .opera-icon {
-      border-bottom: 0;
-    }
+    //.advanced-query-form {
+    //  display: none;
+    //}
+    //.opera-icon {
+    //  border-bottom: 0;
+    //}
     .el-icon-arrow-up {
       transform: rotate(180deg);
     }
-  },
+  }
   .header {
     margin: 0;
     padding: 0;
     background: transparent;
+    font-size: 18px;
   }
   .advanced-query-form {
     background: #ffffff;
