@@ -46,6 +46,35 @@ export const routes = [
         ]
       },
       {
+        path: '/document',
+        component: () => import('./components/common/parent-route.vue'),
+        meta: {moduleId: 'document', title: '单据管理', icon: 'setting', perm: 'wms-system-config'},
+        children: [
+          {
+            path: '/document/order',
+            component: () => import('./components/document/order/index.vue'),
+            meta: {moduleId: 'document', title: '订单管理', perm: 'show'}
+          },
+          {
+            path: '/document/transport',
+            component: () => import('./components/document/transport/index.vue'),
+            meta: {moduleId: 'document', title: '运单管理', perm: 'show'}
+          }
+        ]
+      },
+      {
+        path: '/vehicle',
+        component: () => import('./components/common/parent-route.vue'),
+        meta: {moduleId: 'vehicle', title: '车辆管理', icon: 'setting', perm: 'wms-system-config'},
+        children: [
+          {
+            path: '/vehicle/map/delivery',
+            component: () => import('./components/vehicle/map/index.vue'),
+            meta: {moduleId: 'vehicle', title: '地图派送', perm: 'show'}
+          }
+        ]
+      },
+      {
         path: '/permission',
         component: () => import('./components/system/index.vue'),
         meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'tms-system-config'},
@@ -64,18 +93,6 @@ export const routes = [
             path: '/permission/configuration',
             component: () => import('./components/system/configuration/list.vue'),
             meta: {moduleId: 'permission', title: '本地配置', perm: 'show'}
-          }
-        ]
-      },
-      {
-        path: '/vehicle',
-        component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'vehicle', title: '车辆管理', icon: 'setting', perm: 'tms-system-config'},
-        children: [
-          {
-            path: '/vehicle/map/delivery',
-            component: () => import('./components/vehicle/map/index.vue'),
-            meta: {moduleId: 'vehicle', title: '地图派送', perm: 'show'}
           }
         ]
       }

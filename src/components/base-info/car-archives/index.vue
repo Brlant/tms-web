@@ -31,7 +31,7 @@
 </style>
 <template>
   <div>
-    <div class="container d-table">
+    <div class="d-table">
       <div class="d-table-left">
         <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
           <h2 class="header">

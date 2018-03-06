@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
 
   @import '../../../assets/scss/mixins';
 
@@ -31,9 +31,6 @@
     .el-form-item {
       margin-bottom: 0;
     }
-  }
-  .hr {
-    margin-bottom: 10px;
   }
 </style>
 <template>
@@ -80,7 +77,7 @@
               </el-form-item>
             </two-column>
           </div>
-          <div class="hr"></div>
+          <div class="hr mb-10"></div>
         </div>
         <div class="section-part">
           <div class="header">
@@ -135,7 +132,7 @@
             </el-form-item>
           </div>
         </div>
-        <div class="hr"></div>
+        <div class="hr mb-10"></div>
         <el-row class="text-right">
           <el-form-item>
             <el-button type="primary">保存</el-button>
@@ -146,9 +143,7 @@
   </div>
 </template>
 <script>
-  import TwoColumn from '@/components/common/two-column';
   export default {
-    components: {TwoColumn},
     data () {
       return {
         list: [],

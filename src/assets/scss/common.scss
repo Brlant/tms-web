@@ -1,4 +1,5 @@
 @import "mixins";
+
 [v-cloak] {
   display: none
 }
@@ -8,15 +9,19 @@
   box-sizing: border-box;
   padding-top: 62px;
 }
+
 .main-body {
   min-height: 300px;
 }
+
 .sub-menu {
   background: #eee;
 }
+
 .search-left-box {
   padding: 5px;
 }
+
 .page-main-body {
   font-size: 14px;
   .el-row {
@@ -29,6 +34,7 @@
     }
   }
 }
+
 // 二级菜单样式
 .sub-menu {
   padding: 5px 0;
@@ -51,14 +57,15 @@
   }
 }
 
-
 // 滚动容器
 .d-table-col-wrap {
+  //overflow: hidden;
+  //.el-scrollbar__wrap {
+  //  overflow: hidden;
+  //  overflow-y: auto;
+  //}
   overflow: hidden;
-  .el-scrollbar__wrap {
-    overflow: hidden;
-    overflow-y: auto;
-  }
+  overflow-y: auto;
 }
 
 // 下拉组件长度

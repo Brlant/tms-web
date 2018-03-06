@@ -7,7 +7,7 @@
 </style>
 <template>
   <div>
-    <div class="container d-table">
+    <div class="d-table">
       <div class="d-table-right">
         <span class="pull-right">
           <span class="btn-search-toggle open" v-show="showSearch">
