@@ -118,11 +118,7 @@
           </div>
         </div>
         <div class="d-table-right">
-          <el-amap vid="aMap" :plugin="plugins" :zoom="10" :center="center" :style="'height:'+ bodyHeight">
-            <el-amap-marker v-for="(marker, index) in markers" :vid="index" :position="marker.position"
-                            :label="marker.label" :animation="marker.animation"
-                            :events="marker.events"></el-amap-marker>
-          </el-amap>
+          <div id="aMap" :style="'height:'+ bodyHeight"></div>
         </div>
       </div>
       <el-row class="bottom-part">
@@ -137,6 +133,8 @@
 </template>
 <script>
   import SearchPart from './search';
+  import { lazyAMapApiLoaderInstance } from 'vue-amap';
+
   export default {
     components: {
       SearchPart
@@ -156,16 +154,7 @@
         dialogComponents: {
           0: () => import('./delivery-form')
         },
-        center: [121.5273285, 31.21515044],
-        markers: [],
-        plugins: [
-          {pName: 'ToolBar'},
-          {pName: 'Scale'},
-          {
-            pName: 'MapType',
-            defaultType: 0
-          }
-        ]
+        map: {}
       };
     },
     computed: {
@@ -175,9 +164,30 @@
       }
     },
     mounted () {
+      this.initMap();
     },
     watch: {},
     methods: {
+      initMap () {
+        lazyAMapApiLoaderInstance.load().then(() => {
+          const AMap = window.AMap;
+          const scale = new AMap.Scale();
+          const toolBar = new AMap.ToolBar();
+          const overView = new AMap.OverView();
+          const mapType = new AMap.MapType();
+          const map = new AMap.Map('aMap', {
+            resizeEnable: true,
+            zoom: 10,
+            center: new AMap.LngLat(121.480539, 31.235929)
+          });
+          this.map = map;
+          map.addControl(scale);
+          map.addControl(toolBar);
+          map.addControl(overView);
+          map.addControl(mapType);
+
+        });
+      },
       scrollLoadingData (event) {
         this.$scrollLoadingData(event);
       },
@@ -193,7 +203,9 @@
         this.currentPart = this.dialogComponents[index];
       },
       changeCheckStatus (item) {
-        item._marker.animation = item.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE';
+        item._marker.setAnimation(item.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE');
+        // const Icon = item._marker.getIcon();
+        // Icon.imageUrl = item.isChecked ? '../../assets/img/marker_red.png' : '../../assets/img/marker_blue.png';
       },
       searchResult () {
         this.dataRows = [
@@ -215,33 +227,45 @@
         });
       },
       addOverlays () {
+        const {map} = this;
+        const AMap = window.AMap;
+        // map.clearMap();
+        // let ary = [[116.205467, 39.907761], [116.368904, 39.913423]];
+        // for (let i = 0; i < 2; i++) {
+        //   const marker = new AMap.Marker({
+        //     map,
+        //     position: ary[i]
+        //   });
+        //   // 设置label标签
+        //   marker.setLabel({ // label默认蓝框白底左上角显示，样式className为：amap-marker-label
+        //     offset: new AMap.Pixel(20, 20), // 修改label相对于maker的位置
+        //     content: '我是marker的label标签'
+        //   });
+        // }
+
         // 清空覆盖物
-        this.markers = [];
+        map.clearMap();
         this.dataRows.forEach(i => {
           this.getLgtAndLat(i.address, result => {
             let geoCodes = result.geocodes;
-            geoCodes.forEach(g => {
-              this.addMarker(g, i);
-            });
+            geoCodes && this.addMarker(geoCodes[0], i, map, AMap);
           });
         });
       },
-      addMarker (d, row) {
-        let marker = {
-          position: [d.location.getLng(), d.location.getLat()],
-          label: {
-            content: row.name,
-            offset: [20, 20]
-          },
-          animation: 'AMAP_ANIMATION_NONE',
-          events: {
-            click: () => {
-              row.isChecked = !row.isChecked;
-              marker.animation = row.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE';
-            }
-          }
-        };
-        this.markers.push(marker);
+      addMarker (d, row, map, AMap) {
+        let marker = new AMap.Marker({
+          map: map,
+          draggable: true,
+          position: [d.location.getLng(), d.location.getLat()]
+        });
+        marker.setLabel({
+          offset: new AMap.Pixel(20, 20),
+          content: row.name
+        });
+        marker.on('click', function (e) {
+          row.isChecked = !row.isChecked;
+          marker.setAnimation(row.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE');
+        });
         row._marker = marker;
       }
     }

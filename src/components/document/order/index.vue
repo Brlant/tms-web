@@ -79,6 +79,9 @@
       },
       add () {
 
+      },
+      searchResult () {
+
       }
     }
   };

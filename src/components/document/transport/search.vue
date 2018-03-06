@@ -90,6 +90,9 @@
     methods: {
       search () {
         this.$emit('search', this.searchCondition);
+      },
+      searchResult () {
+
       }
     }
   };
