@@ -50,16 +50,18 @@
           <div class="search-left-box" v-show="showTypeSearch">
             <oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>
           </div>
-          <div v-if="!data.carDto" class="empty-type-info">
+          <div v-if="!data.carDto.id" class="empty-type-info">
             暂无信息
           </div>
           <div v-else>
             <ul class="show-list">
               <li v-for="item in showTypeList" class="list-item" @click="showType(item)"
                   :class="{'active':item.carDto.plateNumber==currentItem.carDto.plateNumber}">
-                <!--<perm label="qualityItem-softDelete"><a href="#" class="pull-right hover-show"-->
-                <!--@click.prevent="removeType(item)">-->
-                <!--<i class="el-icon-t-delete"></i> </a></perm>-->
+                <!--<perm label="tms-car-archives-delete">-->
+                <a href="#" class="pull-right hover-show" @click.prevent="removeType(item)">
+                  <i class="el-icon-t-delete"></i>
+                </a>
+                <!--</perm>-->
                 {{item.carDto.plateNumber}}
               </li>
             </ul>
@@ -74,27 +76,32 @@
       </div>
       <div class="d-table-right">
         <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
-          <div v-if="!data.carDto" class="empty-info">
+          <div v-if="!data.carDto.id" class="empty-info">
             暂无信息
           </div>
           <div v-else>
             <h2 class="clearfix">
                 <span class="pull-right">
                   <el-button-group>
-                    <!--<perm label="qualityItem-update">-->
+                    <!--<perm label="tms-car-archives-edit">-->
                       <el-button @click="edit()">
                         <i class="el-icon-t-edit"></i>
                         编辑
                       </el-button>
+                      <el-button @click="remove()">
+                          <i class="el-icon-t-delete"></i>
+                          删除
+                        </el-button>
+                    <!--</perm> -->
                     </el-button-group>
                 </span>
             </h2>
             <div class="page-main-body min-row">
               <el-row>
-                <el-col :span="4" class="text-right" style="font-size: 12px">
+                <el-col :span="4" class="text-right" style="font-size: 16px;">
                   [ 基础信息 ]
                 </el-col>
-                <el-col :span="12" class="text-right" style="font-size: 12px">
+                <el-col :span="12" class="text-right" style="font-size: 16px">
                   [ 详细信息 ]
                 </el-col>
               </el-row>
@@ -104,16 +111,16 @@
                     {{ data.carDto.plateNumber}}
                   </goods-row>
                   <goods-row label="车辆归属公司" :span="8">
-                    {{ data.carDto.ascriptionCompany}}
+                    {{ data.carDto.ascriptionCompanyName}}
                   </goods-row>
                   <goods-row label="车辆默认司机" :span="8">
-                    {{ data.carDto.defaultDriver}}
+                    {{ data.carDto.defaultDriverName}}
                   </goods-row>
                   <goods-row label="车辆核定载人数" :span="8">
                     {{ data.carDto.authorizedNumber}} <span v-if="data.carDto.authorizedNumber">人</span>
                   </goods-row>
                   <goods-row label="车型" :span="8">
-                    {{ data.carDto.type}}
+                    <dict :dict-group="'carType'" :dict-key="formatStatus( data.carDto.type)"></dict>
                   </goods-row>
                   <goods-row label="车厢长度" :span="8">
                     {{ data.carDto.carriageLength}} <span v-if="data.carDto.carriageLength">米</span>
@@ -199,7 +206,36 @@
         showTypeSearch: false,
         currentItem: 0,
         showSearch: false,
-        data: {},
+        data: {
+          carDto: {
+            id: '',
+            plateNumber: '',
+            ascriptionCompany: '',
+            defaultDriver: '',
+            loadBearing: '',
+            volume: '',
+            authorizedNumber: '',
+            type: '',
+            carriageLength: '',
+            carriageWidth: '',
+            carriageHeight: ''
+          },
+          carDetailDto: {
+            id: '',
+            brand: '',
+            engineNumber: '',
+            identificationNumber: '',
+            createDate: '',
+            issuingDate: '',
+            checkValidityDate: '',
+            forciblyDiscardedDay: '',
+            insuranceCompany: '',
+            ctaliNumber: '',
+            ctaliEndDate: '',
+            thirdPartyInsuranceNumber: '',
+            thirdPartyInsuranceEndDate: ''
+          }
+        },
         typeList: [],
         showTypeList: [],
         typeTxt: '',
@@ -251,6 +287,10 @@
       }
     },
     methods: {
+      formatStatus: function (value) {
+        if (!value) return '';
+        return value.toString();
+      },
       scrollLoadingData(event) {
         this.$scrollLoadingData(event);
       },
@@ -322,22 +362,22 @@
         this.showRight = true;
       },
       remove: function () {
-        this.$confirm('确认删除车辆档案"' + this.data.name + '"?', '', {
+        this.$confirm('确认删除车辆档案"' + this.data.carDto.plateNumber + '"?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          CarArchives.delete(this.data.id).then(() => {
+          CarArchives.delete(this.data.carDto.id).then(() => {
             this.getPageList(1);
             this.$notify.success({
               duration: 2000,
               title: '成功',
-              message: '已成功删除车辆档案"' + this.data.name + '"'
+              message: '已成功删除车辆档案"' + this.data.carDto.plateNumber + '"'
             });
           }).catch(() => {
             this.$notify.error({
               duration: 2000,
-              message: '删除车辆档案"' + this.data.name + '"失败'
+              message: '删除车辆档案"' + this.data.carDto.plateNumber + '"失败'
             });
           });
         }).catch(() => {
@@ -345,22 +385,22 @@
         });
       },
       removeType: function (item) {
-        this.$confirm('确认删除车辆档案"' + item.name + '"?', '', {
+        this.$confirm('确认删除车辆档案"' + item.carDto.plateNumber + '"?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          CarArchives.delete(this.data.id).then(() => {
+          CarArchives.delete(this.data.carDto.id).then(() => {
             this.getPageList(1);
             this.$notify.success({
               title: '成功',
               duration: 2000,
-              message: '已成功删除车辆档案"' + item.name + '"'
+              message: '已成功删除车辆档案"' + item.carDto.plateNumber + '"'
             });
           }).catch(() => {
             this.$notify.error({
               duration: 2000,
-              message: '删除车辆档案"' + item.name + '"失败'
+              message: '删除车辆档案"' + item.carDto.plateNumber + '"失败'
             });
           });
         }).catch(() => {
@@ -381,9 +421,9 @@
         } else {
           let idList = [];
           this.showTypeList.forEach(val => {
-            idList.push(val.id);
+            idList.push(val.carDto.id);
           });
-          this.showTypeList.splice(idList.indexOf(this.currentItem.id), 1, item);
+          this.showTypeList.splice(idList.indexOf(this.currentItem.carDto.id), 1, item);
         }
         this.showType(item);
       }

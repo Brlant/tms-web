@@ -41,7 +41,7 @@ export const routes = [
           {
             path: '/baseInfo/car-archives',
             component: resolve => require(['./components/base-info/car-archives/index.vue'], resolve),
-            meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'stock-in-watch'}
+            meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'show'}
           }
         ]
       },
