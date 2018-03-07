@@ -133,17 +133,30 @@
           totalPage: 1
         },
         action: '',
-        form: {}
+        form: {},
+        filters: {
+          status: ''
+        }
       };
+    },
+    watch: {
+      filters: {
+        handler: function () {
+          this.getTmsOrderPage(1);
+        },
+        deep: true
+      }
     },
     mounted() {
       this.getTmsOrderPage(1);
     },
     methods: {
-      searchResult: function () {
+      searchResult: function (search) {
+        Object.assign(this.filters, search);
       },
-      checkStatus () {
-
+      checkStatus (item, key) {
+        this.filters.status = item.status;
+        this.activeStatus = key;
       },
       resetRightBox () {
         this.showIndex = -1;
@@ -154,7 +167,7 @@
         let param = Object.assign({}, {
           pageNo: pageNo,
           pageSize: this.pager.pageSize
-        });
+        }, this.filters);
         TmsOrder.query(param).then(res => {
           if (isContinue) {
             this.dataList = this.showTypeList.concat(res.data.list);
