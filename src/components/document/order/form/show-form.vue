@@ -72,10 +72,10 @@
             </el-form-item>
             <two-column>
               <el-form-item slot="left" label="发货联系人">
-                {{form.contactName}}
+                {{form.senderContact}}
               </el-form-item>
               <el-form-item slot="right" label="发货联系电话">
-                {{form.phone}}
+                {{form.senderContactPhone}}
               </el-form-item>
             </two-column>
             <el-form-item slot="right" label="发货地址">
@@ -96,7 +96,7 @@
             </el-form-item>
             <two-column>
               <el-form-item slot="left" label="收货联系人">
-                {{form.receiverContactName}}
+                {{form.receiverContact}}
               </el-form-item>
               <el-form-item slot="right" label="收货联系电话">
                 {{form.receiverContractPhone}}

@@ -56,9 +56,9 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="服务方式">
-                <el-select v-model="form.serviceType" placeholder="请选择" :clearable="true">
-                  <el-option :value="center.id" :key="center.id" :label="center.name"
-                             v-for="center in list"></el-option>
+                <el-select v-model="form.serviceType" placeholder="请选择服务方式" :clearable="true">
+                  <el-option :label="item.label" :value="item.key" :key="item.key"
+                             v-for="item in shipmentWayList"></el-option>
                 </el-select>
               </el-form-item>
             </two-column>
@@ -105,10 +105,10 @@
             </el-form-item>
             <two-column>
               <el-form-item slot="left" label="发货联系人">
-                <oms-input v-model="form.contactName" placeholder="请输入发货联系人"></oms-input>
+                <oms-input v-model="form.senderContact" placeholder="请输入发货联系人"></oms-input>
               </el-form-item>
               <el-form-item slot="right" label="发货联系电话">
-                <oms-input v-model="form.phone" placeholder="请输入发货联系电话"></oms-input>
+                <oms-input v-model="form.senderContactPhone" placeholder="请输入发货联系电话"></oms-input>
               </el-form-item>
             </two-column>
             <el-form-item slot="right" label="发货地址">
@@ -125,7 +125,7 @@
           <div class="content">
             <el-form-item label="收货单位" prop="receiverId">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索收货单位" :remote-method="filterReceiverOrg"
-                         :clearable="true" @click.native.once="filterSenderOrg('')"
+                         :clearable="true" @click.native.once="filterReceiverOrg('')"
                          v-model="form.receiverId" popperClass="good-selects">
                 <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
                   <div style="overflow: hidden">
@@ -141,7 +141,7 @@
             </el-form-item>
             <two-column>
               <el-form-item slot="left" label="收货联系人">
-                <oms-input v-model="form.receiverContactName" placeholder="请输入收货联系人"></oms-input>
+                <oms-input v-model="form.receiverContact" placeholder="请输入收货联系人"></oms-input>
               </el-form-item>
               <el-form-item slot="right" label="收货联系电话">
                 <oms-input v-model="form.receiverContractPhone" placeholder="请输入收货联系电话"></oms-input>
@@ -342,6 +342,11 @@
     watch: {
       formItem: function (val) {
         this.form = Object.assign({}, val);
+        if (this.action === 'edit') {
+          this.filterCustomer(this.form.orgId);
+          this.filterSenderOrg(this.form.senderId);
+          this.filterReceiverOrg(this.form.receiverId);
+        }
       }
     },
     methods: {
