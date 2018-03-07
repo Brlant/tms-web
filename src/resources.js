@@ -1,4 +1,4 @@
-import { Notification } from 'element-ui/lib/notification';
+import {Notification} from 'element-ui/lib/notification';
 import axios from 'axios';
 import Vue from 'vue';
 
@@ -61,6 +61,9 @@ Vue.prototype.$http = http;
 export const TmsOrder = resource('/tms-order', http, {
   queryStateNum: (params) => {
     return http.get('/tms-order/count', {params});
+  },
+  createWayBill: (params) => {
+    return http.put('/tms-order/list/generate', params);
   }
 });
 

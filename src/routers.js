@@ -65,7 +65,7 @@ export const routes = [
       {
         path: '/vehicle',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'vehicle', title: '车辆管理', icon: 'setting', perm: 'tms-system-config'},
+        meta: {moduleId: 'vehicle', title: '任务管理', icon: 'setting', perm: 'tms-system-config'},
         children: [
           {
             path: '/vehicle/map/delivery',

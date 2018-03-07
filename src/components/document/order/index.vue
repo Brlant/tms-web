@@ -1,9 +1,22 @@
+<style lang="scss">
+  .special-col {
+    padding-left: 20px;
+    position: relative;
+    .el-checkbox {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+</style>
 <template>
   <div class="order-page">
     <search-part @search="searchResult"></search-part>
 
     <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus">
       <span class="btn-group-right">
+        <des-btn icon="wave" @click="createWayBill" v-if="activeStatus===0">生成运单</des-btn>
         <des-btn icon="plus" @click="showPart(0)">添加</des-btn>
         <!--<el-button size="small" plain @click="showPart(0)">添加</el-button>-->
       </span>
@@ -11,7 +24,10 @@
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="3">订单号</el-col>
+        <el-col :span="3">
+          <el-checkbox @change="checkAll" v-model="isCheckAll" v-if="activeStatus===0"></el-checkbox>
+          订单号
+        </el-col>
         <el-col :span="3">委托单号</el-col>
         <el-col :span="2">订单类型</el-col>
         <el-col :span="2">发运方式</el-col>
@@ -35,7 +51,10 @@
       <div v-else="" class="order-list-body flex-list-dom">
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)">
           <el-row>
-            <el-col :span="3">
+            <el-col :span="3" class="special-col">
+              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)" v-if="activeStatus===0">
+                <el-checkbox v-model="item.isChecked"></el-checkbox>
+              </div>
               <div>
                 {{item.orderNo}}
               </div>
@@ -70,7 +89,7 @@
                 {{item.receiverId}}
               </div>
             </el-col>
-            <el-col :span="4" class="opera-btn">
+            <el-col :span="3" class="opera-btn">
               <div>
                 <span @click.stop="edit(item)">
                   <a @click.pervent="" class="btn-circle btn-opera">
@@ -96,6 +115,9 @@
     <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentInfoPart" :formItem="form" @right-close="resetRightBox"/>
     </page-right>
+    <page-right :show="shoWayBillPart" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
+      <component :is="currentWayBillPart" :checkList="checkListPara" @right-close="resetRightBox" @change="submit"/>
+    </page-right>
 
   </div>
 </template>
@@ -105,10 +127,11 @@
   import {TmsOrder} from '../../../resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
+  import wayBillForm from './form/create-way-bill.vue';
 
   export default {
     components: {
-      SearchPart, addForm
+      SearchPart, addForm, wayBillForm
     },
     data () {
       return {
@@ -120,11 +143,15 @@
         showInfoIndex: -1,
         currentPart: null,
         currentInfoPart: null,
+        currentWayBillPart: null,
         dialogComponents: {
           0: addForm
         },
         dialogInfoComponents: {
           0: showForm
+        },
+        dialogWayBillComponents: {
+          0: wayBillForm
         },
         pager: {
           currentPage: 1,
@@ -135,8 +162,12 @@
         action: '',
         form: {},
         filters: {
-          status: ''
-        }
+          status: 0
+        },
+        isCheckAll: false,
+        checkList: [],
+        checkListPara: [],
+        shoWayBillPart: false
       };
     },
     watch: {
@@ -151,6 +182,49 @@
       this.getTmsOrderPage(1);
     },
     methods: {
+      createWayBill: function () {
+        if (!this.checkList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请选择订单'
+          });
+          return;
+        }
+        this.shoWayBillPart = true;
+        this.currentWayBillPart = this.dialogWayBillComponents[0];
+        this.$nextTick(() => {
+          this.checkListPara = this.checkList.slice();
+        });
+      },
+      checkItem: function (item) {
+        // 单选
+        item.isChecked = !item.isChecked;
+        let index = this.checkList.indexOf(item);
+        if (item.isChecked) {
+          if (index === -1) {
+            this.checkList.push(item);
+          }
+        } else {
+          this.checkList.splice(index, 1);
+        }
+      },
+      checkAll() {
+        // 全选
+        if (this.isCheckAll) {
+          this.dataList.forEach(item => {
+            item.isChecked = true;
+            let index = this.checkList.indexOf(item);
+            if (index === -1) {
+              this.checkList.push(item);
+            }
+          });
+        } else {
+          this.dataList.forEach(item => {
+            item.isChecked = false;
+          });
+          this.checkList = [];
+        }
+      },
       searchResult: function (search) {
         Object.assign(this.filters, search);
       },
@@ -161,6 +235,7 @@
       resetRightBox () {
         this.showIndex = -1;
         this.showInfoIndex = -1;
+        this.shoWayBillPart = false;
       },
       getTmsOrderPage: function (pageNo, isContinue = false) {
         this.pager.currentPage = pageNo;
