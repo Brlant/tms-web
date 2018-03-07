@@ -42,8 +42,8 @@
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="订单类型" prop="type">
-                <el-select v-model="form.type" placeholder="请选择订单类型" :clearable="true">
+              <el-form-item slot="left" label="订单类型" prop="waybillType">
+                <el-select v-model="form.waybillType" placeholder="请选择订单类型" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-option>
                 </el-select>
               </el-form-item>
@@ -300,7 +300,7 @@
           orderNo: [
             {required: true, message: '请输入订单号', trigger: 'blur'}
           ],
-          type: [
+          waybillType: [
             {required: true, message: '请选择订单类型', trigger: 'change'}
           ],
           shipmentWay: [
@@ -342,6 +342,26 @@
       }
     },
     methods: {
+      remove: function (item) {
+        let index = this.form.goodsList.indexOf(item);
+        // 移除删除项
+        this.form.goodsList.splice(index, 1);
+        // // 重新计算排序值
+        // let delDtoList = this.form.goodsList;
+        // let delList = [];
+        // for (let i = 0; i < delDtoList.length ; i++) {
+        //   let value = delDtoList[i];
+        //   let no = value.index;
+        //   // 比删除项大的排序值-1
+        //   if (no > item.index) {
+        //     value = Object.assign(value, {'index': no - 1});
+        //   }
+        //   delList.push(value);
+        // }
+        // this.form = {
+        //   goodsList: delList
+        // };
+      },
       formatDeliveryTime: function (date) {
         if (!date) return '';
         this.form.deliveryTime = this.$moment(date).format('YYYY-MM-DD');
