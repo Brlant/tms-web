@@ -2,11 +2,11 @@ import {Address} from '@dtop/dtop-web-common';
 export default {
   address: Address.value,
   orderType: {
-    0: {'title': '待生成运单', state: null, num: ''},
-    1: {'title': '待派车', state: '1', num: ''},
-    2: {'title': '待启运', state: '2', num: ''},
-    3: {'title': '待签收', state: '3', num: ''},
-    4: {'title': '已完', state: '4', num: ''}
+    0: {'title': '待生成运单', status: '0', num: ''},
+    1: {'title': '待派车', status: '1', num: ''},
+    2: {'title': '待启运', status: '2', num: ''},
+    3: {'title': '待签收', status: '3', num: ''},
+    4: {'title': '已完', status: '4', num: ''}
   },
   /**
    * 格式化包装层级, 支持1到99级
