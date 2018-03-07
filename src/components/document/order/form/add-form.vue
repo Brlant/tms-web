@@ -34,7 +34,7 @@
           </div>
           <div class="content">
             <two-column>
-              <el-form-item slot="left" label="订单号" prop="orderNo">
+              <el-form-item slot="left" label="订单号">
                 <oms-input v-model="form.orderNo" placeholder="请输入订单号"></oms-input>
               </el-form-item>
               <el-form-item slot="right" label="委托单号">
@@ -297,9 +297,6 @@
         },
         doing: false,
         rules: {
-          orderNo: [
-            {required: true, message: '请输入订单号', trigger: 'blur'}
-          ],
           waybillType: [
             {required: true, message: '请选择订单类型', trigger: 'change'}
           ],

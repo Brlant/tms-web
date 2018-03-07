@@ -37,9 +37,10 @@
           <h2 class="header">
             <span class="pull-right">
               <!--<perm label="qualityItem-add">-->
-                <a href="#" class="btn-circle" @click.stop.prevent="addType">
-                  <i class="el-icon-t-plus"></i>
-                </a>
+              <!--<a href="#" class="btn-circle" @click.stop.prevent="addType">-->
+              <!--<i class="el-icon-t-plus"></i>-->
+              <!--</a>-->
+              <des-btn icon="plus" @click="showPart(0)"></des-btn>
               <!--</perm>-->
                 <a href="#" class="btn-circle" @click.prevent="searchType">
                   <i class="el-icon-t-search"></i>
@@ -182,10 +183,8 @@
         </div>
       </div>
     </div>
-    <page-right :show="showRight" @right-close="resetRightBox">
-      <edit-form :formItem="form" @change="onSubmit" :action="action" :actionType="showRight"
-                 :css="{'width':'1000px','padding':0}"
-                 @right-close="resetRightBox"></edit-form>
+    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
+      <component :is="currentPart" :action="action" :formItem="form"/>
     </page-right>
   </div>
 
@@ -201,6 +200,11 @@
     },
     data: function () {
       return {
+        showIndex: -1,
+        currentPart: null,
+        dialogComponents: {
+          0: () => import('./form/form.vue')
+        },
         showRight: false,
         showTypeRight: false,
         showTypeSearch: false,
@@ -317,9 +321,9 @@
         this.getPageList(this.pager.currentPage + 1, true);
       },
       resetRightBox: function () {
-        this.showRight = false;
+        this.showIndex = -1;
       },
-      addType: function () {
+      showPart: function () {
         this.action = 'add';
         this.form = {
           carDto: {
@@ -351,7 +355,8 @@
             thirdPartyInsuranceEndDate: ''
           }
         };
-        this.showRight = true;
+        this.showIndex = 0;
+        this.currentPart = this.dialogComponents[0];
       },
       searchType: function () {
         this.showTypeSearch = !this.showTypeSearch;
@@ -359,7 +364,8 @@
       edit: function () {
         this.action = 'edit';
         this.form = JSON.parse(JSON.stringify(this.data));
-        this.showRight = true;
+        this.showIndex = 0;
+        this.currentPart = this.dialogComponents[0];
       },
       remove: function () {
         this.$confirm('确认删除车辆档案"' + this.data.carDto.plateNumber + '"?', '', {
