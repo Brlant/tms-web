@@ -120,7 +120,7 @@
         <div class="d-table-right">
           <el-amap vid="aMap" :plugin="plugins" :zoom="10" :center="center" :style="'height:'+ bodyHeight">
             <el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"
-                            :label="marker.label" :animation="marker.animation"
+                            :label="marker.label" :icon="marker.icon" :animation="marker.animation"
                             :events="marker.events"></el-amap-marker>
           </el-amap>
         </div>
@@ -130,13 +130,17 @@
       </el-row>
     </div>
 
-    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'800px','padding':0, 'z-index': 1000}">
+    <page-right :show="showIndex === 0" @right-close="resetRightBox"
+                :css="{'width':'800px','padding':0, 'z-index': 1000}">
       <component :is="currentPart"/>
     </page-right>
   </div>
 </template>
 <script>
   import SearchPart from './search';
+  import Icon from '@/assets/img/marker.png';
+  import IconActive from '@/assets/img/marker_active.png';
+
   export default {
     components: {
       SearchPart
@@ -193,7 +197,7 @@
         this.currentPart = this.dialogComponents[index];
       },
       changeCheckStatus (item) {
-        item._marker.animation = item.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE';
+        this.setMarker(item._marker, item);
       },
       searchResult () {
         this.dataRows = [
@@ -230,19 +234,48 @@
         let marker = {
           position: [d.location.getLng(), d.location.getLat()],
           label: {
-            content: row.name,
+            content: `<div class="index_${row.count}">${row.name}</div>`,
             offset: [20, 20]
           },
+          icon: Icon,
           animation: 'AMAP_ANIMATION_NONE',
           events: {
             click: () => {
               row.isChecked = !row.isChecked;
-              marker.animation = row.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE';
+              this.setMarker(marker, row);
+            },
+            mouseover: () => {
+              if (row.isChecked) return;
+              this.setMarkerByMove(marker, row, true);
+            },
+            mouseout: () => {
+              if (row.isChecked) return;
+              this.setMarkerByMove(marker, row, false);
             }
           }
         };
         this.markers.push(marker);
         row._marker = marker;
+      },
+      setMarker (marker, row) {
+        marker.animation = row.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE';
+        marker.icon = row.isChecked ? IconActive : Icon;
+        this.setLabelBorderColor(row);
+      },
+      setLabelBorderColor (row) {
+        const ele = this.$el.getElementsByClassName('index_' + row.count);
+        if (ele.length) {
+          const classList = ele[0].parentNode.classList;
+          row.isChecked ? classList.add('active') : classList.remove('active');
+        }
+      },
+      setMarkerByMove (marker, row, type) {
+        marker.icon = type ? IconActive : Icon;
+        const ele = this.$el.getElementsByClassName('index_' + row.count);
+        if (ele.length) {
+          const classList = ele[0].parentNode.classList;
+          type ? classList.add('active') : classList.remove('active');
+        }
       }
     }
   };
