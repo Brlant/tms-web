@@ -24,7 +24,7 @@
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
-    <template slot="title">添加订单</template>
+    <template slot="title">查看运单</template>
     <template slot="btn">
       <el-button plain @click="close()">关闭</el-button>
     </template>
@@ -38,7 +38,7 @@
           </div>
           <div class="content">
             <two-column>
-              <el-form-item slot="left" label="订单号">
+              <el-form-item slot="left" label="运单号">
                 {{form.orderNo}}
               </el-form-item>
               <el-form-item slot="right" label="委托单号">
@@ -46,7 +46,7 @@
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="订单类型">
+              <el-form-item slot="left" label="运单类型">
                 <dict :dict-group="'tmsOrderType'" :dict-key="form.waybillType"></dict>
               </el-form-item>
               <el-form-item slot="right" label="发运方式">

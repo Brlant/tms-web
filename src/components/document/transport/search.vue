@@ -1,11 +1,11 @@
 <template>
   <search-template :isShow="showSearch"  @search="search" @isShow="isShow">
-    <template slot="title">运单查询</template>
+    <template slot="title">订单查询</template>
     <template slot="content">
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-row>
           <el-col :span="8">
-            <oms-form-row label="运单号" :span="5">
+            <oms-form-row label="订单号" :span="5">
               <oms-input placeholder="请输入运单号"></oms-input>
             </oms-form-row>
           </el-col>

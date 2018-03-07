@@ -18,6 +18,10 @@
     padding: 20px;
     margin-bottom: 20px;
   }
+
+  .el-form-item {
+    margin-bottom: 0px;
+  }
 </style>
 <template>
   <div>
