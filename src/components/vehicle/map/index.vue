@@ -119,7 +119,7 @@
         </div>
         <div class="d-table-right">
           <el-amap vid="aMap" :plugin="plugins" :zoom="10" :center="center" :style="'height:'+ bodyHeight">
-            <el-amap-marker v-for="(marker, index) in markers" :vid="index" :position="marker.position"
+            <el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"
                             :label="marker.label" :animation="marker.animation"
                             :events="marker.events"></el-amap-marker>
           </el-amap>
