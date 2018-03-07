@@ -36,7 +36,7 @@ export const routes = [
       {
         path: '/baseInfo',
         component: resolve => require(['./components/base-info/index.vue'], resolve),
-        meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'warehouse', perm: 'tms-base-info'},
+        meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'basic', perm: 'tms-base-info'},
         children: [
           {
             path: '/baseInfo/car-archives',
@@ -48,7 +48,7 @@ export const routes = [
       {
         path: '/document',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'document', title: '单据管理', icon: 'setting', perm: 'tms-system-config'},
+        meta: {moduleId: 'document', title: '单据管理', icon: 'warehouse', perm: 'tms-system-config'},
         children: [
           {
             path: '/document/order',
@@ -65,7 +65,7 @@ export const routes = [
       {
         path: '/vehicle',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'vehicle', title: '任务管理', icon: 'setting', perm: 'tms-system-config'},
+        meta: {moduleId: 'vehicle', title: '任务作业', icon: 'repertory', perm: 'tms-system-config'},
         children: [
           {
             path: '/vehicle/map/delivery',
