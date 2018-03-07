@@ -264,7 +264,7 @@
       },
       setLabelBorderColor (row) {
         const ele = this.$el.getElementsByClassName('index_' + row.count);
-        if (ele) {
+        if (ele.length) {
           const classList = ele[0].parentNode.classList;
           row.isChecked ? classList.add('active') : classList.remove('active');
         }
@@ -272,7 +272,7 @@
       setMarkerByMove (marker, row, type) {
         marker.icon = type ? IconActive : Icon;
         const ele = this.$el.getElementsByClassName('index_' + row.count);
-        if (ele) {
+        if (ele.length) {
           const classList = ele[0].parentNode.classList;
           type ? classList.add('active') : classList.remove('active');
         }

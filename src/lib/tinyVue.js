@@ -96,6 +96,7 @@ import uploadRelation from '../components/common/upload/upload.relation.vue';
 import perm from '../components/common/perm.vue';
 import ElForm from '../components/common/form/src/form.vue';
 import DialogTemplate from '@/components/common/dialog-template';
+import SearchTemplate from '@/components/common/search-template';
 const tinyVue = [
   Pagination,
   Dialog,
@@ -184,7 +185,8 @@ const tinyVue = [
   statusList,
   TwoColumn,
   DesBtn,
-  DialogTemplate
+  DialogTemplate,
+  SearchTemplate
 ];
 
 const install = function (Vue, opts = {}) {

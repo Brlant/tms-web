@@ -4,13 +4,7 @@
       <el-col :span="2">
         <h2 class="header f-dib">运单查询</h2>
       </el-col>
-      <!--<el-col :span="18" class="text-right">-->
-          <!--<span class="switching-icon" @click="showSearch = !showSearch">-->
-            <!--<i class="el-icon-arrow-up"></i>-->
-            <!--<span v-show="showSearch">收起筛选</span>-->
-            <!--<span v-show="!showSearch">展开筛选</span>-->
-          <!--</span>-->
-      <!--</el-col>-->
+
       <el-col :span="22" class="text-right">
         <el-button-group>
           <el-button type="primary" plain size="small" @click="search">查询结果</el-button>
