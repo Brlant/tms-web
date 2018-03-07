@@ -9,7 +9,7 @@
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
     <template slot="title">{{showTitle}}车辆档案</template>
     <template slot="btn">
-      <el-button plain @click="onSubmit('form')">保存</el-button>
+      <el-button plain @click="onSubmit('form')" :disabled="doing">保存</el-button>
     </template>
     <template slot="content">
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
@@ -295,9 +295,10 @@
         return this.$getDict('carType');
       }
     },
-    props: ['formItem', 'action', 'actionType'],
+    props: ['formItem', 'action'],
     watch: {
       formItem: function (val) {
+        console.log(val);
         this.form = Object.assign({}, val);
         if (this.action === 'add') {
           this.form.carDto =
@@ -361,11 +362,6 @@
           if (this.form.carDto.defaultDriverName) {
             this.filterUser(this.form.carDto.defaultDriverName);
           }
-        }
-      },
-      actionType: function (val) {
-        if (!val) {
-          this.$refs['form'].resetFields();
         }
       }
     },
@@ -449,7 +445,7 @@
                 this.$notify.success({
                   duration: 2000,
                   name: '成功',
-                  message: '新增车辆档案目成功'
+                  message: '新增车辆档案成功'
                 });
                 this.doing = false;
                 this.$emit('change', res.data);
@@ -457,7 +453,7 @@
               }).catch(() => {
                 this.$notify.error({
                   duration: 2000,
-                  message: '新增车辆档案目失败'
+                  message: '新增车辆档案失败'
                 });
                 this.doing = false;
               });
@@ -465,7 +461,7 @@
               CarArchives.update(this.form).then(res => {
                 this.$notify.success({
                   name: '成功',
-                  message: '修改车辆档案目"' + this.form.plateNumber + '"成功'
+                  message: '修改车辆档案"' + this.form.carDto.plateNumber + '"成功'
                 });
                 this.doing = false;
                 this.$emit('change', res.data);
@@ -473,7 +469,7 @@
               }).catch(() => {
                 this.$notify.error({
                   duration: 2000,
-                  message: '修改车辆档案目' + this.form.plateNumber + '"失败'
+                  message: '修改车辆档案' + this.form.carDto.plateNumber + '"失败'
                 });
                 this.doing = false;
               });

@@ -203,7 +203,7 @@
       </div>
     </div>
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
-      <component :is="currentPart" :action="action" :formItem="form"/>
+      <component :is="currentPart" :action="action" :formItem="form" @right-close="resetRightBox"  @change="onSubmit"/>
     </page-right>
   </div>
 
@@ -222,7 +222,7 @@
         showIndex: -1,
         currentPart: null,
         dialogComponents: {
-          0: () => import('./form/form.vue')
+          0: editForm
         },
         showRight: false,
         showTypeRight: false,
@@ -271,15 +271,7 @@
           pageSize: 20,
           totalPage: 1
         },
-        orgType: {
-          //          0: {'title': '所有', 'num': '', 'status': null},
-          0: {'title': '正常', 'num': '', 'status': 1},
-          1: {'title': '停用', 'num': '', 'status': 0}
-        },
         activeStatus: 0,
-        filters: {
-          status: 1
-        },
         doing: false
       };
     },
@@ -323,7 +315,7 @@
           pageNo: pageNo,
           pageSize: this.pager.pageSize,
           keyword: this.typeTxt
-        }, this.filters);
+        });
         CarArchives.query(param).then(res => {
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
@@ -382,9 +374,11 @@
       },
       edit: function () {
         this.action = 'edit';
-        this.form = JSON.parse(JSON.stringify(this.data));
         this.showIndex = 0;
         this.currentPart = this.dialogComponents[0];
+        this.$nextTick(() => {
+          this.form = JSON.parse(JSON.stringify(this.data));
+        });
       },
       remove: function () {
         this.$confirm('确认删除车辆档案"' + this.data.carDto.plateNumber + '"?', '', {
