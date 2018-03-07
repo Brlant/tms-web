@@ -176,6 +176,17 @@
           }
           this.pager.totalPage = res.data.totalPage;
         });
+        this.queryStateNum(param);
+      },
+      queryStateNum: function (params) {
+        TmsOrder.queryStateNum(params).then(res => {
+          let data = res.data;
+          this.orderType[0].num = data['pend-generate-waybill'];
+          this.orderType[1].num = data['pend-choose-car'];
+          this.orderType[2].num = data['pend-shipment'];
+          this.orderType[3].num = data['pend-sign'];
+          this.orderType[4].num = data['complete'];
+        });
       },
       showPart (index) {
         this.action = 'add';
