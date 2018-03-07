@@ -9,7 +9,6 @@ import './assets/css/basic.css';
 import './assets/fonts/iconfont.css';
 import Vuex from 'vuex';
 import store from './store';
-import utils from './tools/utils';
 import { init } from './tools/init';
 init(Vue);
 Vue.use(require('vue-moment'), {moment});
@@ -30,10 +29,3 @@ new Vue({
   router,
   store
 }).$mount('#app');
-
-(function (window, utils) {
-  let configuration = window.localStorage.getItem('localConfiguration');
-  if (!configuration) {
-    window.localStorage.setItem('localConfiguration', JSON.stringify(utils.configurationList));
-  }
-})(window, utils);

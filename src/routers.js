@@ -88,11 +88,6 @@ export const routes = [
             path: '/permission/role',
             component: () => import('./components/system/role/role.vue'),
             meta: {moduleId: 'permission', title: '角色管理', perm: 'tms-access-role-watch'}
-          },
-          {
-            path: '/permission/configuration',
-            component: () => import('./components/system/configuration/list.vue'),
-            meta: {moduleId: 'permission', title: '本地配置', perm: 'show'}
           }
         ]
       }

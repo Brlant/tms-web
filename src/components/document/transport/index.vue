@@ -67,6 +67,9 @@
       };
     },
     methods: {
+      searchResult () {
+
+      },
       checkStatus () {
 
       },
