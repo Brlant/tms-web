@@ -23,7 +23,7 @@
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
     <template slot="title">添加订单</template>
     <template slot="btn">
-      <el-button plain @click="save('form')">保存</el-button>
+      <el-button plain @click="save('form')" :disabled="doing">保存</el-button>
     </template>
     <template slot="content">
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
@@ -338,6 +338,12 @@
         return this.$getDict('tmsOrderType');
       }
     },
+    props: ['formItem', 'action'],
+    watch: {
+      formItem: function (val) {
+        this.form = Object.assign({}, val);
+      }
+    },
     methods: {
       remove: function (item) {
         let index = this.form.goodsList.indexOf(item);
@@ -416,26 +422,46 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
+            if (this.action === 'add') {
+              this.doing = true;
+              TmsOrder.save(this.form).then(res => {
+                this.$notify.success({
+                  duration: 2000,
+                  name: '成功',
+                  message: '新增订单成功'
+                });
+                this.doing = false;
+                this.$emit('change', res.data);
+                this.$emit('right-close');
+              }).catch(() => {
+                this.$notify.error({
+                  duration: 2000,
+                  message: '新增订单失败'
+                });
+                this.doing = false;
+              });
+            } else {
+              TmsOrder.update(this.form.id, this.form).then(res => {
+                this.$notify.success({
+                  name: '成功',
+                  message: '修改订单"' + this.form.orderNo + '"成功'
+                });
+                this.doing = false;
+                this.$emit('change', res.data);
+                this.$emit('right-close');
+              }).catch(() => {
+                this.$notify.error({
+                  duration: 2000,
+                  message: '修改订单' + this.form.orderNo + '"失败'
+                });
+                this.doing = false;
+              });
+            }
+          } else {
 
-            this.doing = true;
-            TmsOrder.save(this.form).then(res => {
-              this.$notify.success({
-                duration: 2000,
-                name: '成功',
-                message: '新增订单成功'
-              });
-              this.doing = false;
-              this.$emit('change', res.data);
-              this.$emit('right-close');
-            }).catch(() => {
-              this.$notify.error({
-                duration: 2000,
-                message: '新增订单失败'
-              });
-              this.doing = false;
-            });
           }
         });
+
       }
     }
   };

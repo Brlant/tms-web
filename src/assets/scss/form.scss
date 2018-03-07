@@ -19,8 +19,18 @@
   }
 }
 
+// 折行
 .acrony-my {
   .el-form-item__label {
     line-height: 20px;
+  }
+}
+
+.opera-btn span:hover {
+  color: $activeColor;
+  cursor: pointer;
+  a {
+    background: $activeColor;
+    color: #fff;
   }
 }
