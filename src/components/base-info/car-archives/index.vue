@@ -99,11 +99,8 @@
             </h2>
             <div class="page-main-body min-row">
               <el-row>
-                <el-col :span="4" class="text-right" style="font-size: 16px;">
-                  [ 基础信息 ]
-                </el-col>
-                <el-col :span="12" class="text-right" style="font-size: 16px">
-                  [ 详细信息 ]
+                <el-col :span="24" style="font-size: 16px;">
+                  [ 主档信息 ]
                 </el-col>
               </el-row>
               <el-row>
@@ -117,11 +114,16 @@
                   <goods-row label="车辆默认司机" :span="8">
                     {{ data.carDto.defaultDriverName}}
                   </goods-row>
+                  <goods-row label="车型" :span="8">
+                    <dict :dict-group="'carType'" :dict-key="formatStatus( data.carDto.type)"></dict>
+                  </goods-row>
                   <goods-row label="车辆核定载人数" :span="8">
                     {{ data.carDto.authorizedNumber}} <span v-if="data.carDto.authorizedNumber">人</span>
                   </goods-row>
-                  <goods-row label="车型" :span="8">
-                    <dict :dict-group="'carType'" :dict-key="formatStatus( data.carDto.type)"></dict>
+                </el-col>
+                <el-col :span="12">
+                  <goods-row label="车辆承重" :span="8">
+                    {{ data.carDto.loadBearing}} <span v-if="data.carDto.loadBearing">吨</span>
                   </goods-row>
                   <goods-row label="车厢长度" :span="8">
                     {{ data.carDto.carriageLength}} <span v-if="data.carDto.carriageLength">米</span>
@@ -135,32 +137,47 @@
                   <goods-row label="车厢容积" :span="8">
                     {{ data.carDto.volume}} <span v-if="data.carDto.volume">立方米</span>
                   </goods-row>
-                  <goods-row label="车辆承重" :span="8">
-                    {{ data.carDto.loadBearing}} <span v-if="data.carDto.loadBearing">吨</span>
-                  </goods-row>
                 </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24" style="font-size: 16px;">
+                  [ 行驶证信息 ]
+                </el-col>
+              </el-row>
+              <el-row>
                 <el-col :span="12">
                   <goods-row label="车辆品牌" :span="8">
                     {{ data.carDetailDto.brand}}
                   </goods-row>
-                  <goods-row label="车辆发动机号" :span="8">
-                    {{ data.carDetailDto.engineNumber}}
-                  </goods-row>
                   <goods-row label="车辆识别代码" :span="8">
                     {{ data.carDetailDto.identificationNumber}}
-                  </goods-row>
-                  <goods-row label="车辆注册日期" :span="8">
-                    {{ data.carDetailDto.createDate|date}}
                   </goods-row>
                   <goods-row label="发证日期" :span="8">
                     {{ data.carDetailDto.issuingDate|date}}
                   </goods-row>
-                  <goods-row label="检验有效期" :span="8">
-                    {{ data.carDetailDto.checkValidityDate|date}}
-                  </goods-row>
                   <goods-row label="强制报废日" :span="8">
                     {{ data.carDetailDto.forciblyDiscardedDay|date}}
                   </goods-row>
+                </el-col>
+                <el-col :span="12">
+                  <goods-row label="车辆发动机号" :span="8">
+                    {{ data.carDetailDto.engineNumber}}
+                  </goods-row>
+                  <goods-row label="车辆注册日期" :span="8">
+                    {{ data.carDetailDto.createDate|date}}
+                  </goods-row>
+                  <goods-row label="检验有效期" :span="8">
+                    {{ data.carDetailDto.checkValidityDate|date}}
+                  </goods-row>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24" style="font-size: 16px;">
+                  [ 保险信息 ]
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
                   <goods-row label="保险公司" :span="8">
                     {{ data.carDetailDto.insuranceCompany}}
                   </goods-row>
@@ -170,11 +187,13 @@
                   <goods-row label="交强险截止日期" :span="8">
                     {{ data.carDetailDto.ctaliEndDate|date}}
                   </goods-row>
-                  <goods-row label="第三责任险保单号" :span="8">
-                    {{ data.carDetailDto.thirdPartyInsuranceNumber}}
-                  </goods-row>
+                </el-col>
+                <el-col :span="12">
                   <goods-row label="第三责任险截止日期" :span="8">
                     {{ data.carDetailDto.thirdPartyInsuranceEndDate|date}}
+                  </goods-row>
+                  <goods-row label="第三责任险保单号" :span="8">
+                    {{ data.carDetailDto.thirdPartyInsuranceNumber}}
                   </goods-row>
                 </el-col>
               </el-row>
