@@ -55,7 +55,6 @@
                   <div style="overflow: hidden">
                     <span class="pull-left" style="clear: right">{{user.name}}</span>
                     <span class="pull-right">
-                        111
                         {{user.companyDepartmentName}}
                       </span>
                   </div>
