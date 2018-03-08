@@ -51,7 +51,7 @@
                 <dict :dict-group="'deliveryTaskType'" :dict-key="form.type"></dict>
               </el-form-item>
               <el-form-item slot="right" label="承运商">
-                {{form.id}}
+                {{form.taskCarriers}}
               </el-form-item>
             </two-column>
             <two-column>

@@ -65,7 +65,7 @@
             </el-col>
             <el-col :span="4" class="R">
               <div>
-                {{item.id}}
+                {{item.taskCarriers}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
