@@ -53,7 +53,18 @@
             </div>
             <two-column>
               <el-form-item slot="left" label="司机" prop="driverName">
-                <oms-input v-model="form.driverName" placeholder="请输入司机姓名"></oms-input>
+                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
+                           :clearable="true" @click.native.once="filterUser('')"
+                           v-model="form.driveId" popperClass="good-selects">
+                  <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
+                    <div style="overflow: hidden">
+                      <span class="pull-left" style="clear: right">{{user.name}}</span>
+                      <span class="pull-right">
+                        {{user.companyDepartmentName}}
+                      </span>
+                    </div>
+                  </el-option>
+                </el-select>
               </el-form-item>
               <el-form-item slot="right" label="司机电话">
                 <oms-input v-model="form.driverPhone" placeholder="请输入司机电话"></oms-input>
@@ -78,7 +89,18 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="理货员">
-                <oms-input v-model="form.tallyClerk" placeholder="请输入理货员姓名"></oms-input>
+                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterTallyClerk"
+                           :clearable="true" @click.native.once="filterTallyClerk('')"
+                           v-model="form.tallyClerk" popperClass="good-selects">
+                  <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in tallyClerkList">
+                    <div style="overflow: hidden">
+                      <span class="pull-left" style="clear: right">{{user.name}}</span>
+                      <span class="pull-right">
+                        {{user.companyDepartmentName}}
+                      </span>
+                    </div>
+                  </el-option>
+                </el-select>
               </el-form-item>
               <el-form-item slot="right" label="理货员电话">
                 <oms-input v-model="form.tallyClerkPhone" placeholder="请输入理货员电话"></oms-input>
@@ -90,7 +112,7 @@
           </div>
           <div class="hr mb-10"></div>
         </div>
-        <el-row class="text-right">
+        <el-row class="text-center" style="margin-right: 80px">
           <el-form-item>
             <el-button type="primary" @click="save('form')" :disabled="doing">保存</el-button>
           </el-form-item>
@@ -100,7 +122,7 @@
   </div>
 </template>
 <script>
-  import {CarArchives, TransportTask} from '../../../resources';
+  import {CarArchives, TransportTask, User} from '../../../resources';
 
   export default {
     data () {
@@ -117,7 +139,9 @@
         form: {
           orderIdList: []
         },
-        doing: false
+        doing: false,
+        userList: [],
+        tallyClerkList: []
       };
     },
     computed: {
@@ -129,13 +153,36 @@
     watch: {
       checkList: {
         handler: function (val) {
-          console.log(val);
           this.form.orderIdList = val;
         },
         deep: true
       }
     },
     methods: {
+      filterUser: function (query) {
+        let data = Object.assign({}, {
+          pageNo: 1,
+          pageSize: 20,
+          objectId: 'oms-system',
+          keyWord: query,
+          status: 1
+        });
+        User.query(data).then(res => {
+          this.userList = res.data.list;
+        });
+      },
+      filterTallyClerk: function (query) {
+        let data = Object.assign({}, {
+          pageNo: 1,
+          pageSize: 20,
+          objectId: 'oms-system',
+          keyWord: query,
+          status: 1
+        });
+        User.query(data).then(res => {
+          this.tallyClerkList = res.data.list;
+        });
+      },
       getCarList: function (query) {
         let param = Object.assign({}, {
           keyword: query
@@ -150,6 +197,10 @@
             if (val.carDto.id === id) {
               this.carInfo = val.carDto;
               this.form.carPlateNumber = val.plateNumber;
+              if (val.carDto.defaultDriver) {
+                this.form.driveId = val.carDto.defaultDriver;
+                this.filterUser(val.carDto.defaultDriverName);
+              }
             }
           });
         }
