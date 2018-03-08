@@ -58,7 +58,7 @@
               <el-form-item slot="left" label="服务方式">
                 <el-select v-model="form.serviceType" placeholder="请选择服务方式" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
-                             v-for="item in shipmentWayList"></el-option>
+                             v-for="item in serviceTypeList"></el-option>
                 </el-select>
               </el-form-item>
             </two-column>
@@ -150,10 +150,6 @@
             <el-form-item slot="right" label="收货地址" prop="receiverAddress">
               <oms-input v-model="form.receiverAddress" placeholder="请输入收货地址"></oms-input>
             </el-form-item>
-            <two-column>
-              <el-form-item slot="left" label="收货地址经度"></el-form-item>
-              <el-form-item slot="right" label="收货地址纬度"></el-form-item>
-            </two-column>
           </div>
           <div class="hr mb-10"></div>
         </div>
@@ -163,9 +159,6 @@
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">{{pageSets[3].name}}</h3>
           </div>
           <div class="content">
-            <el-form-item label="货品名称">
-              <oms-input v-model="form.goodsTotalName" placeholder="请输入货品名称"></oms-input>
-            </el-form-item>
             <two-column>
               <el-form-item slot="left" label="整装箱数" prop="wholeBoxCount">
                 <oms-input type="integer" :min="0" v-model="form.wholeBoxCount" placeholder="请输入整装箱数"
@@ -200,9 +193,21 @@
                   <template slot="append">m³</template>
                 </oms-input>
               </el-form-item>
+              <el-form-item label="货品名称">
+                <oms-input v-model="form.goodsTotalName" placeholder="如果填写货品清淡，货品名称会根据货品清单自动生成。"></oms-input>
+              </el-form-item>
             </two-column>
-            <h4>货品详情信息 <span @click="addGoods" class="btn-circle"><i class="el-icon-t-plus"></i> </span></h4>
-            <div class="part-hj-box" v-for="(hj,index) in form.goodsList" v-show="form.goodsList">
+          </div>
+          <div class="hr mb-10"></div>
+        </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">{{pageSets[4].name}}
+              <span @click="addGoods" class="btn-circle"><i class="el-icon-t-plus"></i> </span></h3>
+          </div>
+          <div class="content">
+            <div class="part-hj-box" v-for="hj in form.goodsList" v-show="form.goodsList">
               <el-form-item label="货品名称">
                 <oms-input v-model="hj.goodsName" placeholder="请输入货品名称"></oms-input>
               </el-form-item>
@@ -236,7 +241,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">{{pageSets[4].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[5].key === currentTab.key}">
+              {{pageSets[5].name}}</h3>
           </div>
           <div class="content">
             <el-form-item label="提货时间">
@@ -281,7 +287,8 @@
           {name: '发货信息', key: 1},
           {name: '收货信息', key: 2},
           {name: '货品信息', key: 3},
-          {name: '其他信息', key: 4}
+          {name: '货品详情信息', key: 4},
+          {name: '其他信息', key: 5}
         ],
         currentTab: {},
         form: {
@@ -336,16 +343,26 @@
       },
       typeList() {
         return this.$getDict('tmsOrderType');
+      },
+      serviceTypeList() {
+        return this.$getDict('serviceType');
       }
     },
     props: ['formItem', 'action'],
     watch: {
       formItem: function (val) {
-        this.form = Object.assign({}, val);
+        if (this.action === 'add') {
+          this.form = Object.assign({}, val);
+        }
         if (this.action === 'edit') {
           this.filterCustomer(this.form.orgId);
           this.filterSenderOrg(this.form.senderId);
           this.filterReceiverOrg(this.form.receiverId);
+          if (val.id) {
+            TmsOrder.getOneTmsOrder(val.id).then(res => {
+              this.form = res.data;
+            });
+          }
         }
       }
     },

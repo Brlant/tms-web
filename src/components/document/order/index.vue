@@ -16,7 +16,7 @@
 
     <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus">
       <span class="btn-group-right">
-        <des-btn icon="wave" @click="createWayBill" v-if="activeStatus===0">生成运单</des-btn>
+        <des-btn icon="wave" @click="createWayBill" v-if="activeStatus===0||activeStatus==='0'">生成运单</des-btn>
         <des-btn icon="plus" @click="showPart(0)">添加</des-btn>
         <!--<el-button size="small" plain @click="showPart(0)">添加</el-button>-->
       </span>
@@ -24,17 +24,22 @@
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="3">
+        <el-col :span="4">
           <el-checkbox @change="checkAll" v-model="isCheckAll" v-if="activeStatus===0"></el-checkbox>
           订单号
         </el-col>
-        <el-col :span="3">委托单号</el-col>
         <el-col :span="2">订单类型</el-col>
-        <el-col :span="2">发运方式</el-col>
-        <el-col :span="2">服务方式</el-col>
-        <el-col :span="4">发货单位</el-col>
-        <el-col :span="4">收货单位</el-col>
-        <el-col :span="4">操作</el-col>
+        <el-col :span="2">运单号</el-col>
+        <el-col :span="2">发货单位</el-col>
+        <el-col :span="2">收货单位</el-col>
+        <el-col :span="2">收货地址</el-col>
+        <el-col :span="1">整件</el-col>
+        <el-col :span="1">散件</el-col>
+        <el-col :span="1">包件</el-col>
+        <el-col :span="2">提货</el-col>
+        <el-col :span="2">送达</el-col>
+        <el-col :span="1">状态</el-col>
+        <el-col :span="2">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -51,19 +56,15 @@
       <div v-else="" class="order-list-body flex-list-dom">
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)">
           <el-row>
-            <el-col :span="3" class="special-col">
-              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)" v-if="activeStatus===0">
+            <el-col :span="4" class="special-col">
+              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
+                   v-if="activeStatus===0||activeStatus==='0'">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
                 {{item.orderNo}}
               </div>
             </el-col>
-            <el-col :span="3">
-              <div>
-                {{item.tmsOrderNumber}}
-              </div>
-            </el-col>
             <el-col :span="2">
               <div>
                 <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
@@ -71,36 +72,70 @@
             </el-col>
             <el-col :span="2">
               <div>
-                <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
+                {{item.waybillNumber}}
               </div>
             </el-col>
             <el-col :span="2">
-              <div>
-                <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
-              </div>
-            </el-col>
-            <el-col :span="4">
               <div>
                 {{item.senderId}}
               </div>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="2">
               <div>
                 {{item.receiverId}}
               </div>
             </el-col>
-            <el-col :span="3" class="opera-btn">
+            <el-col :span="2">
               <div>
-                <span @click.stop="edit(item)">
-                  <a @click.pervent="" class="btn-circle btn-opera">
-                    <i class="el-icon-t-edit"></i>
-                  </a>编辑
-                </span>
-                <span @click.stop="deleteOrder(item)">
-                  <a @click.pervent="" class="btn-circle btn-opera">
-                    <i class="el-icon-t-delete"></i>
-                  </a>删除
-                </span>
+                {{item.receiverAddress}}
+              </div>
+            </el-col>
+            <el-col :span="1">
+              <div>
+                {{item.wholeBoxCount}} <span v-if="item.wholeBoxCount">箱</span>
+              </div>
+            </el-col>
+            <el-col :span="1">
+              <div>
+                {{item.bulkBoxCount}} <span v-if="item.bulkBoxCount">箱</span>
+              </div>
+            </el-col>
+            <el-col :span="1">
+              <div>
+                {{item.incubatorCount}} <span v-if="item.incubatorCount">件</span>
+              </div>
+            </el-col>
+            <el-col :span="2">
+              <div>
+                {{item.pickUpTime|date}}
+              </div>
+            </el-col>
+            <el-col :span="2">
+              <div>
+                {{item.deliveryTime|date}}
+              </div>
+            </el-col>
+            <el-col :span="1">
+              <div>
+                {{getStatus(item)}}
+              </div>
+            </el-col>
+            <el-col :span="2" class="opera-btn">
+              <div>
+                <div>
+                  <span @click.stop="edit(item)">
+                    <a @click.pervent="" class="btn-circle btn-opera">
+                      <i class="el-icon-t-edit"></i>
+                    </a>编辑
+                  </span>
+                </div>
+                <div style="padding-top: 2px">
+                  <span @click.stop="deleteOrder(item)">
+                    <a @click.pervent="" class="btn-circle btn-opera">
+                      <i class="el-icon-t-delete"></i>
+                    </a>删除
+                  </span>
+                </div>
               </div>
             </el-col>
           </el-row>
@@ -162,7 +197,11 @@
         action: '',
         form: {},
         filters: {
-          status: 0
+          status: 0,
+          orderNo: '',
+          tmsOrderNumber: '',
+          waybillType: '',
+          shipmentWay: ''
         },
         isCheckAll: false,
         checkList: [],
@@ -182,6 +221,25 @@
       this.getTmsOrderPage(1);
     },
     methods: {
+      getStatus: function (item) {
+        let title = '';
+        if (item.status === '0') {
+          title = '待生成运单';
+        }
+        if (item.status === '1') {
+          title = '待派车';
+        }
+        if (item.status === '2') {
+          title = '待启运';
+        }
+        if (item.status === '3') {
+          title = '待签收';
+        }
+        if (item.status === '4') {
+          title = '已完成';
+        }
+        return title;
+      },
       createWayBill: function () {
         if (!this.checkList.length) {
           this.$notify.warning({
