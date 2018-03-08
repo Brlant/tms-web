@@ -5,17 +5,20 @@
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-row>
           <el-col :span="8">
-            <oms-form-row label="订单号" :span="5">
-              <oms-input v-model="searchCondition.orderNo" placeholder="请输入运单号"></oms-input>
+            <oms-form-row label="任务编码" :span="5">
+              <oms-input v-model="searchCondition.transportTaskNo" placeholder="请输入任务编码"></oms-input>
             </oms-form-row>
           </el-col>
           <el-col :span="8">
-            <oms-form-row label="委托单号" :span="5">
-              <oms-input v-model="searchCondition.tmsOrderNumber" placeholder="请输入委托单号"></oms-input>
+            <oms-form-row label="任务类型" :span="5">
+              <el-select placeholder="请选择车型" v-model="searchCondition.type">
+                <el-option :label="item.label" :value="item.key" :key="item.key"
+                           v-for="item in deliveryTaskTypeList"></el-option>
+              </el-select>
             </oms-form-row>
           </el-col>
           <el-col :span="8">
-            <oms-form-row label="订单类型" :span="5">
+            <oms-form-row label="任务状态" :span="5">
               <el-select v-model="searchCondition.waybillType" placeholder="请选择订单类型" :clearable="true">
                 <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-option>
               </el-select>
@@ -103,14 +106,8 @@
       };
     },
     computed: {
-      typeList() {
-        return this.$getDict('tmsOrderType');
-      },
-      shipmentWayList() {
-        return this.$getDict('shipmentWayType');
-      },
-      serviceTypeList() {
-        return this.$getDict('serviceType');
+      deliveryTaskTypeList() {
+        return this.$getDict('deliveryTaskType');
       }
     },
     methods: {

@@ -64,7 +64,7 @@
             <two-column>
               <el-form-item slot="left" label="车辆承重" prop="carDto.loadBearing">
                 <oms-input type="number" v-model.number="form.carDto.loadBearing" min="0" placeholder="请输入车辆承重">
-                  <template slot="append">吨(t)</template>
+                  <template slot="append">千克</template>
                 </oms-input>
               </el-form-item>
               <el-form-item slot="right" label="核定载人数">

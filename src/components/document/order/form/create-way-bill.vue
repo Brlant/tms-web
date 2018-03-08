@@ -27,7 +27,7 @@
   <div>
     <div class="content-part">
       <div class="content-left">
-        <h2 class="clearfix right-title">生成波次</h2>
+        <h2 class="clearfix right-title">生成运单</h2>
         <div class="dialog-left-list">
           <div class="dialog-left-item" v-for="(item, index) in dataList" :key="item.id"
                :class="{active:activeId === index}"
@@ -67,7 +67,7 @@
               </two-column>
               <two-column>
                 <el-form-item slot="left" label="服务方式">
-                  <dict :dict-group="'shipmentWayType'" :dict-key="currentOrder.shipmentWay"></dict>
+                  <dict :dict-group="'serviceType'" :dict-key="currentOrder.serviceType"></dict>
                 </el-form-item>
               </two-column>
             </div>
@@ -121,10 +121,6 @@
               <el-form-item slot="right" label="收货地址">
                 {{currentOrder.receiverAddress}}
               </el-form-item>
-              <two-column>
-                <el-form-item slot="left" label="收货地址经度"></el-form-item>
-                <el-form-item slot="right" label="收货地址纬度"></el-form-item>
-              </two-column>
             </div>
             <div class="hr mb-10"></div>
           </div>
@@ -135,9 +131,6 @@
                 {{pageSets[3].name}}</h3>
             </div>
             <div class="content">
-              <el-form-item label="货品名称">
-                {{currentOrder.goodsTotalName}}
-              </el-form-item>
               <two-column>
                 <el-form-item slot="left" label="整装箱数">
                   {{currentOrder.wholeBoxCount}} <span v-if="currentOrder.wholeBoxCount">箱</span>
@@ -162,7 +155,19 @@
                   {{currentOrder.goodsVolume}} <span v-if="currentOrder.goodsVolume">m³</span>
                 </el-form-item>
               </two-column>
-              <h4>货品详情信息</h4>
+              <el-form-item label="货品名称">
+                {{currentOrder.goodsTotalName}}
+              </el-form-item>
+            </div>
+            <div class="hr mb-10"></div>
+          </div>
+          <div class="form-header-part">
+            <div class="header">
+              <div class="sign f-dib"></div>
+              <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">
+                {{pageSets[4].name}}</h3>
+            </div>
+            <div class="content">
               <div class="part-hj-box" v-for="(hj,index) in currentOrder.goodsList" v-show="currentOrder.goodsList">
                 <el-form-item label="货品名称">
                   {{hj.goodsName}}
@@ -190,8 +195,8 @@
           <div class="form-header-part">
             <div class="header">
               <div class="sign f-dib"></div>
-              <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">
-                {{pageSets[4].name}}</h3>
+              <h3 class="tit f-dib index-tit" :class="{active: pageSets[5].key === currentTab.key}">
+                {{pageSets[5].name}}</h3>
             </div>
             <div class="content">
               <two-column>
@@ -233,7 +238,8 @@
           {name: '发货信息', key: 1},
           {name: '收货信息', key: 2},
           {name: '货品信息', key: 3},
-          {name: '其他信息', key: 4}
+          {name: '货品详情信息', key: 4},
+          {name: '其他信息', key: 5}
         ],
         currentTab: {},
         form: {
@@ -292,8 +298,12 @@
         });
       },
       showOrder: function (item, index) {
-        this.currentOrder = item;
-        this.activeId = index;
+        if (item.id) {
+          TmsOrder.getOneTmsOrder(item.id).then(val => {
+            this.currentOrder = val.data;
+            this.activeId = index;
+          });
+        }
       },
       selectTab(item) {
         this.currentTab = item;

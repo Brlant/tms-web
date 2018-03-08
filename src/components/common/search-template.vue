@@ -15,7 +15,8 @@
       <!--</el-col>-->
       <el-col :span="22" class="text-right">
         <el-button-group>
-          <el-button type="primary" plain size="small" @click="search">查询结果</el-button>
+          <el-button type="primary" plain size="small" @click="search">查询</el-button>
+          <el-button type="primary" plain size="small" @click="reset">重置</el-button>
           <el-button type="primary" plain size="small" @click="showSearch = !showSearch">高级检索</el-button>
           <slot name="btn"></slot>
         </el-button-group>
@@ -46,6 +47,9 @@
     methods: {
       search () {
         this.$emit('search');
+      },
+      reset() {
+        this.$emit('reset');
       }
     }
   };

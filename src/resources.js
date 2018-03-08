@@ -64,6 +64,9 @@ export const TmsOrder = resource('/tms-order', http, {
   },
   createWayBill: (params) => {
     return http.put('/tms-order/list/generate', params);
+  },
+  getOneTmsOrder: (id) => {
+    return http.get('/tms-order/' + id, {});
   }
 });
 
@@ -71,6 +74,16 @@ export const TmsOrder = resource('/tms-order', http, {
 export const TmsWayBill = resource('/tms-waybill', http, {
   queryStateNum: (params) => {
     return http.get('/tms-waybill/count', {params});
+  },
+  getOneTmsWayBill: (id) => {
+    return http.get('/tms-waybill/' + id, {});
+  }
+});
+
+// transport-task 对象
+export const TransportTask = resource('/transport-task', http, {
+  getOneTransportTask: (id) => {
+    return http.get('/transport-task/' + id, {});
   }
 });
 

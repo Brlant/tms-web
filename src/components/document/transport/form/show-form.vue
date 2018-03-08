@@ -55,7 +55,7 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="服务方式">
-                <dict :dict-group="'shipmentWayType'" :dict-key="form.shipmentWay"></dict>
+                <dict :dict-group="'serviceType'" :dict-key="form.serviceType"></dict>
               </el-form-item>
             </two-column>
           </div>
@@ -109,10 +109,6 @@
             <el-form-item slot="right" label="收货地址">
               {{form.receiverAddress}}
             </el-form-item>
-            <two-column>
-              <el-form-item slot="left" label="收货地址经度"></el-form-item>
-              <el-form-item slot="right" label="收货地址纬度"></el-form-item>
-            </two-column>
           </div>
           <div class="hr mb-10"></div>
         </div>
@@ -123,9 +119,6 @@
               {{pageSets[3].name}}</h3>
           </div>
           <div class="content">
-            <el-form-item label="货品名称">
-              {{form.goodsTotalName}}
-            </el-form-item>
             <two-column>
               <el-form-item slot="left" label="整装箱数">
                 {{form.wholeBoxCount}} <span v-if="form.wholeBoxCount">箱</span>
@@ -150,7 +143,19 @@
                 {{form.goodsVolume}} <span v-if="form.goodsVolume">m³</span>
               </el-form-item>
             </two-column>
-            <h4>货品详情信息</h4>
+            <el-form-item label="货品名称">
+              {{form.goodsTotalName}}
+            </el-form-item>
+          </div>
+          <div class="hr mb-10"></div>
+        </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">
+              {{pageSets[4].name}}</h3>
+          </div>
+          <div class="content">
             <div class="part-hj-box" v-for="(hj,index) in form.goodsList" v-show="form.goodsList">
               <el-form-item label="货品名称">
                 {{hj.goodsName}}
@@ -172,14 +177,14 @@
                 </el-form-item>
               </two-column>
             </div>
+            <div class="hr mb-10"></div>
           </div>
-          <div class="hr mb-10"></div>
         </div>
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">
-              {{pageSets[4].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[5].key === currentTab.key}">
+              {{pageSets[5].name}}</h3>
           </div>
           <div class="content">
             <two-column>
@@ -207,6 +212,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+  import {TmsWayBill} from '../../../../resources';
 
   export default {
     components: {TwoColumn},
@@ -219,7 +225,8 @@
           {name: '发货信息', key: 1},
           {name: '收货信息', key: 2},
           {name: '货品信息', key: 3},
-          {name: '其他信息', key: 4}
+          {name: '货品详情信息', key: 4},
+          {name: '其他信息', key: 5}
         ],
         currentTab: {},
         form: {
@@ -240,7 +247,11 @@
     props: ['formItem'],
     watch: {
       formItem: function (val) {
-        this.form = Object.assign({}, val);
+        if (val.id) {
+          TmsWayBill.getOneTmsWayBill(val.id).then(res => {
+            this.form = res.data;
+          });
+        }
       }
     },
     methods: {
