@@ -56,7 +56,7 @@
       <div v-else="" class="order-list-body flex-list-dom">
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)">
           <el-row>
-            <el-col :span="4" class="special-col">
+            <el-col :span="4" class="special-col R">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
                    v-if="activeStatus===0||activeStatus==='0'">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
@@ -65,57 +65,57 @@
                 {{item.orderNo}}
               </div>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" class="R">
               <div>
                 <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
               </div>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" class="R">
               <div>
                 {{item.waybillNumber}}
               </div>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" class="R">
               <div>
                 {{item.senderId}}
               </div>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" class="R">
               <div>
                 {{item.receiverId}}
               </div>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" class="R">
               <div>
                 {{item.receiverAddress}}
               </div>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" class="R">
               <div>
                 {{item.wholeBoxCount}} <span v-if="item.wholeBoxCount">箱</span>
               </div>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" class="R">
               <div>
                 {{item.bulkBoxCount}} <span v-if="item.bulkBoxCount">箱</span>
               </div>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" class="R">
               <div>
                 {{item.incubatorCount}} <span v-if="item.incubatorCount">件</span>
               </div>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" class="R">
               <div>
                 {{item.pickUpTime|date}}
               </div>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" class="R">
               <div>
                 {{item.deliveryTime|date}}
               </div>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" class="R">
               <div>
                 {{getStatus(item)}}
               </div>

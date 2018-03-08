@@ -74,6 +74,9 @@ export const TmsOrder = resource('/tms-order', http, {
 export const TmsWayBill = resource('/tms-waybill', http, {
   queryStateNum: (params) => {
     return http.get('/tms-waybill/count', {params});
+  },
+  getOneTmsWayBill: (id) => {
+    return http.get('/tms-waybill/' + id, {});
   }
 });
 
