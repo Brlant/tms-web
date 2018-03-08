@@ -28,13 +28,14 @@
           <el-checkbox @change="checkAll" v-model="isCheckAll" v-if="activeStatus===0"></el-checkbox>
           订单号
         </el-col>
-        <el-col :span="3">委托单号</el-col>
+        <el-col :span="2">委托单号</el-col>
         <el-col :span="2">订单类型</el-col>
         <el-col :span="2">发运方式</el-col>
         <el-col :span="2">服务方式</el-col>
         <el-col :span="4">发货单位</el-col>
         <el-col :span="4">收货单位</el-col>
-        <el-col :span="4">操作</el-col>
+        <el-col :span="2">状态</el-col>
+        <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -49,7 +50,8 @@
         </el-col>
       </el-row>
       <div v-else="" class="order-list-body flex-list-dom">
-        <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)">
+        <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
+             :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="3" class="special-col">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)" v-if="activeStatus===0">
@@ -59,7 +61,7 @@
                 {{item.orderNo}}
               </div>
             </el-col>
-            <el-col :span="3">
+            <el-col :span="2">
               <div>
                 {{item.tmsOrderNumber}}
               </div>
@@ -88,6 +90,9 @@
               <div>
                 {{item.receiverId}}
               </div>
+            </el-col>
+            <el-col :span="2">
+              {{formatStatusTitle(item.status, orderType)}}
             </el-col>
             <el-col :span="3" class="opera-btn">
               <div>
@@ -124,20 +129,22 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {TmsOrder} from '../../../resources';
+  import { TmsOrder } from '../../../resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import wayBillForm from './form/create-way-bill.vue';
+  import StatusMixin from '@/mixins/statusMixin';
 
   export default {
     components: {
       SearchPart, addForm, wayBillForm
     },
+    mixins: [StatusMixin],
     data () {
       return {
         loadingData: false,
         activeStatus: 0,
-        orderType: utils.orderType,
+        orderType: JSON.parse(JSON.stringify(utils.orderType)),
         dataList: [],
         showIndex: -1,
         showInfoIndex: -1,
@@ -178,7 +185,7 @@
         deep: true
       }
     },
-    mounted() {
+    mounted () {
       this.getTmsOrderPage(1);
     },
     methods: {
@@ -208,7 +215,7 @@
           this.checkList.splice(index, 1);
         }
       },
-      checkAll() {
+      checkAll () {
         // 全选
         if (this.isCheckAll) {
           this.dataList.forEach(item => {
@@ -269,6 +276,8 @@
         this.currentPart = this.dialogComponents[index];
       },
       edit: function (item) {
+        this.currentItem = item;
+        this.currentItemId = item.id;
         this.action = 'edit';
         this.showIndex = 0;
         this.currentPart = this.dialogComponents[0];
@@ -277,6 +286,8 @@
         });
       },
       deleteOrder: function (item) {
+        this.currentItem = item;
+        this.currentItemId = item.id;
         this.$confirm('确认删除订单"' + item.orderNo + '"?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -300,13 +311,15 @@
         });
       },
       showInfo: function (item) {
+        this.currentItem = item;
+        this.currentItemId = item.id;
         this.showInfoIndex = 0;
         this.currentInfoPart = this.dialogInfoComponents[0];
         this.$nextTick(() => {
           this.form = JSON.parse(JSON.stringify(item));
         });
       },
-      submit() {
+      submit () {
         this.getTmsOrderPage(1);
       }
     }
