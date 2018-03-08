@@ -258,7 +258,7 @@
         row._marker = marker;
       },
       setMarker (marker, row) {
-        marker.animation = row.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE';
+        // marker.animation = row.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE';
         marker.icon = row.isChecked ? IconActive : Icon;
         this.setLabelBorderColor(row);
       },
