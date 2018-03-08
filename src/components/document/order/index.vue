@@ -54,7 +54,8 @@
         </el-col>
       </el-row>
       <div v-else="" class="order-list-body flex-list-dom">
-        <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)">
+        <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
+             :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="4" class="special-col R">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
@@ -117,7 +118,7 @@
             </el-col>
             <el-col :span="1" class="R">
               <div>
-                {{getStatus(item)}}
+                {{formatStatusTitle(item.status, orderType)}}
               </div>
             </el-col>
             <el-col :span="2" class="opera-btn">
@@ -163,11 +164,12 @@
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import wayBillForm from './form/create-way-bill.vue';
-
+  import StatusMixin from '@/mixins/statusMixin';
   export default {
     components: {
       SearchPart, addForm, wayBillForm
     },
+    mixins: [StatusMixin],
     data () {
       return {
         loadingData: false,
@@ -224,25 +226,6 @@
       this.getTmsOrderPage(1);
     },
     methods: {
-      getStatus: function (item) {
-        let title = '';
-        if (item.status === '0') {
-          title = '待生成运单';
-        }
-        if (item.status === '1') {
-          title = '待派车';
-        }
-        if (item.status === '2') {
-          title = '待启运';
-        }
-        if (item.status === '3') {
-          title = '待签收';
-        }
-        if (item.status === '4') {
-          title = '已完成';
-        }
-        return title;
-      },
       createWayBill: function () {
         if (!this.checkList.length) {
           this.$notify.warning({
@@ -330,6 +313,8 @@
         this.currentPart = this.dialogComponents[index];
       },
       edit: function (item) {
+        this.currentItem = item;
+        this.currentItemId = item.id;
         this.action = 'edit';
         this.showIndex = 0;
         this.currentPart = this.dialogComponents[0];
@@ -338,6 +323,8 @@
         });
       },
       deleteOrder: function (item) {
+        this.currentItem = item;
+        this.currentItemId = item.id;
         this.$confirm('确认删除订单"' + item.orderNo + '"?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -361,6 +348,8 @@
         });
       },
       showInfo: function (item) {
+        this.currentItem = item;
+        this.currentItemId = item.id;
         this.showInfoIndex = 0;
         this.currentInfoPart = this.dialogInfoComponents[0];
         this.$nextTick(() => {

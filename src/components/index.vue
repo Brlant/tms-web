@@ -93,7 +93,7 @@
 
 </style>
 <template>
-  <div class="app-body">
+  <div class="app-body full-width">
     <app-header :to-route="toRoute" v-if="userType"></app-header>
     <div class="main-body container">
       <div class="layer-loading" v-show="loading"><i></i><i></i><i></i></div>
