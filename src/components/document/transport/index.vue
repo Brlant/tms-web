@@ -16,7 +16,6 @@
 
     <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus">
       <span class="btn-group-right">
-        <des-btn icon="wave" @click="createWayBill" v-if="activeStatus===0||activeStatus==='0'">生成运单</des-btn>
         <des-btn icon="plus" @click="showPart(0)">添加</des-btn>
         <!--<el-button size="small" plain @click="showPart(0)">添加</el-button>-->
       </span>
@@ -25,7 +24,6 @@
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="4">
-          <el-checkbox @change="checkAll" v-model="isCheckAll" v-if="activeStatus===0"></el-checkbox>
           运单号
         </el-col>
         <el-col :span="2">运单类型</el-col>
@@ -57,10 +55,6 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)">
           <el-row>
             <el-col :span="4" class="special-col R">
-              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
-                   v-if="activeStatus===0||activeStatus==='0'">
-                <el-checkbox v-model="item.isChecked"></el-checkbox>
-              </div>
               <div>
                 {{item.orderNo}}
               </div>
@@ -189,7 +183,6 @@
         action: '',
         form: {},
         filters: {
-          status: 0,
           orderNo: '',
           tmsOrderNumber: '',
           waybillType: '',

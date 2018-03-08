@@ -80,6 +80,11 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   }
 });
 
+// transport-task 对象
+export const TransportTask = resource('/transport-task', http, {
+
+});
+
 // 车辆档案对象
 export const CarArchives = resource('/car-archives', http, {
   checkPlateNumber: (params) => {

@@ -101,10 +101,12 @@
                   <td>
                     <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                   </td>
-                  <td>{{item.count}}</td>
-                  <td>{{item.type}}</td>
-                  <td>{{item.name}}</td>
-                  <td>{{item.address}}</td>
+                  <td>{{item.incubatorCount}} <span v-if="item.incubatorCount">件</span></td>
+                  <td>
+                    <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
+                  </td>
+                  <td>{{item.receiverId}}</td>
+                  <td>{{item.receiverAddress}}</td>
                 </tr>
                 </tbody>
               </table>
@@ -132,7 +134,7 @@
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox"
                 :css="{'width':'800px','padding':0, 'z-index': 1000}">
-      <component :is="currentPart"/>
+      <component :is="currentPart" :checkList="orderIdList"/>
     </page-right>
   </div>
 </template>
@@ -140,6 +142,8 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
+  import {TmsWayBill} from '../../../resources';
+  import deliveryForm from './delivery-form';
 
   export default {
     components: {
@@ -158,7 +162,7 @@
         showIndex: false,
         currentPart: null,
         dialogComponents: {
-          0: () => import('./delivery-form')
+          0: deliveryForm
         },
         center: [121.5273285, 31.21515044],
         markers: [],
@@ -169,7 +173,18 @@
             pName: 'MapType',
             defaultType: 0
           }
-        ]
+        ],
+        checkList: [],
+        filters: {
+          orderNo: '',
+          tmsOrderNumber: '',
+          waybillType: '',
+          shipmentWay: '',
+          serviceType: '',
+          senderId: '',
+          receiverId: ''
+        },
+        orderIdList: []
       };
     },
     computed: {
@@ -180,8 +195,25 @@
     },
     mounted () {
     },
-    watch: {},
+    watch: {
+      filters: {
+        handler: function () {
+          this.getWayBillOrderList();
+        },
+        deep: true
+      }
+    },
     methods: {
+      getWayBillOrderList: function () {
+        let param = Object.assign({}, {
+          pageNo: 1,
+          pageSize: 20
+        }, this.filters);
+        TmsWayBill.query(param).then(res => {
+          this.dataRows = res.data.list;
+          this.addOverlays();
+        });
+      },
       scrollLoadingData (event) {
         this.$scrollLoadingData(event);
       },
@@ -193,21 +225,37 @@
         this.showIndex = -1;
       },
       showPart (index) {
+        if (!this.checkList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请选择需要生成派送任务的运单'
+          });
+          return;
+        }
         this.showIndex = index;
         this.currentPart = this.dialogComponents[index];
+        this.$nextTick(() => {
+          let orderIdList = [];
+          this.checkList.forEach(val => {
+            orderIdList.push(val.id);
+          });
+          this.orderIdList = orderIdList;
+        });
       },
       changeCheckStatus (item) {
+        let index = this.checkList.indexOf(item);
+        if (item.isChecked) {
+          if (index === -1) {
+            this.checkList.push(item);
+          }
+        } else {
+          this.checkList.splice(index, 1);
+        }
         this.setMarker(item._marker, item);
       },
-      searchResult () {
-        this.dataRows = [
-          {count: 7, type: '冷藏药品', name: '浦东医院犬伤门诊（南中心', address: '浦东新区惠南镇拱为路2800号', isChecked: false},
-          {count: 1, type: '冷藏药品', name: '上海市浦东新区金杨社区卫生服务中心', address: '浦东新区银山路332号', isChecked: false},
-          {count: 2, type: '冷藏药品', name: '青村镇社区卫生服务中心钱桥分中心', address: '奉贤区长丰路45号', isChecked: false},
-          {count: 3, type: '冷藏药品', name: '上海市第七人民医院', address: '上海市浦东新区高桥镇大同路358号（药库）', isChecked: false},
-          {count: 4, type: '冷藏药品', name: '南桥镇社区卫生服务中心光明分中心', address: '奉贤区优化路108号', isChecked: false}
-        ];
-        this.addOverlays();
+      searchResult(search) {
+        Object.assign(this.filters, search);
+        this.getWayBillOrderList();
       },
       getLgtAndLat (query, callBack) {
         const AMap = window.AMap;
@@ -222,7 +270,7 @@
         // 清空覆盖物
         this.markers = [];
         this.dataRows.forEach(i => {
-          this.getLgtAndLat(i.address, result => {
+          this.getLgtAndLat(i.receiverAddress, result => {
             let geoCodes = result.geocodes;
             geoCodes.forEach(g => {
               this.addMarker(g, i);
@@ -234,7 +282,7 @@
         let marker = {
           position: [d.location.getLng(), d.location.getLat()],
           label: {
-            content: `<div class="index_${row.count}">${row.name}</div>`,
+            content: `<div class="index_${row.id}">${row.receiverId}</div>`,
             offset: [20, 20]
           },
           icon: Icon,
@@ -243,6 +291,14 @@
             click: () => {
               row.isChecked = !row.isChecked;
               this.setMarker(marker, row);
+              let index = this.checkList.indexOf(row);
+              if (row.isChecked) {
+                if (index === -1) {
+                  this.checkList.push(row);
+                }
+              } else {
+                this.checkList.splice(index, 1);
+              }
             },
             mouseover: () => {
               if (row.isChecked) return;
@@ -263,7 +319,7 @@
         this.setLabelBorderColor(row);
       },
       setLabelBorderColor (row) {
-        const ele = this.$el.getElementsByClassName('index_' + row.count);
+        const ele = this.$el.getElementsByClassName('index_' + row.id);
         if (ele.length) {
           const classList = ele[0].parentNode.classList;
           row.isChecked ? classList.add('active') : classList.remove('active');
@@ -271,7 +327,7 @@
       },
       setMarkerByMove (marker, row, type) {
         marker.icon = type ? IconActive : Icon;
-        const ele = this.$el.getElementsByClassName('index_' + row.count);
+        const ele = this.$el.getElementsByClassName('index_' + row.id);
         if (ele.length) {
           const classList = ele[0].parentNode.classList;
           type ? classList.add('active') : classList.remove('active');

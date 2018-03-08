@@ -123,7 +123,7 @@
                 </el-col>
                 <el-col :span="12">
                   <goods-row label="车辆承重" :span="8">
-                    {{ data.carDto.loadBearing}} <span v-if="data.carDto.loadBearing">吨</span>
+                    {{ data.carDto.loadBearing}} <span v-if="data.carDto.loadBearing">千克</span>
                   </goods-row>
                   <goods-row label="车厢长度" :span="8">
                     {{ data.carDto.carriageLength}} <span v-if="data.carDto.carriageLength">米</span>
