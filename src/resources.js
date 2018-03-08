@@ -82,7 +82,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
 
 // transport-task 对象
 export const TransportTask = resource('/transport-task', http, {
-
+  getOneTransportTask: (id) => {
+    return http.get('/transport-task/' + id, {});
+  }
 });
 
 // 车辆档案对象
