@@ -201,7 +201,10 @@
           orderNo: '',
           tmsOrderNumber: '',
           waybillType: '',
-          shipmentWay: ''
+          shipmentWay: '',
+          serviceType: '',
+          senderId: '',
+          receiverId: ''
         },
         isCheckAll: false,
         checkList: [],

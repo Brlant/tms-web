@@ -90,7 +90,10 @@
           orderNo: '',
           tmsOrderNumber: '',
           waybillType: '',
-          shipmentWay: ''
+          shipmentWay: '',
+          serviceType: '',
+          senderId: '',
+          receiverId: ''
         },
         showSearch: false,
         list: [],
@@ -116,7 +119,10 @@
           orderNo: '',
           tmsOrderNumber: '',
           waybillType: '',
-          shipmentWay: ''
+          shipmentWay: '',
+          serviceType: '',
+          senderId: '',
+          receiverId: ''
         };
         this.$emit('search', this.searchCondition);
       },
