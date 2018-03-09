@@ -180,12 +180,13 @@
         filters: {
           status: '0',
           orderNo: '',
-          tmsOrderNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
           senderId: '',
-          receiverId: ''
+          receiverId: '',
+          startTime: '',
+          endTime: ''
         },
         orderIdList: [],
         totalTicket: 0,
