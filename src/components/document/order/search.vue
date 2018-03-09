@@ -131,6 +131,7 @@
           startTime: '',
           endTime: ''
         };
+        this.deliveryDate = '';
         this.$emit('search', this.searchCondition);
       },
       search () {
