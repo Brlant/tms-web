@@ -78,6 +78,9 @@
         <el-col :span="6">
         </el-col>
         <el-col :span="16" class="text-right">
+          <span class="text-center">
+              合计：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米
+            </span>
           <!--<el-button-group>-->
             <!--<perm label="tms-task-add">-->
               <!--<el-button plain size="small" @click="showPart(0)">生成派送</el-button>-->
@@ -109,7 +112,7 @@
                   <td>
                     <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
                   </td>
-                  <td>{{item.receiverId}}</td>
+                  <td>{{item.receiverName}}</td>
                   <td>{{item.receiverAddress}}</td>
                 </tr>
                 </tbody>
@@ -131,9 +134,6 @@
           </el-amap>
         </div>
       </div>
-      <el-row class="bottom-part">
-        合计：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米：
-      </el-row>
     </div>
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox"
@@ -304,7 +304,7 @@
         let marker = {
           position: [d.location.getLng(), d.location.getLat()],
           label: {
-            content: `<div class="index_${row.id}">${row.receiverId}</div>`,
+            content: `<div class="index_${row.id}">${row.receiverName}</div>`,
             offset: [20, 20]
           },
           icon: Icon,

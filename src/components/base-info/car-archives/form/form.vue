@@ -425,8 +425,6 @@
       },
       filterUser: function (query) {
         let data = Object.assign({}, {
-          pageNo: 1,
-          pageSize: 20,
           objectId: 'oms-system',
           keyWord: query,
           status: 1

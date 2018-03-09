@@ -67,7 +67,7 @@
                 {{form.tallyClerk}}
               </el-form-item>
               <el-form-item slot="right" label="件数">
-                {{form.incubatorCount}} <span v-if="form.incubatorCount">件</span>
+                {{form.incubatorCount}}
               </el-form-item>
             </two-column>
             <two-column>
@@ -126,15 +126,15 @@
                   {{order.receiverAddress}}
                 </el-form-item>
                 <el-form-item slot="right" label="整件">
-                  {{order.wholeBoxCount}} <span v-if="order.wholeBoxCount">箱</span>
+                  {{order.wholeBoxCount}}
                 </el-form-item>
               </two-column>
               <two-column>
                 <el-form-item slot="left" label="散件">
-                  {{order.bulkBoxCount}} <span v-if="order.bulkBoxCount">箱</span>
+                  {{order.bulkBoxCount}}
                 </el-form-item>
                 <el-form-item slot="right" label="包件">
-                  {{order.wholeBoxCount}} <span v-if="order.wholeBoxCount">箱</span>
+                  {{order.wholeBoxCount}}
                 </el-form-item>
               </two-column>
               <two-column>

@@ -34,19 +34,17 @@
         <el-col :span="4">
           <el-checkbox @change="checkAll" v-model="isCheckAll"
                        v-if="activeStatus===0||activeStatus==='0'"></el-checkbox>
-          订单号
+          运单号
         </el-col>
         <el-col :span="2">订单类型</el-col>
-        <el-col :span="2">运单号</el-col>
-        <el-col :span="2">发货单位</el-col>
-        <el-col :span="2">收货单位</el-col>
-        <el-col :span="2">收货地址</el-col>
+        <el-col :span="3">发货单位</el-col>
+        <el-col :span="3">收货单位</el-col>
+        <el-col :span="3">收货地址</el-col>
         <el-col :span="1">整件</el-col>
         <el-col :span="1">散件</el-col>
         <el-col :span="1">包件</el-col>
-        <el-col :span="2">提货</el-col>
-        <el-col :span="2">送达</el-col>
-        <el-col :span="1">状态</el-col>
+        <el-col :span="2">送达时限</el-col>
+        <el-col :span="2">状态</el-col>
         <el-col :span="2">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
@@ -71,7 +69,7 @@
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
-                {{item.orderNo}}
+                {{item.generateObjectNumber}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
@@ -79,44 +77,34 @@
                 <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
               </div>
             </el-col>
-            <el-col :span="2" class="R">
-              <div>
-                {{item.generateObjectNumber}}
-              </div>
-            </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="3" class="R">
               <div>
                 {{item.senderName}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="3" class="R">
               <div>
                 {{item.receiverName}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="3" class="R">
               <div>
                 {{item.receiverAddress}}
               </div>
             </el-col>
             <el-col :span="1" class="R">
               <div>
-                {{item.wholeBoxCount}} <span v-if="item.wholeBoxCount">箱</span>
+                {{item.wholeBoxCount}}
               </div>
             </el-col>
             <el-col :span="1" class="R">
               <div>
-                {{item.bulkBoxCount}} <span v-if="item.bulkBoxCount">箱</span>
+                {{item.bulkBoxCount}}
               </div>
             </el-col>
             <el-col :span="1" class="R">
               <div>
-                {{item.incubatorCount}} <span v-if="item.incubatorCount">件</span>
-              </div>
-            </el-col>
-            <el-col :span="2" class="R">
-              <div>
-                {{item.pickUpTime|date}}
+                {{item.incubatorCount}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
@@ -124,7 +112,7 @@
                 {{item.deliveryTime|date}}
               </div>
             </el-col>
-            <el-col :span="1" class="R">
+            <el-col :span="2" class="R">
               <div>
                 {{formatStatusTitle(item.status, orderType)}}
               </div>

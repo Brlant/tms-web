@@ -55,7 +55,7 @@
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
                            :clearable="true" @click.native.once="filterUser('')"
-                           v-model="form.driveId" popperClass="good-selects">
+                           v-model="form.driveId" popperClass="good-selects" @clear="filterUser">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
                     <div style="overflow: hidden">
                       <span class="pull-left" style="clear: right">{{user.name}}</span>
