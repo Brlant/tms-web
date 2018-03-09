@@ -71,6 +71,11 @@ export const routes = [
             path: '/vehicle/map/delivery',
             component: () => import('./components/vehicle/map/index.vue'),
             meta: {moduleId: 'vehicle', title: '地图派送', perm: 'show'}
+          },
+          {
+            path: '/vehicle/delivery/task',
+            component: () => import('./components/vehicle/task/index.vue'),
+            meta: {moduleId: 'vehicle', title: '出车任务', perm: 'show'}
           }
         ]
       },

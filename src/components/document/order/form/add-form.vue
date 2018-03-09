@@ -287,7 +287,7 @@
           {name: '发货信息', key: 1},
           {name: '收货信息', key: 2},
           {name: '货品信息', key: 3},
-          {name: '货品详情信息', key: 4},
+          {name: '货品列表', key: 4},
           {name: '其他信息', key: 5}
         ],
         currentTab: {},
@@ -371,21 +371,6 @@
         let index = this.form.goodsList.indexOf(item);
         // 移除删除项
         this.form.goodsList.splice(index, 1);
-        // // 重新计算排序值
-        // let delDtoList = this.form.goodsList;
-        // let delList = [];
-        // for (let i = 0; i < delDtoList.length ; i++) {
-        //   let value = delDtoList[i];
-        //   let no = value.index;
-        //   // 比删除项大的排序值-1
-        //   if (no > item.index) {
-        //     value = Object.assign(value, {'index': no - 1});
-        //   }
-        //   delList.push(value);
-        // }
-        // this.form = {
-        //   goodsList: delList
-        // };
       },
       formatDeliveryTime: function (date) {
         if (!date) return '';
@@ -419,8 +404,7 @@
       addGoods: function () {
         let tpl = {};
         // 计算排序值
-        let index = this.form.goodsList.length + 1;
-        tpl = Object.assign(tpl, {'index': index});
+        tpl = Object.assign(tpl, {goodsName: '', specifications: '', weight: '', volume: '', code: ''});
         this.form.goodsList.splice(0, 0, tpl);
       },
       filterCustomer: function (query) {// 过滤货主

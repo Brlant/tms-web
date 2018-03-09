@@ -225,7 +225,7 @@
           {name: '发货信息', key: 1},
           {name: '收货信息', key: 2},
           {name: '货品信息', key: 3},
-          {name: '货品详情信息', key: 4},
+          {name: '货品列表', key: 4},
           {name: '其他信息', key: 5}
         ],
         currentTab: {},

@@ -12,19 +12,20 @@
 </style>
 <template>
   <div class="order-page">
-    <search-part @search="searchResult"></search-part>
+    <search-part @search="searchResult">
+      <template slot="btn">
+        <el-button plain size="small" @click="showPart(0)">
+          <f-a class="icon-small" name="plus"></f-a>添加
+        </el-button>
+      </template>
+    </search-part>
 
-    <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus">
-      <span class="btn-group-right">
-        <des-btn icon="plus" @click="showPart(0)">添加</des-btn>
-        <!--<el-button size="small" plain @click="showPart(0)">添加</el-button>-->
-      </span>
-    </status-list>
+    <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus"/>
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="4">
-          运单号
+          订单号
         </el-col>
         <el-col :span="2">运单类型</el-col>
         <el-col :span="2">运单号</el-col>
@@ -34,8 +35,8 @@
         <el-col :span="1">整件</el-col>
         <el-col :span="1">散件</el-col>
         <el-col :span="1">包件</el-col>
-        <el-col :span="2">提货</el-col>
-        <el-col :span="2">送达</el-col>
+        <el-col :span="2">提货时间</el-col>
+        <el-col :span="2">送达时限</el-col>
         <el-col :span="1">状态</el-col>
         <el-col :span="2">操作</el-col>
       </el-row>
@@ -52,7 +53,8 @@
         </el-col>
       </el-row>
       <div v-else="" class="order-list-body flex-list-dom">
-        <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)">
+        <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
+             :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="4" class="special-col R">
               <div>
@@ -111,7 +113,7 @@
             </el-col>
             <el-col :span="1" class="R">
               <div>
-                {{getStatus(item)}}
+                {{formatStatusTitle(item.status, orderType)}}
               </div>
             </el-col>
             <el-col :span="2" class="opera-btn">
@@ -121,13 +123,6 @@
                     <a @click.pervent="" class="btn-circle btn-opera">
                       <i class="el-icon-t-edit"></i>
                     </a>编辑
-                  </span>
-                </div>
-                <div style="padding-top: 2px">
-                  <span @click.stop="deleteOrder(item)">
-                    <a @click.pervent="" class="btn-circle btn-opera">
-                      <i class="el-icon-t-delete"></i>
-                    </a>删除
                   </span>
                 </div>
               </div>
@@ -153,11 +148,13 @@
   import {TmsWayBill} from '../../../resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
+  import StatusMixin from '@/mixins/statusMixin';
 
   export default {
     components: {
       SearchPart, addForm
     },
+    mixins: [StatusMixin],
     data () {
       return {
         loadingData: false,
@@ -183,13 +180,15 @@
         action: '',
         form: {},
         filters: {
+          status: '0',
           orderNo: '',
-          tmsOrderNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
           senderId: '',
-          receiverId: ''
+          receiverId: '',
+          startTime: '',
+          endTime: ''
         },
         isCheckAll: false,
         checkList: [],
@@ -209,25 +208,6 @@
       this.getTmsWayBillPage(1);
     },
     methods: {
-      getStatus: function (item) {
-        let title = '';
-        if (item.status === '0') {
-          title = '待生成运单';
-        }
-        if (item.status === '1') {
-          title = '待派车';
-        }
-        if (item.status === '2') {
-          title = '待启运';
-        }
-        if (item.status === '3') {
-          title = '待签收';
-        }
-        if (item.status === '4') {
-          title = '已完成';
-        }
-        return title;
-      },
       searchResult: function (search) {
         Object.assign(this.filters, search);
       },
@@ -254,16 +234,15 @@
           }
           this.pager.totalPage = res.data.totalPage;
         });
-        // this.queryStateNum(param);
+        this.queryStateNum(param);
       },
       queryStateNum: function (params) {
         TmsWayBill.queryStateNum(params).then(res => {
           let data = res.data;
-          this.orderType[0].num = data['pend-generate-waybill'];
-          this.orderType[1].num = data['pend-choose-car'];
-          this.orderType[2].num = data['pend-shipment'];
-          this.orderType[3].num = data['pend-sign'];
-          this.orderType[4].num = data['complete'];
+          this.orderType[0].num = data['pend-choose-car'];
+          this.orderType[1].num = data['pend-shipment'];
+          this.orderType[2].num = data['pend-sign'];
+          this.orderType[3].num = data['complete'];
         });
       },
       showPart (index) {
@@ -272,6 +251,8 @@
         this.currentPart = this.dialogComponents[index];
       },
       edit: function (item) {
+        this.currentItem = item;
+        this.currentItemId = item.id;
         this.action = 'edit';
         this.showIndex = 0;
         this.currentPart = this.dialogComponents[0];
@@ -279,30 +260,9 @@
           this.form = JSON.parse(JSON.stringify(item));
         });
       },
-      deleteOrder: function (item) {
-        this.$confirm('确认删除运单"' + item.orderNo + '"?', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          TmsWayBill.delete(item.id).then(() => {
-            this.getTmsWayBillPage(1);
-            this.$notify.success({
-              duration: 2000,
-              title: '成功',
-              message: '已成功删除运单"' + item.orderNo + '"'
-            });
-          }).catch(() => {
-            this.$notify.error({
-              duration: 2000,
-              message: '删除运单"' + item.orderNo + '"失败'
-            });
-          });
-        }).catch(() => {
-
-        });
-      },
       showInfo: function (item) {
+        this.currentItem = item;
+        this.currentItemId = item.id;
         this.showInfoIndex = 0;
         this.currentInfoPart = this.dialogInfoComponents[0];
         this.$nextTick(() => {
