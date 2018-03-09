@@ -1,4 +1,5 @@
 import {Address} from '@dtop/dtop-web-common';
+
 export default {
   address: Address.value,
   orderType: {
@@ -9,11 +10,18 @@ export default {
     4: {'title': '已完成', status: '4', num: ''}
   },
   wayBillType: {
-    0: {'title': '待生成运单', status: '0', num: ''},
+    0: {'title': '待生成派送任务', status: '0', num: ''},
     1: {'title': '待派车', status: '1', num: ''},
     2: {'title': '待启运', status: '2', num: ''},
     3: {'title': '待签收', status: '3', num: ''},
     4: {'title': '已完成', status: '4', num: ''}
+  },
+  carTaskType: {
+    0: {'title': '待确认', status: '0', num: ''},
+    1: {'title': '待开始', status: '1', num: ''},
+    2: {'title': '待结束', status: '2', num: ''},
+    3: {'title': '已完成', status: '3', num: ''},
+    4: {'title': '已取消', status: '4', num: ''}
   },
   /**
    * 格式化包装层级, 支持1到99级

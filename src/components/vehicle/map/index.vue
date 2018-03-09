@@ -176,7 +176,7 @@
         ],
         checkList: [],
         filters: {
-          status: '0',
+          status: null,
           orderNo: '',
           tmsOrderNumber: '',
           waybillType: '',

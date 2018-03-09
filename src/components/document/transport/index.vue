@@ -186,7 +186,7 @@
         action: '',
         form: {},
         filters: {
-          status: 0,
+          status: '0',
           orderNo: '',
           tmsOrderNumber: '',
           waybillType: '',

@@ -132,7 +132,7 @@
       return {
         loadingData: false,
         activeStatus: 0,
-        orderType: utils.wayBillType,
+        orderType: utils.carTaskType,
         dataList: [],
         showIndex: -1,
         dialogComponents: {
@@ -172,25 +172,6 @@
       this.getTransportTaskPage(1);
     },
     methods: {
-      getTaskStatus: function (item) {
-        let title = '';
-        if (item.status === '0') {
-          title = '待生成运单';
-        }
-        if (item.status === '1') {
-          title = '待派车';
-        }
-        if (item.status === '2') {
-          title = '待启运';
-        }
-        if (item.status === '3') {
-          title = '待签收';
-        }
-        if (item.status === '4') {
-          title = '已完成';
-        }
-        return title;
-      },
       searchResult: function (search) {
         Object.assign(this.filters, search);
       },
@@ -215,7 +196,7 @@
           }
           this.pager.totalPage = res.data.totalPage;
         });
-        // this.queryStateNum(param);
+        this.queryStateNum(param);
       },
       queryStateNum: function (params) {
         TmsWayBill.queryStateNum(params).then(res => {
