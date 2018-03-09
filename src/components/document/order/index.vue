@@ -133,7 +133,7 @@
                   </span>
                 </div>
                 <div style="padding-top: 2px">
-                  <span @click.stop="deleteOrder(item)">
+                  <span @click.stop="deleteOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
                     <a @click.pervent="" class="btn-circle btn-opera">
                       <i class="el-icon-t-delete"></i>
                     </a>删除

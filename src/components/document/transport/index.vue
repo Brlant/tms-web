@@ -125,13 +125,6 @@
                     </a>编辑
                   </span>
                 </div>
-                <div style="padding-top: 2px">
-                  <span @click.stop="deleteOrder(item)">
-                    <a @click.pervent="" class="btn-circle btn-opera">
-                      <i class="el-icon-t-delete"></i>
-                    </a>删除
-                  </span>
-                </div>
               </div>
             </el-col>
           </el-row>
@@ -265,31 +258,6 @@
         this.currentPart = this.dialogComponents[0];
         this.$nextTick(() => {
           this.form = JSON.parse(JSON.stringify(item));
-        });
-      },
-      deleteOrder: function (item) {
-        this.currentItem = item;
-        this.currentItemId = item.id;
-        this.$confirm('确认删除运单"' + item.orderNo + '"?', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          TmsWayBill.delete(item.id).then(() => {
-            this.getTmsWayBillPage(1);
-            this.$notify.success({
-              duration: 2000,
-              title: '成功',
-              message: '已成功删除运单"' + item.orderNo + '"'
-            });
-          }).catch(() => {
-            this.$notify.error({
-              duration: 2000,
-              message: '删除运单"' + item.orderNo + '"失败'
-            });
-          });
-        }).catch(() => {
-
         });
       },
       showInfo: function (item) {
