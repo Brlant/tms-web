@@ -138,7 +138,7 @@
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox"
                 :css="{'width':'800px','padding':0, 'z-index': 1000}">
-      <component :is="currentPart" :checkList="orderIdList"/>
+      <component :is="currentPart" :checkList="orderIdList" @change="submit"/>
     </page-right>
   </div>
 </template>
@@ -214,6 +214,9 @@
       }
     },
     methods: {
+      submit: function () {
+        this.getWayBillOrderList();
+      },
       getWayBillOrderList: function () {
         let param = Object.assign({}, {
           pageNo: 1,

@@ -76,12 +76,12 @@
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{item.senderId}}
+                {{item.senderName}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{item.receiverId}}
+                {{item.receiverName}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
