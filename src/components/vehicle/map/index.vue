@@ -76,11 +76,9 @@
           <h2 class="header f-dib">查询结果</h2>
         </el-col>
         <el-col :span="6">
+          <div style="padding-top: 5px">合计：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米</div>
         </el-col>
         <el-col :span="16" class="text-right">
-          <span class="text-center">
-              合计：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米
-            </span>
           <!--<el-button-group>-->
             <!--<perm label="tms-task-add">-->
               <!--<el-button plain size="small" @click="showPart(0)">生成派送</el-button>-->
