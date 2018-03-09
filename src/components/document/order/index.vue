@@ -61,8 +61,8 @@
           <el-row>
             <el-col :span="4" class="special-col R">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
-                   v-show="activeStatus===0||activeStatus==='0'">
-                  <el-checkbox v-model="item.isChecked"></el-checkbox>
+                   v-if="activeStatus===0||activeStatus==='0'">
+                <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
                 {{item.orderNo}}
@@ -293,10 +293,10 @@
           pageSize: this.pager.pageSize
         }, this.filters);
         TmsOrder.query(param).then(res => {
-          this.dataList = res.data.list;
-          this.dataList.forEach(val => {
+          res.data.list.forEach(val => {
             val.isChecked = false;
           });
+          this.dataList = res.data.list;
           this.pager.totalPage = res.data.totalPage;
         });
         this.queryStateNum(param);
