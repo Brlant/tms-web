@@ -18,65 +18,11 @@
             </oms-form-row>
           </el-col>
           <el-col :span="8">
-            <oms-form-row label="任务状态" :span="5">
-              <el-select v-model="searchCondition.waybillType" placeholder="请选择订单类型" :clearable="true">
-                <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-option>
-              </el-select>
+            <oms-form-row label="车牌号" :span="5">
+              <oms-input v-model="searchCondition.carPlateNumber" placeholder="请输入车牌号"></oms-input>
             </oms-form-row>
           </el-col>
           <div v-show="showSearch">
-            <el-col :span="8">
-              <oms-form-row label="发运方式" :span="5">
-                <el-select v-model="searchCondition.shipmentWay" placeholder="请选择发运方式" :clearable="true">
-                  <el-option :label="item.label" :value="item.key" :key="item.key"
-                             v-for="item in shipmentWayList"></el-option>
-                </el-select>
-              </oms-form-row>
-            </el-col>
-            <el-col :span="8">
-              <oms-form-row label="服务方式" :span="5">
-                <el-select v-model="searchCondition.serviceType" placeholder="请选择服务方式" :clearable="true">
-                  <el-option :label="item.label" :value="item.key" :key="item.key"
-                             v-for="item in serviceTypeList"></el-option>
-                </el-select>
-              </oms-form-row>
-            </el-col>
-            <el-col :span="8">
-              <oms-form-row label="发货单位" :span="5">
-                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索发货单位" :remote-method="filterSenderOrg"
-                           :clearable="true" @click.native.once="filterSenderOrg('')"
-                           v-model="searchCondition.senderId" popperClass="good-selects">
-                  <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in senderOrgList">
-                    <div style="overflow: hidden">
-                      <span class="pull-left" style="clear: right">{{org.name}}</span>
-                    </div>
-                    <div style="overflow: hidden">
-                    <span class="select-other-info pull-left">
-                      <span>系统代码:</span>{{org.manufacturerCode}}
-                    </span>
-                    </div>
-                  </el-option>
-                </el-select>
-              </oms-form-row>
-            </el-col>
-            <el-col :span="8">
-              <oms-form-row label="收货单位" :span="5">
-                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索收货单位" :remote-method="filterReceiverOrg"
-                           :clearable="true" @click.native.once="filterReceiverOrg('')"
-                           v-model="searchCondition.receiverId" popperClass="good-selects">
-                  <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
-                    <div style="overflow: hidden">
-                      <span class="pull-left" style="clear: right">{{org.name}}</span>
-                    </div>
-                    <div style="overflow: hidden">
-                    <span class="select-other-info pull-left">
-                      <span>系统代码:</span>{{org.manufacturerCode}}
-                    </span>
-                    </div>
-                  </el-option>
-                </el-select>
-              </oms-form-row>
-            </el-col>
           </div>
         </el-row>
       </el-form>
@@ -90,13 +36,9 @@
     data: function () {
       return {
         searchCondition: {
-          orderNo: '',
-          tmsOrderNumber: '',
-          waybillType: '',
-          shipmentWay: '',
-          serviceType: '',
-          senderId: '',
-          receiverId: ''
+          transportTaskNo: '',
+          type: '',
+          carPlateNumber: ''
         },
         showSearch: false,
         list: [],
@@ -113,13 +55,9 @@
     methods: {
       reset() {
         this.searchCondition = {
-          orderNo: '',
-          tmsOrderNumber: '',
-          waybillType: '',
-          shipmentWay: '',
-          serviceType: '',
-          senderId: '',
-          receiverId: ''
+          transportTaskNo: '',
+          type: '',
+          carPlateNumber: ''
         };
         this.$emit('search', this.searchCondition);
       },
@@ -128,16 +66,6 @@
       },
       isShow (val) {
         this.showSearch = val;
-      },
-      filterSenderOrg: function (query) {// 过滤发货单位
-        BaseInfo.query({keyWord: query}).then(res => {
-          this.senderOrgList = res.data.list;
-        });
-      },
-      filterReceiverOrg: function (query) {// 过滤收货单位
-        BaseInfo.query({keyWord: query}).then(res => {
-          this.receiverOrgList = res.data.list;
-        });
       }
     }
   };

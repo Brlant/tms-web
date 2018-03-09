@@ -128,7 +128,7 @@
         </div>
       </div>
       <el-row class="bottom-part">
-        合计：共有20票，57件，0公斤，42051立方：
+        合计：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米：
       </el-row>
     </div>
 
@@ -185,7 +185,11 @@
           senderId: '',
           receiverId: ''
         },
-        orderIdList: []
+        orderIdList: [],
+        totalTicket: 0,
+        totalIncubatorCount: 0,
+        totalWeight: 0,
+        totalVolume: 0
       };
     },
     computed: {
@@ -210,8 +214,17 @@
           pageNo: 1,
           pageSize: 20
         }, this.filters);
+        this.totalIncubatorCount = 0;
+        this.totalWeight = 0;
+        this.totalVolume = 0;
         TmsWayBill.query(param).then(res => {
           this.dataRows = res.data.list;
+          this.totalTicket = res.data.list.length;
+          this.dataRows.forEach(val => {
+            this.totalIncubatorCount = this.totalIncubatorCount + val.incubatorCount;
+            this.totalWeight = this.totalWeight + val.goodsWeight;
+            this.totalVolume = this.totalVolume + val.goodsVolume;
+          });
           this.addOverlays();
         });
       },

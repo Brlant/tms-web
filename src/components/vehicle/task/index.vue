@@ -46,7 +46,8 @@
         </el-col>
       </el-row>
       <div v-else="" class="order-list-body flex-list-dom">
-        <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)">
+        <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
+             :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="2" class="R">
               <div>
@@ -60,7 +61,7 @@
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{getTaskStatus(item.status)}}
+                {{formatStatusTitle(item.status, orderType)}}
               </div>
             </el-col>
             <el-col :span="4" class="R">
@@ -120,11 +121,13 @@
   import SearchPart from './search';
   import {TmsWayBill, TransportTask} from '../../../resources';
   import showForm from './form/show-form';
+  import StatusMixin from '@/mixins/statusMixin';
 
   export default {
     components: {
       SearchPart
     },
+    mixins: [StatusMixin],
     data() {
       return {
         loadingData: false,
@@ -144,11 +147,17 @@
         },
         action: '',
         form: {},
-        filters: {},
+        filters: {
+          transportTaskNo: '',
+          type: '',
+          carPlateNumber: ''
+        },
         isCheckAll: false,
         checkList: [],
         checkListPara: [],
-        shoWayBillPart: false
+        shoWayBillPart: false,
+        currentItem: {},
+        currentItemId: ''
       };
     },
     watch: {
@@ -219,6 +228,8 @@
         });
       },
       showInfo: function (item) {
+        this.currentItem = item;
+        this.currentItemId = item.id;
         this.showIndex = 0;
         this.currentPart = this.dialogComponents[0];
         this.$nextTick(() => {
