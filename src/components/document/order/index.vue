@@ -26,7 +26,8 @@
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="4">
-          <el-checkbox @change="checkAll" v-model="isCheckAll" v-if="activeStatus===0"></el-checkbox>
+          <el-checkbox @change="checkAll" v-model="isCheckAll"
+                       v-if="activeStatus===0||activeStatus==='0'"></el-checkbox>
           订单号
         </el-col>
         <el-col :span="2">订单类型</el-col>
@@ -60,8 +61,8 @@
           <el-row>
             <el-col :span="4" class="special-col R">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
-                   v-if="activeStatus===0||activeStatus==='0'">
-                <el-checkbox v-model="item.isChecked"></el-checkbox>
+                   v-show="activeStatus===0||activeStatus==='0'">
+                  <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
                 {{item.orderNo}}
@@ -79,12 +80,12 @@
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{item.senderId}}
+                {{item.senderName}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{item.receiverId}}
+                {{item.receiverName}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
@@ -166,6 +167,7 @@
   import showForm from './form/show-form.vue';
   import wayBillForm from './form/create-way-bill.vue';
   import StatusMixin from '@/mixins/statusMixin';
+
   export default {
     components: {
       SearchPart, addForm, wayBillForm
@@ -202,12 +204,13 @@
         filters: {
           status: 0,
           orderNo: '',
-          tmsOrderNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
           senderId: '',
-          receiverId: ''
+          receiverId: '',
+          startTime: '',
+          endTime: ''
         },
         isCheckAll: false,
         checkList: [],
@@ -244,6 +247,7 @@
       checkItem: function (item) {
         // 单选
         item.isChecked = !item.isChecked;
+        console.log(item.isChecked);
         let index = this.checkList.indexOf(item);
         if (item.isChecked) {
           if (index === -1) {
@@ -282,18 +286,17 @@
         this.showInfoIndex = -1;
         this.shoWayBillPart = false;
       },
-      getTmsOrderPage: function (pageNo, isContinue = false) {
+      getTmsOrderPage: function (pageNo) {
         this.pager.currentPage = pageNo;
         let param = Object.assign({}, {
           pageNo: pageNo,
           pageSize: this.pager.pageSize
         }, this.filters);
         TmsOrder.query(param).then(res => {
-          if (isContinue) {
-            this.dataList = this.showTypeList.concat(res.data.list);
-          } else {
-            this.dataList = res.data.list;
-          }
+          this.dataList = res.data.list;
+          this.dataList.forEach(val => {
+            val.isChecked = false;
+          });
           this.pager.totalPage = res.data.totalPage;
         });
         this.queryStateNum(param);

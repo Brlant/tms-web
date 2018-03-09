@@ -25,7 +25,7 @@
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="4">
-          运单号
+          订单号
         </el-col>
         <el-col :span="2">运单类型</el-col>
         <el-col :span="2">运单号</el-col>
@@ -35,8 +35,8 @@
         <el-col :span="1">整件</el-col>
         <el-col :span="1">散件</el-col>
         <el-col :span="1">包件</el-col>
-        <el-col :span="2">提货</el-col>
-        <el-col :span="2">送达</el-col>
+        <el-col :span="2">提货时间</el-col>
+        <el-col :span="2">送达时限</el-col>
         <el-col :span="1">状态</el-col>
         <el-col :span="2">操作</el-col>
       </el-row>
@@ -189,12 +189,13 @@
         filters: {
           status: '0',
           orderNo: '',
-          tmsOrderNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
           senderId: '',
-          receiverId: ''
+          receiverId: '',
+          startTime: '',
+          endTime: ''
         },
         isCheckAll: false,
         checkList: [],
@@ -240,16 +241,15 @@
           }
           this.pager.totalPage = res.data.totalPage;
         });
-        // this.queryStateNum(param);
+        this.queryStateNum(param);
       },
       queryStateNum: function (params) {
         TmsWayBill.queryStateNum(params).then(res => {
           let data = res.data;
-          this.orderType[0].num = data['pend-generate-waybill'];
-          this.orderType[1].num = data['pend-choose-car'];
-          this.orderType[2].num = data['pend-shipment'];
-          this.orderType[3].num = data['pend-sign'];
-          this.orderType[4].num = data['complete'];
+          this.orderType[0].num = data['pend-choose-car'];
+          this.orderType[1].num = data['pend-shipment'];
+          this.orderType[2].num = data['pend-sign'];
+          this.orderType[3].num = data['complete'];
         });
       },
       showPart (index) {

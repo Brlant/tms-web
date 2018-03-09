@@ -10,10 +10,10 @@ export default {
     4: {'title': '已完成', status: '4', num: ''}
   },
   wayBillType: {
-    0: {'title': '待派车', status: '1', num: ''},
-    1: {'title': '待启运', status: '2', num: ''},
-    2: {'title': '待签收', status: '3', num: ''},
-    3: {'title': '已完成', status: '4', num: ''}
+    0: {'title': '待派车', status: '0', num: ''},
+    1: {'title': '待启运', status: '1', num: ''},
+    2: {'title': '待签收', status: '2', num: ''},
+    3: {'title': '已完成', status: '3', num: ''}
   },
   carTaskType: {
     0: {'title': '待确认', status: '0', num: ''},
