@@ -148,6 +148,7 @@
         action: '',
         form: {},
         filters: {
+          status: '',
           transportTaskNo: '',
           type: '',
           carPlateNumber: ''
