@@ -52,7 +52,7 @@
               </two-column>
             </div>
             <two-column>
-              <el-form-item slot="left" label="司机" prop="driverName">
+              <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
                            :clearable="true" @click.native.once="filterUser('')"
                            v-model="form.driveId" popperClass="good-selects">
@@ -128,7 +128,7 @@
     data () {
       return {
         rules: {
-          'driverName': [
+          'driveId': [
             {required: true, message: '请输入司机', trigger: 'blur'}
           ]
         },
