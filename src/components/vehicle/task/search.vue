@@ -5,7 +5,7 @@
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-row>
           <el-col :span="8">
-            <oms-form-row label="任务编码" :span="5">
+            <oms-form-row label="任务号" :span="5">
               <oms-input v-model="searchCondition.transportTaskNo" placeholder="请输入任务编码"></oms-input>
             </oms-form-row>
           </el-col>

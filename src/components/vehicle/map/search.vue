@@ -15,8 +15,8 @@
             </oms-form-row>
           </el-col>
           <el-col :span="8">
-            <oms-form-row label="订单类型" :span="5">
-              <el-select v-model="searchCondition.waybillType" placeholder="请选择订单类型" :clearable="true">
+            <oms-form-row label="运单类型" :span="5">
+              <el-select v-model="searchCondition.waybillType" placeholder="请选择运单类型" :clearable="true">
                 <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-option>
               </el-select>
             </oms-form-row>

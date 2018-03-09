@@ -70,10 +70,6 @@
           <h2 class="header f-dib">查询结果</h2>
         </el-col>
         <el-col :span="6">
-          <span class="btn-search-toggle open">
-                  <single-input v-model="searchWord" placeholder="请输入关键字搜索"></single-input>
-                  <i class="el-icon-t-search"></i>
-          </span>
         </el-col>
         <el-col :span="16" class="text-right">
           <el-button-group>
@@ -176,7 +172,7 @@
         ],
         checkList: [],
         filters: {
-          status: null,
+          status: '0',
           orderNo: '',
           tmsOrderNumber: '',
           waybillType: '',

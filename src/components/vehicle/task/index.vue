@@ -21,7 +21,7 @@
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="2">任务编码</el-col>
+        <el-col :span="2">任务号</el-col>
         <el-col :span="2">任务类型</el-col>
         <el-col :span="2">任务状态</el-col>
         <el-col :span="4">承运商</el-col>
@@ -200,13 +200,13 @@
         this.queryStateNum(param);
       },
       queryStateNum: function (params) {
-        TmsWayBill.queryStateNum(params).then(res => {
+        TransportTask.queryStateNum(params).then(res => {
           let data = res.data;
-          this.orderType[0].num = data['pend-generate-waybill'];
-          this.orderType[1].num = data['pend-choose-car'];
-          this.orderType[2].num = data['pend-shipment'];
-          this.orderType[3].num = data['pend-sign'];
-          this.orderType[4].num = data['complete'];
+          this.orderType[0].num = data['pend-confirmed'];
+          this.orderType[1].num = data['pend-start'];
+          this.orderType[2].num = data['pend-end'];
+          this.orderType[3].num = data['completed'];
+          this.orderType[4].num = data['canceled'];
         });
       },
       showInfo: function (item) {

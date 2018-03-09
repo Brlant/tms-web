@@ -84,6 +84,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
 export const TransportTask = resource('/transport-task', http, {
   getOneTransportTask: (id) => {
     return http.get('/transport-task/' + id, {});
+  },
+  queryStateNum: (params) => {
+    return http.get('/transport-task/count', {params});
   }
 });
 
