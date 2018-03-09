@@ -75,10 +75,10 @@
         <el-col :span="2">
           <h2 class="header f-dib">查询结果</h2>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="12">
           <div style="padding-top: 5px">合计：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米</div>
         </el-col>
-        <el-col :span="16" class="text-right">
+        <el-col :span="10" class="text-right">
           <!--<el-button-group>-->
             <!--<perm label="tms-task-add">-->
               <!--<el-button plain size="small" @click="showPart(0)">生成派送</el-button>-->
@@ -192,7 +192,8 @@
         totalTicket: 0,
         totalIncubatorCount: 0,
         totalWeight: 0,
-        totalVolume: 0
+        totalVolume: 0,
+        dataMap: []
       };
     },
     computed: {
@@ -210,6 +211,19 @@
           this.getWayBillOrderList();
         },
         deep: true
+      },
+      checkList: function (val) {
+        if (val) {
+          this.totalIncubatorCount = 0;
+          this.totalWeight = 0;
+          this.totalVolume = 0;
+          this.totalTicket = val.length;
+          val.forEach(item => {
+            this.totalIncubatorCount = this.totalIncubatorCount + item.incubatorCount;
+            this.totalWeight = this.totalWeight + item.goodsWeight;
+            this.totalVolume = this.totalVolume + item.goodsVolume;
+          });
+        }
       }
     },
     methods: {
@@ -221,17 +235,8 @@
           pageNo: 1,
           pageSize: 20
         }, this.filters);
-        this.totalIncubatorCount = 0;
-        this.totalWeight = 0;
-        this.totalVolume = 0;
         TmsWayBill.query(param).then(res => {
           this.dataRows = res.data.list;
-          this.totalTicket = res.data.list.length;
-          this.dataRows.forEach(val => {
-            this.totalIncubatorCount = this.totalIncubatorCount + val.incubatorCount;
-            this.totalWeight = this.totalWeight + val.goodsWeight;
-            this.totalVolume = this.totalVolume + val.goodsVolume;
-          });
           this.addOverlays();
         });
       },
