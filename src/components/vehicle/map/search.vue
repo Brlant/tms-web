@@ -1,6 +1,9 @@
 <template>
   <search-template :isShow="showSearch" @search="search" @reset="reset" @isShow="isShow">
     <template slot="title">订单查询</template>
+    <template slot="btn">
+      <slot name="btn"></slot>
+    </template>
     <template slot="content">
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-row>

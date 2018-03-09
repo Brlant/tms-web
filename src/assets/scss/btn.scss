@@ -22,7 +22,6 @@
   }
 }
 
-
 .btn-search-toggle {
   cursor: pointer;
   white-space: nowrap;
@@ -61,6 +60,7 @@
     background: $activeColor;
     color: $activeColorFont;
   }
+
 }
 
 .opera-btn-group {
@@ -99,6 +99,9 @@
     background: #ffffff;
     padding-top: 10px;
     padding-right: 10px;
+  },
+  .icon-small {
+    font-size: 12px;
   }
 }
 

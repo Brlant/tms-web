@@ -12,14 +12,15 @@
 </style>
 <template>
   <div class="order-page">
-    <search-part @search="searchResult"></search-part>
+    <search-part @search="searchResult">
+      <template slot="btn">
+        <el-button plain size="small" @click="showPart(0)">
+          <f-a class="icon-small" name="plus"></f-a>添加
+        </el-button>
+      </template>
+    </search-part>
 
-    <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus">
-      <span class="btn-group-right">
-        <des-btn icon="plus" @click="showPart(0)">添加</des-btn>
-        <!--<el-button size="small" plain @click="showPart(0)">添加</el-button>-->
-      </span>
-    </status-list>
+    <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus"/>
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
