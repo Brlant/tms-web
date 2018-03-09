@@ -73,7 +73,9 @@
         </el-col>
         <el-col :span="16" class="text-right">
           <el-button-group>
-            <el-button plain size="small" @click="showPart(0)">生成派送</el-button>
+            <perm label="tms-task-add">
+              <el-button plain size="small" @click="showPart(0)">生成派送</el-button>
+            </perm>
             <el-button plain size="small">显示当天任务</el-button>
           </el-button-group>
         </el-col>

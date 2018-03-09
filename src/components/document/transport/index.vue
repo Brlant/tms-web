@@ -14,9 +14,12 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button plain size="small" @click="showPart(0)">
-          <f-a class="icon-small" name="plus"></f-a>添加
-        </el-button>
+        <perm label="tms-waybill-add">
+          <el-button plain size="small" @click="showPart(0)">
+            <f-a class="icon-small" name="plus"></f-a>
+            添加
+          </el-button>
+        </perm>
       </template>
     </search-part>
 
@@ -119,11 +122,13 @@
             <el-col :span="2" class="opera-btn">
               <div>
                 <div>
-                  <span @click.stop="edit(item)">
-                    <a @click.pervent="" class="btn-circle btn-opera">
-                      <i class="el-icon-t-edit"></i>
-                    </a>编辑
-                  </span>
+                  <perm label="tms-waybill-edit">
+                    <span @click.stop="edit(item)">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-edit"></i>
+                      </a>编辑
+                    </span>
+                  </perm>
                 </div>
               </div>
             </el-col>

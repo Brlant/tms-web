@@ -14,12 +14,18 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button plain size="small" @click="createWayBill">
-          <f-a class="icon-small" name="wave" v-if="activeStatus===0||activeStatus==='0'"></f-a>生成运单
-        </el-button>
-        <el-button plain size="small" @click="showPart(0)">
-          <f-a class="icon-small" name="plus"></f-a>添加
-        </el-button>
+        <perm label="tms-order-generate">
+          <el-button plain size="small" @click="createWayBill">
+            <f-a class="icon-small" name="wave" v-if="activeStatus===0||activeStatus==='0'"></f-a>
+            生成运单
+          </el-button>
+        </perm>
+        <perm label="tms-order-add">
+          <el-button plain size="small" @click="showPart(0)">
+            <f-a class="icon-small" name="plus"></f-a>
+            添加
+          </el-button>
+        </perm>
       </template>
     </search-part>
     <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus"/>
@@ -75,7 +81,7 @@
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{item.waybillNumber}}
+                {{item.generateObjectNumber}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
@@ -126,18 +132,22 @@
             <el-col :span="2" class="opera-btn">
               <div>
                 <div>
-                  <span @click.stop="edit(item)">
-                    <a @click.pervent="" class="btn-circle btn-opera">
-                      <i class="el-icon-t-edit"></i>
-                    </a>编辑
-                  </span>
+                  <perm label="tms-order-edit">
+                    <span @click.stop="edit(item)">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-edit"></i>
+                      </a>编辑
+                    </span>
+                  </perm>
                 </div>
                 <div style="padding-top: 2px">
-                  <span @click.stop="deleteOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
-                    <a @click.pervent="" class="btn-circle btn-opera">
-                      <i class="el-icon-t-delete"></i>
-                    </a>删除
-                  </span>
+                  <perm label="tms-order-delete">
+                    <span @click.stop="deleteOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-delete"></i>
+                      </a>删除
+                    </span>
+                  </perm>
                 </div>
               </div>
             </el-col>
@@ -167,9 +177,11 @@
   import showForm from './form/show-form.vue';
   import wayBillForm from './form/create-way-bill.vue';
   import StatusMixin from '@/mixins/statusMixin';
+  import Perm from '@/components/common/perm';
 
   export default {
     components: {
+      Perm,
       SearchPart, addForm, wayBillForm
     },
     mixins: [StatusMixin],

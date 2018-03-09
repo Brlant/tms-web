@@ -69,7 +69,7 @@
           </div>
           <div class="content">
             <el-form-item label="货主">
-              {{form.orgId}}
+              {{form.orgName}}
             </el-form-item>
             <el-form-item label="发货单位">
               {{form.senderId}}

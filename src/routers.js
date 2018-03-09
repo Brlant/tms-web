@@ -48,34 +48,34 @@ export const routes = [
       {
         path: '/document',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'document', title: '单据管理', icon: 'warehouse', perm: 'tms-system-config'},
+        meta: {moduleId: 'document', title: '单据管理', icon: 'warehouse', perm: 'tms-documents-info'},
         children: [
           {
             path: '/document/order',
             component: () => import('./components/document/order/index.vue'),
-            meta: {moduleId: 'document', title: '订单管理', perm: 'show'}
+            meta: {moduleId: 'document', title: '订单管理', perm: 'tms-order-query'}
           },
           {
             path: '/document/transport',
             component: () => import('./components/document/transport/index.vue'),
-            meta: {moduleId: 'document', title: '运单管理', perm: 'show'}
+            meta: {moduleId: 'document', title: '运单管理', perm: 'tms-waybill-query'}
           }
         ]
       },
       {
         path: '/vehicle',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'vehicle', title: '任务作业', icon: 'repertory', perm: 'tms-system-config'},
+        meta: {moduleId: 'vehicle', title: '任务作业', icon: 'repertory', perm: 'tms-task-manager'},
         children: [
           {
             path: '/vehicle/map/delivery',
             component: () => import('./components/vehicle/map/index.vue'),
-            meta: {moduleId: 'vehicle', title: '地图派送', perm: 'show'}
+            meta: {moduleId: 'vehicle', title: '地图派送', perm: 'tms-task-map-manager'}
           },
           {
             path: '/vehicle/delivery/task',
             component: () => import('./components/vehicle/task/index.vue'),
-            meta: {moduleId: 'vehicle', title: '出车任务', perm: 'show'}
+            meta: {moduleId: 'vehicle', title: '出车任务', perm: 'tms-task-car-task-query'}
           }
         ]
       },
