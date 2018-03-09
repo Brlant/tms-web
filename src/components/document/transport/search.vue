@@ -1,6 +1,6 @@
 <template>
   <search-template :isShow="showSearch" @search="search" @reset="reset" @isShow="isShow">
-    <template slot="title">订单查询</template>
+    <template slot="title">运单查询</template>
     <template slot="btn">
       <slot name="btn"></slot>
     </template>
@@ -8,8 +8,8 @@
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-row>
           <el-col :span="8">
-            <oms-form-row label="订单号" :span="8">
-              <oms-input v-model="searchCondition.orderNo" placeholder="请输入运单号"></oms-input>
+            <oms-form-row label="运单号" :span="8">
+              <oms-input v-model="searchCondition.waybillNumber" placeholder="请输入运单号"></oms-input>
             </oms-form-row>
           </el-col>
           <el-col :span="8">

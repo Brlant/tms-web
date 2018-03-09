@@ -64,7 +64,13 @@
 <template>
   <div>
     <div>
-      <search-part @search="searchResult"></search-part>
+      <search-part @search="searchResult">
+        <template slot="btn">
+          <perm label="tms-task-add">
+            <el-button plain size="small" @click="showPart(0)">生成派送</el-button>
+          </perm>
+        </template>
+      </search-part>
       <el-row class="second-part clearfix">
         <el-col :span="2">
           <h2 class="header f-dib">查询结果</h2>
@@ -72,12 +78,12 @@
         <el-col :span="6">
         </el-col>
         <el-col :span="16" class="text-right">
-          <el-button-group>
-            <perm label="tms-task-add">
-              <el-button plain size="small" @click="showPart(0)">生成派送</el-button>
-            </perm>
-            <el-button plain size="small">显示当天任务</el-button>
-          </el-button-group>
+          <!--<el-button-group>-->
+            <!--<perm label="tms-task-add">-->
+              <!--<el-button plain size="small" @click="showPart(0)">生成派送</el-button>-->
+            <!--</perm>-->
+            <!--<el-button plain size="small">显示当天任务</el-button>-->
+          <!--</el-button-group>-->
         </el-col>
       </el-row>
       <div class="d-table">
@@ -197,6 +203,7 @@
       }
     },
     mounted () {
+      this.getWayBillOrderList();
     },
     watch: {
       filters: {

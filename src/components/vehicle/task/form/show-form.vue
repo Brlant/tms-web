@@ -80,7 +80,7 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="创建人">
-                {{form.createdBy}}
+                {{form.creatorName}}
               </el-form-item>
               <el-form-item slot="right" label="创建时间">
                 {{form.createTime|time}}
@@ -88,7 +88,7 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="修改人">
-                {{form.updatedBy}}
+                {{form.updateName}}
               </el-form-item>
               <el-form-item slot="right" label="修改时间">
                 {{form.updateTime|time}}
