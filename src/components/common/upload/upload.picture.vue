@@ -1,18 +1,21 @@
 <template>
   <div>
-    <el-upload
+    <oms-el-upload
       class="avatar-uploader"
-      :action="'/api/omsAttachment'"
+      :action="uploadUrl"
       :show-file-list="false"
-      name="name"
+      name="file"
       :on-success="handleAvatarSuccess"
       :on-error="error"
       :on-remove="handleRemove"
       :before-upload="beforeAvatarUpload"
-      :on-change="changePhoto">
-      <img v-if="imageUrl" :src="imageUrl" class="avatar">
-      <i v-else="" class="el-icon-plus avatar-uploader-icon"></i>
-    </el-upload>
+      :on-change="changePhoto"
+      :data="uploadData"
+      :formData="formData"
+    >
+      <img v-if="imageUrl" :src="imageUrl" slot="trigger" class="avatar">
+      <i v-else="" class="el-icon-plus avatar-uploader-icon" slot="trigger"></i>
+    </oms-el-upload>
   </div>
 </template>
 
@@ -47,12 +50,19 @@
 
 <script>
   import {http, OmsAttachment} from '@/resources';
+  import OmsElUpload from './upload/src/index.vue';
+
   export default {
-    props: ['photoUrl'],
+    props: ['photoUrl', 'formData'],
     name: 'omsPhotoUpload',
+    components: {
+      OmsElUpload
+    },
     data() {
       return {
-        imageUrl: this.photoUrl
+        imageUrl: this.photoUrl,
+        uploadData: {},
+        uploadUrl: '/omsAttachment'
       };
     },
     watch: {
@@ -90,19 +100,14 @@
         });
       },
       beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-
-        const isPng = file.type === 'image/png';
-
-        if (!isJPG && !isPng) {
-          this.$message.error('上传图片只能是JPG或者PNG格式!');
-        }
         const isLt10M = file.size / 1024 / 1024 < 10;
-
         if (!isLt10M) {
-          this.$message.error('上传图片大小不能超过 10MB!');
+          this.$notify.error({
+            duration: 2000,
+            message: '上传附件大小不能超过 10MB!'
+          });
+          return false;
         }
-        return isPng || isJPG && isLt10M;
       },
       error(err) {
         this.$notify.error({
