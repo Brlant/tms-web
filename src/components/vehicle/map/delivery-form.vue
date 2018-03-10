@@ -79,6 +79,9 @@
             <h3 class="tit f-dib">派送信息</h3>
           </div>
           <div class="content">
+            <el-form-item label="承运商">
+              <oms-input v-model="form.taskCarriers" placeholder="请输入承运商"></oms-input>
+            </el-form-item>
             <two-column>
               <el-form-item slot="left" label="任务类型">
                 <el-select placeholder="请选择车型" v-model="form.type">

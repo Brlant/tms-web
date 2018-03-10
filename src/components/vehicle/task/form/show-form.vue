@@ -101,59 +101,60 @@
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
-              {{pageSets[1].name}}</h3>
+              {{pageSets[1].name}}
+              <span @click="showAdd" class="btn-circle"><i class="el-icon-t-plus"></i> </span>
+            </h3>
+          </div>
+          <div>
+            <el-form ref="detailForm" :model="detailForm" class="clearfix" label-width="100px" v-show="showAddFlag">
+              <el-row>
+                <el-col :span="20">
+                  <el-form-item label="运单" style="margin-top: 20px;margin-bottom: 20px">
+                    <el-select filterable remote multiple placeholder="请输入运单号搜索运单" :remote-method="getTmsOrderList"
+                               :clearable="true" @click.native.once="getTmsOrderList('')"
+                               v-model="detailForm.list" popperClass="good-selects">
+                      <el-option :value="bill.id" :key="bill.id" :label="bill.waybillNumber"
+                                 v-for="bill in wayBillList">
+                        <div style="overflow: hidden">
+                          <span class="pull-left" style="clear: right">{{bill.waybillNumber}}</span>
+                        </div>
+                        <div style="overflow: hidden">
+                          <span class="select-other-info pull-left">
+                            <span>收货单位:</span>{{bill.receiverName}}
+                          </span>
+                        </div>
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4" style="margin-top: 20px;margin-bottom: 20px;padding-left: 40px">
+                  <el-button type="primary" @click="onSubmit('detailForm')">保存</el-button>
+                </el-col>
+              </el-row>
+            </el-form>
           </div>
           <div class="content">
-            <div class="part-hj-box" v-for="order in form.waybillList" v-show="form.waybillList">
-              <two-column>
-                <el-form-item slot="left" label="运单号">
-                  {{order.waybillNumber}}
-                </el-form-item>
-                <el-form-item slot="right" label="运单状态">
-                  {{getTaskStatus(order.status)}}
-                </el-form-item>
-              </two-column>
-              <two-column>
-                <el-form-item slot="left" label="发货单位">
-                  {{order.senderId}}
-                </el-form-item>
-                <el-form-item slot="right" label="收货单位">
-                  {{order.receiverId}}
-                </el-form-item>
-              </two-column>
-              <two-column>
-                <el-form-item slot="left" label="收货地址">
-                  {{order.receiverAddress}}
-                </el-form-item>
-                <el-form-item slot="right" label="整件">
-                  {{order.wholeBoxCount}}
-                </el-form-item>
-              </two-column>
-              <two-column>
-                <el-form-item slot="left" label="散件">
-                  {{order.bulkBoxCount}}
-                </el-form-item>
-                <el-form-item slot="right" label="包件">
-                  {{order.wholeBoxCount}}
-                </el-form-item>
-              </two-column>
-              <two-column>
-                <el-form-item slot="left" label="提货时间">
-                  {{order.pickUpTime|date}}
-                </el-form-item>
-                <el-form-item slot="right" label="送达时间">
-                  {{order.deliveryTime|date}}
-                </el-form-item>
-              </two-column>
-              <two-column>
-                <el-form-item slot="left" label="体积">
-                  {{order.goodsVolume}} <span v-if="order.goodsVolume">立方米</span>
-                </el-form-item>
-                <el-form-item slot="right" label="重量">
-                  {{order.goodsWeight}} <span v-if="order.goodsWeight">千克</span>
-                </el-form-item>
-              </two-column>
-            </div>
+            <el-table :data="form.waybillList" border style="width: 100%">
+              <el-table-column prop="waybillNumber" label="运单号">
+              </el-table-column>
+              <el-table-column prop="receiverName" label="收货单位">
+              </el-table-column>
+              <el-table-column prop="receiverAddress" label="收货地址">
+              </el-table-column>
+              <el-table-column prop="wholeBoxCount" label="包件">
+              </el-table-column>
+              <el-table-column prop="" label="操作">
+                <template slot-scope="scope">
+                  <perm label="tms-waybill-edit" class="opera-btn">
+                    <span @click.stop="deleteDetail(scope.row)">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-delete"></i>
+                      </a>删除运单明细
+                    </span>
+                  </perm>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </div>
       </el-form>
@@ -162,7 +163,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TransportTask} from '../../../../resources';
+  import {TmsOrder, TransportTask} from '../../../../resources';
 
   export default {
     components: {TwoColumn},
@@ -186,7 +187,12 @@
             }
           ]
         },
-        rules: {}
+        rules: {},
+        showAddFlag: false,
+        detailForm: {
+          id: '', list: []
+        },
+        wayBillList: []
       };
     },
     computed: {},
@@ -201,24 +207,69 @@
       }
     },
     methods: {
-      getTaskStatus: function (item) {
-        let title = '';
-        if (item.status === '0') {
-          title = '待生成运单';
+      onSubmit: function () {
+        if (!this.detailForm.list.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请选择需要添加的运单'
+          });
+          return;
         }
-        if (item.status === '1') {
-          title = '待派车';
-        }
-        if (item.status === '2') {
-          title = '待启运';
-        }
-        if (item.status === '3') {
-          title = '待签收';
-        }
-        if (item.status === '4') {
-          title = '已完成';
-        }
-        return title;
+        this.detailForm.id = this.form.id;
+        TransportTask.batchAddDetail(this.form.id, this.detailForm).then(() => {
+          this.$notify.success({
+            duration: 2000,
+            title: '成功',
+            message: '已成功新增运单详情'
+          });
+          TransportTask.getOneTransportTask(this.form.id).then(res => {
+            this.$nextTick(() => {
+              this.form = res.data;
+            });
+          });
+          this.detailForm.list = [];
+          this.showAddFlag = !this.showAddFlag;
+        }).catch(() => {
+          this.$notify.error({
+            duration: 2000,
+            message: '新增运单详情失败'
+          });
+        });
+      },
+      getTmsOrderList: function (query) {
+        TmsOrder.query({waybillNumber: query, status: 0}).then(res => {
+          this.wayBillList = res.data.list;
+        });
+      },
+      showAdd: function () {
+        this.showAddFlag = !this.showAddFlag;
+      },
+      deleteDetail: function (item) {
+        this.$confirm('确认删除运单"' + item.waybillNumber + '"的信息?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TransportTask.deleteDetail(item.id).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '已成功删除运单"' + item.waybillNumber + '"的信息'
+            });
+            this.detailForm.list = [];
+            this.showAddFlag = false;
+            TransportTask.getOneTransportTask(this.form.id).then(res => {
+              this.form = res.data;
+            });
+          }).catch(() => {
+            this.$notify.error({
+              duration: 2000,
+              message: '删除运单"' + item.waybillNumber + '"的信息失败'
+            });
+          });
+        }).catch(() => {
+
+        });
       },
       selectTab(item) {
         this.currentTab = item;

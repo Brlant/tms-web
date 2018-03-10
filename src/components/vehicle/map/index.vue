@@ -76,7 +76,7 @@
           <h2 class="header f-dib">查询结果</h2>
         </el-col>
         <el-col :span="12">
-          <div style="padding-top: 5px">合计：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米</div>
+          <div style="padding-top: 5px">您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米</div>
         </el-col>
         <el-col :span="10" class="text-right">
           <!--<el-button-group>-->

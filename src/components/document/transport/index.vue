@@ -174,7 +174,7 @@
         form: {},
         filters: {
           status: '0',
-          orderNo: '',
+          waybillNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',

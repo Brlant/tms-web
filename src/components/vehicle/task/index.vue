@@ -24,14 +24,15 @@
         <el-col :span="2">任务号</el-col>
         <el-col :span="2">任务类型</el-col>
         <el-col :span="2">任务状态</el-col>
-        <el-col :span="4">承运商</el-col>
+        <el-col :span="3">承运商</el-col>
         <el-col :span="2">车牌号</el-col>
         <el-col :span="2">司机</el-col>
         <el-col :span="2">理货员</el-col>
-        <el-col :span="2">件数</el-col>
-        <el-col :span="2">载重</el-col>
+        <el-col :span="1">件数</el-col>
+        <el-col :span="1">载重</el-col>
         <el-col :span="2">容积</el-col>
         <el-col :span="2">派车时间</el-col>
+        <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -64,7 +65,7 @@
                 {{formatStatusTitle(item.status, orderType)}}
               </div>
             </el-col>
-            <el-col :span="4" class="R">
+            <el-col :span="3" class="R">
               <div>
                 {{item.taskCarriers}}
               </div>
@@ -84,12 +85,12 @@
                 {{item.tallyClerk}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="1" class="R">
               <div>
-                {{item.incubatorCount}} <span v-if="item.incubatorCount">件</span>
+                {{item.incubatorCount}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="1" class="R">
               <div>
                 {{item.carLoadBearing}} <span v-if="item.carLoadBearing">千克</span>
               </div>
@@ -102,6 +103,13 @@
             <el-col :span="2" class="R">
               <div>
                 {{item.updateTime|time}}
+              </div>
+            </el-col>
+            <el-col :span="3" class="opera-btn">
+              <div>
+                <div>
+
+                </div>
               </div>
             </el-col>
           </el-row>
@@ -119,7 +127,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {TmsWayBill, TransportTask} from '../../../resources';
+  import {TransportTask} from '../../../resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
 

@@ -87,6 +87,12 @@ export const TransportTask = resource('/transport-task', http, {
   },
   queryStateNum: (params) => {
     return http.get('/transport-task/count', {params});
+  },
+  deleteDetail: (id) => {
+    return http.delete('/transport-task/detail/' + id, {});
+  },
+  batchAddDetail: (id, params) => {
+    return http.post('/transport-task/detail/' + id, params);
   }
 });
 
