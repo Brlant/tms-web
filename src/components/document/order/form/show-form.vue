@@ -156,37 +156,6 @@
               {{pageSets[4].name}}</h3>
           </div>
           <div class="content">
-            <div class="part-hj-box" v-for="(hj,index) in form.goodsList" v-show="form.goodsList">
-              <el-form-item label="货品名称">
-                {{hj.goodsName}}
-              </el-form-item>
-              <two-column>
-                <el-form-item slot="left" label="货品重量">
-                  {{hj.weight}} <span v-if="hj.weight">kg</span>
-                </el-form-item>
-                <el-form-item slot="right" label="货品体积">
-                  {{hj.volume}} <span v-if="hj.volume">m³</span>
-                </el-form-item>
-              </two-column>
-              <two-column>
-                <el-form-item slot="left" label="货品规格">
-                  {{hj.specifications}}
-                </el-form-item>
-                <el-form-item slot="right" label="货品追溯码">
-                  {{hj.code}}
-                </el-form-item>
-              </two-column>
-            </div>
-            <div class="hr mb-10"></div>
-          </div>
-        </div>
-        <div class="form-header-part">
-          <div class="header">
-            <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[5].key === currentTab.key}">
-              {{pageSets[5].name}}</h3>
-          </div>
-          <div class="content">
             <two-column>
               <el-form-item slot="left" label="提货时间">
                 {{form.pickUpTime|date}}
@@ -204,6 +173,34 @@
             <el-form-item slot="right" label="备注">
               {{form.remark}}
             </el-form-item>
+            <div class="hr mb-10"></div>
+          </div>
+        </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[5].key === currentTab.key}">
+              {{pageSets[5].name}}</h3>
+          </div>
+          <div class="content">
+            <el-table :data="form.goodsList" border style="width: 100%">
+              <el-table-column prop="goodsName" label="货品名称">
+              </el-table-column>
+              <el-table-column prop="weight" label="货品重量">
+                <template slot-scope="scope">
+                  {{scope.row.weight}} <span v-if="scope.row.weight">kg</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="volume" label="货品体积">
+                <template slot-scope="scope">
+                  {{scope.row.volume}} <span v-if="scope.row.volume">m³</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="specifications" label="货品规格">
+              </el-table-column>
+              <el-table-column prop="code" label="货品追溯码">
+              </el-table-column>
+            </el-table>
           </div>
         </div>
       </el-form>
@@ -225,8 +222,8 @@
           {name: '发货信息', key: 1},
           {name: '收货信息', key: 2},
           {name: '货品信息', key: 3},
-          {name: '货品列表', key: 4},
-          {name: '其他信息', key: 5}
+          {name: '其他信息', key: 4},
+          {name: '货品列表', key: 5}
         ],
         currentTab: {},
         form: {
