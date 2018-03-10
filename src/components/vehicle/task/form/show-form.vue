@@ -137,19 +137,19 @@
             <el-table :data="form.waybillList" border style="width: 100%">
               <el-table-column prop="waybillNumber" label="运单号">
               </el-table-column>
-              <el-table-column prop="receiverName" label="收货单位">
+              <el-table-column prop="receiverName" label="收货单位" width="240">
               </el-table-column>
-              <el-table-column prop="receiverAddress" label="收货地址">
+              <el-table-column prop="receiverAddress" label="收货地址"  width="180">
               </el-table-column>
-              <el-table-column prop="wholeBoxCount" label="包件">
+              <el-table-column prop="wholeBoxCount" label="包件" width="50">
               </el-table-column>
-              <el-table-column prop="" label="操作">
+              <el-table-column prop="" label="操作" width="80">
                 <template slot-scope="scope">
                   <perm label="tms-waybill-edit" class="opera-btn">
                     <span @click.stop="deleteDetail(scope.row)">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
-                      </a>删除运单明细
+                      </a>删除
                     </span>
                   </perm>
                 </template>
