@@ -203,7 +203,7 @@
         form: {},
         filters: {
           status: 0,
-          orderNo: '',
+          generateObjectNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',

@@ -76,7 +76,9 @@
           <h2 class="header f-dib">查询结果</h2>
         </el-col>
         <el-col :span="12">
-          <div style="padding-top: 5px">您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米</div>
+          <div style="padding-top: 5px">
+            您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{formatVolume(totalVolume)}}立方米
+          </div>
         </el-col>
         <el-col :span="10" class="text-right">
           <!--<el-button-group>-->
@@ -146,6 +148,7 @@
   import IconActive from '@/assets/img/marker_active.png';
   import {TmsWayBill} from '../../../resources';
   import deliveryForm from './delivery-form';
+  import utils from '@/tools/utils';
 
   export default {
     components: {
@@ -227,6 +230,10 @@
       }
     },
     methods: {
+      formatVolume(value) {// 保留两位小数
+        if (!value) return 0;
+        return utils.autoformatDecimalPoint(value);
+      },
       submit: function () {
         this.getWayBillOrderList();
       },

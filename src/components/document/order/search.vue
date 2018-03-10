@@ -91,7 +91,7 @@
     data: function () {
       return {
         searchCondition: {
-          orderNo: '',
+          generateObjectNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
@@ -122,7 +122,7 @@
     methods: {
       reset() {
         this.searchCondition = {
-          orderNo: '',
+          generateObjectNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',

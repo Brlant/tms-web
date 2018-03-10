@@ -81,10 +81,10 @@
             </div>
             <div class="content">
               <el-form-item label="货主">
-                {{currentOrder.orgId}}
+                {{currentOrder.orgName}}
               </el-form-item>
               <el-form-item label="发货单位">
-                {{currentOrder.senderId}}
+                {{currentOrder.senderName}}
               </el-form-item>
               <two-column>
                 <el-form-item slot="left" label="发货联系人">
@@ -108,7 +108,7 @@
             </div>
             <div class="content">
               <el-form-item label="收货单位">
-                {{currentOrder.receiverId}}
+                {{currentOrder.receiverName}}
               </el-form-item>
               <two-column>
                 <el-form-item slot="left" label="收货联系人">
