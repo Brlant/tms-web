@@ -163,7 +163,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TransportTask} from '../../../../resources';
+  import {TransportTask} from '@/resources';
 
   export default {
     components: {TwoColumn},

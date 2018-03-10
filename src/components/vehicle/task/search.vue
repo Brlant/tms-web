@@ -33,7 +33,7 @@
   </search-template>
 </template>
 <script>
-  import {BaseInfo} from '../../../resources';
+  import {BaseInfo} from '@/resources';
 
   export default {
     data: function () {

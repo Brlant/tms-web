@@ -160,7 +160,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {TmsOrder} from '../../../resources';
+  import {TmsOrder} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import wayBillForm from './form/create-way-bill.vue';
@@ -315,7 +315,17 @@
         this.action = 'add';
         this.showIndex = index;
         this.currentPart = this.dialogComponents[index];
-        this.form = {};
+        this.form = {
+          goodsList: [
+            {
+              goodsName: '',
+              specifications: '',
+              weight: '',
+              volume: '',
+              code: ''
+            }
+          ]
+        };
       },
       edit: function (item) {
         this.currentItem = item;

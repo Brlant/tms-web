@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import {OmsAttachment, http} from '../../../resources';
+  import {OmsAttachment, http} from '@/resources';
   import UploadList from './upload.file.list.vue';
   import OmsElUpload from './upload/src/index.vue';
 

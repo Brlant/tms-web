@@ -143,7 +143,7 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
-  import {TmsWayBill} from '../../../resources';
+  import {TmsWayBill} from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
 

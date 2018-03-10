@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  import {Access, Department, User} from '../../../../resources';
+  import {Access, Department, User} from '@/resources';
 
   export default {
     name: 'editForm',

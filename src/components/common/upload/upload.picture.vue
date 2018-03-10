@@ -46,7 +46,7 @@
 </style>
 
 <script>
-  import {http, OmsAttachment} from '../../../resources';
+  import {http, OmsAttachment} from '@/resources';
   export default {
     props: ['photoUrl'],
     name: 'omsPhotoUpload',

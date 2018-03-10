@@ -65,7 +65,7 @@
 </template>
 
 <script>
-  import { http } from '../../resources';
+  import { http } from '@/resources';
 
   export default {
     name: 'resetpwd',

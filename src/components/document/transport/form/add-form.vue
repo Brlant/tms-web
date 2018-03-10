@@ -275,7 +275,7 @@
   </dialog-template>
 </template>
 <script>
-  import {BaseInfo, TmsWayBill} from '../../../../resources';
+  import {BaseInfo, TmsWayBill} from '@/resources';
 
   export default {
     data () {

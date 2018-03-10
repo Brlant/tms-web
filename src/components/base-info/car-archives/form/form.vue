@@ -202,7 +202,7 @@
   </dialog-template>
 </template>
 <script>
-  import {BaseInfo, CarArchives, User} from '../../../../resources';
+  import {BaseInfo, CarArchives, User} from '@/resources';
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
 
   export default {

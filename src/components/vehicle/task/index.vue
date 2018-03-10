@@ -127,7 +127,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {TransportTask} from '../../../resources';
+  import {TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
 

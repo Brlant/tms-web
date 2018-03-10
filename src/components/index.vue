@@ -111,7 +111,7 @@
   import AppFooter from './layout/app.footer.vue';
   import utils from '../tools/utils';
   import attachmentDialog from './common/attachment/attachment.dialog.vue';
-  import {Auth, DictGroup} from '../resources';
+  import {Auth, DictGroup} from '@/resources';
   import printDialog from './common/print.loading.vue';
 
   export default {

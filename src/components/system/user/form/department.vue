@@ -23,7 +23,7 @@
   </el-form>
 </template>
 <script>
-  import {Department} from '../../../../resources';
+  import {Department} from '@/resources';
 
   export default {
     data: function () {

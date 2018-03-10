@@ -209,7 +209,7 @@
 
 </template>
 <script>
-  import {CarArchives} from '../../../resources';
+  import {CarArchives} from '@/resources';
   import editForm from './form/form.vue';
   import goodsRow from './goods.row';
 

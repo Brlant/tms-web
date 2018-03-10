@@ -209,7 +209,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TmsOrder} from '../../../../resources';
+  import {TmsOrder} from '@/resources';
 
   export default {
     components: {TwoColumn},

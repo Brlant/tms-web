@@ -285,10 +285,10 @@
 </template>
 
 <script>
-  import logo_pic from '../../assets/img/logo_pic.png';
+  import logo_pic from '@/assets/img/logo_pic.png';
   import omsUploadPicture from '../common/upload/upload.user.picture.vue';
-  import {routes} from '../../routers';
-  import {Auth} from '../../resources';
+  import {routes} from '@/routers';
+  import {Auth} from '@/resources';
 
   export default {
     components: {omsUploadPicture},

@@ -49,7 +49,7 @@
 </template>
 
 <script>
-  import { User } from '../../resources';
+  import { User } from '@/resources';
 
   export default {
     name: 'resetpsw',

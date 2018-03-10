@@ -138,7 +138,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {TmsWayBill} from '../../../resources';
+  import {TmsWayBill} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import StatusMixin from '@/mixins/statusMixin';

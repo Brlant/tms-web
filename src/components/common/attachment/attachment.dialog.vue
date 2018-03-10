@@ -110,7 +110,7 @@
   </el-dialog>
 </template>
 <script>
-  import {http} from '../../../resources';
+  import {http} from '@/resources';
   import utils from '@/tools/utils';
   import ElButton from '../../../../node_modules/element-ui/packages/button/src/button.vue';
 

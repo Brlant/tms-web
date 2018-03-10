@@ -173,7 +173,7 @@
 
 </template>
 <script>
-  import {Department, User} from '../../../resources';
+  import {Department, User} from '@/resources';
   import utils from '@/tools/utils';
   import editForm from './form/form.vue';
   import departmentForm from './form/department.vue';

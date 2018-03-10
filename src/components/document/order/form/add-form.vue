@@ -270,7 +270,7 @@
   </dialog-template>
 </template>
 <script>
-  import {BaseInfo, TmsOrder} from '../../../../resources';
+  import {BaseInfo, TmsOrder} from '@/resources';
 
   export default {
     data () {
@@ -423,6 +423,16 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
+            // 处理货品列表
+            if (this.form.goodsList) {
+              let goodsList = [];
+              this.form.goodsList.forEach(val => {
+                if (val.goodsName !== '' || val.specifications !== '' || val.weight !== '' || val.volume !== '' || val.code !== '') {
+                  goodsList.push(val);
+                }
+              });
+              this.form.goodsList = goodsList;
+            }
             if (this.action === 'add') {
               this.doing = true;
               TmsOrder.save(this.form).then(res => {

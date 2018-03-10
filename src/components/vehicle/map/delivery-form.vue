@@ -55,7 +55,7 @@
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
                            :clearable="true" @click.native.once="filterUser('')"
-                           v-model="form.driveId" popperClass="good-selects" @clear="filterUser">
+                           v-model="form.driveId" popperClass="good-selects">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
                     <div style="overflow: hidden">
                       <span class="pull-left" style="clear: right">{{user.name}}</span>
@@ -125,7 +125,7 @@
   </div>
 </template>
 <script>
-  import {CarArchives, TransportTask, User} from '../../../resources';
+  import {CarArchives, TransportTask, User} from '@/resources';
 
   export default {
     data () {
@@ -159,6 +159,16 @@
           this.form.orderIdList = val;
         },
         deep: true
+      },
+      carInfo: function (val) {
+        if (val) {
+          console.log(val);
+          this.form.carPlateNumber = val.plateNumber;
+          if (val.defaultDriver) {
+            this.form.driveId = val.defaultDriver;
+            this.filterUser(val.defaultDriverName);
+          }
+        }
       }
     },
     methods: {
@@ -199,11 +209,6 @@
           this.carList.forEach(val => {
             if (val.carDto.id === id) {
               this.carInfo = val.carDto;
-              this.form.carPlateNumber = val.plateNumber;
-              if (val.carDto.defaultDriver) {
-                this.form.driveId = val.carDto.defaultDriver;
-                this.filterUser(val.carDto.defaultDriverName);
-              }
             }
           });
         }
