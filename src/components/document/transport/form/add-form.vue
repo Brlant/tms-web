@@ -21,7 +21,7 @@
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
-    <template slot="title">添加运单</template>
+    <template slot="title">{{showTitle}}运单</template>
     <template slot="btn">
       <el-button plain @click="save('form')" :disabled="doing">保存</el-button>
     </template>
@@ -346,6 +346,13 @@
       },
       serviceTypeList() {
         return this.$getDict('serviceType');
+      },
+      showTitle: function () {
+        let title = '新增';
+        if (this.action === 'edit') {
+          title = '修改';
+        }
+        return title;
       }
     },
     props: ['formItem', 'action'],
@@ -355,12 +362,12 @@
           this.form = Object.assign({}, val);
         }
         if (this.action === 'edit') {
-          this.filterCustomer(this.form.orgId);
-          this.filterSenderOrg(this.form.senderId);
-          this.filterReceiverOrg(this.form.receiverId);
           if (val.id) {
             TmsWayBill.getOneTmsWayBill(val.id).then(res => {
               this.form = res.data;
+              this.filterCustomer(this.form.orgName);
+              this.filterSenderOrg(this.form.senderName);
+              this.filterReceiverOrg(this.form.receiverName);
             });
           }
         }
