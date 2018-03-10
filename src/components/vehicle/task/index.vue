@@ -21,17 +21,16 @@
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="2">任务号</el-col>
+        <el-col :span="3">任务号</el-col>
         <el-col :span="2">任务类型</el-col>
         <el-col :span="2">任务状态</el-col>
-        <el-col :span="3">承运商</el-col>
         <el-col :span="2">车牌号</el-col>
         <el-col :span="2">司机</el-col>
         <el-col :span="2">理货员</el-col>
-        <el-col :span="1">件数</el-col>
+        <el-col :span="2">件数</el-col>
         <el-col :span="2">载重(kg)</el-col>
         <el-col :span="2">容积(m³)</el-col>
-        <el-col :span="2">派车时间</el-col>
+        <el-col :span="3">派车时间</el-col>
         <el-col :span="2">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
@@ -50,7 +49,7 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="2" class="R">
+            <el-col :span="3" class="R">
               <div>
                 {{item.transportTaskNo}}
               </div>
@@ -63,11 +62,6 @@
             <el-col :span="2" class="R">
               <div>
                 {{formatStatusTitle(item.status, orderType)}}
-              </div>
-            </el-col>
-            <el-col :span="3" class="R">
-              <div>
-                {{item.taskCarriers}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
@@ -85,7 +79,7 @@
                 {{item.tallyClerk}}
               </div>
             </el-col>
-            <el-col :span="1" class="R">
+            <el-col :span="2" class="R">
               <div>
                 {{item.incubatorCount}}
               </div>
@@ -100,7 +94,7 @@
                 {{item.carVolume}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="3" class="R">
               <div>
                 {{item.updateTime|time}}
               </div>
