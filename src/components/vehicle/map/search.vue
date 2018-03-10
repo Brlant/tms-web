@@ -1,3 +1,13 @@
+<style>
+  .el-date-editor .el-range__close-icon {
+    font-size: 14px;
+    color: #c0c4cc;
+    width: 20px;
+    display: inline-block;
+    float: right;
+    line-height: 32px;
+  }
+</style>
 <template>
   <search-template :isShow="showSearch" @search="search" @reset="reset" @isShow="isShow">
     <template slot="title">运单查询</template>
@@ -8,7 +18,7 @@
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-row>
           <el-col :span="4">
-            <oms-form-row label="运单号" :span="8">
+            <oms-form-row label="运单号" :span="6">
               <oms-input v-model="searchCondition.waybillNumber" placeholder="请输入运单号"></oms-input>
             </oms-form-row>
           </el-col>
@@ -49,15 +59,16 @@
             </oms-form-row>
           </el-col>
           <el-col :span="8">
-            <oms-form-row label="送达时限" :span="4">
-              <el-date-picker v-model="deliveryDate" type="daterange" placeholder="请选择">
+            <oms-form-row label="送达时限" :span="4" style="width: 100%">
+              <el-date-picker v-model="deliveryDate" type="daterange" format="yyyy-MM-dd" start-placeholder="开始日期"
+                              end-placeholder="结束日期">
               </el-date-picker>
             </oms-form-row>
           </el-col>
           <div v-show="showSearch">
             <el-col :span="4">
-              <oms-form-row label="运单类型" :span="8">
-                <el-select v-model="searchCondition.waybillType" placeholder="订单类型" :clearable="true">
+              <oms-form-row label="运单类型" :span="6">
+                <el-select v-model="searchCondition.waybillType" placeholder="运单类型" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-option>
                 </el-select>
               </oms-form-row>
