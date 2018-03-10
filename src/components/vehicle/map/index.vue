@@ -77,7 +77,7 @@
         </el-col>
         <el-col :span="12">
           <div style="padding-top: 5px">
-            您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{formatVolume(totalVolume)}}立方米
+            您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米
           </div>
         </el-col>
         <el-col :span="10" class="text-right">
@@ -226,13 +226,14 @@
             this.totalWeight = this.totalWeight + item.goodsWeight;
             this.totalVolume = this.totalVolume + item.goodsVolume;
           });
+          this.formatVolume();
         }
       }
     },
     methods: {
-      formatVolume(value) {// 保留两位小数
-        if (!value) return 0;
-        return utils.autoformatDecimalPoint(value);
+      formatVolume() {// 保留两位小数
+        if (!this.totalVolume) return 0;
+        this.totalVolume = utils.autoformatDecimalPoint(this.totalVolume.toString());
       },
       submit: function () {
         this.getWayBillOrderList();

@@ -419,8 +419,7 @@
       addGoods: function () {
         let tpl = {};
         // 计算排序值
-        let index = this.form.goodsList.length + 1;
-        tpl = Object.assign(tpl, {'index': index});
+        tpl = Object.assign(tpl, {goodsName: '', specifications: '', weight: '', volume: '', code: ''});
         this.form.goodsList.splice(0, 0, tpl);
       },
       filterCustomer: function (query) {// 过滤货主
