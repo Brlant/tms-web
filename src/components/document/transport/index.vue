@@ -242,7 +242,17 @@
         this.action = 'add';
         this.showIndex = index;
         this.currentPart = this.dialogComponents[index];
-        this.form = {};
+        this.form = {
+          goodsList: [
+            {
+              goodsName: '',
+              specifications: '',
+              weight: '',
+              volume: '',
+              code: ''
+            }
+          ]
+        };
       },
       edit: function (item) {
         this.currentItem = item;
