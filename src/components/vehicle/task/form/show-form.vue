@@ -128,7 +128,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="4" style="margin-top: 20px;margin-bottom: 20px;padding-left: 40px">
-                  <el-button type="primary" @click="onSubmit('detailForm')">保存</el-button>
+                  <el-button type="primary" @click="onSubmit('detailForm')" :disabled="doing">保存</el-button>
                 </el-col>
               </el-row>
             </el-form>
@@ -163,7 +163,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TmsOrder, TransportTask} from '../../../../resources';
+  import {TransportTask} from '../../../../resources';
 
   export default {
     components: {TwoColumn},
@@ -192,7 +192,8 @@
         detailForm: {
           id: '', list: []
         },
-        wayBillList: []
+        wayBillList: [],
+        doing: false
       };
     },
     computed: {},
@@ -204,6 +205,9 @@
             this.form = res.data;
           });
         }
+      },
+      'detailForm.list': function () {
+        this.doing = false;
       }
     },
     methods: {
@@ -216,6 +220,7 @@
           return;
         }
         this.detailForm.id = this.form.id;
+        this.doing = true;
         TransportTask.batchAddDetail(this.form.id, this.detailForm).then(() => {
           this.$notify.success({
             duration: 2000,
@@ -227,6 +232,7 @@
               this.form = res.data;
             });
           });
+          this.doing = false;
           this.detailForm.list = [];
           this.showAddFlag = !this.showAddFlag;
         }).catch(() => {
@@ -237,7 +243,7 @@
         });
       },
       getTmsOrderList: function (query) {
-        TmsOrder.validWayBill({waybillNumber: query}).then(res => {
+        TransportTask.validWayBill({waybillNumber: query}).then(res => {
           this.wayBillList = res.data.list;
         });
       },
