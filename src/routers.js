@@ -34,19 +34,19 @@ export const routes = [
     component: require('./components/index.vue'),
     children: [
       {
-        path: '/baseInfo',
-        component: resolve => require(['./components/base-info/index.vue'], resolve),
-        meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'basic', perm: 'tms-base-info'},
+        path: '/vehicle',
+        component: () => import('./components/common/parent-route.vue'),
+        meta: {moduleId: 'vehicle', title: '运输任务', icon: 'repertory', perm: 'tms-task-manager'},
         children: [
           {
-            path: '/baseInfo/org-list',
-            component: resolve => require(['./components/base-info/org-list/list.vue'], resolve),
-            meta: {moduleId: 'baseInfo', title: '业务单位', perm: 'tms-business-unit-query'}
+            path: '/vehicle/map/delivery',
+            component: () => import('./components/vehicle/map/index.vue'),
+            meta: {moduleId: 'vehicle', title: '地图派送', perm: 'tms-task-map-manager'}
           },
           {
-            path: '/baseInfo/car-archives',
-            component: resolve => require(['./components/base-info/car-archives/index.vue'], resolve),
-            meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'tms-car-archives-watch'}
+            path: '/vehicle/delivery/task',
+            component: () => import('./components/vehicle/task/index.vue'),
+            meta: {moduleId: 'vehicle', title: '出车任务', perm: 'tms-task-car-task-query'}
           }
         ]
       },
@@ -68,19 +68,19 @@ export const routes = [
         ]
       },
       {
-        path: '/vehicle',
-        component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'vehicle', title: '任务作业', icon: 'repertory', perm: 'tms-task-manager'},
+        path: '/baseInfo',
+        component: resolve => require(['./components/base-info/index.vue'], resolve),
+        meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'basic', perm: 'tms-base-info'},
         children: [
           {
-            path: '/vehicle/map/delivery',
-            component: () => import('./components/vehicle/map/index.vue'),
-            meta: {moduleId: 'vehicle', title: '地图派送', perm: 'tms-task-map-manager'}
+            path: '/baseInfo/org-list',
+            component: resolve => require(['./components/base-info/org-list/list.vue'], resolve),
+            meta: {moduleId: 'baseInfo', title: '业务单位', perm: 'tms-business-unit-query'}
           },
           {
-            path: '/vehicle/delivery/task',
-            component: () => import('./components/vehicle/task/index.vue'),
-            meta: {moduleId: 'vehicle', title: '出车任务', perm: 'tms-task-car-task-query'}
+            path: '/baseInfo/car-archives',
+            component: resolve => require(['./components/base-info/car-archives/index.vue'], resolve),
+            meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'tms-car-archives-watch'}
           }
         ]
       },
