@@ -94,7 +94,7 @@
               <el-form-item slot="left" label="理货员">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterTallyClerk"
                            :clearable="true" @click.native.once="filterTallyClerk('')"
-                           v-model="form.tallyClerk" popperClass="good-selects">
+                           v-model="form.tallyClerkId" popperClass="good-selects">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in tallyClerkList">
                     <div style="overflow: hidden">
                       <span class="pull-left" style="clear: right">{{user.name}}</span>

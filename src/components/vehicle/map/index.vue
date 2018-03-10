@@ -236,6 +236,10 @@
       },
       submit: function () {
         this.getWayBillOrderList();
+        this.totalIncubatorCount = 0;
+        this.totalWeight = 0;
+        this.totalVolume = 0;
+        this.totalTicket = 0;
       },
       getWayBillOrderList: function () {
         let param = Object.assign({}, {
