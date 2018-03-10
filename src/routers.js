@@ -39,6 +39,11 @@ export const routes = [
         meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'basic', perm: 'tms-base-info'},
         children: [
           {
+            path: '/baseInfo/org-list',
+            component: resolve => require(['./components/base-info/org-list/list.vue'], resolve),
+            meta: {moduleId: 'baseInfo', title: '业务单位', perm: 'tms-business-unit-query'}
+          },
+          {
             path: '/baseInfo/car-archives',
             component: resolve => require(['./components/base-info/car-archives/index.vue'], resolve),
             meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'tms-car-archives-watch'}

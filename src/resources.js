@@ -99,6 +99,13 @@ export const TransportTask = resource('/transport-task', http, {
   }
 });
 
+// 货主车牌信息
+export const plateNumber = resource('/org-plate', http, {
+  batchAddPlateNumber (obj) {
+    return http.post('/org-plate/batch', obj);
+  }
+});
+
 // 车辆档案对象
 export const CarArchives = resource('/car-archives', http, {
   checkPlateNumber: (params) => {

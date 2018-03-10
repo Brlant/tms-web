@@ -4,7 +4,7 @@
       class="avatar-uploader"
       :action="'/api/omsAttachment'"
       :show-file-list="false"
-      name="upfile"
+      name="name"
       :on-success="handleAvatarSuccess"
       :on-error="error"
       :on-remove="handleRemove"
