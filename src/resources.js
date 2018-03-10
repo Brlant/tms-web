@@ -93,6 +93,9 @@ export const TransportTask = resource('/transport-task', http, {
   },
   batchAddDetail: (id, params) => {
     return http.post('/transport-task/detail/' + id, params);
+  },
+  validWayBill: () => {
+    return http.get('/transport-task/valid/waybill', {});
   }
 });
 

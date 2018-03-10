@@ -242,6 +242,7 @@
         this.action = 'add';
         this.showIndex = index;
         this.currentPart = this.dialogComponents[index];
+        this.form = {};
       },
       edit: function (item) {
         this.currentItem = item;

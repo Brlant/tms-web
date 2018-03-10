@@ -237,7 +237,7 @@
         });
       },
       getTmsOrderList: function (query) {
-        TmsOrder.query({waybillNumber: query, status: 0}).then(res => {
+        TmsOrder.validWayBill({waybillNumber: query}).then(res => {
           this.wayBillList = res.data.list;
         });
       },
