@@ -96,6 +96,9 @@ export const TransportTask = resource('/transport-task', http, {
   },
   validWayBill: (params) => {
     return http.get('/transport-task/valid/waybill', {params});
+  },
+  confirmTask: (id) => {
+    return http.put('/transport-task/' + id + '/confirm', {});
   }
 });
 

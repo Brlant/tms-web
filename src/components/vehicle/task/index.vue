@@ -108,7 +108,13 @@
             <el-col :span="2" class="opera-btn">
               <div>
                 <div>
-
+                  <perm label="tms-task-car-task-confirm" class="opera-btn">
+                    <span @click.stop="confirmTask(item)">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-delete"></i>
+                      </a>确认派送
+                    </span>
+                  </perm>
                 </div>
               </div>
             </el-col>
@@ -156,7 +162,7 @@
         action: '',
         form: {},
         filters: {
-          status: '',
+          status: '0',
           transportTaskNo: '',
           type: '',
           carPlateNumber: ''
@@ -181,6 +187,29 @@
       this.getTransportTaskPage(1);
     },
     methods: {
+      confirmTask: function (item) {
+        this.$confirm('确认派送任务"' + item.transportTaskNo + '"?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TransportTask.confirmTask(item.id).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '已成功确认派送任务"' + item.transportTaskNo + '"'
+            });
+            this.getTransportTaskPage(1);
+          }).catch(() => {
+            this.$notify.error({
+              duration: 2000,
+              message: '确认派送任务"' + item.transportTaskNo + '"失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       searchResult: function (search) {
         Object.assign(this.filters, search);
       },
