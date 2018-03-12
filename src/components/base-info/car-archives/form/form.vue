@@ -33,7 +33,7 @@
             </two-column>
             <el-form-item slot="left" label="归属公司">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索归属公司" :remote-method="filterCustomer"
-                         :clearable="true" @click.native.once="filterCustomer('')"
+                         :clearable="true"
                          v-model="form.carDto.ascriptionCompany" popperClass="good-selects" style="width: 100%">
                 <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in customerList">
                   <div style="overflow: hidden">
@@ -49,7 +49,7 @@
             </el-form-item>
             <el-form-item slot="right" label="默认司机">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索司机" :remote-method="filterUser"
-                         :clearable="true" @click.native.once="filterUser('')"
+                         :clearable="true"
                          v-model="form.carDto.defaultDriver" popperClass="good-selects">
                 <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
                   <div style="overflow: hidden">

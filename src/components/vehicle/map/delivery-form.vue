@@ -26,7 +26,7 @@
           <div class="content">
             <el-form-item label="运货车辆" prop="receiverId">
               <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="getCarList"
-                         :clearable="true" @click.native.once="getCarList('')" @change="setCarInfo(form.carId)"
+                         :clearable="true" @change="setCarInfo(form.carId)"
                          v-model="form.carId" popperClass="good-selects">
                 <el-option :value="car.carDto.id" :key="car.carDto.id" :label="car.carDto.plateNumber"
                            v-for="car in carList">
@@ -54,8 +54,8 @@
             <two-column>
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
-                           :clearable="true" @click.native.once="filterUser('')"
-                           v-model="form.driveId" popperClass="good-selects" @clear="clearDriveId">
+                           :clearable="true"
+                           v-model="form.driveId" popperClass="good-selects">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
                     <div style="overflow: hidden">
                       <span class="pull-left" style="clear: right">{{user.name}}</span>
@@ -93,7 +93,7 @@
             <two-column>
               <el-form-item slot="left" label="理货员">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterTallyClerk"
-                           :clearable="true" @click.native.once="filterTallyClerk('')"
+                           :clearable="true"
                            v-model="form.tallyClerkId" popperClass="good-selects">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in tallyClerkList">
                     <div style="overflow: hidden">
@@ -172,9 +172,6 @@
       }
     },
     methods: {
-      clearDriveId: function () {
-        this.form.driveId = '';
-      },
       filterUser: function (query) {
         let data = Object.assign({}, {
           pageNo: 1,

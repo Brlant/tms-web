@@ -73,7 +73,7 @@
           <div class="content">
             <el-form-item  label="货主">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索货主" :remote-method="filterCustomer"
-                         :clearable="true" @click.native.once="filterCustomer('')"
+                         :clearable="true"
                          v-model="form.orgId" popperClass="good-selects">
                 <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in customerList">
                   <div style="overflow: hidden">
@@ -89,7 +89,7 @@
             </el-form-item>
             <el-form-item label="发货单位">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索发货单位" :remote-method="filterSenderOrg"
-                         :clearable="true" @click.native.once="filterSenderOrg('')"
+                         :clearable="true"
                          v-model="form.senderId" popperClass="good-selects">
                 <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in senderOrgList">
                   <div style="overflow: hidden">
@@ -125,7 +125,7 @@
           <div class="content">
             <el-form-item label="收货单位" prop="receiverId">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索收货单位" :remote-method="filterReceiverOrg"
-                         :clearable="true" @click.native.once="filterReceiverOrg('')"
+                         :clearable="true"
                          v-model="form.receiverId" popperClass="good-selects">
                 <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
                   <div style="overflow: hidden">

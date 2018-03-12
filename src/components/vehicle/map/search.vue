@@ -25,7 +25,7 @@
           <el-col :span="6">
             <oms-form-row label="发货单位" :span="6">
               <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterSenderOrg"
-                         :clearable="true" @click.native.once="filterSenderOrg('')"
+                         :clearable="true"
                          v-model="searchCondition.senderId" popperClass="good-selects">
                 <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in senderOrgList">
                   <div style="overflow: hidden">
@@ -43,7 +43,7 @@
           <el-col :span="6">
             <oms-form-row label="收货单位" :span="6">
               <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterReceiverOrg"
-                         :clearable="true" @click.native.once="filterReceiverOrg('')"
+                         :clearable="true"
                          v-model="searchCondition.receiverId" popperClass="good-selects">
                 <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
                   <div style="overflow: hidden">
