@@ -15,15 +15,24 @@
       <!--</el-col>-->
       <el-col :span="22" class="text-right">
         <el-button-group>
-          <el-button plain size="small" @click="search">
-            <f-a class="icon-small" name="search"></f-a>查询
-          </el-button>
-          <el-button  plain size="small" @click="reset">
-            <f-a class="icon-small" name="reset"></f-a>重置
-          </el-button>
-          <el-button v-if="isShowAdvance" plain size="small" @click="showSearch = !showSearch">
-            <f-a class="icon-small" name="search"></f-a>高级检索
-          </el-button>
+          <perm label="show">
+            <el-button plain size="small" @click="search">
+              <f-a class="icon-small" name="search"></f-a>
+              查询
+            </el-button>
+          </perm>
+          <perm label="show">
+            <el-button plain size="small" @click="reset">
+              <f-a class="icon-small" name="reset"></f-a>
+              重置
+            </el-button>
+          </perm>
+          <perm label="show">
+            <el-button v-if="isShowAdvance" plain size="small" @click="showSearch = !showSearch">
+              <f-a class="icon-small" name="search"></f-a>
+              高级检索
+            </el-button>
+          </perm>
           <slot name="btn"></slot>
         </el-button-group>
       </el-col>
