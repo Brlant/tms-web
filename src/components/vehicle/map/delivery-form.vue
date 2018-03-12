@@ -27,7 +27,7 @@
             <el-form-item label="运货车辆" prop="receiverId">
               <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="getCarList"
                          :clearable="true" @change="setCarInfo(form.carId)"
-                         v-model="form.carId" popperClass="good-selects">
+                         v-model="form.carId" popperClass="good-selects" @clear="clearCarInfo">
                 <el-option :value="car.carDto.id" :key="car.carDto.id" :label="car.carDto.plateNumber"
                            v-for="car in carList">
                 </el-option>
@@ -54,7 +54,7 @@
             <two-column>
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
-                           :clearable="true"
+                           :clearable="true" @change="setDriverInfo(form.driverId)"
                            v-model="form.driveId" popperClass="good-selects">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
                     <div style="overflow: hidden">
@@ -162,16 +162,20 @@
       },
       carInfo: function (val) {
         if (val) {
-          console.log(val);
           this.form.carPlateNumber = val.plateNumber;
           if (val.defaultDriver) {
-            this.form.driveId = val.defaultDriver;
             this.filterUser(val.defaultDriverName);
+            this.form.driveId = val.defaultDriver;
           }
         }
       }
     },
     methods: {
+      clearCarInfo: function () {
+        this.form.carId = '';
+        this.form.driveId = '';
+        this.carInfo = {};
+      },
       filterUser: function (query) {
         let data = Object.assign({}, {
           pageNo: 1,
@@ -209,6 +213,16 @@
           this.carList.forEach(val => {
             if (val.carDto.id === id) {
               this.carInfo = val.carDto;
+            }
+          });
+        }
+      },
+      setDriverInfo: function (id) {
+        if (id) {
+          this.userList.forEach(val => {
+            if (val.id === id) {
+              this.form.driveId = val.id;
+              this.form.driverPhone = val.phone;
             }
           });
         }
