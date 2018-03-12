@@ -164,12 +164,14 @@
                 {{form.deliveryTime|date}}
               </el-form-item>
             </two-column>
-            <el-form-item label="始发地">
-              {{form.provenance}}
-            </el-form-item>
-            <el-form-item label="目的地">
-              {{form.destination}}
-            </el-form-item>
+            <two-column>
+              <el-form-item slot="left" label="始发地">
+                {{form.provenance}}
+              </el-form-item>
+              <el-form-item slot="right" label="目的地">
+                {{form.destination}}
+              </el-form-item>
+            </two-column>
             <el-form-item slot="right" label="备注">
               {{form.remark}}
             </el-form-item>
