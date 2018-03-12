@@ -121,18 +121,18 @@
           <div class="content">
             <two-column>
               <el-form-item slot="left" label="整装箱数">
-                {{form.wholeBoxCount}} <span v-if="form.wholeBoxCount">箱</span>
+                {{form.wholeBoxCount}}
               </el-form-item>
               <el-form-item slot="right" label="散装箱数">
-                {{form.bulkBoxCount}} <span v-if="form.bulkBoxCount">箱</span>
+                {{form.bulkBoxCount}}
               </el-form-item>
             </two-column>
             <two-column>
               <el-form-item slot="left" label="包件数">
-                {{form.incubatorCount}} <span v-if="form.incubatorCount">件</span>
+                {{form.incubatorCount}}
               </el-form-item>
               <el-form-item slot="right" label="声明价格">
-                <span v-if="form.goodsPrice">人民币</span> {{form.goodsPrice}}
+                <span v-if="form.goodsPrice">¥</span> {{form.goodsPrice}}
               </el-form-item>
             </two-column>
             <two-column>
