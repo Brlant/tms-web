@@ -144,6 +144,13 @@
         </div>
       </div>
     </div>
+    <div class="text-center" v-show="dataList.length && !loadingData">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                     :current-page="pager.currentPage"
+                     :page-sizes="[20,50,100]" :page-size="20" layout="total, sizes, prev, pager, next, jumper"
+                     :total="pager.count">
+      </el-pagination>
+    </div>
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentPart" :action="action" :formItem="form" @right-close="resetRightBox" @change="submit"/>
@@ -230,6 +237,13 @@
       this.getTmsOrderPage(1);
     },
     methods: {
+      handleSizeChange(val) {
+        this.pager.pageSize = val;
+        this.getTmsOrderPage(1);
+      },
+      handleCurrentChange(val) {
+        this.getTmsOrderPage(val);
+      },
       createWayBill: function () {
         if (!this.checkList.length) {
           this.$notify.warning({
@@ -286,18 +300,24 @@
         this.showInfoIndex = -1;
         this.shoWayBillPart = false;
       },
-      getTmsOrderPage: function (pageNo) {
+      getTmsOrderPage: function (pageNo, isContinue = false) {
         this.pager.currentPage = pageNo;
         let param = Object.assign({}, {
           pageNo: pageNo,
           pageSize: this.pager.pageSize
         }, this.filters);
+        this.loadingData = true;
         TmsOrder.query(param).then(res => {
           res.data.list.forEach(val => {
             val.isChecked = false;
           });
-          this.dataList = res.data.list;
-          this.pager.totalPage = res.data.totalPage;
+          if (isContinue) {
+            this.dataList = this.showTypeList.concat(res.data.list);
+          } else {
+            this.dataList = res.data.list;
+          }
+          this.pager.count = res.data.count;
+          this.loadingData = false;
         });
         this.queryStateNum(param);
       },
