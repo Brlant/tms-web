@@ -6,7 +6,7 @@ import 'moment/locale/zh-cn';
 import '@/assets/scss/index.scss';
 
 import './assets/css/basic.css';
-import './assets/fonts/iconfont.css';
+import '../static/fonts/iconfont.css';
 import Vuex from 'vuex';
 import store from './store';
 import { init } from './tools/init';
