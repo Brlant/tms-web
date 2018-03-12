@@ -224,6 +224,7 @@
             this.totalVolume = this.totalVolume + item.goodsVolume;
           });
           this.formatVolume();
+          this.formatWeight();
         }
       }
     },
@@ -231,6 +232,10 @@
       formatVolume() {// 保留两位小数
         if (!this.totalVolume) return 0;
         this.totalVolume = utils.autoformatDecimalPoint(this.totalVolume.toString());
+      },
+      formatWeight() {// 保留两位小数
+        if (!this.totalWeight) return 0;
+        this.totalWeight = utils.autoformatDecimalPoint(this.totalWeight.toString());
       },
       submit: function () {
         this.getWayBillOrderList();

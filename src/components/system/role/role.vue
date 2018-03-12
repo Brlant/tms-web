@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="less" scoped="">
 
 
   .margin-left {
@@ -45,13 +45,19 @@
 <template>
   <div>
     <div>
-
-      <status-list :activeStatus="filters.usableStatus" :statusList="orgType"
-                   :checkStatus="changeType" :isShowNum="false" :isShowIcon="isShowIcon"
-                   :formatClass="formatClass"></status-list>
-      <div class="d-table">
+      <div class="order-list-status container">
+        <div class="status-item" :class="{'active':item.usableStatus==filters.usableStatus}"
+             v-for="(item,key) in orgType"
+             @click="filters.usableStatus=item.usableStatus">
+          <div class="status-bg" :class="['b_color_'+key]"></div>
+          <div class="status-title"><i class="el-icon-caret-right"
+                                       v-if="item.usableStatus==filters.usableStatus"></i>{{item.title}}
+            <!--<span class="status-num">{{item.num}}</span>--></div>
+        </div>
+      </div>
+      <div class="container d-table">
         <div class="d-table-left">
-          <div class="d-table-col-wrap">
+          <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
             <h2 class="header">
                 <span class="pull-right">
                   <perm label="tms-access-role-add">
@@ -86,6 +92,12 @@
                 </li>
               </ul>
             </div>
+            <div class="btn-left-list-more">
+              <bottom-loading></bottom-loading>
+              <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
+                <el-button v-show="pager.currentPage<pager.totalPage">加载更多</el-button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="d-table-right">
@@ -95,30 +107,32 @@
             </div>
             <div v-else>
               <h2 class="clearfix">
-              <span class="pull-right">
-               <el-button-group>
-                 <perm label="tms-access-role-edit">
-                   <el-button @click="edit()">
-                     <i class="el-icon-t-edit"></i>
-                     编辑
-                   </el-button>
-                 </perm>
-                 <perm label="tms-access-role-stop">
-                  <el-button @click="forbid()" v-show="resData.usableStatus == 1">
-                    <i class="el-icon-t-forbidden"></i>
-                    停用
-                  </el-button>
-                 </perm>
-                 <perm label="tms-access-role-start">
-                   <el-button @click="useNormal()" v-show="resData.usableStatus == 0">
-                     <i class="el-icon-t-start"></i>启用
-                   </el-button>
-                 </perm>
-                 <perm label="tms-access-role-delete">
-                   <el-button @click="remove()"><i class="el-icon-t-delete"></i>删除</el-button>
-                 </perm>
-                </el-button-group>
-              </span>
+                <span class="pull-right">
+                 <el-button-group>
+                     <perm label="tms-access-role-edit">
+                       <el-button @click="edit()">
+                         <i class="el-icon-t-edit"></i>
+                         编辑
+                       </el-button>
+                     </perm>
+                      <perm label="tms-access-role-stop">
+                        <el-button @click="forbid()" v-show="resData.usableStatus == 1">
+                          <i class="el-icon-t-forbidden"></i>
+                          停用
+                        </el-button>
+                      </perm>
+                       <perm label="tms-access-role-start">
+                         <el-button @click="useNormal()" v-show="resData.usableStatus == 0">
+                           <i class="el-icon-t-start"></i>启用
+                         </el-button>
+                       </perm>
+                      <perm label="tms-access-role-delete">
+                         <el-button @click="remove()">
+                           <i class="el-icon-t-delete"></i>删除
+                         </el-button>
+                      </perm>
+                  </el-button-group>
+                </span>
               </h2>
               <div class="page-main-body">
                 <el-row>
@@ -169,7 +183,7 @@
         </div>
       </div>
     </div>
-    <page-right :show="showRight" @right-close="resetRightBox" :css="{'width':'900px'}">
+    <page-right :show="showRight" @right-close="resetRightBox" :css="{'width':'1000px'}">
       <role-form :formItem="form" :action="action" @close="showRight=false" :actionType="showRight"
                  @changed="change"></role-form>
     </page-right>
@@ -179,6 +193,7 @@
   import {Access} from '@/resources';
   import roleForm from './form/form.vue';
   import roleMixin from '@/mixins/roleMixin';
+  import utils from '@/tools/utils';
 
   export default {
     components: {roleForm},
@@ -211,7 +226,13 @@
           keyWord: ''
         },
         activeStatus: 1,
-        menuList: []
+        menuList: [],
+        pager: {
+          currentPage: 1,
+          count: 0,
+          pageSize: 20,
+          totalPage: 1
+        }
       };
     },
     computed: {
@@ -232,13 +253,13 @@
       }
     },
     mounted() {
-      this.getPageList();
+      this.getPageList(1);
       this.getMenuList();
     },
     watch: {
       filters: {
         handler: function () {
-          this.getPageList();
+          this.getPageList(1);
         },
         deep: true
       },
@@ -247,16 +268,11 @@
       }
     },
     methods: {
-      changeType (item, key) {
-        this.filters.usableStatus = item.usableStatus;
+      getMore: function () {
+        this.getPageList(this.pager.currentPage + 1, true);
       },
-      isShowIcon (item, key, activeStatus) {
-        return item.usableStatus === activeStatus;
-      },
-      formatClass (item, key, activeStatus) {
-        return {
-          'active': item.usableStatus === activeStatus
-        };
+      scrollLoadingData(event) {
+        this.$scrollLoadingData(event);
       },
       getMenuList: function (cache = true) {
         this.getRoleMenus(cache).then(res => {
@@ -280,17 +296,30 @@
         });
         this.getCheckedMenu(checkedMenuList, permissionIdList);
       },
-      getPageList: function () {// 查询角色列表
+      getPageList: function (pageNo, isContinue = false) {
+        this.pager.currentPage = pageNo;
         let param = Object.assign({}, {
+          pageNo: pageNo,
+          pageSize: this.pager.pageSize,
           keyword: this.typeTxt,
           deleteFlag: false,
           objectId: 'tms-system'
         }, this.filters);
         Access.query(param).then(res => {
-          this.showTypeList = res.data.list;
-          this.typeList = res.data.list;
-          this.currentItem = Object.assign({id: ''}, this.showTypeList[0]);
-          this.queryRoleDetail(this.currentItem.id);
+          this.$store.commit('initBottomLoading', false);
+          if (isContinue) {
+            this.showTypeList = this.showTypeList.concat(res.data.list);
+          } else {
+            this.showTypeList = res.data.list;
+            this.typeList = res.data.list;
+            this.currentItem = Object.assign({id: ''}, this.showTypeList[0]);
+            if (res.data.list.length !== 0) {
+              this.queryRoleDetail(this.currentItem.id);
+            } else {
+              this.resData = {};
+            }
+          }
+          this.pager.totalPage = res.data.totalPage;
         });
       },
       queryRoleDetail: function (id) {
@@ -332,7 +361,7 @@
           itemTemp.usableStatus = 0;
           Access.update(itemTemp.id, itemTemp).then(() => {
             this.resData.usableStatus = 0;
-            this.getPageList();
+            this.getPageList(1);
             this.$notify.success({
               title: '成功',
               message: '已成功停用角色"' + this.resData.title + '"'
@@ -350,7 +379,7 @@
           itemTemp.usableStatus = 1;
           Access.update(itemTemp.id, itemTemp).then(() => {
             this.resData.usableStatus = 1;
-            this.getPageList();
+            this.getPageList(1);
             this.$notify.success({
               title: '成功',
               message: '已成功启用角色"' + this.resData.title + '"'
@@ -365,7 +394,7 @@
           type: 'warning'
         }).then(() => {
           Access.delete(this.resData.id).then(() => {
-            this.getPageList();
+            this.getPageList(1);
             this.$notify.success({
               title: '成功',
               message: '已成功删除角色"' + this.resData.title + '"'
@@ -375,7 +404,7 @@
       },
       removeType: function (item) {
         Access.delete(item.id).then(() => {
-          this.getPageList();
+          this.getPageList(1);
           this.$notify.success({
             title: '成功',
             message: '已成功删除角色"' + item.title + '"'
@@ -388,7 +417,7 @@
       },
       change: function (item) {
         if (this.action === 'add') {
-          this.getPageList();
+          this.getPageList(1);
           this.showRight = false;
         } else {
           this.resData = item;

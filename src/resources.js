@@ -157,6 +157,9 @@ export const Department = resource('oms/department', http, {
   },
   getMembers: (params) => {
     return http.get('oms/department/members', {params});
+  },
+  queryStateNum: (params) => {
+    return http.get('/oms/department/member/count', {params});
   }
 });
 

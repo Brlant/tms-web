@@ -8,12 +8,21 @@
 </style>
 <template>
   <div>
-    <div class="d-table">
+    <!--<div class="order-list-status container">-->
+    <!--<div class="status-item" :class="{'active':key==activeStatus} "-->
+    <!--v-for="(item,key) in orgType"-->
+    <!--@click="changeType(key,item)">-->
+    <!--<div class="status-bg" :class="['b_color_'+key]"></div>-->
+    <!--<div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{item.title}}<span-->
+    <!--class="status-num">{{item.num}}</span></div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="container d-table">
       <div class="d-table-left">
         <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
           <h2 class="header">
             <span class="pull-right">
-              <perm label="department-add">
+              <perm label="tms-department-add">
                 <a href="#" class="btn-circle" @click.stop.prevent="addDepartment">
                   <i class="el-icon-t-plus"></i>
                 </a>
@@ -34,20 +43,11 @@
               </li>
               <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
                   :class="{'active':item.id==currentItem.id}">
-                <perm label="department-edit">
+                <perm label="tms-department-edit">
                   <a href="#" @click.stop.prevent="editDepartment(item)" class="hover-show pull-right">
                     <i class="el-icon-t-edit"></i>
                   </a>
                 </perm>
-                <!--<a href="#" @click.stop.prevent="forbid()" class="hover-show pull-right" v-show="data.status">-->
-                <!--<i class="el-icon-t-forbidden"></i>-->
-                <!--</a>-->
-                <!--&lt;!&ndash;</perm>&ndash;&gt;-->
-                <!--&lt;!&ndash;<perm label="qualityItem-start">&ndash;&gt;-->
-                <!--<a href="#" @click.stop.prevent="start()" class="hover-show pull-right" v-show="!data.status">-->
-                <!--<i class="el-icon-t-start"></i>-->
-                <!--</a>-->
-                <!--</perm>-->
                 {{item.name}}
               </li>
             </ul>
@@ -71,15 +71,6 @@
                 <div><i class="el-icon-caret-right" v-if="item.status==filters.status"></i>{{item.title}}<span
                   class="status-num">{{item.num}}</span></div>
               </div>
-              <span class="btn-group-right">
-           <perm label="oms-access-platfrom-role-export">
-           <span @click.stop.prevent="exportUserRoles">
-               <a href="#" class="btn-circle" @click.prevent=""
-                  style="margin-right: 5px"><i
-                 class="el-icon-t-print"></i> </a>导出用户角色信息
-          </span>
-        </perm>
-        </span>
             </div>
           </div>
           <span class="pull-right">
@@ -91,7 +82,7 @@
                 <a href="#" class="btn-circle" @click.stop.prevent="showSearch=(!showSearch)" v-show="!showSearch">
                   <i class="el-icon-t-search"></i>
                 </a>
-                    <perm label="platform-user-add">
+                    <perm label="tms-platform-user-add">
                       <a href="#" class="btn-circle" @click.stop.prevent="add">
                         <i class="el-icon-t-plus"></i>
                       </a>
@@ -133,7 +124,7 @@
                   <dict :dict-group="'orgUserStatus'" :dict-key="formatStatus(row.status)"></dict>
                 </td>
                 <td class="list-op">
-                  <perm label="platform-user-edit">
+                  <perm label="tms-platform-user-edit">
                     <a href="#" @click.stop.prevent="edit(row)"><i class="el-icon-t-edit"></i>编辑</a>
                     <oms-forbid :item="row" @forbided="forbid" :tips='"确认停用平台用户\""+row.name +"\"?"'
                                 v-show="row.status!== '2'"><i
@@ -173,7 +164,7 @@
 
 </template>
 <script>
-  import {Department, User} from '@/resources';
+  import {Department, User} from '../../../resources';
   import utils from '@/tools/utils';
   import editForm from './form/form.vue';
   import departmentForm from './form/department.vue';
@@ -227,7 +218,6 @@
     mounted () {
       this.getDepartmentPage();
       this.showAllType(1);
-      // this.getPageList();
     },
     computed: {
       bodyHeight: function () {
@@ -250,8 +240,6 @@
             this.showAllType(1);
           } else if (!this.showAll && this.currentItem.id) {
             this.showType(this.currentItem, 1);
-          } else {
-            this.getPageList(1);
           }
         },
         deep: true
@@ -270,12 +258,14 @@
           this.pager.count = res.data.count;
         });
         this.showAll = true;
+        this.queryStatusNum(data);
       },
       showType: function (type, pageNo) {
         let data = Object.assign({}, this.filters, {
           pageNo: pageNo,
           pageSize: this.pager.pageSize,
-          objectId: 'oms-system'
+          companyDepartment: type.id,
+          objectId: 'tms-system'
         });
         Department.getOnesMember(type.id, data).then(res => {
           this.dataRows = res.data.list;
@@ -283,6 +273,15 @@
         });
         this.currentItem = type;
         this.showAll = false;
+        this.queryStatusNum(data);
+      },
+      queryStatusNum: function (params) {
+        Department.queryStateNum(params).then(res => {
+          let data = res.data;
+          this.orgType[0].num = data['normal'];
+          this.orgType[1].num = data['not-active'];
+          this.orgType[2].num = data['disable'];
+        });
       },
       scrollLoadingData(event) {
         this.$scrollLoadingData(event);
@@ -293,8 +292,6 @@
           this.showAllType(1);
         } else if (!this.showAll && this.currentItem.id) {
           this.showType(this.currentItem, 1);
-        } else {
-          this.getPageList(1);
         }
       },
       handleCurrentChange(val) {
@@ -302,8 +299,6 @@
           this.showAllType(val);
         } else if (!this.showAll && this.currentItem.id) {
           this.showType(this.currentItem, val);
-        } else {
-          this.getPageList(val);
         }
       },
       resetRightBox: function () {
@@ -334,18 +329,6 @@
           this.departmentPager.totalPage = res.data.totalPage;
         });
         // this.queryStatusNum(param);
-      },
-      getPageList: function (pageNo) {
-        this.pager.currentPage = pageNo;
-        let data = Object.assign({}, this.filters, {
-          pageNo: pageNo,
-          pageSize: this.pager.pageSize,
-          objectId: 'oms-system'
-        });
-        User.query(data).then(res => {
-          this.dataRows = res.data.list;
-          this.pager.count = res.data.count;
-        });
       },
       add: function () {
         this.action = 'add';
@@ -381,6 +364,11 @@
             title: '成功',
             message: '已成功停用平台用户"' + item.name + '"'
           });
+          if (this.showAll) {
+            this.showAllType(1);
+          } else if (!this.showAll && this.currentItem.id) {
+            this.showType(this.currentItem, 1);
+          }
         });
       },
       useNormal: function (item) {
@@ -392,6 +380,11 @@
             title: '成功',
             message: '已成功启用平台用户"' + item.name + '"'
           });
+          if (this.showAll) {
+            this.showAllType(1);
+          } else if (!this.showAll && this.currentItem.id) {
+            this.showType(this.currentItem, 1);
+          }
         });
       },
       departmentChange: function () {
@@ -400,7 +393,11 @@
       },
       itemChange: function (formData) {
         if (!formData.id) {
-          this.getPageList(1);
+          if (this.showAll) {
+            this.showAllType(1);
+          } else if (!this.showAll && this.currentItem.id) {
+            this.showType(this.currentItem, 1);
+          }
         } else {
           let index = -1;
           this.dataRows.forEach((f, key) => {
@@ -411,7 +408,11 @@
           if (index !== -1) {
             this.dataRows.splice(index, 1, formData);
           } else {
-            this.getPageList(this.pager.currentPage);
+            if (this.showAll) {
+              this.showAllType(this.pager.currentPage);
+            } else if (!this.showAll && this.currentItem.id) {
+              this.showType(this.currentItem, this.pager.currentPage);
+            }
           }
         }
         this.showRight = false;
@@ -419,36 +420,6 @@
       formatStatus: function (value) {
         if (!value) return '';
         return value.toString();
-      },
-      exportUserRoles () {
-        this.$store.commit('initPrint', {
-          isPrinting: true,
-          moduleId: this.$route.path,
-          text: '拼命导出中'
-        });
-        let params = {
-          objectId: 'oms-system', type: 0
-        };
-        this.$http.get('/access/statement/role/export', {params}).then(res => {
-          utils.download(res.data.path);
-          this.$store.commit('initPrint', {
-            isPrinting: false,
-            moduleId: this.$route.path,
-            text: '拼命导出中'
-          });
-        }).catch(error => {
-          this.$store.commit('initPrint', {
-            isPrinting: false,
-            moduleId: this.$route.path,
-            text: '拼命导出中'
-          });
-          this.$notify({
-            duration: 2000,
-            title: '无法打印',
-            message: error.response.data.msg,
-            type: 'error'
-          });
-        });
       }
     }
   };
