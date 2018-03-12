@@ -321,10 +321,6 @@
         let subMenu = [];
         if (!this.activeId) {
           subMenu = this.menu.length ? this.menu[0].subMenu : [];
-          if (subMenu.length && this.$route.path === '/') {
-            this.$router.push(subMenu[0].path);
-            this.activeId = subMenu[0].moduleId;
-          }
         } else {
           this.menu.forEach(menu => {
             if (menu.meta.moduleId === this.activeId) {
@@ -338,6 +334,19 @@
     watch: {
       toRoute: function () {
         this.activeId = this.getGroupId();
+      },
+      menu (val) {
+        if (this.$route.path === '/') {
+          if (val[0]) {
+            if (!val[0].subMenu.length) {
+              this.$router.push(val[0].path);
+              this.activeId = val[0].meta.moduleId;
+            } else {
+              this.$router.push(val[0].subMenu[0].path);
+              this.activeId = val[0].subMenu[0].meta.moduleId;
+            }
+          }
+        }
       }
     },
     methods: {
