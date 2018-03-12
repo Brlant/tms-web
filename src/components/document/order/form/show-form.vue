@@ -184,7 +184,7 @@
           </div>
           <div class="content">
             <el-table :data="form.goodsList" border style="width: 100%">
-              <el-table-column prop="goodsName" label="货品名称">
+              <el-table-column prop="goodsName" label="货品名称" width="200">
               </el-table-column>
               <el-table-column prop="weight" label="货品重量">
                 <template slot-scope="scope">
