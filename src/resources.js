@@ -67,6 +67,9 @@ export const TmsOrder = resource('/tms-order', http, {
   },
   getOneTmsOrder: (id) => {
     return http.get('/tms-order/' + id, {});
+  },
+  cancelOrder: (id) => {
+    return http.get('/tms-order/' + id + '/cancel', {});
   }
 });
 
@@ -77,6 +80,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   },
   getOneTmsWayBill: (id) => {
     return http.get('/tms-waybill/' + id, {});
+  },
+  cancelWayBill: (id) => {
+    return http.get('/tms-waybill/' + id + '/cancel', {});
   }
 });
 

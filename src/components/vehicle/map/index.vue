@@ -94,7 +94,7 @@
                 <thead>
                 <tr>
                   <th width="6%"></th>
-                  <th width="12%">件数</th>
+                  <th width="12%">包件数</th>
                   <th width="20%">运单类型</th>
                   <th width="30%">收货单位</th>
                   <th width="32%">收货地址</th>
@@ -105,7 +105,7 @@
                   <td>
                     <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                   </td>
-                  <td>{{item.incubatorCount}} <span v-if="item.incubatorCount">件</span></td>
+                  <td>{{item.incubatorCount}}
                   <td>
                     <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
                   </td>
