@@ -137,6 +137,15 @@
                     </span>
                   </perm>
                 </div>
+                <div style="padding-top: 2px">
+                  <perm label="tms-order-cancel" class="opera-btn">
+                    <span @click.stop="cancelOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-forbidden"></i>
+                      </a>取消
+                    </span>
+                  </perm>
+                </div>
               </div>
             </el-col>
           </el-row>
@@ -237,6 +246,29 @@
       this.getTmsOrderPage(1);
     },
     methods: {
+      cancelOrder: function (item) {
+        this.$confirm('确认取消订单"' + item.orderNo + '"?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TmsOrder.cancelOrder(item.id).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '已成功取消订单"' + item.orderNo + '"'
+            });
+            this.getTmsOrderPage(1);
+          }).catch(() => {
+            this.$notify.error({
+              duration: 2000,
+              message: '取消订单"' + item.orderNo + '"失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       handleSizeChange(val) {
         this.pager.pageSize = val;
         this.getTmsOrderPage(1);
