@@ -154,7 +154,6 @@
     data: function () {
       return {
         dataRows: [],
-        currentItem: {},
         searchWord: '',
         pager: {
           currentPage: 1,
@@ -203,12 +202,12 @@
       }
     },
     mounted () {
-      this.getWayBillOrderList();
+      this.getWayBillOrderList(1);
     },
     watch: {
       filters: {
         handler: function () {
-          this.getWayBillOrderList();
+          this.getWayBillOrderList(1);
         },
         deep: true
       },
@@ -224,28 +223,43 @@
             this.totalVolume = this.totalVolume + item.goodsVolume;
           });
           this.formatVolume();
+          this.formatWeight();
         }
       }
     },
     methods: {
+      getMore: function () {
+        this.getPageList(this.pager.currentPage + 1, true);
+      },
       formatVolume() {// 保留两位小数
         if (!this.totalVolume) return 0;
         this.totalVolume = utils.autoformatDecimalPoint(this.totalVolume.toString());
       },
+      formatWeight() {// 保留两位小数
+        if (!this.totalWeight) return 0;
+        this.totalWeight = utils.autoformatDecimalPoint(this.totalWeight.toString());
+      },
       submit: function () {
-        this.getWayBillOrderList();
+        this.getWayBillOrderList(1);
         this.totalIncubatorCount = 0;
         this.totalWeight = 0;
         this.totalVolume = 0;
         this.totalTicket = 0;
       },
-      getWayBillOrderList: function () {
+      getWayBillOrderList: function (pageNo, isContinue = false) {
+        this.pager.currentPage = pageNo;
         let param = Object.assign({}, {
-          pageNo: 1,
-          pageSize: 20
+          pageNo: pageNo,
+          pageSize: this.pager.pageSize
         }, this.filters);
         TmsWayBill.query(param).then(res => {
-          this.dataRows = res.data.list;
+          this.$store.commit('initBottomLoading', false);
+          if (isContinue) {
+            this.dataRows = this.showTypeList.concat(res.data.list);
+          } else {
+            this.dataRows = res.data.list;
+          }
+          this.pager.totalPage = res.data.totalPage;
           this.addOverlays();
         });
       },
@@ -290,7 +304,7 @@
       },
       searchResult(search) {
         Object.assign(this.filters, search);
-        this.getWayBillOrderList();
+        this.getWayBillOrderList(1);
       },
       getLgtAndLat (query, callBack) {
         const AMap = window.AMap;

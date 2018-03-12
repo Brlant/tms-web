@@ -125,6 +125,13 @@
         </div>
       </div>
     </div>
+    <div class="text-center" v-show="dataList.length && !loadingData">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                     :current-page="pager.currentPage"
+                     :page-sizes="[20,50,100]" :page-size="20" layout="total, sizes, prev, pager, next, jumper"
+                     :total="pager.count">
+      </el-pagination>
+    </div>
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentPart" :action="action" :formItem="form" @right-close="resetRightBox" @change="submit"/>
@@ -201,6 +208,13 @@
       this.getTmsWayBillPage(1);
     },
     methods: {
+      handleSizeChange(val) {
+        this.pager.pageSize = val;
+        this.getTmsWayBillPage(1);
+      },
+      handleCurrentChange(val) {
+        this.getTmsWayBillPage(val);
+      },
       searchResult: function (search) {
         Object.assign(this.filters, search);
       },
@@ -219,13 +233,15 @@
           pageNo: pageNo,
           pageSize: this.pager.pageSize
         }, this.filters);
+        this.loadingData = true;
         TmsWayBill.query(param).then(res => {
           if (isContinue) {
             this.dataList = this.showTypeList.concat(res.data.list);
           } else {
             this.dataList = res.data.list;
           }
-          this.pager.totalPage = res.data.totalPage;
+          this.pager.count = res.data.count;
+          this.loadingData = false;
         });
         this.queryStateNum(param);
       },
