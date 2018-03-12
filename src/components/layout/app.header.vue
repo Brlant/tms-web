@@ -230,7 +230,7 @@
                 @mouseenter="hoverItem=item"
                 @mouseleave="hoverItem={}">
               <perm :label="item.meta.perm">
-                <a href="#" @click.stop.prevent="goTo(item)">
+                <a href="#" @click.stop.prevent="goTo(item.subMenu.length ? item.subMenu[0]:item)">
                   <i :class="'el-icon-t-'+item.meta.icon" style="font-size: 18px"></i> {{item.meta.title}}</a>
               </perm>
               <ul class="top-sub-menu" v-if="item.subMenu.length">
@@ -321,8 +321,9 @@
         let subMenu = [];
         if (!this.activeId) {
           subMenu = this.menu.length ? this.menu[0].subMenu : [];
-          if (subMenu.length) {
+          if (subMenu.length && this.$route.path === '/') {
             this.$router.push(subMenu[0].path);
+            this.activeId = subMenu[0].moduleId;
           }
         } else {
           this.menu.forEach(menu => {
