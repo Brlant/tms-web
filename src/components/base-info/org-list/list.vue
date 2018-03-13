@@ -75,7 +75,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="row in dataRows" @click="$router.push('/'+typePage+'/'+row.id)" class="org-list">
+              <tr v-for="row in dataRows" class="org-list">
                 <td>
                   {{row.manufacturerCode}}
                   <el-tag type="success" v-show="row.type === '0' && filters.type===1 ">货主</el-tag>
@@ -95,21 +95,15 @@
                 <td>
                   <span v-show="row.deleteFlag">停用</span>
                   <span v-show="!row.deleteFlag">
-                    <router-link :to="{path:'/'+typePage+'/'+row.id +'/base'}"
-                                 v-if="row.auditDto.baseInfoStatus === '0'"
-                                 v-show="row.auditDto.baseInfoStatus === '0'">
+                    <span v-if="row.auditDto.baseInfoStatus === '0'">
                       基础信息待审核
-                    </router-link>
-                    <router-link :to="{path:'/'+typePage+'/'+row.id +'/blank'}"
-                                 v-if="row.auditDto.financeStatus === '0'"
-                                 v-show="row.auditDto.financeStatus === '0'">
+                    </span>
+                    <span v-if="row.auditDto.financeStatus === '0'">
                       <li>财务信息待审核</li>
-                    </router-link>
-                    <router-link :to="{path:'/'+typePage+'/'+row.id +'/store'}"
-                                 v-if="row.auditDto.warehouseStatus === '0'"
-                                 v-show="row.auditDto.warehouseStatus === '0'">
+                    </span>
+                    <span v-if="row.auditDto.warehouseStatus === '0'">
                       <li>仓库地址待审核</li>
-                    </router-link>
+                    </span>
                     <span
                       v-if="row.auditDto.baseInfoStatus === '1' && row.auditDto.financeStatus === '1' && row.auditDto.warehouseStatus === '1'&&!row.showAuditButton">
                       正常
@@ -431,10 +425,8 @@
         this.filters.otherAuditStatus = item.otherAuditStatus;
       },
       onSubmit() {
-        if (this.action === 'add') {
           this.getOrgPage(1);
           this.showRight = false;
-        }
       }
     }
   };
