@@ -64,7 +64,7 @@
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
+                <dict :dict-group="'transportationCondition'" :dict-key="item.waybillType"></dict>
               </div>
             </el-col>
             <el-col :span="3" class="R">

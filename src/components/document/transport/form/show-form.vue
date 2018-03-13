@@ -47,7 +47,7 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="运单类型">
-                <dict :dict-group="'tmsOrderType'" :dict-key="form.waybillType"></dict>
+                <dict :dict-group="'transportationCondition'" :dict-key="form.waybillType"></dict>
               </el-form-item>
               <el-form-item slot="right" label="发运方式">
                 <dict :dict-group="'shipmentWayType'" :dict-key="form.shipmentWay"></dict>
