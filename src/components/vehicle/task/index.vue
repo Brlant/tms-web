@@ -198,7 +198,7 @@
     },
     methods: {
       cancelTask: function (item) {
-        this.$confirm('确认取消派送任务"' + item.transportTaskNo + '"?', '', {
+        this.$confirm('确认取消出车任务"' + item.transportTaskNo + '"?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -207,13 +207,13 @@
             this.$notify.success({
               duration: 2000,
               title: '成功',
-              message: '已成功取消派送任务"' + item.transportTaskNo + '"'
+              message: '已成功取消出车任务"' + item.transportTaskNo + '"'
             });
             this.getTransportTaskPage(1);
           }).catch(() => {
             this.$notify.error({
               duration: 2000,
-              message: '取消派送任务"' + item.transportTaskNo + '"失败'
+              message: '取消出车任务"' + item.transportTaskNo + '"失败'
             });
           });
         }).catch(() => {
