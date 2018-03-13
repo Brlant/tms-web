@@ -240,6 +240,9 @@ export const Access = resource('/oms/access', http, {
   },
   getRoleDetail: (roleId) => {
     return http.get('/oms/access/' + roleId);
+  },
+  queryStateNum: (params) => {
+    return http.get('/oms/access/platform/count', {params});
   }
 });
 

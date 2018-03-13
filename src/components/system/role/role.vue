@@ -51,8 +51,8 @@
              @click="filters.usableStatus=item.usableStatus">
           <div class="status-bg" :class="['b_color_'+key]"></div>
           <div class="status-title"><i class="el-icon-caret-right"
-                                       v-if="item.usableStatus==filters.usableStatus"></i>{{item.title}}
-            <!--<span class="status-num">{{item.num}}</span>--></div>
+                                       v-if="item.usableStatus==filters.usableStatus"></i>{{item.title}}<span
+            class="status-num">{{item.num}}</span></div>
         </div>
       </div>
       <div class="container d-table">
@@ -193,7 +193,6 @@
   import {Access} from '@/resources';
   import roleForm from './form/form.vue';
   import roleMixin from '@/mixins/roleMixin';
-  import utils from '@/tools/utils';
 
   export default {
     components: {roleForm},
@@ -320,6 +319,15 @@
             }
           }
           this.pager.totalPage = res.data.totalPage;
+          this.queryStatusNum(param);
+        });
+      },
+      queryStatusNum: function (params) {
+        Access.queryStateNum(params).then(res => {
+          let data = res.data;
+          this.orgType[0].num = data['all'];
+          this.orgType[1].num = data['valid'];
+          this.orgType[2].num = data['stop'];
         });
       },
       queryRoleDetail: function (id) {
