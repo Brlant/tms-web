@@ -110,6 +110,15 @@
                     </span>
                   </perm>
                 </div>
+                <div style="padding-top: 2px">
+                  <perm label="tms-task-car-task-cancel" class="opera-btn">
+                    <span @click.stop="cancelTask(item)" v-if="item.status==='0'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-forbidden"></i>
+                      </a>取消
+                    </span>
+                  </perm>
+                </div>
               </div>
             </el-col>
           </el-row>
@@ -188,6 +197,29 @@
       this.getTransportTaskPage(1);
     },
     methods: {
+      cancelTask: function (item) {
+        this.$confirm('确认取消派送任务"' + item.transportTaskNo + '"?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TransportTask.cancelTask(item.id).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '已成功取消派送任务"' + item.transportTaskNo + '"'
+            });
+            this.getTransportTaskPage(1);
+          }).catch(() => {
+            this.$notify.error({
+              duration: 2000,
+              message: '取消派送任务"' + item.transportTaskNo + '"失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       handleSizeChange(val) {
         this.pager.pageSize = val;
         this.getTransportTaskPage(1);
