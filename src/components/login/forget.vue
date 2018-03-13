@@ -48,7 +48,7 @@
 <template>
   <div>
     <el-card class="box-card main-card-box">
-      <div class="logo-part clearfix"><img src="../../assets/img/logo_pic.png">TMS</div>
+      <div class="logo-part clearfix"><img src="../../assets/img/logo_pic.png">TMS运输管理</div>
 
 
       <div style="padding:0 20px">

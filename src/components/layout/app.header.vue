@@ -213,7 +213,7 @@
               <img :src="logo_pic" class="logo_pic" @click="activeId=''">
             </div>
             <div>
-              <div class="main-title">TMS</div>
+              <div class="main-title">TMS运输管理</div>
               <el-tooltip  effect="dark" :content="logisticsCentreName" placement="bottom">
                 <div class="sub-title">
                   {{ logisticsCentreName.length > 10 ? logisticsCentreName.slice(0, 10)  : logisticsCentreName }}
