@@ -73,16 +73,17 @@
       </search-part>
       <el-row class="second-part clearfix">
         <el-col :span="12">
-          <h2 class="header f-dib"> 您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米</h2>
+          <h2 class="header f-dib">
+            您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米</h2>
         </el-col>
         <el-col :span="2">
         </el-col>
         <el-col :span="10" class="text-right">
           <!--<el-button-group>-->
-            <!--<perm label="tms-task-add">-->
-              <!--<el-button plain size="small" @click="showPart(0)">生成派送</el-button>-->
-            <!--</perm>-->
-            <!--<el-button plain size="small">显示当天任务</el-button>-->
+          <!--<perm label="tms-task-add">-->
+          <!--<el-button plain size="small" @click="showPart(0)">生成派送</el-button>-->
+          <!--</perm>-->
+          <!--<el-button plain size="small">显示当天任务</el-button>-->
           <!--</el-button-group>-->
         </el-col>
       </el-row>
@@ -143,7 +144,7 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
-  import {TmsWayBill} from '@/resources';
+  import { TmsWayBill } from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
 
@@ -231,11 +232,11 @@
       getMore: function () {
         this.getPageList(this.pager.currentPage + 1, true);
       },
-      formatVolume() {// 保留两位小数
+      formatVolume () {// 保留两位小数
         if (!this.totalVolume) return 0;
         this.totalVolume = utils.autoformatDecimalPoint(this.totalVolume.toString());
       },
-      formatWeight() {// 保留两位小数
+      formatWeight () {// 保留两位小数
         if (!this.totalWeight) return 0;
         this.totalWeight = utils.autoformatDecimalPoint(this.totalWeight.toString());
       },
@@ -302,7 +303,7 @@
         }
         this.setMarker(item._marker, item);
       },
-      searchResult(search) {
+      searchResult (search) {
         Object.assign(this.filters, search);
         this.getWayBillOrderList(1);
       },
@@ -319,17 +320,23 @@
         // 清空覆盖物
         this.markers = [];
         this.dataRows.forEach(i => {
-          this.getLgtAndLat(i.receiverAddress, result => {
-            let geoCodes = result.geocodes;
-            geoCodes.forEach(g => {
-              this.addMarker(g, i);
+          if (i.receiverAddressDimension && i.receiverAddressLongitude) {
+            this.addMarker({
+              lng: i.receiverAddressLongitude,
+              lat: i.receiverAddressDimension
+            }, i, true);
+          } else {
+            this.getLgtAndLat(i.receiverAddress, result => {
+              let geoCodes = result.geocodes;
+              geoCodes.forEach(g => {
+                this.addMarker(g, i);
+              });
             });
-          });
+          }
         });
       },
-      addMarker (d, row) {
+      addMarker (d, row, isHas = false) {
         let marker = {
-          position: [d.location.getLng(), d.location.getLat()],
           label: {
             content: `<div class="index_${row.id}">${row.receiverName}</div>`,
             offset: [20, 20]
@@ -338,29 +345,53 @@
           animation: 'AMAP_ANIMATION_NONE',
           events: {
             click: () => {
-              row.isChecked = !row.isChecked;
-              this.setMarker(marker, row);
-              let index = this.checkList.indexOf(row);
-              if (row.isChecked) {
-                if (index === -1) {
-                  this.checkList.push(row);
-                }
-              } else {
-                this.checkList.splice(index, 1);
-              }
+              this.clickMarker(marker, row);
             },
             mouseover: () => {
-              if (row.isChecked) return;
-              this.setMarkerByMove(marker, row, true);
+              this.setMarkerByMove(marker, row, !row.isChecked);
             },
             mouseout: () => {
-              if (row.isChecked) return;
-              this.setMarkerByMove(marker, row, false);
+              this.setMarkerByMove(marker, row, row.isChecked);
             }
           }
         };
+        if (!isHas) {
+          marker.position = [d.location.getLng(), d.location.getLat()];
+        } else {
+          marker.position = [d.lng, d.lat];
+        }
         this.markers.push(marker);
         row._marker = marker;
+        setTimeout(() => {
+          this.createMarkerLabel(marker, row);
+        }, 300);
+      },
+      createMarkerLabel (marker, row) {
+        let ele_ary = this.$el.getElementsByClassName('index_' + row.id);
+        if (!ele_ary.length) return;
+        const div = ele_ary[0];
+        let aMapEvent = window.AMap.event;
+        aMapEvent.addDomListener(div, 'click', () => {
+          this.clickMarker(marker, row);
+        });
+        aMapEvent.addDomListener(div, 'mouseover', () => {
+          this.setMarkerByMove(marker, row, !row.isChecked);
+        });
+        aMapEvent.addDomListener(div, 'mouseout', () => {
+          this.setMarkerByMove(marker, row, row.isChecked);
+        });
+      },
+      clickMarker (marker, row) {
+        row.isChecked = !row.isChecked;
+        this.setMarker(marker, row);
+        let index = this.checkList.indexOf(row);
+        if (row.isChecked) {
+          if (index === -1) {
+            this.checkList.push(row);
+          }
+        } else {
+          this.checkList.splice(index, 1);
+        }
       },
       setMarker (marker, row) {
         // marker.animation = row.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE';
