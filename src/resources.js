@@ -105,6 +105,9 @@ export const TransportTask = resource('/transport-task', http, {
   },
   confirmTask: (id) => {
     return http.put('/transport-task/' + id + '/confirm', {});
+  },
+  cancelTask: (id) => {
+    return http.put('/transport-task/' + id + '/cancel', {});
   }
 });
 

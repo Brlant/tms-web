@@ -342,7 +342,7 @@
         return this.$getDict('shipmentWayType');
       },
       typeList() {
-        return this.$getDict('tmsOrderType');
+        return this.$getDict('transportationCondition');
       },
       serviceTypeList() {
         return this.$getDict('serviceType');

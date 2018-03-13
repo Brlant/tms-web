@@ -47,7 +47,7 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="运单类型">
-                <dict :dict-group="'tmsOrderType'" :dict-key="form.waybillType"></dict>
+                <dict :dict-group="'transportationCondition'" :dict-key="form.waybillType"></dict>
               </el-form-item>
               <el-form-item slot="right" label="发运方式">
                 <dict :dict-group="'shipmentWayType'" :dict-key="form.shipmentWay"></dict>
@@ -186,16 +186,16 @@
           </div>
           <div class="content">
             <el-table :data="form.goodsList" border style="width: 100%">
-              <el-table-column prop="goodsName" label="货品名称" width="260">
+              <el-table-column prop="goodsName" label="货品名称" width="200">
               </el-table-column>
-              <el-table-column prop="weight" label="货品重量">
+              <el-table-column prop="weight" label="货品重量(kg)">
                 <template slot-scope="scope">
-                  {{scope.row.weight}} <span v-if="scope.row.weight">kg</span>
+                  {{scope.row.weight}}
                 </template>
               </el-table-column>
-              <el-table-column prop="volume" label="货品体积">
+              <el-table-column prop="volume" label="货品体积(m³)">
                 <template slot-scope="scope">
-                  {{scope.row.volume}} <span v-if="scope.row.volume">m³</span>
+                  {{scope.row.volume}}
                 </template>
               </el-table-column>
               <el-table-column prop="specifications" label="货品规格">
