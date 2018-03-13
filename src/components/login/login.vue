@@ -34,7 +34,7 @@
 <template>
   <div>
     <el-card class="box-card main-card-box">
-      <div class="logo-part clearfix"><img src="../../assets/img/logo_pic.png">TMS</div>
+      <div class="logo-part clearfix"><img src="../../assets/img/logo_pic.png">TMS运输管理</div>
 
       <div style="padding:20px">
         <el-form label-position="top" ref="loginForm" label-width="80px" :model="user" :rules="rules"
