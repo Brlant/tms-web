@@ -199,7 +199,7 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height - 70) + 'px';
+        return (height - 90) + 'px';
       }
     },
     mounted () {
@@ -230,7 +230,7 @@
     },
     methods: {
       getMore: function () {
-        this.getPageList(this.pager.currentPage + 1, true);
+        this.getWayBillOrderList(this.pager.currentPage + 1, true);
       },
       formatVolume () {// 保留两位小数
         if (!this.totalVolume) return 0;
@@ -256,7 +256,7 @@
         TmsWayBill.query(param).then(res => {
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
-            this.dataRows = this.showTypeList.concat(res.data.list);
+            this.dataRows = this.dataRows.concat(res.data.list);
           } else {
             this.dataRows = res.data.list;
           }
