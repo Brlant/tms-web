@@ -82,17 +82,17 @@
                 {{item.receiverAddress}}
               </div>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" class="text-center">
               <div>
                 {{item.wholeBoxCount}}
               </div>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" class="text-center">
               <div>
                 {{item.bulkBoxCount}}
               </div>
             </el-col>
-            <el-col :span="1" >
+            <el-col :span="1" class="text-center">
               <div>
                 {{item.incubatorCount}}
               </div>
