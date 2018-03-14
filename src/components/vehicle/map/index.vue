@@ -60,6 +60,12 @@
       cursor: pointer;
     }
   }
+
+  .id-part {
+    font-size: 12px;
+    color: #888;
+
+  }
 </style>
 <template>
   <div>
@@ -94,11 +100,11 @@
               <table class="table table-hover mt-10">
                 <thead>
                 <tr>
-                  <th width="6%"></th>
-                  <th width="12%">包件数</th>
-                  <th width="20%">运单类型</th>
+                  <th width="4%"></th>
+                  <th width="16%">包件数</th>
+                  <th width="20%">运单号</th>
                   <th width="30%">收货单位</th>
-                  <th width="32%">收货地址</th>
+                  <th width="30%">收货地址</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -108,7 +114,13 @@
                   </td>
                   <td>{{item.incubatorCount}}
                   <td>
-                    <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
+                    <div class="id-part">
+                      运单类型:
+                      <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
+                    </div>
+                    <div>
+                      {{item.waybillNumber}}
+                    </div>
                   </td>
                   <td>{{item.receiverName}}</td>
                   <td>{{item.receiverAddress}}</td>
@@ -144,7 +156,7 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
-  import { TmsWayBill } from '@/resources';
+  import {TmsWayBill} from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
 
@@ -179,7 +191,7 @@
         checkList: [],
         filters: {
           status: '0',
-          orderNo: '',
+          waybillNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
