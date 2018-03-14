@@ -415,7 +415,6 @@
         this.form.incubatorCount = parseInt(value, 10);
       },
       setGoodsWeight: function (value) {
-        console.log(parseFloat(value));
         if (!value || isNaN(value)) return;
         this.form.goodsWeight = parseFloat(value);
       },

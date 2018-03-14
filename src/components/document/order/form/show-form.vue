@@ -41,20 +41,15 @@
               <el-form-item slot="left" label="订单号">
                 {{form.orderNo}}
               </el-form-item>
-              <el-form-item slot="right" label="委托单号">
-                {{form.tmsOrderNumber}}
-              </el-form-item>
-            </two-column>
-            <two-column>
-              <el-form-item slot="left" label="订单类型">
+              <el-form-item slot="right" label="订单类型">
                 <dict :dict-group="'tmsOrderType'" :dict-key="form.waybillType"></dict>
               </el-form-item>
-              <el-form-item slot="right" label="发运方式">
-                <dict :dict-group="'shipmentWayType'" :dict-key="form.shipmentWay"></dict>
-              </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="服务方式">
+              <el-form-item slot="left" label="发运方式">
+                <dict :dict-group="'shipmentWayType'" :dict-key="form.shipmentWay"></dict>
+              </el-form-item>
+              <el-form-item slot="right" label="服务方式">
                 <dict :dict-group="'serviceType'" :dict-key="form.serviceType"></dict>
               </el-form-item>
             </two-column>

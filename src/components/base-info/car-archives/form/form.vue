@@ -297,7 +297,6 @@
     props: ['formItem', 'action'],
     watch: {
       formItem: function (val) {
-        console.log(val);
         this.form = Object.assign({}, val);
         if (this.action === 'add') {
           this.form.carDto =

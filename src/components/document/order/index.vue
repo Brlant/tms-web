@@ -34,7 +34,7 @@
         <el-col :span="4">
           <el-checkbox @change="checkAll" v-model="isCheckAll"
                        v-if="activeStatus===0||activeStatus==='0'"></el-checkbox>
-          运单号
+          订单号
         </el-col>
         <el-col :span="2">订单类型</el-col>
         <el-col :span="3">发货单位</el-col>
@@ -69,7 +69,7 @@
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
-                {{item.generateObjectNumber}}
+                {{item.orderNo}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
@@ -219,7 +219,7 @@
         form: {},
         filters: {
           status: 0,
-          generateObjectNumber: '',
+          orderNo: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
@@ -293,7 +293,6 @@
       checkItem: function (item) {
         // 单选
         item.isChecked = !item.isChecked;
-        console.log(item.isChecked);
         let index = this.checkList.indexOf(item);
         if (item.isChecked) {
           if (index === -1) {
