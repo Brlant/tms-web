@@ -18,7 +18,7 @@
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-row>
           <el-col :span="4">
-            <oms-form-row label="运单号" :span="6">
+            <oms-form-row label="运单号" :span="8">
               <oms-input v-model="searchCondition.waybillNumber" placeholder="请输入运单号"></oms-input>
             </oms-form-row>
           </el-col>
@@ -67,7 +67,7 @@
           </el-col>
           <div v-show="showSearch">
             <el-col :span="4">
-              <oms-form-row label="运单类型" :span="6">
+              <oms-form-row label="运单类型" :span="8">
                 <el-select v-model="searchCondition.waybillType" placeholder="运单类型" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-option>
                 </el-select>
