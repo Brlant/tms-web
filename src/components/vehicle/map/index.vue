@@ -115,7 +115,6 @@
                   <td>{{item.incubatorCount}}
                   <td>
                     <div class="id-part">
-                      运单类型:
                       <dict :dict-group="'transportationCondition'" :dict-key="item.waybillType"></dict>
                     </div>
                     <div>
