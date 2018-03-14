@@ -116,7 +116,7 @@
                   <td>
                     <div class="id-part">
                       运单类型:
-                      <dict :dict-group="'tmsOrderType'" :dict-key="item.waybillType"></dict>
+                      <dict :dict-group="'transportationCondition'" :dict-key="item.waybillType"></dict>
                     </div>
                     <div>
                       {{item.waybillNumber}}
