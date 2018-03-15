@@ -66,6 +66,12 @@
     color: #888;
 
   }
+
+  .tr-position {
+    position: fixed;
+    background: #ffffff;
+    height: 100%;
+  }
 </style>
 <template>
   <div>
@@ -95,25 +101,27 @@
       </el-row>
       <div class="d-table">
         <div class="d-table-left">
+          <table class="table" style="margin-bottom: 0">
+            <thead>
+            <tr>
+              <th width="4%"></th>
+              <th width="16%">包件数</th>
+              <th width="20%">运单号</th>
+              <th width="30%">收货单位</th>
+              <th width="30%">收货地址</th>
+            </tr>
+            </thead>
+          </table>
           <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
             <div class="m-list">
-              <table class="table table-hover mt-10">
-                <thead>
-                <tr>
-                  <th width="4%"></th>
-                  <th width="16%">包件数</th>
-                  <th width="20%">运单号</th>
-                  <th width="30%">收货单位</th>
-                  <th width="30%">收货地址</th>
-                </tr>
-                </thead>
+              <table class="table table-hover">
                 <tbody>
                 <tr v-for="item in dataRows" :class="{active: item.isChecked}" @click="rowClick(item)">
-                  <td>
+                  <td width="4%">
                     <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                   </td>
-                  <td>{{item.incubatorCount}}
-                  <td>
+                  <td width="16%">{{item.incubatorCount}}
+                  <td width="20%">
                     <div class="id-part">
                       <dict :dict-group="'transportationCondition'" :dict-key="item.waybillType"></dict>
                     </div>
@@ -121,8 +129,8 @@
                       {{item.waybillNumber}}
                     </div>
                   </td>
-                  <td>{{item.receiverName}}</td>
-                  <td>{{item.receiverAddress}}</td>
+                  <td width="30%">{{item.receiverName}}</td>
+                  <td width="30%">{{item.receiverAddress}}</td>
                 </tr>
                 </tbody>
               </table>
@@ -268,11 +276,13 @@
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
             this.dataRows = this.dataRows.concat(res.data.list);
+            this.addOverlays(res.data.list, true);
           } else {
+            this.dataRows = [];
             this.dataRows = res.data.list;
+            this.addOverlays(this.dataRows, false);
           }
           this.pager.totalPage = res.data.totalPage;
-          this.addOverlays();
         });
       },
       scrollLoadingData (event) {
@@ -316,7 +326,6 @@
       },
       searchResult (search) {
         Object.assign(this.filters, search);
-        this.getWayBillOrderList(1);
       },
       getLgtAndLat (query, callBack) {
         const AMap = window.AMap;
@@ -327,10 +336,12 @@
           }
         });
       },
-      addOverlays () {
+      addOverlays(list, isContinue) {
         // 清空覆盖物
-        this.markers = [];
-        this.dataRows.forEach(i => {
+        if (!isContinue || list.length === 0) {
+          this.markers = [];
+        }
+        list.forEach(i => {
           if (i.receiverAddressDimension && i.receiverAddressLongitude) {
             this.addMarker({
               lng: i.receiverAddressLongitude,
