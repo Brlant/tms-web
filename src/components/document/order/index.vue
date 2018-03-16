@@ -127,8 +127,6 @@
                       </a>编辑
                     </span>
                   </perm>
-                </div>
-                <div style="padding-top: 2px">
                   <perm label="tms-order-delete">
                     <span @click.stop="deleteOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
@@ -145,12 +143,10 @@
                       </a>取消
                     </span>
                   </perm>
-                </div>
-                <div style="padding-top: 2px">
-                  <perm label="tms-order-cancel" class="opera-btn">
+                  <perm label="tms-order-dismantling" class="opera-btn">
                     <span @click.stop="splitOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
-                        <i class="el-icon-t-forbidden"></i>
+                        <i class="el-icon-t-basic"></i>
                       </a>拆分订单
                     </span>
                   </perm>
@@ -386,6 +382,7 @@
           this.orderType[2].num = data['pend-shipment'];
           this.orderType[3].num = data['pend-sign'];
           this.orderType[4].num = data['complete'];
+          this.orderType[5].num = data['canceled'];
         });
       },
       showPart (index) {

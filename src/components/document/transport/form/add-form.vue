@@ -54,14 +54,14 @@
                 </el-select>
               </el-form-item>
             </two-column>
-            <two-column>
-              <el-form-item slot="left" label="服务方式">
-                <el-select v-model="form.serviceType" placeholder="请选择服务方式" :clearable="true">
-                  <el-option :label="item.label" :value="item.key" :key="item.key"
-                             v-for="item in serviceTypeList"></el-option>
-                </el-select>
-              </el-form-item>
-            </two-column>
+            <!--<two-column>-->
+              <!--<el-form-item slot="left" label="服务方式">-->
+                <!--<el-select v-model="form.serviceType" placeholder="请选择服务方式" :clearable="true">-->
+                  <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
+                             <!--v-for="item in serviceTypeList"></el-option>-->
+                <!--</el-select>-->
+              <!--</el-form-item>-->
+            <!--</two-column>-->
           </div>
           <div class="hr mb-10"></div>
         </div>

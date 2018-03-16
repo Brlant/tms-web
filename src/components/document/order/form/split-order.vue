@@ -168,6 +168,30 @@
               });
               return;
             }
+            // 对货品列表进行归类
+            let goodsList = this.form.goodsList;
+            // let map = {},
+            // let dest = [];
+            // for(var i = 0; i < goodsList.length; i++){
+            //   var goods = goodsList[i];
+            //   if(!map[goods.id]){
+            //     dest.push({
+            //       id: goods.id,
+            //       name: goods.name,
+            //       data: [goods]
+            //     });
+            //     map[ai.id] = ai;
+            //   }else{
+            //     for(var j = 0; j < dest.length; j++){
+            //       var dj = dest[j];
+            //       if(dj.id == ai.id){
+            //         dj.data.push(ai);
+            //         break;
+            //       }
+            //     }
+            //   }
+            // }
+
             if (this.action === 'add') {
               this.doing = true;
               TmsOrder.save(this.form).then(res => {

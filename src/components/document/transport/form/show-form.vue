@@ -53,11 +53,11 @@
                 <dict :dict-group="'shipmentWayType'" :dict-key="form.shipmentWay"></dict>
               </el-form-item>
             </two-column>
-            <two-column>
-              <el-form-item slot="left" label="服务方式">
-                <dict :dict-group="'serviceType'" :dict-key="form.serviceType"></dict>
-              </el-form-item>
-            </two-column>
+            <!--<two-column>-->
+              <!--<el-form-item slot="left" label="服务方式">-->
+                <!--<dict :dict-group="'serviceType'" :dict-key="form.serviceType"></dict>-->
+              <!--</el-form-item>-->
+            <!--</two-column>-->
           </div>
           <div class="hr mb-10"></div>
         </div>

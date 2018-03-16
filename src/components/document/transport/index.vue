@@ -189,7 +189,7 @@
         action: '',
         form: {},
         filters: {
-          status: '0',
+          status: '-1',
           waybillNumber: '',
           waybillType: '',
           shipmentWay: '',
@@ -281,9 +281,11 @@
         TmsWayBill.queryStateNum(params).then(res => {
           let data = res.data;
           this.orderType[0].num = data['pend-choose-car'];
-          this.orderType[1].num = data['pend-shipment'];
-          this.orderType[2].num = data['pend-sign'];
-          this.orderType[3].num = data['complete'];
+          this.orderType[1].num = data['pend-choose-car'];
+          this.orderType[2].num = data['pend-shipment'];
+          this.orderType[3].num = data['pend-sign'];
+          this.orderType[4].num = data['complete'];
+          this.orderType[5].num = data['canceled'];
         });
       },
       showPart (index) {

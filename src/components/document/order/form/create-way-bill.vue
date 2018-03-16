@@ -61,9 +61,9 @@
                 <el-form-item slot="left" label="发运方式">
                   <dict :dict-group="'shipmentWayType'" :dict-key="currentOrder.shipmentWay"></dict>
                 </el-form-item>
-                <el-form-item slot="right" label="服务方式">
-                  <dict :dict-group="'serviceType'" :dict-key="currentOrder.serviceType"></dict>
-                </el-form-item>
+                <!--<el-form-item slot="right" label="服务方式">-->
+                  <!--<dict :dict-group="'serviceType'" :dict-key="currentOrder.serviceType"></dict>-->
+                <!--</el-form-item>-->
               </two-column>
             </div>
             <div class="hr mb-10"></div>
