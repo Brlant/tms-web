@@ -31,7 +31,7 @@
     <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus"/>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="4">
+        <el-col :span="3">
           <el-checkbox @change="checkAll" v-model="isCheckAll"
                        v-if="activeStatus===0||activeStatus==='0'"></el-checkbox>
           订单号
@@ -45,7 +45,7 @@
         <el-col :span="1">包件</el-col>
         <el-col :span="2">送达时限</el-col>
         <el-col :span="2">状态</el-col>
-        <el-col :span="2">操作</el-col>
+        <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -63,7 +63,7 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="4" class="special-col R">
+            <el-col :span="3" class="special-col R">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
                    v-if="activeStatus===0||activeStatus==='0'">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
@@ -117,7 +117,7 @@
                 {{formatStatusTitle(item.status, orderType)}}
               </div>
             </el-col>
-            <el-col :span="2" class="opera-btn">
+            <el-col :span="3" class="opera-btn">
               <div>
                 <div>
                   <perm label="tms-order-edit">
@@ -146,6 +146,15 @@
                     </span>
                   </perm>
                 </div>
+                <div style="padding-top: 2px">
+                  <perm label="tms-order-cancel" class="opera-btn">
+                    <span @click.stop="splitOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-forbidden"></i>
+                      </a>拆分订单
+                    </span>
+                  </perm>
+                </div>
               </div>
             </el-col>
           </el-row>
@@ -170,6 +179,9 @@
     <page-right :show="shoWayBillPart" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
       <component :is="currentWayBillPart" :checkList="checkListPara" @right-close="resetRightBox" @change="submit"/>
     </page-right>
+    <page-right :show="showSplitOrderPart" @right-close="resetRightBox" :css="{'width':'1200px','padding':0}">
+      <component :is="currentSplitOrderPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
+    </page-right>
 
   </div>
 </template>
@@ -179,14 +191,14 @@
   import {TmsOrder} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
+  import splitForm from './form/split-order.vue';
   import wayBillForm from './form/create-way-bill.vue';
   import StatusMixin from '@/mixins/statusMixin';
   import Perm from '@/components/common/perm';
 
   export default {
     components: {
-      Perm,
-      SearchPart, addForm, wayBillForm
+      Perm, SearchPart, addForm, wayBillForm
     },
     mixins: [StatusMixin],
     data () {
@@ -200,6 +212,7 @@
         currentPart: null,
         currentInfoPart: null,
         currentWayBillPart: null,
+        currentSplitOrderPart: null,
         dialogComponents: {
           0: addForm
         },
@@ -208,6 +221,9 @@
         },
         dialogWayBillComponents: {
           0: wayBillForm
+        },
+        dialogSplitFormComponents: {
+          0: splitForm
         },
         pager: {
           currentPage: 1,
@@ -231,7 +247,8 @@
         isCheckAll: false,
         checkList: [],
         checkListPara: [],
-        shoWayBillPart: false
+        shoWayBillPart: false,
+        showSplitOrderPart: false
       };
     },
     watch: {
@@ -267,6 +284,14 @@
           });
         }).catch(() => {
 
+        });
+      },
+      splitOrder: function (item) {
+        this.currentSplitOrderPart = this.dialogSplitFormComponents[0];
+        this.showSplitOrderPart = true;
+        this.$nextTick(() => {
+          this.form = JSON.parse(JSON.stringify(item));
+          this.form.goodsList = item.goodsList;
         });
       },
       handleSizeChange(val) {
@@ -330,6 +355,7 @@
         this.showIndex = -1;
         this.showInfoIndex = -1;
         this.shoWayBillPart = false;
+        this.showSplitOrderPart = false;
       },
       getTmsOrderPage: function (pageNo, isContinue = false) {
         this.pager.currentPage = pageNo;
