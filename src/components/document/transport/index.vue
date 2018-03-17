@@ -127,6 +127,15 @@
                     </span>
                   </perm>
                 </div>
+                <div style="padding-top: 2px">
+                  <perm label="tms-waybill-cancel" class="opera-btn">
+                    <span @click.stop="signWayBill(item)" v-if="activeStatus===3||activeStatus==='3'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-edit"></i>
+                      </a>签收
+                    </span>
+                  </perm>
+                </div>
               </div>
             </el-col>
           </el-row>
@@ -148,6 +157,9 @@
     <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentInfoPart" :formItem="form" @right-close="resetRightBox"/>
     </page-right>
+    <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentSignPart" :formItem="form" @right-close="resetRightBox"/>
+    </page-right>
 
   </div>
 </template>
@@ -157,6 +169,7 @@
   import {TmsWayBill} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
+  import signForm from './form/sign-form';
   import StatusMixin from '@/mixins/statusMixin';
 
   export default {
@@ -172,13 +185,18 @@
         dataList: [],
         showIndex: -1,
         showInfoIndex: -1,
+        showSignIndex: -1,
         currentPart: null,
         currentInfoPart: null,
+        currentSignPart: null,
         dialogComponents: {
           0: addForm
         },
         dialogInfoComponents: {
           0: showForm
+        },
+        dialogSignComponents: {
+          0: signForm
         },
         pager: {
           currentPage: 1,
@@ -217,6 +235,13 @@
       this.getTmsWayBillPage(1);
     },
     methods: {
+      signWayBill: function (item) {
+        this.showSignIndex = 0;
+        this.currentSignPart = this.dialogSignComponents[0];
+        this.$nextTick(() => {
+          this.form = JSON.parse(JSON.stringify(item));
+        });
+      },
       cancelWayBill: function (item) {
         this.$confirm('确认取消运单"' + item.waybillNumber + '"?', '', {
           confirmButtonText: '确定',
@@ -258,6 +283,7 @@
         this.showIndex = -1;
         this.showInfoIndex = -1;
         this.shoWayBillPart = false;
+        this.showSignIndex = -1;
       },
       getTmsWayBillPage: function (pageNo, isContinue = false) {
         this.pager.currentPage = pageNo;
