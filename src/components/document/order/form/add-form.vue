@@ -337,7 +337,7 @@
         return this.$getDict('transportationCondition');
       },
       typeList() {
-        return this.$getDict('transportationMeans');
+        return this.$getDict('bizType');
       },
       serviceTypeList() {
         return this.$getDict('serviceType');

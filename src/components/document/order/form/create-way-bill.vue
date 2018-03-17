@@ -54,7 +54,7 @@
                   {{currentOrder.orderNo}}
                 </el-form-item>
                 <el-form-item slot="right" label="订单类型">
-                  <dict :dict-group="'transportationMeans'" :dict-key="currentOrder.waybillType"></dict>
+                  <dict :dict-group="'bizType'" :dict-key="currentOrder.waybillType"></dict>
                 </el-form-item>
               </two-column>
               <two-column>

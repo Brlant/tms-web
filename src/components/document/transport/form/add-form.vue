@@ -339,7 +339,7 @@
     },
     computed: {
       shipmentWayList() {
-        return this.$getDict('shipmentWayType');
+        return this.$getDict('transportationCondition');
       },
       typeList() {
         return this.$getDict('transportationMeans');
