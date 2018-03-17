@@ -129,6 +129,12 @@
       'searchCondition.receiverId': function () {
         this.search();
       },
+      'searchCondition.waybillType': function () {
+        this.search();
+      },
+      'searchCondition.shipmentWay': function () {
+        this.search();
+      },
       'deliveryDate': function (val) {
         if (val) {
           this.search();

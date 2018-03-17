@@ -119,6 +119,32 @@
         return this.$getDict('serviceType');
       }
     },
+    watch: {
+      'searchCondition.waybillNumber': function () {
+        this.search();
+      },
+      'searchCondition.senderId': function () {
+        this.search();
+      },
+      'searchCondition.receiverId': function () {
+        this.search();
+      },
+      'searchCondition.waybillType': function () {
+        this.search();
+      },
+      'searchCondition.shipmentWay': function () {
+        this.search();
+      },
+      'deliveryDate': function (val) {
+        if (val) {
+          this.search();
+        } else {
+          this.searchCondition.startTime = '';
+          this.searchCondition.endTime = '';
+          this.$emit('search', this.searchCondition);
+        }
+      }
+    },
     methods: {
       reset() {
         this.searchCondition = {

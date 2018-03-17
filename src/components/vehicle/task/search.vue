@@ -50,6 +50,17 @@
         receiverOrgList: []
       };
     },
+    watch: {
+      'searchCondition.transportTaskNo': function () {
+        this.search();
+      },
+      'searchCondition.type': function () {
+        this.search();
+      },
+      'searchCondition.carPlateNumber': function () {
+        this.search();
+      }
+    },
     computed: {
       deliveryTaskTypeList() {
         return this.$getDict('deliveryTaskType');
