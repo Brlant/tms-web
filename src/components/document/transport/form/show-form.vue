@@ -203,6 +203,34 @@
               <el-table-column prop="code" label="货品追溯码">
               </el-table-column>
             </el-table>
+            <div class="hr mb-10"></div>
+          </div>
+        </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[6].key === currentTab.key}">
+              {{pageSets[6].name}}</h3>
+          </div>
+          <div class="content">
+            <el-table :data="form.goodsList" border style="width: 100%">
+              <el-table-column prop="boxNo" label="保温箱编号" width="200">
+              </el-table-column>
+              <el-table-column prop="thermometerNoList" label="温度计列表">
+                <template slot-scope="scope">
+                  <span v-for="no in thermometerNoList">
+                      {{no}} <span v-if="thermometerNoList.indexOf(no)!==thermometerNoList.length-1">,</span>
+                  </span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="codeList" label="货品追溯码">
+                <template slot-scope="scope">
+                 <span v-for="code in codeList">
+                      {{no}} <span v-if="codeList.indexOf(code)!==codeList.length-1">,</span>
+                  </span>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </div>
       </el-form>
@@ -225,7 +253,8 @@
           {name: '收货信息', key: 2},
           {name: '货品信息', key: 3},
           {name: '其他信息', key: 4},
-          {name: '货品列表', key: 5}
+          {name: '货品列表', key: 5},
+          {name: '保温箱列表', key: 6}
         ],
         currentTab: {},
         form: {
