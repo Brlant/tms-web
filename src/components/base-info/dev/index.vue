@@ -1,5 +1,7 @@
 <style lang="scss" scoped>
 
+  @import "../../../assets/scss/mixins.scss";
+
   .margin-left {
     margin-left: 15px;
   }
@@ -33,6 +35,35 @@
     line-height: 20px;
   }
 
+  .form-header-part {
+    padding: 0 10px;
+    &.part-bg {
+      background: #eee;
+      padding-bottom: 10px;
+    }
+    .header {
+      line-height: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      .sign {
+        width: 4px;
+        background: $activeColor;
+        height: 100%;
+      }
+      .tit {
+        margin: 0 0 0 10px;
+        &.active {
+          color: $activeColor
+        }
+      }
+    }
+    .content-sp {
+      overflow: hidden;
+      font-size: 14px;
+    }
+  }
+
 </style>
 <template>
   <div>
@@ -50,7 +81,7 @@
                         <i class="el-icon-t-search"></i>
                       </a>
                 </span>
-            设备耗材
+            包装耗材
           </h2>
           <div class="search-left-box" v-if="showTypeSearch">
             <oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>
@@ -81,92 +112,108 @@
                 <el-button v-show="pager.currentPage<pager.totalPage">加载更多</el-button>
               </div>
             </div>
-            <!--<div class="btn-left-list-more" @click.stop="getMore">-->
-            <!--<el-button v-if="pager.currentPage<pager.totalPage">加载更多</el-button>-->
-            <!--</div>-->
           </div>
         </div>
       </div>
       <div class="d-table-right">
-        <el-row style="padding-bottom:20px;padding-top: 20px">
-          <el-col :span="7">
-            <oms-row label="名称" v-show="currentItem.name">{{currentItem.name }}</oms-row>
-            <oms-row label="型号" v-show="currentItem.model">{{ currentItem.model}}</oms-row>
-            <oms-row label="品牌" v-show="currentItem.brand">{{currentItem.brand }}</oms-row>
-          </el-col>
-          <el-col :span="7">
-            <oms-row label="类型" v-show="currentItem.type">
-              <dict :dict-group="'equipmentType'" :dict-key="currentItem.type"/>
-            </oms-row>
-            <oms-row label="规格" v-show="currentItem.specification">{{currentItem.specification }}</oms-row>
-            <oms-row label="体积" v-show="currentItem.volume">{{currentItem.volume }}</oms-row>
-          </el-col>
-          <el-col :span="7">
-            <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
-            <oms-row label="采购价格" v-show="currentItem.purchasePrice"><span v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice
-              }}
-            </oms-row>
-            <oms-row label="单次计费价格" v-show="currentItem.rentPrice"><span v-show="currentItem.rentPrice">¥</span>{{currentItem.rentPrice
-              }}
-            </oms-row>
-            <oms-row label="租赁计费价格" v-show="currentItem.singlePrice"><span v-show="currentItem.singlePrice">¥</span>{{
-              currentItem.singlePrice}}
-            </oms-row>
-            <oms-row label="销售价格" v-show="currentItem.salePrice"><span v-show="currentItem.salePrice">¥</span>{{
-              currentItem.salePrice}}
-            </oms-row>
-            <oms-row label="库存数量">{{ currentItem.count}}</oms-row>
-          </el-col>
-          <el-col :span="3">
-               <span class="pull-right">
-                    <perm label="tms-equipment-consumables-detail-add">
-                        <a href="#" class="btn-circle" @click.stop.prevent="add">
-                          <i class="el-icon-t-plus"></i>
-                        </a>
-                 </perm>
-                </span>
-          </el-col>
-        </el-row>
-        <!--<div v-if="devDetailList.length===0">-->
-        <!--<div class="empty-info">暂无信息</div>-->
-        <!--</div>-->
-        <div class="d-table-col-wrap">
-          <div>
-            <el-form class="advanced-query-form clearfix" style="padding-top: 10px" onsubmit="return false">
-              <el-row>
-                <el-col :span="12">
-                  <oms-form-row label="设备编号" :span="6">
-                    <oms-input type="text" v-model="searchCondition.devNo" placeholder="请输入设备编号"></oms-input>
-                  </oms-form-row>
+        <div v-if="devDetailList.length!=0" class="content-right">
+          <div class="form-header-part part-bg p-r-20">
+            <div class="header">
+              <div class="sign f-dib"></div>
+              <h3 class="tit f-dib index-tit">包装信息</h3>
+            </div>
+            <div class="content content-sp">
+              <el-row style="padding-bottom:20px;padding-top: 20px">
+                <el-col :span="8">
+                  <oms-row label="名称" v-show="currentItem.name">{{currentItem.name }}</oms-row>
+                  <oms-row label="型号" v-show="currentItem.model">{{ currentItem.model}}</oms-row>
+                  <oms-row label="品牌" v-show="currentItem.brand">{{currentItem.brand }}</oms-row>
                 </el-col>
-                <el-col :span="12">
-                  <oms-form-row label="设备状态" :span="6">
-                    <el-select placeholder="请选择设备状态" v-model="searchCondition.status">
-                      <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList">
-                      </el-option>
-                    </el-select>
-                  </oms-form-row>
+                <el-col :span="8">
+                  <oms-row label="类型" v-show="currentItem.type">
+                    <dict :dict-group="'equipmentType'" :dict-key="currentItem.type"/>
+                  </oms-row>
+                  <oms-row label="规格" v-show="currentItem.specification">{{currentItem.specification }}</oms-row>
+                  <oms-row label="体积" v-show="currentItem.volume">{{currentItem.volume }}</oms-row>
                 </el-col>
-                <el-col :span="12">
-                  <oms-form-row label="有效期" :span="6">
-                    <el-date-picker v-model="validityTimes" type="daterange" style="width: 300px"></el-date-picker>
-                  </oms-form-row>
-                </el-col>
-                <el-col :span="12">
-                  <oms-form-row label="" :span="6">
-                    <el-button type="primary" native-type="submit" @click="searchInOrder">查询</el-button>
-                    <el-button native-type="reset" @click="resetSearchForm">重置</el-button>
-                    <el-button :plain="true" @click="exportFile" :disabled="isLoading" v-if="devDetailList.length>0">
-                      导出Excel
-                    </el-button>
-                  </oms-form-row>
+                <el-col :span="8">
+                  <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
+                  <oms-row label="采购价格" v-show="currentItem.purchasePrice"><span
+                    v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice
+                    }}
+                  </oms-row>
+                  <oms-row label="单次计费价格" v-show="currentItem.rentPrice"><span v-show="currentItem.rentPrice">¥</span>{{currentItem.rentPrice
+                    }}
+                  </oms-row>
+                  <oms-row label="租赁计费价格" v-show="currentItem.singlePrice"><span
+                    v-show="currentItem.singlePrice">¥</span>{{
+                    currentItem.singlePrice}}
+                  </oms-row>
+                  <oms-row label="销售价格" v-show="currentItem.salePrice"><span v-show="currentItem.salePrice">¥</span>{{
+                    currentItem.salePrice}}
+                  </oms-row>
+                  <oms-row label="库存数量">{{ currentItem.count}}</oms-row>
                 </el-col>
               </el-row>
-            </el-form>
+            </div>
           </div>
+          <div class="form-header-part mt-10 p-r-20">
+            <el-row>
+              <el-col :span="6">
+                <div class="header">
+                  <div class="sign f-dib"></div>
+                  <h3 class="tit f-dib index-tit">包装详情列表</h3>
+                </div>
+              </el-col>
+              <el-col :span="18" class="text-right ">
+                  <span class="pull-right">
+                      <perm label="tms-equipment-consumables-detail-add">
+                          <a href="#" class="btn-circle" @click.stop.prevent="add">
+                            <i class="el-icon-t-plus"></i>
+                          </a>
+                      </perm>
+                  </span>
+              </el-col>
+            </el-row>
+            <div class="content">
+              <el-form class="advanced-query-form clearfix" style="padding-top: 10px" onsubmit="return false">
+                <el-row>
+                  <el-col :span="10">
+                    <oms-form-row label="包装编号" :span="4">
+                      <oms-input type="text" v-model="searchCondition.devNo" placeholder="请输入包装编号"></oms-input>
+                    </oms-form-row>
+                  </el-col>
+                  <el-col :span="14">
+                    <oms-form-row label="有效期" :span="6">
+                      <el-date-picker v-model="validityTimes" type="daterange" style="width: 300px"></el-date-picker>
+                    </oms-form-row>
+                  </el-col>
+                  <el-col :span="10">
+                    <oms-form-row label="包装状态" :span="4">
+                      <el-select placeholder="请选择包装状态" v-model="searchCondition.status">
+                        <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList">
+                        </el-option>
+                      </el-select>
+                    </oms-form-row>
+                  </el-col>
+                  <el-col :span="14">
+                    <oms-form-row label="" :span="6">
+                      <el-button type="primary" native-type="submit" @click="searchInOrder">查询</el-button>
+                      <el-button native-type="reset" @click="resetSearchForm">重置</el-button>
+                      <el-button :plain="true" @click="exportFile" :disabled="isLoading" v-if="devDetailList.length>0">
+                        导出Excel
+                      </el-button>
+                    </oms-form-row>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </div>
+          </div>
+        </div>
+        <div class="p-r-20 mt-10">
           <el-table :data="devDetailList" class="header-list" border
                     :header-row-class-name="'headerClass'" v-loading="loadingDetailData">
-            <el-table-column prop="devNo" label="设备编号" width="204" :sortable="true"></el-table-column>
+            <el-table-column prop="devNo" label="包装编号" width="204" :sortable="true"></el-table-column>
             <el-table-column prop="status" label="状态" width="100" :sortable="true">
               <template slot-scope="scope">
                 <dict :dict-group="currentItem.type+'Status'" :dict-key="scope.row.status"></dict>
@@ -201,15 +248,17 @@
               </template>
             </el-table-column>
           </el-table>
-
-          <div class="text-center clearfix" v-if="devDetailList.length">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                           :current-page="detailPager.currentPage"
-                           :page-sizes="[20,50,100]" :page-size="20"
-                           layout="total, sizes, prev, pager, next, jumper"
-                           :total="detailPager.count">
-            </el-pagination>
-          </div>
+        </div>
+        <div v-if="devDetailList.length===0">
+          <div class="empty-info">暂无信息</div>
+        </div>
+        <div class="text-center clearfix" v-if="devDetailList.length">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                         :current-page="detailPager.currentPage"
+                         :page-sizes="[20,50,100]" :page-size="20"
+                         layout="total, sizes, prev, pager, next, jumper"
+                         :total="detailPager.count">
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -362,7 +411,7 @@
           deleteFlag: false
         }, this.detailFilter);
         this.$http.get('dev-detail/excel/export', {params: param}).then(res => {
-          utils.download(res.data.path, '设备详情表');
+          utils.download(res.data.path, '包装详情表');
           this.isLoading = false;
           this.$store.commit('initPrint', {
             isPrinting: false,

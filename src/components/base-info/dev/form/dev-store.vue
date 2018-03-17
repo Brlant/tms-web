@@ -12,7 +12,7 @@
 </style>
 <template>
   <el-form ref="form" :rules="rules" :model="form" label-width="100px" class="demo-ruleForm">
-    <h2 class="clearfix">设备出入库记录</h2>
+    <h2 class="clearfix">包装出入库记录</h2>
     <el-form-item label="出入库时间">
       <el-date-picker v-model="form.createTime" format="yyyy-MM-dd" placeholder="选择出入库时间" @change="changeCreateTime">
       </el-date-picker>
@@ -28,8 +28,8 @@
         <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in type"/>
       </el-select>
     </el-form-item>
-    <el-form-item label="出入库设备序列号">
-      <el-select v-model="form.devDetailIdList" multiple filterable placeholder="请选择出入库设备详情id">
+    <el-form-item label="出入库包装序列号">
+      <el-select v-model="form.devDetailIdList" multiple filterable placeholder="请选择出入库包装详情id">
         <el-option :key="item.id" :label="item.devNo" :value="item.id" v-for="item in devDetailList"/>
       </el-select>
     </el-form-item>
@@ -48,10 +48,10 @@
       return {
         rules: {
           devNo: [
-            {required: true, message: '请输入设备序列号', trigger: 'blur'}
+            {required: true, message: '请输入包装序列号', trigger: 'blur'}
           ],
           status: [
-            {required: true, message: '请选择设备状态', trigger: 'change'}
+            {required: true, message: '请选择包装状态', trigger: 'change'}
           ]
         },
         form: this.formItem,
@@ -113,7 +113,7 @@
                 this.$notify.success({
                   duration: 2000,
                   name: '成功',
-                  message: '新增设备出入库记录成功'
+                  message: '新增包装出入库记录成功'
                 });
                 this.doing = false;
                 this.$emit('change', res.data);
@@ -121,7 +121,7 @@
               }).catch(() => {
                 this.$notify.error({
                   duration: 2000,
-                  message: '新增设备出入库记录失败'
+                  message: '新增包装出入库记录失败'
                 });
                 this.doing = false;
               });
@@ -129,7 +129,7 @@
               DevStore.update(this.form.id, this.form).then(() => {
                 this.$notify.success({
                   name: '成功',
-                  message: '修改设备出入库记录"' + this.form.name + '"成功'
+                  message: '修改包装出入库记录"' + this.form.name + '"成功'
                 });
                 this.doing = false;
                 this.$emit('change', this.form);
@@ -137,7 +137,7 @@
               }).catch(() => {
                 this.$notify.error({
                   duration: 2000,
-                  message: '修改设备出入库记录"' + this.form.name + '"失败'
+                  message: '修改包装出入库记录"' + this.form.name + '"失败'
                 });
                 this.doing = false;
               });

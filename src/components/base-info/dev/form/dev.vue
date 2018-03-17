@@ -12,7 +12,7 @@
 </style>
 <template>
   <el-form ref="form" :rules="rules" :model="form" label-width="160px" class="demo-ruleForm">
-    <h2 class="clearfix">设备资料</h2>
+    <h2 class="clearfix">包装资料</h2>
     <el-form-item label="名称">
       <oms-input model="text" v-model="form.name" placeholder="请输入名称"></oms-input>
     </el-form-item>
@@ -23,15 +23,15 @@
       <oms-input model="text" v-model="form.specification" placeholder="请输入型号"></oms-input>
     </el-form-item>
     <el-form-item label="体积">
-      <oms-input type="number" v-model.number="form.volume" min="0" placeholder="请输入设备体积"></oms-input>
+      <oms-input type="number" v-model.number="form.volume" min="0" placeholder="请输入包装体积"></oms-input>
     </el-form-item>
     <el-form-item label="类型" prop="type">
-      <el-select placeholder="请选择设备类型" v-model="form.type">
+      <el-select placeholder="请选择包装类型" v-model="form.type">
         <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in equipmentType"/>
       </el-select>
     </el-form-item>
-    <el-form-item label="设备品牌">
-      <oms-input model="text" v-model="form.brand" placeholder="请输入设备品牌"></oms-input>
+    <el-form-item label="包装品牌">
+      <oms-input model="text" v-model="form.brand" placeholder="请输入包装品牌"></oms-input>
     </el-form-item>
     <!--<el-form-item label="库存数量" prop="count">-->
     <!--<oms-input model="number" v-model.number="form.count" :min="0" placeholder="请输入库存数量"></oms-input>-->
@@ -83,13 +83,13 @@
             {required: true, message: '请输入型号', trigger: 'blur'}
           ],
           brand: [
-            {required: true, message: '请输入设备品牌', trigger: 'blur'}
+            {required: true, message: '请输入包装品牌', trigger: 'blur'}
           ],
           specification: [
             {required: true, message: '请输入规格', trigger: 'blur'}
           ],
           type: [
-            {required: true, message: '请选择设备类型', trigger: 'change'}
+            {required: true, message: '请选择包装类型', trigger: 'change'}
           ],
           purchasePrice: [
             {required: true, message: '请输入采购价格', trigger: 'blur'}
@@ -148,7 +148,7 @@
                 this.$notify.success({
                   duration: 2000,
                   name: '成功',
-                  message: '新增设备耗材成功'
+                  message: '新增包装耗材成功'
                 });
                 this.doing = false;
                 this.$emit('change', res.data);
@@ -156,7 +156,7 @@
               }).catch(() => {
                 this.$notify.error({
                   duration: 2000,
-                  message: '新增设备耗材失败'
+                  message: '新增包装耗材失败'
                 });
                 this.doing = false;
               });
@@ -164,7 +164,7 @@
               Dev.update(this.form.id, this.form).then(() => {
                 this.$notify.success({
                   name: '成功',
-                  message: '修改设备耗材"' + this.form.name + '"成功'
+                  message: '修改包装耗材"' + this.form.name + '"成功'
                 });
                 this.doing = false;
                 this.$emit('change', this.form);
@@ -172,7 +172,7 @@
               }).catch(() => {
                 this.$notify.error({
                   duration: 2000,
-                  message: '修改设备耗材"' + this.form.name + '"失败'
+                  message: '修改包装耗材"' + this.form.name + '"失败'
                 });
                 this.doing = false;
               });

@@ -13,7 +13,7 @@
 <template>
   <div>
     <div class="content-part">
-      <h2 class="clearfix" style="margin-left: 20px">当前设备编号：{{form.devNo}}</h2>
+      <h2 class="clearfix" style="margin-left: 20px">当前包装编号：{{form.devNo}}</h2>
       <el-table :data="logList" border style="width: 90%;margin-top: 20px;margin-left: 20px">
         <el-table-column prop="oldStatus" label="旧状态" width="200">
           <template slot-scope="scope">
