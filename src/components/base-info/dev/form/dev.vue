@@ -23,7 +23,14 @@
       <oms-input model="text" v-model="form.specification" placeholder="请输入型号"></oms-input>
     </el-form-item>
     <el-form-item label="体积">
-      <oms-input type="number" v-model.number="form.volume" min="0" placeholder="请输入包装体积"></oms-input>
+      <oms-input type="number" v-model.number="form.volume" min="0" placeholder="请输入包装体积">
+        <template slot="append">m³</template>
+      </oms-input>
+    </el-form-item>
+    <el-form-item label="重量">
+      <oms-input type="number" v-model.number="form.weight" min="0" placeholder="请输入包装重量">
+        <template slot="append">kg</template>
+      </oms-input>
     </el-form-item>
     <el-form-item label="类型" prop="type">
       <el-select placeholder="请选择包装类型" v-model="form.type">

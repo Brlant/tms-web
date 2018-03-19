@@ -134,7 +134,8 @@
                     <dict :dict-group="'equipmentType'" :dict-key="currentItem.type"/>
                   </oms-row>
                   <oms-row label="规格" v-show="currentItem.specification">{{currentItem.specification }}</oms-row>
-                  <oms-row label="体积" v-show="currentItem.volume">{{currentItem.volume }}</oms-row>
+                  <oms-row label="体积" v-show="currentItem.volume">{{currentItem.volume }} <span>m³</span></oms-row>
+                  <oms-row label="重量" v-show="currentItem.volume">{{currentItem.weight }} <span>kg³</span></oms-row>
                 </el-col>
                 <el-col :span="8">
                   <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
