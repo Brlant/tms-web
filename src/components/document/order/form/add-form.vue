@@ -34,8 +34,8 @@
           </div>
           <div class="content">
             <two-column>
-              <el-form-item slot="left" label="运单号">
-                <oms-input v-model="form.tmsOrderNumber" placeholder="请输入运单号"></oms-input>
+              <el-form-item slot="left" label="订单号">
+                <oms-input v-model="form.orderNo" placeholder="请输入订单号"></oms-input>
               </el-form-item>
               <!--<el-form-item slot="right" label="服务方式">-->
                 <!--<el-select v-model="form.serviceType" placeholder="请选择服务方式" :clearable="true">-->

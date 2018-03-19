@@ -368,6 +368,9 @@
               this.filterCustomer(this.form.orgName);
               this.filterSenderOrg(this.form.senderName);
               this.filterReceiverOrg(this.form.receiverName);
+              if (this.form.goodsList.length === 0) {
+                this.addGoods();
+              }
             });
           }
         }

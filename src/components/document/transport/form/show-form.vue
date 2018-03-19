@@ -213,7 +213,7 @@
               {{pageSets[6].name}}</h3>
           </div>
           <div class="content">
-            <el-table :data="form.goodsList" border style="width: 100%">
+            <el-table :data="form.incubatorDtoList" border style="width: 100%">
               <el-table-column prop="boxNo" label="保温箱编号" width="200">
               </el-table-column>
               <el-table-column prop="thermometerNoList" label="温度计列表">
