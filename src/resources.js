@@ -330,7 +330,7 @@ export const BaseInfo = resource('/orgs', http, {
   turnToOwner: (orgId) => {
     return http.put('/orgs/transform/consignor/' + orgId, {});
   },
-  // 一键审核组织基础信息(同时审核单位基本信息、经营范围、执照信息,并审核基础信息模块)
+  // 一键审核单位基础信息(同时审核单位基本信息、经营范围、执照信息,并审核基础信息模块)
   auditBaseInfo: (orgId, obj) => {
     return http.put('/orgs/' + orgId + '/check', obj);
   },

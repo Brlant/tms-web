@@ -415,16 +415,16 @@
             {required: true, message: '请选择默认物流中心', trigger: 'blur'}
           ],
           orgRelationType: [
-            {required: true, message: '请选择组织类型', trigger: 'blur'}
+            {required: true, message: '请选择单位类型', trigger: 'blur'}
           ],
           orgRelationTypeList: [
-            {required: true, message: '请选择组织类型', trigger: 'change'}
+            {required: true, message: '请选择单位类型', trigger: 'change'}
           ],
           namePhonetic: [
-            {required: true, message: '请输入组织名称拼音', trigger: 'blur'}
+            {required: true, message: '请输入单位名称拼音', trigger: 'blur'}
           ],
           nameAcronymy: [
-            {required: true, message: '请输入组织拼音首字母', trigger: 'blur'}
+            {required: true, message: '请输入单位拼音首字母', trigger: 'blur'}
           ]
         },
         doing: false,
