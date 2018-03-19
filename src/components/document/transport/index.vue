@@ -255,10 +255,10 @@
               message: '已成功取消运单"' + item.waybillNumber + '"'
             });
             this.getTmsWayBillPage(1);
-          }).catch(() => {
+          }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: '取消运单"' + item.waybillNumber + '"失败'
+              message: error.response && error.response.data && error.response.msg || '取消运单失败'
             });
           });
         }).catch(() => {

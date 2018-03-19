@@ -450,10 +450,10 @@
                 this.doing = false;
                 this.$emit('change', res.data);
                 this.$emit('right-close');
-              }).catch(() => {
+              }).catch(error => {
                 this.$notify.error({
                   duration: 2000,
-                  message: '新增订单失败'
+                  message: error.response && error.response.data && error.response.msg || '新增订单失败'
                 });
                 this.doing = false;
               });
@@ -466,10 +466,10 @@
                 this.doing = false;
                 this.$emit('change', res.data);
                 this.$emit('right-close');
-              }).catch(() => {
+              }).catch(error => {
                 this.$notify.error({
                   duration: 2000,
-                  message: '修改订单' + this.form.orderNo + '"失败'
+                  message: error.response && error.response.data && error.response.msg || '修改订单失败'
                 });
                 this.doing = false;
               });

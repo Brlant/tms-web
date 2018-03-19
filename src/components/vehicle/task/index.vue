@@ -210,10 +210,10 @@
               message: '已成功取消出车任务"' + item.transportTaskNo + '"'
             });
             this.getTransportTaskPage(1);
-          }).catch(() => {
+          }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: '取消出车任务"' + item.transportTaskNo + '"失败'
+              message: error.response && error.response.data && error.response.msg || '取消出车任务失败'
             });
           });
         }).catch(() => {
@@ -240,10 +240,10 @@
               message: '已成功确认派送任务"' + item.transportTaskNo + '"'
             });
             this.getTransportTaskPage(1);
-          }).catch(() => {
+          }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: '确认派送任务"' + item.transportTaskNo + '"失败'
+              message: error.response && error.response.data && error.response.msg || '确认派送任务失败'
             });
           });
         }).catch(() => {

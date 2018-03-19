@@ -278,10 +278,10 @@
             });
             this.$emit('change', this.orderIdList);
             this.$emit('right-close');
-          }).catch(() => {
+          }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: '生成运单失败'
+              message: error.response && error.response.data && error.response.msg || '生成运单失败'
             });
           });
         }).catch(() => {

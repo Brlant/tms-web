@@ -272,10 +272,10 @@
               message: '已成功取消订单"' + item.orderNo + '"'
             });
             this.getTmsOrderPage(1);
-          }).catch(() => {
+          }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: '取消订单"' + item.orderNo + '"失败'
+              message: error.response && error.response.data && error.response.msg || '取消订单失败'
             });
           });
         }).catch(() => {
@@ -426,10 +426,10 @@
               title: '成功',
               message: '已成功删除订单"' + item.orderNo + '"'
             });
-          }).catch(() => {
+          }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: '删除订单"' + item.orderNo + '"失败'
+              message: error.response && error.response.data && error.response.msg || '删除运单失败'
             });
           });
         }).catch(() => {

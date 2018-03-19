@@ -206,15 +206,15 @@
             TmsWayBill.update(this.form.id, this.form).then(res => {
               this.$notify.success({
                 name: '成功',
-                message: '修改运单"' + this.form.orderNo + '"成功'
+                message: '签收运单"' + this.form.orderNo + '"成功'
               });
               this.doing = false;
               this.$emit('change', res.data);
               this.$emit('right-close');
-            }).catch(() => {
+            }).catch(error => {
               this.$notify.error({
                 duration: 2000,
-                message: '修改运单' + this.form.orderNo + '"失败'
+                message: error.response && error.response.data && error.response.msg || '签收运单失败'
               });
               this.doing = false;
             });

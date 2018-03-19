@@ -235,10 +235,10 @@
           this.doing = false;
           this.detailForm.list = [];
           this.showAddFlag = !this.showAddFlag;
-        }).catch(() => {
+        }).catch(error => {
           this.$notify.error({
             duration: 2000,
-            message: '新增运单详情失败'
+            message: error.response && error.response.data && error.response.msg || '新增运单失败'
           });
         });
       },
@@ -267,10 +267,10 @@
             TransportTask.getOneTransportTask(this.form.id).then(res => {
               this.form = res.data;
             });
-          }).catch(() => {
+          }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: '删除运单"' + item.waybillNumber + '"的信息失败'
+              message: error.response && error.response.data && error.response.msg || '删除运单失败'
             });
           });
         }).catch(() => {
