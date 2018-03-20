@@ -104,6 +104,11 @@ export const routes = [
             path: '/permission/role',
             component: () => import('./components/system/role/role.vue'),
             meta: {moduleId: 'permission', title: '角色管理', perm: 'tms-access-role-watch'}
+          },
+          {
+            path: '/permission/log',
+            component: () => import('./components/common/log/list.vue'),
+            meta: {topMould: 'permission', title: '系统日志', perm: 'tms-system-log'}
           }
         ]
       }
