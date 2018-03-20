@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="opera-btn">
-          <div type="primary" class="btn" @click="createWayBill">生成运单</div>
+          <div type="primary" class="btn" @click="createWayBill" :disabled="doing">生成运单</div>
         </div>
       </div>
       <div class="content-right min-row" v-show="currentOrder.id">
@@ -247,7 +247,8 @@
         orderIdList: [],
         rules: {},
         currentOrder: {},
-        activeId: ''
+        activeId: '',
+        doing: false
       };
     },
     computed: {},
@@ -270,12 +271,14 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          this.doing = true;
           TmsOrder.createWayBill({orderIdList: this.orderIdList}).then(() => {
             this.$notify.success({
               duration: 2000,
               title: '成功',
               message: '已成功生成运单'
             });
+            this.doing = false;
             this.$emit('change', this.orderIdList);
             this.$emit('right-close');
           }).catch(error => {
@@ -283,6 +286,7 @@
               duration: 2000,
               message: error.response && error.response.data && error.response.msg || '生成运单失败'
             });
+            this.doing = false;
           });
         }).catch(() => {
 
