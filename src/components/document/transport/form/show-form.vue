@@ -218,15 +218,16 @@
               </el-table-column>
               <el-table-column prop="thermometerNoList" label="温度计列表">
                 <template slot-scope="scope">
-                  <span v-for="no in thermometerNoList">
-                      {{no}} <span v-if="thermometerNoList.indexOf(no)!==thermometerNoList.length-1">,</span>
+                  <span v-for="no in scope.row.thermometerNoList">
+                      {{no}} <span
+                    v-if="scope.row.thermometerNoList.indexOf(no)!==scope.row.thermometerNoList.length-1">,</span>
                   </span>
                 </template>
               </el-table-column>
               <el-table-column prop="codeList" label="货品追溯码">
                 <template slot-scope="scope">
-                 <span v-for="code in codeList">
-                      {{no}} <span v-if="codeList.indexOf(code)!==codeList.length-1">,</span>
+                 <span v-for="code in scope.row.codeList">
+                      {{code}} <span v-if="scope.row.codeList.indexOf(code)!==scope.row.codeList.length-1">,</span>
                   </span>
                 </template>
               </el-table-column>

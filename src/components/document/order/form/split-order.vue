@@ -35,7 +35,7 @@
           </div>
           <div class="content">
             <el-form-item label="拆分数量">
-              <oms-input type="number" v-model.number="splitCount" min="0" placeholder="请输入拆分订单数量"
+              <oms-input type="number" v-model.number="splitCount" min="0" placeholder="请输入拆分运单数量"
                          @change="setSplitCount"></oms-input>
             </el-form-item>
           </div>
@@ -67,7 +67,7 @@
               </el-table-column>
               <el-table-column prop="" label="操作">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.orderIndex" placeholder="请选择订单" :clearable="true">
+                  <el-select v-model="scope.row.orderIndex" placeholder="请选择运单" :clearable="true">
                     <el-option :label="item.name" :value="item.value" :key="item.value"
                                v-for="item in splitList"></el-option>
                   </el-select>
@@ -127,7 +127,7 @@
         this.splitList = [];
         for (let i = 0; i < index; i++) {
           let count = i + 1;
-          this.splitList.push({name: '订单' + count, value: count});
+          this.splitList.push({name: '运单' + count, value: count});
         }
       },
       selectTab(item) {
