@@ -70,6 +70,9 @@ export const TmsOrder = resource('/tms-order', http, {
   },
   cancelOrder: (id) => {
     return http.put('/tms-order/' + id + '/cancel', {});
+  },
+  dismantlingOrder: (id, params) => {
+    return http.put('/tms-order/' + id + '/dismantling', params);
   }
 });
 

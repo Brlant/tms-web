@@ -143,13 +143,13 @@
                       </a>取消
                     </span>
                   </perm>
-                  <!--<perm label="tms-order-dismantling" class="opera-btn">-->
-                    <!--<span @click.stop="splitOrder(item)" v-if="activeStatus===0||activeStatus==='0'">-->
-                      <!--<a @click.pervent="" class="btn-circle btn-opera">-->
-                        <!--<i class="el-icon-t-basic"></i>-->
-                      <!--</a>拆分订单-->
-                    <!--</span>-->
-                  <!--</perm>-->
+                  <perm label="tms-order-dismantling" class="opera-btn">
+                    <span @click.stop="splitOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-basic"></i>
+                      </a>拆分订单
+                    </span>
+                  </perm>
                 </div>
               </div>
             </el-col>

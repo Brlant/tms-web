@@ -170,63 +170,49 @@
             }
             // 对货品列表进行归类
             let goodsList = this.form.goodsList;
-            // let map = {},
-            // let dest = [];
-            // for(var i = 0; i < goodsList.length; i++){
-            //   var goods = goodsList[i];
-            //   if(!map[goods.id]){
-            //     dest.push({
-            //       id: goods.id,
-            //       name: goods.name,
-            //       data: [goods]
-            //     });
-            //     map[ai.id] = ai;
-            //   }else{
-            //     for(var j = 0; j < dest.length; j++){
-            //       var dj = dest[j];
-            //       if(dj.id == ai.id){
-            //         dj.data.push(ai);
-            //         break;
-            //       }
-            //     }
-            //   }
-            // }
-
-            if (this.action === 'add') {
-              this.doing = true;
-              TmsOrder.save(this.form).then(res => {
-                this.$notify.success({
-                  duration: 2000,
-                  name: '成功',
-                  message: '新增订单成功'
-                });
-                this.doing = false;
-                this.$emit('change', res.data);
-                this.$emit('right-close');
-              }).catch(() => {
-                this.$notify.error({
-                  duration: 2000,
-                  message: '新增订单失败'
-                });
-                this.doing = false;
-              });
-            } else {
-              TmsOrder.update(this.form.id, this.form).then(res => {
-                this.$notify.success({
-                  name: '成功',
-                  message: '修改订单"' + this.form.orderNo + '"成功'
-                });
-                this.doing = false;
-                this.$emit('change', res.data);
-                this.$emit('right-close');
-              }).catch(() => {
-                this.$notify.error({
-                  duration: 2000,
-                  message: '修改订单' + this.form.orderNo + '"失败'
-                });
-                this.doing = false;
-              });
+            let data = [];
+            for (let i = 0; i < goodsList.length; i++) {
+              let index = goodsList[i].orderIndex;
+              if (index) {
+                if (!data[index]) {
+                  let arr = [];
+                  arr.push(goodsList[i]);
+                  data[index] = {key: index, list: arr};
+                } else {
+                  let list = data[index].list;
+                  if (list) {
+                    list.push(goodsList[i]);
+                  }
+                  data[index].list = list;
+                }
+              }
             }
+            // 处理数组中的空项
+            for (let i = 0, len = data.length; i < len; i++) {
+              if (!data[i] || data[i] === '') {
+                data.splice(i, 1);
+                len--;
+              }
+            }
+            // 组装数据
+            let saveData = {orderId: this.form.id, requestList: data};
+            this.doing = true;
+            TmsOrder.dismantlingOrder(this.form.id, saveData).then(res => {
+              this.$notify.success({
+                duration: 2000,
+                name: '成功',
+                message: '拆解订单成功'
+              });
+              this.doing = false;
+              this.$emit('change', res.data);
+              this.$emit('right-close');
+            }).catch(error => {
+              this.$notify.error({
+                duration: 2000,
+                message: error.response && error.response.data && error.response.msg || '拆解订单失败'
+              });
+              this.doing = false;
+            });
           } else {
 
           }
