@@ -83,6 +83,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   },
   cancelWayBill: (id) => {
     return http.get('/tms-waybill/' + id + '/cancel', {});
+  },
+  confirmWayBill: (id) => {
+    return http.put('/tms-waybill/' + id + '/confirm', {});
   }
 });
 

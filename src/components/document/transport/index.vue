@@ -27,7 +27,7 @@
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="4">
+        <el-col :span="3">
           运单号
         </el-col>
         <el-col :span="2">运单类型</el-col>
@@ -39,7 +39,7 @@
         <el-col :span="1">包件</el-col>
         <el-col :span="2">送达时限</el-col>
         <el-col :span="2">状态</el-col>
-        <el-col :span="2">操作</el-col>
+        <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -57,7 +57,7 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="4" class="special-col R">
+            <el-col :span="3" class="special-col R">
               <div>
                 {{item.waybillNumber}}
               </div>
@@ -107,7 +107,7 @@
                 {{formatStatusTitle(item.status, orderType)}}
               </div>
             </el-col>
-            <el-col :span="2" class="opera-btn">
+            <el-col :span="3" class="opera-btn">
               <div>
                 <div>
                   <perm label="tms-waybill-edit">
@@ -115,6 +115,13 @@
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
+                    </span>
+                  </perm>
+                  <perm label="tms-waybill-edit">
+                    <span @click.stop="confirm(item)">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-verifyPass"></i>
+                      </a>确认
                     </span>
                   </perm>
                 </div>
@@ -126,8 +133,6 @@
                       </a>取消
                     </span>
                   </perm>
-                </div>
-                <div style="padding-top: 2px">
                   <perm label="tms-waybill-cancel" class="opera-btn">
                     <span @click.stop="signWayBill(item)" v-if="activeStatus===3||activeStatus==='3'">
                       <a @click.pervent="" class="btn-circle btn-opera">
@@ -235,6 +240,29 @@
       this.getTmsWayBillPage(1);
     },
     methods: {
+      confirm: function (item) {
+        this.$confirm('确认运单"' + item.waybillNumber + '信息"?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TmsWayBill.confirmWayBill(item.id).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '已成功确认运单"' + item.waybillNumber + '"'
+            });
+            this.getTmsWayBillPage(1);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.msg || '确认运单失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       signWayBill: function (item) {
         this.showSignIndex = 0;
         this.currentSignPart = this.dialogSignComponents[0];
