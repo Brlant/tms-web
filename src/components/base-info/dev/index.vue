@@ -115,7 +115,7 @@
           </div>
         </div>
       </div>
-      <div class="d-table-right">
+      <div class="d-table-right" :style="'height:'+bodyHeight">
         <div v-if="devDetailList.length!=0" class="content-right">
           <div class="form-header-part part-bg p-r-20">
             <div class="header">

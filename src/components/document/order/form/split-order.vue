@@ -100,17 +100,7 @@
         splitList: []
       };
     },
-    computed: {
-      shipmentWayList() {
-        return this.$getDict('shipmentWayType');
-      },
-      typeList() {
-        return this.$getDict('tmsOrderType');
-      },
-      serviceTypeList() {
-        return this.$getDict('serviceType');
-      }
-    },
+    computed: {},
     props: ['formItem', 'action'],
     watch: {
       formItem: function (val) {

@@ -15,9 +15,15 @@
     <search-part @search="searchResult">
       <template slot="btn">
         <perm label="tms-order-generate">
-          <el-button plain size="small" @click="createWayBill">
-            <f-a class="icon-small" name="wave" v-if="activeStatus===0||activeStatus==='0'"></f-a>
+          <el-button plain size="small" @click="createWayBill" v-if="activeStatus===0||activeStatus==='0'">
+            <f-a class="icon-small" name="wave"></f-a>
             生成运单
+          </el-button>
+        </perm>
+        <perm label="tms-order-generate">
+          <el-button plain size="small" @click="autoCreateWayBill" v-if="activeStatus===0||activeStatus==='0'">
+            <f-a class="icon-small" name="wave"></f-a>
+            自动生成运单
           </el-button>
         </perm>
         <perm label="tms-order-add">
@@ -259,6 +265,30 @@
       this.getTmsOrderPage(1);
     },
     methods: {
+      autoCreateWayBill: function () {
+        this.$confirm('确认将状态为待生成运单的订单自动生成为运单?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let param = Object.assign({}, this.filters);
+          TmsOrder.autoCreateWayBill(param).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '已成功生成运单'
+            });
+            this.getTmsOrderPage(1);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.msg || '自动生成运单失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       cancelOrder: function (item) {
         this.$confirm('确认取消订单"' + item.orderNo + '"?', '', {
           confirmButtonText: '确定',

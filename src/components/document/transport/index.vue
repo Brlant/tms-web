@@ -30,7 +30,7 @@
         <el-col :span="3">
           运单号
         </el-col>
-        <el-col :span="2">运单类型</el-col>
+        <el-col :span="2">发运方式</el-col>
         <el-col :span="3">发货单位</el-col>
         <el-col :span="3">收货单位</el-col>
         <el-col :span="3">收货地址</el-col>
@@ -58,13 +58,16 @@
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="3" class="special-col R">
+              <div class="id-part">
+                <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
+              </div>
               <div>
                 {{item.waybillNumber}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                <dict :dict-group="'transportationCondition'" :dict-key="item.waybillType"></dict>
+                <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
               </div>
             </el-col>
             <el-col :span="3" class="R">
