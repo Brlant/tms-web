@@ -55,6 +55,14 @@
               lnglatList.push(points[i].lnglat);
             }
             return lnglatList;
+          },
+          renderOptions: {
+            startPointStyle: {
+              radius: 8
+            },
+            endPointStyle: {
+              radius: 8
+            }
           }
         });
         this.pathSimplifierIns = pathSimplifierIns;
