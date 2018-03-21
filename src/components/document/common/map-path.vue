@@ -28,7 +28,7 @@
     watch: {
       formItem (val) {
         this.points = [];
-        if (val.id) return;
+        if (!val.id) return;
         this.queryPath();
       }
     },
@@ -66,7 +66,7 @@
         pathSimplifierIns.clearPathNavigators();
         // 重新创建新的导航器
         const nav = pathSimplifierIns.createPathNavigator(0, {
-          loop: true,
+          loop: false,
           speed: 5000,
           pathNavigatorStyle: {
             width: 16,

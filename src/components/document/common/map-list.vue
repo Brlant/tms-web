@@ -9,7 +9,7 @@
     <div v-if="!waybills.length" class="empty-info mini">暂无轨迹信息</div>
     <div v-else v-for="(item, index) in waybills" :key="index">
       <h2>运单号:{{item.waybillNo}}</h2>
-      <el-amap  :ref="`pathMap${index}`" :vid="`pathMap${index}`" :amap-manager="item.amapManager"
+      <el-amap :ref="`pathMap${index}`" :vid="`pathMap${index}`" :amap-manager="item.amapManager"
                :zoom="10" :center="item.center" class="map-path">
       </el-amap>
     </div>
@@ -18,6 +18,7 @@
 <script>
   import { AMapManager } from 'vue-amap';
   import CarImg from '@/assets/img/car.png';
+
   export default {
     props: ['formItem'],
     data () {
@@ -28,28 +29,28 @@
     watch: {
       formItem (val) {
         this.waybills = [];
-        if (val.id) return;
+        if (!val.id) return;
         this.queryPath();
       }
     },
     methods: {
       queryPath () {
-        this.$http(`/track-transportation/task/${this.formItem.id}`).then(res => {
+        this.$http(`/track-transportation/order/${this.formItem.id}`).then(res => {
           this.waybills = res.data.map(m => {
             return {
-              waybillNo: m.waybillNo,
+              waybillNo: res.data.waybillNo,
               center: [121.5273285, 31.21515044],
               amapManager: new AMapManager(),
-              points: m.points && m.points.filter(f => f.longitude && f.latitude).map(m => {
+              points: m.list && m.list.filter(f => f.longitude && f.latitude).map(m => {
                 return {
                   lnglat: [m.longitude, m.latitude]
                 };
               })
-            }
-          })|| [];
+            };
+          }) || [];
           this.$nextTick(() => {
             this.waybills.forEach(i => {
-              this.drawPath(i)
+              this.drawPath(i);
             });
           });
         });
@@ -72,7 +73,7 @@
           pathSimplifierIns.setData([{points: item.points}]);
           pathSimplifierIns.setSelectedPathIndex(0);
           const nav = pathSimplifierIns.createPathNavigator(0, {
-            loop: true,
+            loop: false,
             speed: 5000,
             pathNavigatorStyle: {
               width: 16,
