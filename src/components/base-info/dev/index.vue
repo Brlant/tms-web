@@ -115,7 +115,8 @@
           </div>
         </div>
       </div>
-      <div class="d-table-right" :style="'height:'+bodyHeight">
+      <div class="d-table-right">
+        <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
         <div v-if="devDetailList.length!=0" class="content-right">
           <div class="form-header-part part-bg p-r-20">
             <div class="header">
@@ -261,6 +262,7 @@
                          :total="detailPager.count">
           </el-pagination>
         </div>
+        </div>
       </div>
     </div>
     <page-right :show="showRight" @right-close="resetRightBox" :css="{width:'600px'}">
@@ -373,7 +375,7 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = (height + 17) + 'px';
+        height = (height - 17) + 'px';
         return height;
       },
       equipmentType: function () {
