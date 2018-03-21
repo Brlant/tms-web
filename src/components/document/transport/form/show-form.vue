@@ -234,6 +234,16 @@
             </el-table>
           </div>
         </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[7].key === currentTab.key}">
+              {{pageSets[7].name}}</h3>
+          </div>
+          <div class="content">
+            <map-path :formItem="formItem"></map-path>
+          </div>
+        </div>
       </el-form>
     </template>
   </dialog-template>
@@ -241,9 +251,10 @@
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
   import {TmsWayBill} from '@/resources';
+  import MapPath from '../../common/map-path';
 
   export default {
-    components: {TwoColumn},
+    components: {TwoColumn, MapPath},
     data() {
       return {
         list: [],
@@ -255,7 +266,8 @@
           {name: '货品信息', key: 3},
           {name: '其他信息', key: 4},
           {name: '货品列表', key: 5},
-          {name: '保温箱列表', key: 6}
+          {name: '保温箱列表', key: 6},
+          {name: '派送轨迹', key: 7}
         ],
         currentTab: {},
         form: {

@@ -65,11 +65,6 @@ export const routes = [
             component: () => import('./components/document/transport/index.vue'),
             meta: {moduleId: 'document', title: '运单管理', perm: 'tms-waybill-query'}
           }
-          // {
-          //   path: '/document/path',
-          //   component: () => import('./components/map-path.vue'),
-          //   meta: {moduleId: 'document', title: '派送轨迹', perm: 'tms-waybill-query'}
-          // }
         ]
       },
       {

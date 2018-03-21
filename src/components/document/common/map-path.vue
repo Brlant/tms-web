@@ -1,47 +1,46 @@
 <style scoped>
   .map-path {
-    height: 600px;
+    height: 300px;
+    margin-bottom: 10px;
   }
 </style>
 <template>
   <div>
-    <el-amap ref="pathMap" vid="pathMap" :amap-manager="amapManager"
-             :plugin="plugins" :zoom="10" :center="center" class="map-path">
+    <div v-if="!points.length" class="empty-info mini">暂无轨迹信息</div>
+    <el-amap v-else ref="pathMap" vid="pathMap" :amap-manager="amapManager"
+             :zoom="10" :center="center" class="map-path">
     </el-amap>
-    <el-button @click="queryPath">显示轨迹</el-button>
   </div>
 </template>
 <script>
   import { AMapManager } from 'vue-amap';
   import CarImg from '@/assets/img/car.png';
   export default {
+    props: ['formItem'],
     data () {
       return {
         center: [121.5273285, 31.21515044],
-        plugins: [
-          {pName: 'ToolBar'},
-          {pName: 'Scale'},
-          {
-            pName: 'MapType',
-            defaultType: 0
-          }
-        ],
         amapManager: new AMapManager(),
-        pathSimplifierIns: null
+        pathSimplifierIns: null,
+        points: []
       };
     },
-    mounted () {
-      this.queryPath();
+    watch: {
+      formItem (val) {
+        this.points = [];
+        if (val.id) return;
+        this.queryPath();
+      }
     },
     methods: {
       queryPath () {
-        this.$http('/track-transportation/task/1234').then(res => {
-          let points = res.data.filter(f => f.longitude && f.latitude).map(m => {
+        this.$http(`/track-transportation/task/${this.formItem.id}`).then(res => {
+          this.points = res.data.filter(f => f.longitude && f.latitude).map(m => {
             return {
               lnglat: [m.longitude, m.latitude]
             };
           });
-          this.drawPath(points);
+          this.points.length && this.drawPath(this.points);
         });
       },
       // 创建轨迹线对象
