@@ -37,12 +37,9 @@
               <el-form-item slot="left" label="订单号">
                 <oms-input v-model="form.orderNo" placeholder="请输入订单号"></oms-input>
               </el-form-item>
-              <!--<el-form-item slot="right" label="服务方式">-->
-                <!--<el-select v-model="form.serviceType" placeholder="请选择服务方式" :clearable="true">-->
-                  <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
-                             <!--v-for="item in serviceTypeList"></el-option>-->
-                <!--</el-select>-->
-              <!--</el-form-item>-->
+              <el-form-item slot="right" label="委托单号">
+                <oms-input v-model="form.tmsOrderNumber" placeholder="请输入委托单号"></oms-input>
+              </el-form-item>
             </two-column>
             <two-column>
               <el-form-item slot="left" label="订单类型" prop="waybillType">

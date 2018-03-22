@@ -35,11 +35,11 @@
           <div class="content">
             <two-column>
               <el-form-item slot="left" label="运单号">
-                <oms-input v-model="form.orderNo" placeholder="请输入运单号"></oms-input>
+                <oms-input v-model="form.waybillNumber" placeholder="请输入运单号"></oms-input>
               </el-form-item>
-              <el-form-item slot="right" label="委托单号">
-                <oms-input v-model="form.tmsOrderNumber" placeholder="请输入"></oms-input>
-              </el-form-item>
+              <!--<el-form-item slot="right" label="委托单号">-->
+                <!--<oms-input v-model="form.tmsOrderNumber" placeholder="请输入"></oms-input>-->
+              <!--</el-form-item>-->
             </two-column>
             <two-column>
               <el-form-item slot="left" label="运单类型" prop="waybillType">
@@ -342,7 +342,7 @@
         return this.$getDict('transportationCondition');
       },
       typeList() {
-        return this.$getDict('transportationMeans');
+        return this.$getDict('bizType');
       },
       serviceTypeList() {
         return this.$getDict('serviceType');
