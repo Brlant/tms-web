@@ -41,9 +41,9 @@
               <el-form-item slot="left" label="运单号">
                 {{form.waybillNumber}}
               </el-form-item>
-              <el-form-item slot="right" label="委托单号">
-                {{form.tmsOrderNumber}}
-              </el-form-item>
+              <!--<el-form-item slot="right" label="委托单号">-->
+                <!--{{form.tmsOrderNumber}}-->
+              <!--</el-form-item>-->
             </two-column>
             <two-column>
               <el-form-item slot="left" label="运单类型">
