@@ -251,7 +251,7 @@
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
   import {TmsWayBill} from '@/resources';
-  import MapPath from '../../common/map-path';
+  import MapPath from '../../common/map-path-new';
 
   export default {
     components: {TwoColumn, MapPath},
@@ -267,7 +267,7 @@
           {name: '其他信息', key: 4},
           {name: '货品列表', key: 5},
           {name: '保温箱列表', key: 6},
-          {name: '派送轨迹', key: 7}
+          {name: '派送情况', key: 7}
         ],
         currentTab: {},
         form: {
