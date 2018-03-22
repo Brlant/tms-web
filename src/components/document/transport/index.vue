@@ -30,7 +30,7 @@
         <el-col :span="3">
           运单号
         </el-col>
-        <el-col :span="2">运单类型</el-col>
+        <el-col :span="2">发运方式</el-col>
         <el-col :span="3">发货单位</el-col>
         <el-col :span="3">收货单位</el-col>
         <el-col :span="3">收货地址</el-col>
@@ -58,13 +58,16 @@
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="3" class="special-col R">
+              <div class="id-part">
+                <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
+              </div>
               <div>
                 {{item.waybillNumber}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                <dict :dict-group="'transportationCondition'" :dict-key="item.waybillType"></dict>
+                <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
               </div>
             </el-col>
             <el-col :span="3" class="R">
@@ -111,14 +114,14 @@
               <div>
                 <div>
                   <perm label="tms-waybill-edit">
-                    <span @click.stop="edit(item)">
+                    <span @click.stop="edit(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
                   </perm>
                   <perm label="tms-waybill-edit">
-                    <span @click.stop="confirm(item)">
+                    <span @click.stop="confirm(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-verifyPass"></i>
                       </a>确认
@@ -163,7 +166,7 @@
       <component :is="currentInfoPart" :formItem="form" @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
-      <component :is="currentSignPart" :formItem="form" @right-close="resetRightBox"/>
+      <component :is="currentSignPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
 
   </div>

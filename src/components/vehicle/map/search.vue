@@ -147,10 +147,10 @@
     },
     computed: {
       typeList() {
-        return this.$getDict('tmsOrderType');
+        return this.$getDict('bizType');
       },
       shipmentWayList() {
-        return this.$getDict('shipmentWayType');
+        return this.$getDict('transportationCondition');
       },
       serviceTypeList() {
         return this.$getDict('serviceType');

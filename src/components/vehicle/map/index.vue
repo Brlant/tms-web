@@ -123,7 +123,7 @@
                   <td width="16%">{{item.incubatorCount}}
                   <td width="20%">
                     <div class="id-part">
-                      <dict :dict-group="'transportationCondition'" :dict-key="item.waybillType"></dict>
+                      <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
                     </div>
                     <div>
                       {{item.waybillNumber}}

@@ -65,6 +65,9 @@ export const TmsOrder = resource('/tms-order', http, {
   createWayBill: (params) => {
     return http.put('/tms-order/list/generate', params);
   },
+  autoCreateWayBill: (params) => {
+    return http.put('/tms-order/generate', params);
+  },
   getOneTmsOrder: (id) => {
     return http.get('/tms-order/' + id, {});
   },
@@ -89,6 +92,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   },
   confirmWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/confirm', {});
+  },
+  signTmsWayBill: (id, obj) => {
+    return http.put('/tms-waybill/' + id + '/sign', {obj});
   }
 });
 
