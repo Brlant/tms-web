@@ -141,7 +141,7 @@
               </el-table-column>
               <el-table-column prop="receiverAddress" label="收货地址"  width="180">
               </el-table-column>
-              <el-table-column prop="wholeBoxCount" label="包件" width="50">
+              <el-table-column prop="incubatorCount" label="包件" width="50">
               </el-table-column>
               <el-table-column prop="" label="操作" width="80">
                 <template slot-scope="scope">
