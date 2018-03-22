@@ -114,14 +114,14 @@
               <div>
                 <div>
                   <perm label="tms-waybill-edit">
-                    <span @click.stop="edit(item)">
+                    <span @click.stop="edit(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
                   </perm>
                   <perm label="tms-waybill-edit">
-                    <span @click.stop="confirm(item)">
+                    <span @click.stop="confirm(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-verifyPass"></i>
                       </a>确认
@@ -166,7 +166,7 @@
       <component :is="currentInfoPart" :formItem="form" @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
-      <component :is="currentSignPart" :formItem="form" @right-close="resetRightBox"/>
+      <component :is="currentSignPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
 
   </div>
