@@ -6,7 +6,7 @@
 </style>
 <template>
   <div>
-    <div v-if="!points.length" class="empty-info mini">暂无轨迹信息</div>
+    <div v-if="!points.length" class="empty-info mini">暂无派送信息</div>
     <el-amap v-else ref="pathMap" vid="pathMap" :amap-manager="amapManager"
              :zoom="10" :center="center" class="map-path">
     </el-amap>
@@ -55,22 +55,39 @@
       },
       // 描点
       drawPath (points) {
-        window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
-          const point = new SimpleMarker({
-            iconTheme: 'default',
-            iconStyle: 'red',
-            map: this.amapManager._map,
-            position: points,
-            label: {
-              content: '当前位置',
-              offset: new window.AMap.Pixel(32, 25)
-            }
-          });
-        });
+        // window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
+        //   const point = new SimpleMarker({
+        //     iconTheme: 'default',
+        //     iconStyle: 'red',
+        //     map: this.amapManager._map,
+        //     position: points,
+        //     label: {
+        //       content: '当前位置',
+        //       offset: new window.AMap.Pixel(32, 25)
+        //     }
+        //   });
+        // });
         this.getLgtAndLat(this.formItem.provenance, this.formItem.receiverAddress, res => {
           let geoCodes = res.geocodes;
           if (!geoCodes.length) return;
           window.AMapUI.loadUI(['overlay/SvgMarker'], SvgMarker => {
+            const marker1 = new SvgMarker(
+              new SvgMarker.Shape.IconFont({
+                // 参见 symbol引用, http://www.iconfont.cn/plus/help/detail?helptype=code
+                symbolJs: '/static/fonts/iconfont.js',
+                icon: 'el-icon-t-qiache',
+                size: 30,
+                offset: [-15, -15],
+                fillColor: 'green'
+              }), {
+                map: this.amapManager._map,
+                position: points,
+                showPositionPoint: false,
+                label: {
+                  content: '当前位置',
+                  offset: new window.AMap.Pixel(32, 0)
+                }
+              });
             const shape = new SvgMarker.Shape.TriangleFlagPin({
               height: 60, //高度
               //width: **, //不指定时会维持默认的宽高比
@@ -86,7 +103,7 @@
               shape,
               //第二个参数为SimpleMarker的构造参数（iconStyle除外）
               {
-                showPositionPoint: true, //显示定位点
+                showPositionPoint: false, //显示定位点
                 map: this.amapManager._map,
                 position: position,
                 label: {
@@ -97,8 +114,6 @@
             );
           });
         });
-
-
       }
     }
   };
