@@ -41,9 +41,10 @@
               <el-form-item slot="left" label="运单号">
                 {{form.waybillNumber}}
               </el-form-item>
-              <!--<el-form-item slot="right" label="委托单号">-->
-                <!--{{form.tmsOrderNumber}}-->
-              <!--</el-form-item>-->
+              <el-form-item slot="right" label="来源订单号">
+                <span v-for="order in form.orderNoList">{{order}}<span
+                  v-if="form.orderNoList.indexOf(order)!==form.orderNoList.length-1">,</span></span>
+              </el-form-item>
             </two-column>
             <two-column>
               <el-form-item slot="left" label="运单类型">
