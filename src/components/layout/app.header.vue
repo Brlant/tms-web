@@ -246,7 +246,7 @@
             <el-dropdown trigger="click">
               <div class="el-dropdown-link top-right-item">
                 <img v-if="user.userIcon" :src="user.userIcon+'?image&action=resize:w_50,h_50,m_2'">
-                <img v-else src="/src/assets/img/userpic.png"> {{user.userName}}
+                <img v-else src="/static/img/userpic.png"> {{user.userName}}
                 <i class="el-icon-caret-bottom"></i>
               </div>
               <el-dropdown-menu class="top-right-user-dropdown" slot="dropdown">
