@@ -9,7 +9,7 @@
         <el-row>
           <el-col :span="8">
             <oms-form-row label="任务号" :span="5">
-              <oms-input v-model="searchCondition.transportTaskNo" placeholder="请输入任务编码"></oms-input>
+              <oms-input v-model="searchCondition.transportTaskNo" placeholder="请输入任务编码" @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
           <el-col :span="8">
@@ -22,7 +22,7 @@
           </el-col>
           <el-col :span="8">
             <oms-form-row label="车牌号" :span="5">
-              <oms-input v-model="searchCondition.carPlateNumber" placeholder="请输入车牌号"></oms-input>
+              <oms-input v-model="searchCondition.carPlateNumber" placeholder="请输入车牌号" @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
           <div v-show="showSearch">
@@ -51,13 +51,7 @@
       };
     },
     watch: {
-      'searchCondition.transportTaskNo': function () {
-        this.search();
-      },
       'searchCondition.type': function () {
-        this.search();
-      },
-      'searchCondition.carPlateNumber': function () {
         this.search();
       }
     },

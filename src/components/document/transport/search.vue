@@ -9,7 +9,7 @@
         <el-row>
           <el-col :span="4">
             <oms-form-row label="运单号" :span="8">
-              <oms-input v-model="searchCondition.waybillNumber" placeholder="请输入运单号"></oms-input>
+              <oms-input v-model="searchCondition.waybillNumber" placeholder="请输入运单号" @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
           <el-col :span="6">
@@ -120,9 +120,6 @@
       }
     },
     watch: {
-      'searchCondition.waybillNumber': function () {
-        this.search();
-      },
       'searchCondition.senderId': function () {
         this.search();
       },

@@ -221,6 +221,7 @@
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
   import {TmsOrder} from '@/resources';
   import MapPath from '../../common/map-list';
+
   export default {
     components: {TwoColumn, MapPath},
     data() {

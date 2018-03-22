@@ -127,7 +127,7 @@
               <div>
                 <div>
                   <perm label="tms-order-edit">
-                    <span @click.stop="edit(item)">
+                    <span @click.stop="edit(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
