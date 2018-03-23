@@ -116,7 +116,7 @@
         </div>
       </div>
       <div class="d-table-right">
-        <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
+        <div class="d-table-col-wrap">
         <div v-if="devDetailList.length!=0" class="content-right">
           <div class="form-header-part part-bg p-r-20">
             <div class="header">
@@ -124,37 +124,35 @@
               <h3 class="tit f-dib index-tit">包装信息</h3>
             </div>
             <div class="content content-sp">
-              <el-row style="padding-bottom:20px;padding-top: 20px">
+              <el-row>
                 <el-col :span="8">
-                  <oms-row label="名称" v-show="currentItem.name">{{currentItem.name }}</oms-row>
-                  <oms-row label="型号" v-show="currentItem.model">{{ currentItem.model}}</oms-row>
-                  <oms-row label="品牌" v-show="currentItem.brand">{{currentItem.brand }}</oms-row>
+                  <oms-row label="名称" :span="5" v-show="currentItem.name">{{currentItem.name }}</oms-row>
+                  <oms-row label="型号" :span="5" v-show="currentItem.model">{{ currentItem.model}}</oms-row>
+                  <oms-row label="品牌" :span="5" v-show="currentItem.brand">{{currentItem.brand }}</oms-row>
                 </el-col>
                 <el-col :span="8">
-                  <oms-row label="类型" v-show="currentItem.type">
+                  <oms-row label="类型" :span="5" v-show="currentItem.type">
                     <dict :dict-group="'equipmentType'" :dict-key="currentItem.type"/>
                   </oms-row>
-                  <oms-row label="规格" v-show="currentItem.specification">{{currentItem.specification }}</oms-row>
-                  <oms-row label="体积" v-show="currentItem.volume">{{currentItem.volume }} <span>m³</span></oms-row>
-                  <oms-row label="重量" v-show="currentItem.volume">{{currentItem.weight }} <span>kg³</span></oms-row>
+                  <oms-row label="规格" :span="5" v-show="currentItem.specification">{{currentItem.specification }}</oms-row>
+                  <oms-row label="体积" :span="5" v-show="currentItem.volume">{{currentItem.volume }} <span>m³</span></oms-row>
+                  <oms-row label="重量" :span="5" v-show="currentItem.volume">{{currentItem.weight }} <span>kg³</span></oms-row>
                 </el-col>
                 <el-col :span="8">
                   <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
-                  <oms-row label="采购价格" v-show="currentItem.purchasePrice"><span
-                    v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice
-                    }}
+                  <oms-row label="采购价格"  v-show="currentItem.purchasePrice"><span
+                    v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice}}
                   </oms-row>
-                  <oms-row label="单次计费价格" v-show="currentItem.rentPrice"><span v-show="currentItem.rentPrice">¥</span>{{currentItem.rentPrice
-                    }}
+                  <oms-row label="单次计费价格" v-show="currentItem.rentPrice">
+                    <span v-show="currentItem.rentPrice">¥</span>{{currentItem.rentPrice}}
                   </oms-row>
-                  <oms-row label="租赁计费价格" v-show="currentItem.singlePrice"><span
-                    v-show="currentItem.singlePrice">¥</span>{{
-                    currentItem.singlePrice}}
+                  <oms-row label="租赁计费价格"  v-show="currentItem.singlePrice"><span
+                    v-show="currentItem.singlePrice">¥</span>{{currentItem.singlePrice}}
                   </oms-row>
-                  <oms-row label="销售价格" v-show="currentItem.salePrice"><span v-show="currentItem.salePrice">¥</span>{{
-                    currentItem.salePrice}}
+                  <oms-row label="销售价格" v-show="currentItem.salePrice">
+                    <span v-show="currentItem.salePrice">¥</span>{{currentItem.salePrice}}
                   </oms-row>
-                  <oms-row label="库存数量">{{ currentItem.count}}</oms-row>
+                  <oms-row label="库存数量" >{{ currentItem.count}}</oms-row>
                 </el-col>
               </el-row>
             </div>
@@ -168,43 +166,37 @@
                 </div>
               </el-col>
               <el-col :span="18" class="text-right ">
-                  <span class="pull-right">
-                      <perm label="tms-equipment-consumables-detail-add">
-                          <a href="#" class="btn-circle" @click.stop.prevent="add">
-                            <i class="el-icon-t-plus"></i>
-                          </a>
-                      </perm>
-                  </span>
+                <el-button-group>
+                  <el-button :plain="true" native-type="submit" @click="searchInOrder">查询</el-button>
+                  <el-button native-type="reset" @click="resetSearchForm">重置</el-button>
+                  <el-button :plain="true" @click="exportFile" :disabled="isLoading" v-if="devDetailList.length>0">
+                    导出Excel
+                  </el-button>
+                  <perm label="tms-equipment-consumables-detail-add">
+                    <el-button :plain="true" @click="add">添加</el-button>
+                  </perm>
+                </el-button-group>
               </el-col>
             </el-row>
             <div class="content">
               <el-form class="advanced-query-form clearfix" style="padding-top: 10px" onsubmit="return false">
                 <el-row>
-                  <el-col :span="10">
-                    <oms-form-row label="包装编号" :span="4">
+                  <el-col :span="7">
+                    <oms-form-row label="包装编号" :span="6">
                       <oms-input type="text" v-model="searchCondition.devNo" placeholder="请输入包装编号"></oms-input>
                     </oms-form-row>
                   </el-col>
-                  <el-col :span="14">
+                  <el-col :span="10">
                     <oms-form-row label="有效期" :span="6">
-                      <el-date-picker v-model="validityTimes" type="daterange" style="width: 300px"></el-date-picker>
+                      <el-date-picker v-model="validityTimes" type="daterange"></el-date-picker>
                     </oms-form-row>
                   </el-col>
-                  <el-col :span="10">
-                    <oms-form-row label="包装状态" :span="4">
+                  <el-col :span="7">
+                    <oms-form-row label="包装状态" :span="6">
                       <el-select placeholder="请选择包装状态" v-model="searchCondition.status">
                         <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList">
                         </el-option>
                       </el-select>
-                    </oms-form-row>
-                  </el-col>
-                  <el-col :span="14">
-                    <oms-form-row label="" :span="6">
-                      <el-button type="primary" native-type="submit" @click="searchInOrder">查询</el-button>
-                      <el-button native-type="reset" @click="resetSearchForm">重置</el-button>
-                      <el-button :plain="true" @click="exportFile" :disabled="isLoading" v-if="devDetailList.length>0">
-                        导出Excel
-                      </el-button>
                     </oms-form-row>
                   </el-col>
                 </el-row>
@@ -213,25 +205,31 @@
           </div>
         </div>
         <div class="p-r-20 mt-10">
-          <el-table :data="devDetailList" class="header-list" border
-                    :header-row-class-name="'headerClass'" v-loading="loadingDetailData">
-            <el-table-column prop="devNo" label="包装编号" width="204" :sortable="true"></el-table-column>
-            <el-table-column prop="status" label="状态" width="100" :sortable="true">
+          <div v-if="loadingDetailData">
+            <oms-loading :loading="loadingDetailData"></oms-loading>
+          </div>
+          <div v-else-if="devDetailList.length===0">
+            <div class="empty-info">暂无信息</div>
+          </div>
+          <el-table v-else :data="devDetailList" class="header-list" border
+                    :header-row-class-name="'headerClass'" :maxHeight="tableHeight">
+            <el-table-column prop="devNo" label="包装编号" min-width="204" :sortable="true"></el-table-column>
+            <el-table-column prop="status" label="状态" min-width="100" :sortable="true">
               <template slot-scope="scope">
                 <dict :dict-group="currentItem.type+'Status'" :dict-key="scope.row.status"></dict>
               </template>
             </el-table-column>
-            <el-table-column prop="validityDate" label="有效期" width="150" :sortable="true">
+            <el-table-column prop="validityDate" label="有效期" min-width="120" :sortable="true">
               <template slot-scope="scope">
                 {{scope.row.validityDate|date}}
               </template>
             </el-table-column>
-            <el-table-column prop="remark" label="备注" width="200">
+            <el-table-column prop="remark" label="备注" min-width="150">
               <template slot-scope="scope">
                 {{scope.row.remark}}
               </template>
             </el-table-column>
-            <el-table-column label="操作" fixed="right">
+            <el-table-column label="操作" fixed="right" min-width="180">
               <template slot-scope="scope">
                 <div class="opera-btn">
                   <perm label="tms-equipment-consumables-detail-edit">
@@ -250,9 +248,6 @@
               </template>
             </el-table-column>
           </el-table>
-        </div>
-        <div v-if="devDetailList.length===0">
-          <div class="empty-info">暂无信息</div>
         </div>
         <div class="text-center clearfix" v-if="devDetailList.length">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -376,6 +371,11 @@
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
         height = (height - 17) + 'px';
+        return height;
+      },
+      tableHeight: function () {
+        let height = parseInt(this.$store.state.bodyHeight, 10);
+        height = height - 17 - 300;
         return height;
       },
       equipmentType: function () {
