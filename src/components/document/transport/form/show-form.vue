@@ -37,20 +37,20 @@
               {{pageSets[0].name}}</h3>
           </div>
           <div class="content">
-            <two-column>
-              <el-form-item slot="left" label="运单号">
+            <two-column>`
+              <el-form-item slot="left" label="运单号" v-show="form.waybillNumber">
                 {{form.waybillNumber}}
               </el-form-item>
-              <el-form-item slot="right" label="来源订单号">
+              <el-form-item slot="right" label="来源订单号" v-show="form.orderNoList">
                 <span v-for="order in form.orderNoList">{{order}}<span
                   v-if="form.orderNoList.indexOf(order)!==form.orderNoList.length-1">,</span></span>
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="运单类型">
+              <el-form-item slot="left" label="运单类型" v-show="form.waybillType">
                 <dict :dict-group="'bizType'" :dict-key="form.waybillType"></dict>
               </el-form-item>
-              <el-form-item slot="right" label="发运方式">
+              <el-form-item slot="right" label="发运方式" v-show="form.shipmentWay">
                 <dict :dict-group="'transportationCondition'" :dict-key="form.shipmentWay"></dict>
               </el-form-item>
             </two-column>
@@ -68,22 +68,22 @@
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
               {{pageSets[1].name}}</h3>
           </div>
-          <div class="content">
+          <div class="content" v-show="form.orgName">
             <el-form-item label="货主">
               {{form.orgName}}
             </el-form-item>
-            <el-form-item label="发货单位">
+            <el-form-item label="发货单位" v-show="form.senderName">
               {{form.senderName}}
             </el-form-item>
             <two-column>
-              <el-form-item slot="left" label="发货联系人">
+              <el-form-item slot="left" label="发货联系人" v-show="form.senderContact">
                 {{form.senderContact}}
               </el-form-item>
-              <el-form-item slot="right" label="发货联系电话">
+              <el-form-item slot="right" label="发货联系电话" v-show="form.senderContactPhone">
                 {{form.senderContactPhone}}
               </el-form-item>
             </two-column>
-            <el-form-item slot="right" label="发货地址">
+            <el-form-item slot="right" label="发货地址" v-show="form.senderAddress">
               {{form.senderAddress}}
             </el-form-item>
           </div>
@@ -96,18 +96,18 @@
               {{pageSets[2].name}}</h3>
           </div>
           <div class="content">
-            <el-form-item label="收货单位">
+            <el-form-item label="收货单位" v-show="form.receiverName">
               {{form.receiverName}}
             </el-form-item>
             <two-column>
-              <el-form-item slot="left" label="收货联系人">
+              <el-form-item slot="left" label="收货联系人" v-show="form.receiverContact">
                 {{form.receiverContact}}
               </el-form-item>
-              <el-form-item slot="right" label="收货联系电话">
+              <el-form-item slot="right" label="收货联系电话" v-show="form.receiverContractPhone">
                 {{form.receiverContractPhone}}
               </el-form-item>
             </two-column>
-            <el-form-item slot="right" label="收货地址">
+            <el-form-item slot="right" label="收货地址" v-show="form.receiverAddress">
               {{form.receiverAddress}}
             </el-form-item>
           </div>
@@ -121,30 +121,30 @@
           </div>
           <div class="content">
             <two-column>
-              <el-form-item slot="left" label="整装箱数">
+              <el-form-item slot="left" label="整装箱数" v-show="form.wholeBoxCount">
                 {{form.wholeBoxCount}}
               </el-form-item>
-              <el-form-item slot="right" label="散装箱数">
+              <el-form-item slot="right" label="散装箱数" v-show="form.bulkBoxCount">
                 {{form.bulkBoxCount}}
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="包件数">
+              <el-form-item slot="left" label="包件数" v-show="form.incubatorCount">
                 {{form.incubatorCount}}
               </el-form-item>
-              <el-form-item slot="right" label="声明价格">
+              <el-form-item slot="right" label="声明价格" v-show="form.goodsPrice">
                 <span v-if="form.goodsPrice">¥</span> {{form.goodsPrice}}
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="重量" prop="goodsWeight">
+              <el-form-item slot="left" label="重量" prop="goodsWeight" v-show="form.goodsWeight">
                 {{form.goodsWeight}} <span v-if="form.goodsWeight">kg</span>
               </el-form-item>
-              <el-form-item slot="right" label="体积" prop="goodsVolume">
+              <el-form-item slot="right" label="体积" prop="goodsVolume" v-show="form.goodsVolume">
                 {{form.goodsVolume}} <span v-if="form.goodsVolume">m³</span>
               </el-form-item>
             </two-column>
-            <el-form-item label="货品名称">
+            <el-form-item label="货品名称" v-show="form.goodsTotalName">
               {{form.goodsTotalName}}
             </el-form-item>
           </div>
@@ -158,22 +158,22 @@
           </div>
           <div class="content">
             <two-column>
-              <el-form-item slot="left" label="提货时间">
+              <el-form-item slot="left" label="提货时间" v-show="form.pickUpTime">
                 {{form.pickUpTime|date}}
               </el-form-item>
-              <el-form-item slot="right" label="送达时限">
+              <el-form-item slot="right" label="送达时限" v-show="form.deliveryTime">
                 {{form.deliveryTime|date}}
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="始发地">
+              <el-form-item slot="left" label="始发地" v-show="form.provenance">
                 {{form.provenance}}
               </el-form-item>
-              <el-form-item slot="right" label="目的地">
+              <el-form-item slot="right" label="目的地" v-show="form.destination">
                 {{form.destination}}
               </el-form-item>
             </two-column>
-            <el-form-item slot="right" label="备注">
+            <el-form-item slot="right" label="备注" v-show="form.remark">
               {{form.remark}}
             </el-form-item>
             <div class="hr mb-10"></div>
@@ -242,7 +242,7 @@
               {{pageSets[7].name}}</h3>
           </div>
           <div class="content">
-            <el-form-item label="签收人">
+            <el-form-item label="签收人" v-show="form.signPerson">
               {{form.signPerson}}
             </el-form-item>
             <el-form-item label="附件">
@@ -269,9 +269,10 @@
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
   import {TmsWayBill} from '@/resources';
   import MapPath from '../../common/map-path-new';
+  import attachmentLists from '../../../common/attachment/attachmentList';
 
   export default {
-    components: {TwoColumn, MapPath},
+    components: {TwoColumn, MapPath, attachmentLists},
     data() {
       return {
         list: [],

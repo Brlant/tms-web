@@ -117,7 +117,7 @@
       </div>
       <div class="d-table-right">
         <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
-        <div v-if="devDetailList.length!=0" class="content-right">
+        <div class="content-right">
           <div class="form-header-part part-bg p-r-20">
             <div class="header">
               <div class="sign f-dib"></div>
@@ -186,20 +186,25 @@
                     </oms-form-row>
                   </el-col>
                   <el-col :span="14">
-                    <oms-form-row label="有效期" :span="6">
-                      <el-date-picker v-model="validityTimes" type="daterange" style="width: 300px"></el-date-picker>
+                    <oms-form-row label="包装状态" :span="4">
+                      <el-radio-group v-model="currentStatus" @change="changeStatus">
+                        <el-radio-button :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-radio-button>
+                      </el-radio-group>
                     </oms-form-row>
                   </el-col>
                   <el-col :span="10">
-                    <oms-form-row label="包装状态" :span="4">
-                      <el-select placeholder="请选择包装状态" v-model="searchCondition.status">
-                        <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList">
-                        </el-option>
-                      </el-select>
+                    <!--<oms-form-row label="包装状态" :span="4">-->
+                    <!--<el-select placeholder="请选择包装状态" v-model="searchCondition.status">-->
+                    <!--<el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList">-->
+                    <!--</el-option>-->
+                    <!--</el-select>-->
+                    <!--</oms-form-row>-->
+                    <oms-form-row label="有效期" :span="4">
+                      <el-date-picker v-model="validityTimes" type="daterange" style="width: 300px"></el-date-picker>
                     </oms-form-row>
                   </el-col>
                   <el-col :span="14">
-                    <oms-form-row label="" :span="6">
+                    <oms-form-row label="" :span="4">
                       <el-button type="primary" native-type="submit" @click="searchInOrder">查询</el-button>
                       <el-button native-type="reset" @click="resetSearchForm">重置</el-button>
                       <el-button :plain="true" @click="exportFile" :disabled="isLoading" v-if="devDetailList.length>0">
@@ -250,9 +255,6 @@
               </template>
             </el-table-column>
           </el-table>
-        </div>
-        <div v-if="devDetailList.length===0">
-          <div class="empty-info">暂无信息</div>
         </div>
         <div class="text-center clearfix" v-if="devDetailList.length">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -365,7 +367,8 @@
           devNo: ''
         },
         validityTimes: '',
-        isLoading: false
+        isLoading: false,
+        currentStatus: ''
       };
     },
     mounted() {
@@ -402,6 +405,15 @@
       }
     },
     methods: {
+      changeStatus: function (val) {
+        let value = '';
+        this.typeList.forEach(item => {
+          if (item.label === val) {
+            value = item.key;
+          }
+        });
+        this.searchCondition.status = value;
+      },
       exportFile: function () {
         this.isLoading = true;
         this.$store.commit('initPrint', {

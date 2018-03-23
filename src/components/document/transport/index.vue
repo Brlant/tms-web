@@ -64,11 +64,9 @@
             </el-col>
             <el-col :span="3" class="R">
               <div v-show="item.waybillType">
-                <span>运单类型:</span>
                 <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
               </div>
               <div v-show="item.shipmentWay">
-                <span>发运方式:</span>
                 <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
               </div>
             </el-col>
@@ -103,16 +101,16 @@
               </div>
             </el-col>
             <el-col :span="4" class="R">
-              <div v-show="item.waybillType">
+              <div v-show="item.deliveryTime&&!item.waybillCompleteTime">
                 <span>送达时限:</span>
                 {{item.deliveryTime|date}}
               </div>
               <div v-show="item.startTransportTime">
-                <span>开始时间:</span>
+                <span>[开始] </span>
                 {{item.startTransportTime|time}}
               </div>
               <div v-show="item.waybillCompleteTime">
-                <span>完成时间:</span>
+                <span>[完成] </span>
                 {{item.waybillCompleteTime|time}}
               </div>
             </el-col>
