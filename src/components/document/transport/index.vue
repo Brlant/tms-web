@@ -27,10 +27,10 @@
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="2">
+        <el-col :span="3">
           运单号
         </el-col>
-        <el-col :span="3">类型</el-col>
+        <el-col :span="2">类型</el-col>
         <el-col :span="3">发货单位</el-col>
         <el-col :span="3">收货单位</el-col>
         <el-col :span="3">收货地址</el-col>
@@ -57,12 +57,12 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="2" class="special-col R">
+            <el-col :span="3" class="special-col R">
               <div>
                 {{item.waybillNumber}}
               </div>
             </el-col>
-            <el-col :span="3" class="R">
+            <el-col :span="2" class="R">
               <div v-show="item.waybillType">
                 <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
               </div>
