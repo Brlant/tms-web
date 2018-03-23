@@ -39,58 +39,58 @@
           </div>
           <div class="content">
             <two-column>
-              <el-form-item slot="left" label="任务编码">
+              <el-form-item slot="left" label="任务编码:">
                 {{form.transportTaskNo}}
               </el-form-item>
-              <el-form-item slot="right" label="任务名称">
+              <el-form-item slot="right" label="任务名称:">
                 {{form.taskName}}
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="任务类型">
+              <el-form-item slot="left" label="任务类型:">
                 <dict :dict-group="'deliveryTaskType'" :dict-key="form.type"></dict>
               </el-form-item>
-              <el-form-item slot="right" label="承运商">
+              <el-form-item slot="right" label="承运商:">
                 {{form.taskCarriers}}
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="车牌号">
+              <el-form-item slot="left" label="车牌号:">
                 {{form.carPlateNumber}}
               </el-form-item>
-              <el-form-item slot="right" label="司机">
+              <el-form-item slot="right" label="司机:">
                 {{form.driverName}}
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="理货员">
+              <el-form-item slot="left" label="理货员:">
                 {{form.tallyClerk}}
               </el-form-item>
-              <el-form-item slot="right" label="件数">
+              <el-form-item slot="right" label="件数:">
                 {{form.incubatorCount}}
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="载重">
+              <el-form-item slot="left" label="载重:">
                 {{form.carLoadBearing}} <span v-if="form.carLoadBearing">千克</span>
               </el-form-item>
-              <el-form-item slot="right" label="容积">
+              <el-form-item slot="right" label="容积:">
                 {{form.carVolume}} <span v-if="form.carVolume">立方米</span>
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="创建人">
+              <el-form-item slot="left" label="创建人:">
                 {{form.creatorName}}
               </el-form-item>
-              <el-form-item slot="right" label="创建时间">
+              <el-form-item slot="right" label="创建时间:">
                 {{form.createTime|time}}
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="修改人">
+              <el-form-item slot="left" label="修改人:">
                 {{form.updateName}}
               </el-form-item>
-              <el-form-item slot="right" label="修改时间">
+              <el-form-item slot="right" label="修改时间:">
                 {{form.updateTime|time}}
               </el-form-item>
             </two-column>
