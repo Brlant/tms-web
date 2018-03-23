@@ -218,7 +218,7 @@
           this.filterUser(this.form.defaultDriverName);
           this.filterTallyClerk(this.form.tallyClerk);
           this.getCarList(this.form.carPlateNumber);
-          this.filterTaskCarriers(this.form.taskCarriers);
+          this.filterTaskCarriers(this.form.taskCarriersName);
         }
       }
     },
