@@ -27,19 +27,19 @@
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="3">
+        <el-col :span="2">
           运单号
         </el-col>
         <el-col :span="2">类型</el-col>
         <el-col :span="3">发货单位</el-col>
         <el-col :span="3">收货单位</el-col>
-        <el-col :span="3">收货地址</el-col>
+        <el-col :span="4">收货地址</el-col>
         <el-col :span="1">整件</el-col>
         <el-col :span="1">散件</el-col>
         <el-col :span="1">包件</el-col>
-        <el-col :span="4">时间</el-col>
+        <el-col :span="3">时间</el-col>
         <el-col :span="1">状态</el-col>
-        <el-col :span="2">操作</el-col>
+        <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -57,7 +57,7 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="3" class="special-col R">
+            <el-col :span="2" class="special-col R">
               <div>
                 {{item.waybillNumber}}
               </div>
@@ -80,7 +80,7 @@
                 {{item.receiverName}}
               </div>
             </el-col>
-            <el-col :span="3" class="R">
+            <el-col :span="4" class="R">
               <div>
                 {{item.receiverAddress}}
               </div>
@@ -100,18 +100,18 @@
                 {{item.incubatorCount}}
               </div>
             </el-col>
-            <el-col :span="4" class="R">
+            <el-col :span="3" class="R">
               <div v-show="item.deliveryTime&&!item.waybillCompleteTime">
                 <span>送达时限:</span>
                 {{item.deliveryTime|date}}
               </div>
               <div v-show="item.startTransportTime">
-                <span>[开始] </span>
-                {{item.startTransportTime|time}}
+                <span>[始] </span>
+                {{item.startTransportTime|shortDate}}
               </div>
               <div v-show="item.waybillCompleteTime">
-                <span>[完成] </span>
-                {{item.waybillCompleteTime|time}}
+                <span>[终] </span>
+                {{item.waybillCompleteTime|shortDate}}
               </div>
             </el-col>
             <el-col :span="1" class="R">
@@ -119,7 +119,7 @@
                 {{formatStatusTitle(item.status, orderType)}}
               </div>
             </el-col>
-            <el-col :span="2" class="opera-btn">
+            <el-col :span="3" class="opera-btn">
               <div>
                 <div>
                   <perm label="tms-waybill-edit">
@@ -129,8 +129,6 @@
                       </a>编辑
                     </span>
                   </perm>
-                </div>
-                <div style="padding-top: 2px">
                   <perm label="tms-waybill-edit">
                     <span @click.stop="confirm(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">

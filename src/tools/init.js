@@ -5,6 +5,11 @@ export function init (Vue) {
     if (!dateTime) return '';
     return moment(dateTime).format('YYYY-MM-DD');
   });
+
+  Vue.filter('shortDate', function (dateTime) {
+    if (!dateTime) return '';
+    return moment(dateTime).format('MM-DD HH:mm:ss');
+  });
   Vue.filter('time', function (dateTime) {
     if (!dateTime) return '';
     return moment(dateTime).format('YYYY-MM-DD HH:mm:ss');
