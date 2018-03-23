@@ -50,18 +50,18 @@
             </div>
             <div class="content">
               <two-column>
-                <el-form-item slot="left" label="订单号">
+                <el-form-item slot="left" label="订单号:">
                   {{currentOrder.orderNo}}
                 </el-form-item>
-                <el-form-item slot="right" label="订单类型">
+                <el-form-item slot="right" label="订单类型:">
                   <dict :dict-group="'bizType'" :dict-key="currentOrder.waybillType"></dict>
                 </el-form-item>
               </two-column>
               <two-column>
-                <el-form-item slot="left" label="发运方式">
+                <el-form-item slot="left" label="发运方式:">
                   <dict :dict-group="'transportationCondition'" :dict-key="currentOrder.shipmentWay"></dict>
                 </el-form-item>
-                <el-form-item slot="right" label="委托单号">
+                <el-form-item slot="right" label="委托单号:">
                   {{currentOrder.tmsOrderNumber}}
                 </el-form-item>
               </two-column>
@@ -79,21 +79,21 @@
                 {{pageSets[1].name}}</h3>
             </div>
             <div class="content">
-              <el-form-item label="货主">
+              <el-form-item label="货主:">
                 {{currentOrder.orgName}}
               </el-form-item>
-              <el-form-item label="发货单位">
+              <el-form-item label="发货单位:">
                 {{currentOrder.senderName}}
               </el-form-item>
               <two-column>
-                <el-form-item slot="left" label="发货联系人">
+                <el-form-item slot="left" label="发货联系人:">
                   {{currentOrder.senderContact}}
                 </el-form-item>
-                <el-form-item slot="right" label="发货联系电话">
+                <el-form-item slot="right" label="发货联系电话:">
                   {{currentOrder.senderContactPhone}}
                 </el-form-item>
               </two-column>
-              <el-form-item slot="right" label="发货地址">
+              <el-form-item slot="right" label="发货地址:">
                 {{currentOrder.senderAddress}}
               </el-form-item>
             </div>
@@ -106,18 +106,18 @@
                 {{pageSets[2].name}}</h3>
             </div>
             <div class="content">
-              <el-form-item label="收货单位">
+              <el-form-item label="收货单位:">
                 {{currentOrder.receiverName}}
               </el-form-item>
               <two-column>
-                <el-form-item slot="left" label="收货联系人">
+                <el-form-item slot="left" label="收货联系人:">
                   {{currentOrder.receiverContact}}
                 </el-form-item>
-                <el-form-item slot="right" label="收货联系电话">
+                <el-form-item slot="right" label="收货联系电话:">
                   {{currentOrder.receiverContractPhone}}
                 </el-form-item>
               </two-column>
-              <el-form-item slot="right" label="收货地址">
+              <el-form-item slot="right" label="收货地址:">
                 {{currentOrder.receiverAddress}}
               </el-form-item>
             </div>
@@ -131,30 +131,30 @@
             </div>
             <div class="content">
               <two-column>
-                <el-form-item slot="left" label="整装箱数">
+                <el-form-item slot="left" label="整装箱数:">
                   {{currentOrder.wholeBoxCount}} <span v-if="currentOrder.wholeBoxCount">箱</span>
                 </el-form-item>
-                <el-form-item slot="right" label="散装箱数">
+                <el-form-item slot="right" label="散装箱数:">
                   {{currentOrder.bulkBoxCount}} <span v-if="currentOrder.bulkBoxCount">箱</span>
                 </el-form-item>
               </two-column>
               <two-column>
-                <el-form-item slot="left" label="包件数">
+                <el-form-item slot="left" label="包件数:">
                   {{currentOrder.incubatorCount}} <span v-if="currentOrder.incubatorCount">件</span>
                 </el-form-item>
-                <el-form-item slot="right" label="声明价格">
+                <el-form-item slot="right" label="声明价格:">
                   <span v-if="currentOrder.goodsPrice">人民币</span> {{currentOrder.goodsPrice}}
                 </el-form-item>
               </two-column>
               <two-column>
-                <el-form-item slot="left" label="重量" prop="goodsWeight">
+                <el-form-item slot="left" label="重量:" prop="goodsWeight">
                   {{currentOrder.goodsWeight}} <span v-if="currentOrder.goodsWeight">kg</span>
                 </el-form-item>
-                <el-form-item slot="right" label="体积" prop="goodsVolume">
+                <el-form-item slot="right" label="体积:" prop="goodsVolume">
                   {{currentOrder.goodsVolume}} <span v-if="currentOrder.goodsVolume">m³</span>
                 </el-form-item>
               </two-column>
-              <el-form-item label="货品名称">
+              <el-form-item label="货品名称:">
                 {{currentOrder.goodsTotalName}}
               </el-form-item>
             </div>
@@ -168,20 +168,20 @@
             </div>
             <div class="content">
               <two-column>
-                <el-form-item slot="left" label="提货时间">
+                <el-form-item slot="left" label="提货时间:">
                   {{currentOrder.pickUpTime|date}}
                 </el-form-item>
-                <el-form-item slot="right" label="送达时限">
+                <el-form-item slot="right" label="送达时限:">
                   {{currentOrder.deliveryTime|date}}
                 </el-form-item>
               </two-column>
-              <el-form-item label="始发地">
+              <el-form-item label="始发地:">
                 {{currentOrder.provenance}}
               </el-form-item>
-              <el-form-item label="目的地">
+              <el-form-item label="目的地:">
                 {{currentOrder.destination}}
               </el-form-item>
-              <el-form-item slot="right" label="备注">
+              <el-form-item slot="right" label="备注:">
                 {{currentOrder.remark}}
               </el-form-item>
             </div>

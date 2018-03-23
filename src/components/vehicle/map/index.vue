@@ -105,10 +105,10 @@
             <thead>
             <tr>
               <th width="4%"></th>
-              <th width="16%">包件数</th>
-              <th width="20%">运单号</th>
-              <th width="30%">收货单位</th>
-              <th width="30%">收货地址</th>
+              <th width="14%">包件数</th>
+              <th width="30%">运单号</th>
+              <th width="26%">收货单位</th>
+              <th width="26%">收货地址</th>
             </tr>
             </thead>
           </table>
@@ -120,8 +120,8 @@
                   <td width="4%">
                     <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                   </td>
-                  <td width="16%">{{item.incubatorCount}}
-                  <td width="20%">
+                  <td width="12%">{{item.incubatorCount}}</td>
+                  <td width="32%" class="R">
                     <div class="id-part">
                       <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
                     </div>
@@ -129,8 +129,8 @@
                       {{item.waybillNumber}}
                     </div>
                   </td>
-                  <td width="30%">{{item.receiverName}}</td>
-                  <td width="30%">{{item.receiverAddress}}</td>
+                  <td width="26%" class="R">{{item.receiverName}}</td>
+                  <td width="26%" class="R">{{item.receiverAddress}}</td>
                 </tr>
                 </tbody>
               </table>
