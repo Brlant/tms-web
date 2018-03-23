@@ -51,6 +51,18 @@
         titleOffsetTop: []
       };
     },
+    computed: {
+      isShow () {
+        return this.$parent.$parent.show;
+      }
+    },
+    watch: {
+      isShow (val) {
+        if (!val) {
+          this.selectTab(this.pageSets[0], 0);
+        }
+      }
+    },
     methods: {
       selectTab (item, key) {
         this.index = key;
