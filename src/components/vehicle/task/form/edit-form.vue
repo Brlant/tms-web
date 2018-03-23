@@ -7,6 +7,7 @@
       left: 0;
     }
   }
+
   .info-part {
     .el-form-item {
       margin-bottom: 0;
@@ -16,7 +17,7 @@
 <template>
   <div class="content-part">
     <div class="content-right content-padding">
-      <h3>生成派送</h3>
+      <h3>编辑出车任务</h3>
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
         <div class="form-header-part">
           <div class="header">
@@ -79,15 +80,38 @@
             <h3 class="tit f-dib">派送信息</h3>
           </div>
           <div class="content">
-            <el-form-item label="承运商">
-              <oms-input v-model="form.taskCarriers" placeholder="请输入承运商"></oms-input>
-            </el-form-item>
             <two-column>
-              <el-form-item slot="left" label="任务类型">
+              <el-form-item slot="left" label="任务号">
+                {{form.transportTaskNo}}
+              </el-form-item>
+              <el-form-item slot="right" label="任务类型">
                 <el-select placeholder="请选择车型" v-model="form.type">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
                              v-for="item in deliveryTaskTypeList"></el-option>
                 </el-select>
+              </el-form-item>
+            </two-column>
+            <two-column>
+              <el-form-item slot="left" label="承运商">
+                <oms-input v-model="form.taskCarriers" placeholder="请输入承运商"></oms-input>
+              </el-form-item>
+              <el-form-item slot="right" label="包件数" prop="incubatorCount">
+                <oms-input type="number" :min="0" v-model="form.incubatorCount" placeholder="请输入包件数"
+                           @blur="setIncubatorCount(form.incubatorCount)"></oms-input>
+              </el-form-item>
+            </two-column>
+            <two-column>
+              <el-form-item slot="left" label="载重" prop="goodsWeight">
+                <oms-input v-model="form.carLoadBearing" placeholder="请输入车辆载重"
+                           @blur="setGoodsWeight(form.carLoadBearing)">
+                  <template slot="append">kg</template>
+                </oms-input>
+              </el-form-item>
+              <el-form-item slot="right" label="容积" prop="goodsVolume">
+                <oms-input v-model="form.carVolume" placeholder="请输入车辆容积"
+                           @blur="setGoodsVolume(form.carVolume)">
+                  <template slot="append">m³</template>
+                </oms-input>
               </el-form-item>
             </two-column>
             <two-column>
@@ -126,9 +150,11 @@
 </template>
 <script>
   import {CarArchives, TransportTask, User} from '@/resources';
+  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
 
   export default {
-    data () {
+    components: {TwoColumn},
+    data() {
       return {
         rules: {
           'driveId': [
@@ -152,7 +178,7 @@
         return this.$getDict('deliveryTaskType');
       }
     },
-    props: ['checkList'],
+    props: ['formItem'],
     watch: {
       checkList: {
         handler: function (val) {
@@ -170,13 +196,33 @@
             this.form.driveId = '';
           }
         }
+      },
+      formItem: function (val) {
+        if (val.id) {
+          this.form = val;
+          this.filterUser(this.form.defaultDriverName);
+          this.getCarList(this.form.carPlateNumber);
+        }
       }
     },
     methods: {
+      setIncubatorCount: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.incubatorCount = parseInt(value, 10);
+      },
+      setGoodsWeight: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.goodsWeight = parseFloat(value);
+      },
+      setGoodsVolume: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.goodsVolume = parseFloat(value);
+      },
       clearCarInfo: function () {
         this.form.carId = '';
         this.form.driveId = '';
         this.form.driverPhone = '';
+        this.form.driverName = '';
         this.carInfo = {};
       },
       filterUser: function (query) {
@@ -226,6 +272,8 @@
             if (val.id === id) {
               this.form.driveId = val.id;
               this.form.driverPhone = val.phone;
+              console.log(val.name);
+              this.form.driverName = val.name;
             }
           });
         }
@@ -234,18 +282,18 @@
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.doing = true;
-            TransportTask.save(this.form).then(res => {
+            TransportTask.update(this.form.id, this.form).then(res => {
               this.$notify.success({
                 duration: 2000,
                 name: '成功',
-                message: '新增派送任务成功'
+                message: '编辑派送任务成功'
               });
               this.doing = false;
               this.$emit('change', res.data);
               this.$emit('right-close');
             }).catch(error => {
               this.$notify.error({
-                message: error.response.data && error.response.data.msg || '新增派送任务失败'
+                message: error.response.data && error.response.data.msg || '编辑派送任务失败'
               });
               this.doing = false;
             });

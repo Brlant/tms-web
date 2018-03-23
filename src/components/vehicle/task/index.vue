@@ -24,14 +24,14 @@
         <el-col :span="3">任务号</el-col>
         <el-col :span="2">任务类型</el-col>
         <el-col :span="2">任务状态</el-col>
+        <el-col :span="1">司机</el-col>
         <el-col :span="2">车牌号</el-col>
-        <el-col :span="2">司机</el-col>
         <el-col :span="2">理货员</el-col>
         <el-col :span="2">件数</el-col>
         <el-col :span="2">载重(kg)</el-col>
         <el-col :span="2">容积(m³)</el-col>
         <el-col :span="3">派车时间</el-col>
-        <el-col :span="2">操作</el-col>
+        <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -64,14 +64,14 @@
                 {{formatStatusTitle(item.status, orderType)}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="1" class="R">
               <div>
-                {{item.carPlateNumber}}
+                {{item.driverName}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{item.driverName}}
+                {{item.carPlateNumber}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
@@ -99,7 +99,7 @@
                 {{item.updateTime|time}}
               </div>
             </el-col>
-            <el-col :span="2" class="opera-btn">
+            <el-col :span="3" class="opera-btn">
               <div>
                 <div>
                   <perm label="tms-task-car-task-confirm" class="opera-btn">
@@ -111,6 +111,13 @@
                   </perm>
                 </div>
                 <div style="padding-top: 2px">
+                  <perm label="tms-waybill-edit">
+                    <span @click.stop="editInfo(item)" v-if="item.status==='0'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-edit"></i>
+                      </a>编辑
+                    </span>
+                  </perm>
                   <perm label="tms-task-car-task-cancel" class="opera-btn">
                     <span @click.stop="cancelTask(item)" v-if="item.status==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
@@ -137,6 +144,9 @@
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
       <component :is="currentPart" :formItem="form"/>
     </page-right>
+    <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'800px','padding':0}">
+      <component :is="currentEditPart" :formItem="form" @change="submit"  @right-close="resetRightBox"/>
+    </page-right>
 
   </div>
 </template>
@@ -146,6 +156,7 @@
   import {TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
+  import editForm from './form/edit-form';
 
   export default {
     components: {
@@ -159,10 +170,15 @@
         orderType: utils.carTaskType,
         dataList: [],
         showIndex: -1,
+        showEditIndex: -1,
         dialogComponents: {
           0: showForm
         },
+        dialogEditComponents: {
+          0: editForm
+        },
         currentPart: null,
+        currentEditPart: null,
         pager: {
           currentPage: 1,
           count: 0,
@@ -259,6 +275,7 @@
       },
       resetRightBox() {
         this.showIndex = -1;
+        this.showEditIndex = -1;
       },
       getTransportTaskPage: function (pageNo, isContinue = false) {
         this.pager.currentPage = pageNo;
@@ -296,6 +313,18 @@
         this.$nextTick(() => {
           this.form = JSON.parse(JSON.stringify(item));
         });
+      },
+      editInfo: function (item) {
+        this.currentItem = item;
+        this.currentItemId = item.id;
+        this.showEditIndex = 0;
+        this.currentEditPart = this.dialogEditComponents[0];
+        this.$nextTick(() => {
+          this.form = JSON.parse(JSON.stringify(item));
+        });
+      },
+      submit() {
+        this.getTransportTaskPage(1);
       }
     }
   };
