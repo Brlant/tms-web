@@ -35,7 +35,7 @@
     methods: {
       queryPath () {
         let id = '1234';
-        this.$http(`/track-transportation/task/${this.formItem.id}/latest`).then(res => {
+        this.$http(`/track-transportation/waybill/${this.formItem.id}/latest`).then(res => {
           if (res.data.longitude && res.data.latitude) {
             this.points = [res.data.longitude, res.data.latitude];
             this.drawPath(this.points);
@@ -67,27 +67,30 @@
         //     }
         //   });
         // });
+        this.center = points;
+        window.AMapUI.loadUI(['overlay/SvgMarker'], SvgMarker => {
+          const marker1 = new SvgMarker(
+            new SvgMarker.Shape.IconFont({
+              // 参见 symbol引用, http://www.iconfont.cn/plus/help/detail?helptype=code
+              symbolJs: '/static/fonts/iconfont.js',
+              icon: 'el-icon-t-qiache',
+              size: 30,
+              offset: [-15, -15],
+              fillColor: 'green'
+            }), {
+              map: this.amapManager._map,
+              position: points,
+              showPositionPoint: false,
+              label: {
+                content: '当前位置',
+                offset: new window.AMap.Pixel(32, 0)
+              }
+            });
+        });
         this.getLgtAndLat(this.formItem.provenance, this.formItem.receiverAddress, res => {
           let geoCodes = res.geocodes;
           if (!geoCodes.length) return;
           window.AMapUI.loadUI(['overlay/SvgMarker'], SvgMarker => {
-            const marker1 = new SvgMarker(
-              new SvgMarker.Shape.IconFont({
-                // 参见 symbol引用, http://www.iconfont.cn/plus/help/detail?helptype=code
-                symbolJs: '/static/fonts/iconfont.js',
-                icon: 'el-icon-t-qiache',
-                size: 30,
-                offset: [-15, -15],
-                fillColor: 'green'
-              }), {
-                map: this.amapManager._map,
-                position: points,
-                showPositionPoint: false,
-                label: {
-                  content: '当前位置',
-                  offset: new window.AMap.Pixel(32, 0)
-                }
-              });
             const shape = new SvgMarker.Shape.TriangleFlagPin({
               height: 60, //高度
               //width: **, //不指定时会维持默认的宽高比
