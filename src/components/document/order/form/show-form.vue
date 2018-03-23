@@ -56,6 +56,22 @@
                 <!--<dict :dict-group="'serviceType'" :dict-key="form.serviceType"></dict>-->
               <!--</el-form-item>-->
             </two-column>
+            <two-column>
+              <el-form-item slot="left" label="创建人" v-show="form.creatorName">
+                {{form.creatorName}}
+              </el-form-item>
+              <el-form-item slot="right" label="创建时间" v-show="form.createTime">
+                {{form.createTime|time}}
+              </el-form-item>
+            </two-column>
+            <two-column>
+              <el-form-item slot="left" label="修改人" v-show="form.updateName">
+                {{form.updateName}}
+              </el-form-item>
+              <el-form-item slot="right" label="修改时间" v-show="form.updateTime">
+                {{form.updateTime|time}}
+              </el-form-item>
+            </two-column>
           </div>
           <div class="hr mb-10"></div>
         </div>
