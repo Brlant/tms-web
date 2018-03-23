@@ -155,7 +155,7 @@
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox"
                 :css="{'width':'800px','padding':0, 'z-index': 1000}">
-      <component :is="currentPart" :checkList="orderIdList" @change="submit"/>
+      <component :is="currentPart" :checkList="orderIdList"  @right-close="resetRightBox" @change="submit"/>
     </page-right>
   </div>
 </template>

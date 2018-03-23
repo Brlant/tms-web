@@ -93,7 +93,20 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="承运商">
-                <oms-input v-model="form.taskCarriers" placeholder="请输入承运商"></oms-input>
+                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索承运商" :remote-method="filterTaskCarriers"
+                           :clearable="true"
+                           v-model="form.taskCarriers" popperClass="good-selects">
+                  <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in orgList">
+                    <div style="overflow: hidden">
+                      <span class="pull-left" style="clear: right">{{org.name}}</span>
+                    </div>
+                    <div style="overflow: hidden">
+                    <span class="select-other-info pull-left">
+                      <span>系统代码:</span>{{org.manufacturerCode}}
+                    </span>
+                    </div>
+                  </el-option>
+                </el-select>
               </el-form-item>
               <el-form-item slot="right" label="包件数" prop="incubatorCount">
                 <oms-input type="number" :min="0" v-model="form.incubatorCount" placeholder="请输入包件数"
@@ -118,7 +131,8 @@
               <el-form-item slot="left" label="理货员">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterTallyClerk"
                            :clearable="true"
-                           v-model="form.tallyClerkId" popperClass="good-selects">
+                           v-model="form.tallyClerkId" popperClass="good-selects"
+                           @change="setTallyClerk(form.tallyClerkId)">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in tallyClerkList">
                     <div style="overflow: hidden">
                       <span class="pull-left" style="clear: right">{{user.name}}</span>
@@ -149,7 +163,7 @@
   </div>
 </template>
 <script>
-  import {CarArchives, TransportTask, User} from '@/resources';
+  import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
 
   export default {
@@ -170,7 +184,8 @@
         },
         doing: false,
         userList: [],
-        tallyClerkList: []
+        tallyClerkList: [],
+        orgList: []
       };
     },
     computed: {
@@ -201,11 +216,18 @@
         if (val.id) {
           this.form = val;
           this.filterUser(this.form.defaultDriverName);
+          this.filterTallyClerk(this.form.tallyClerk);
           this.getCarList(this.form.carPlateNumber);
+          this.filterTaskCarriers(this.form.taskCarriers);
         }
       }
     },
     methods: {
+      filterTaskCarriers: function (query) {// 过滤承运商
+        BaseInfo.query({keyWord: query}).then(res => {
+          this.orgList = res.data.list;
+        });
+      },
       setIncubatorCount: function (value) {
         if (!value || isNaN(value)) return;
         this.form.incubatorCount = parseInt(value, 10);
@@ -274,6 +296,16 @@
               this.form.driverPhone = val.phone;
               console.log(val.name);
               this.form.driverName = val.name;
+            }
+          });
+        }
+      },
+      setTallyClerk: function (id) {
+        if (id) {
+          this.tallyClerkList.forEach(val => {
+            if (val.id === id) {
+              this.form.tallyClerkId = val.id;
+              this.form.tallyClerkPhone = val.phone;
             }
           });
         }
