@@ -405,6 +405,9 @@
       index() {
         this.loadingData = true;
         this.showTypeList = [];
+      },
+      'searchCondition.status': function () {
+        this.searchInOrder();
       }
     },
     methods: {
