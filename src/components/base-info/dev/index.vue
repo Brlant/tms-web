@@ -182,12 +182,12 @@
               <el-form class="advanced-query-form clearfix" style="padding-top: 10px" onsubmit="return false">
                 <el-row>
                   <el-col :span="6">
-                    <oms-form-row label="包装编号" :span="6">
+                    <oms-form-row label="编号" :span="6">
                       <oms-input type="text" v-model="searchCondition.devNo" placeholder="请输入包装编号"></oms-input>
                     </oms-form-row>
                   </el-col>
                   <el-col :span="10">
-                    <oms-form-row label="包装状态" :span="4">
+                    <oms-form-row label="状态" :span="3">
                       <el-radio-group v-model="currentStatus" size="small" @change="changeStatus">
                         <el-radio-button :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-radio-button>
                       </el-radio-group>
