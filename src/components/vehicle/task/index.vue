@@ -111,7 +111,7 @@
                   </perm>
                 </div>
                 <div style="padding-top: 2px">
-                  <perm label="tms-waybill-edit">
+                  <perm label="tms-task-car-task-edit">
                     <span @click.stop="editInfo(item)" v-if="item.status==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
