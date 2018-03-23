@@ -117,7 +117,7 @@
       </div>
       <div class="d-table-right">
         <div class="d-table-col-wrap">
-        <div v-if="devDetailList.length!=0" class="content-right">
+        <div class="content-right">
           <div class="form-header-part part-bg p-r-20">
             <div class="header">
               <div class="sign f-dib"></div>
@@ -181,19 +181,19 @@
             <div class="content">
               <el-form class="advanced-query-form clearfix" style="padding-top: 10px" onsubmit="return false">
                 <el-row>
-                  <el-col :span="7">
+                  <el-col :span="6">
                     <oms-form-row label="包装编号" :span="6">
                       <oms-input type="text" v-model="searchCondition.devNo" placeholder="请输入包装编号"></oms-input>
                     </oms-form-row>
                   </el-col>
-                  <el-col :span="14">
+                  <el-col :span="10">
                     <oms-form-row label="包装状态" :span="4">
-                      <el-radio-group v-model="currentStatus" @change="changeStatus">
+                      <el-radio-group v-model="currentStatus" size="small" @change="changeStatus">
                         <el-radio-button :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-radio-button>
                       </el-radio-group>
                     </oms-form-row>
                   </el-col>
-                  <el-col :span="10">
+                  <el-col :span="8">
                     <!--<oms-form-row label="包装状态" :span="4">-->
                     <!--<el-select placeholder="请选择包装状态" v-model="searchCondition.status">-->
                     <!--<el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList">-->
@@ -201,7 +201,7 @@
                     <!--</el-select>-->
                     <!--</oms-form-row>-->
                     <oms-form-row label="有效期" :span="4">
-                      <el-date-picker v-model="validityTimes" type="daterange" style="width: 300px"></el-date-picker>
+                      <el-date-picker v-model="validityTimes" type="daterange" ></el-date-picker>
                     </oms-form-row>
                   </el-col>
                 </el-row>
