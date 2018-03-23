@@ -186,17 +186,22 @@
                       <oms-input type="text" v-model="searchCondition.devNo" placeholder="请输入包装编号"></oms-input>
                     </oms-form-row>
                   </el-col>
-                  <el-col :span="10">
-                    <oms-form-row label="有效期" :span="6">
-                      <el-date-picker v-model="validityTimes" type="daterange"></el-date-picker>
+                  <el-col :span="14">
+                    <oms-form-row label="包装状态" :span="4">
+                      <el-radio-group v-model="currentStatus" @change="changeStatus">
+                        <el-radio-button :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-radio-button>
+                      </el-radio-group>
                     </oms-form-row>
                   </el-col>
-                  <el-col :span="7">
-                    <oms-form-row label="包装状态" :span="6">
-                      <el-select placeholder="请选择包装状态" v-model="searchCondition.status">
-                        <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList">
-                        </el-option>
-                      </el-select>
+                  <el-col :span="10">
+                    <!--<oms-form-row label="包装状态" :span="4">-->
+                    <!--<el-select placeholder="请选择包装状态" v-model="searchCondition.status">-->
+                    <!--<el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList">-->
+                    <!--</el-option>-->
+                    <!--</el-select>-->
+                    <!--</oms-form-row>-->
+                    <oms-form-row label="有效期" :span="4">
+                      <el-date-picker v-model="validityTimes" type="daterange" style="width: 300px"></el-date-picker>
                     </oms-form-row>
                   </el-col>
                 </el-row>
@@ -360,7 +365,8 @@
           devNo: ''
         },
         validityTimes: '',
-        isLoading: false
+        isLoading: false,
+        currentStatus: ''
       };
     },
     mounted() {
@@ -402,6 +408,15 @@
       }
     },
     methods: {
+      changeStatus: function (val) {
+        let value = '';
+        this.typeList.forEach(item => {
+          if (item.label === val) {
+            value = item.key;
+          }
+        });
+        this.searchCondition.status = value;
+      },
       exportFile: function () {
         this.isLoading = true;
         this.$store.commit('initPrint', {

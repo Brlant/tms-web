@@ -27,10 +27,10 @@
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="2">
+        <el-col :span="3">
           运单号
         </el-col>
-        <el-col :span="3">类型</el-col>
+        <el-col :span="2">类型</el-col>
         <el-col :span="3">发货单位</el-col>
         <el-col :span="3">收货单位</el-col>
         <el-col :span="3">收货地址</el-col>
@@ -57,18 +57,16 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="2" class="special-col R">
+            <el-col :span="3" class="special-col R">
               <div>
                 {{item.waybillNumber}}
               </div>
             </el-col>
-            <el-col :span="3" class="R">
+            <el-col :span="2" class="R">
               <div v-show="item.waybillType">
-                <span>运单类型:</span>
                 <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
               </div>
               <div v-show="item.shipmentWay">
-                <span>发运方式:</span>
                 <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
               </div>
             </el-col>
@@ -103,16 +101,16 @@
               </div>
             </el-col>
             <el-col :span="4" class="R">
-              <div v-show="item.waybillType">
+              <div v-show="item.deliveryTime&&!item.waybillCompleteTime">
                 <span>送达时限:</span>
                 {{item.deliveryTime|date}}
               </div>
               <div v-show="item.startTransportTime">
-                <span>开始时间:</span>
+                <span>[开始] </span>
                 {{item.startTransportTime|time}}
               </div>
               <div v-show="item.waybillCompleteTime">
-                <span>完成时间:</span>
+                <span>[完成] </span>
                 {{item.waybillCompleteTime|time}}
               </div>
             </el-col>
