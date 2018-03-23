@@ -107,11 +107,11 @@
               </div>
               <div v-show="item.startTransportTime">
                 <span>[始] </span>
-                {{item.startTransportTime|shortDate}}
+                {{item.startTransportTime|time}}
               </div>
               <div v-show="item.waybillCompleteTime">
                 <span>[终] </span>
-                {{item.waybillCompleteTime|shortDate}}
+                {{item.waybillCompleteTime|time}}
               </div>
             </el-col>
             <el-col :span="1" class="R">
