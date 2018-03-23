@@ -41,9 +41,10 @@
               <el-form-item slot="left" label="运单号">
                 {{form.waybillNumber}}
               </el-form-item>
-              <!--<el-form-item slot="right" label="委托单号">-->
-                <!--{{form.tmsOrderNumber}}-->
-              <!--</el-form-item>-->
+              <el-form-item slot="right" label="来源订单号">
+                <span v-for="order in form.orderNoList">{{order}}<span
+                  v-if="form.orderNoList.indexOf(order)!==form.orderNoList.length-1">,</span></span>
+              </el-form-item>
             </two-column>
             <two-column>
               <el-form-item slot="left" label="运单类型">
@@ -241,6 +242,22 @@
               {{pageSets[7].name}}</h3>
           </div>
           <div class="content">
+            <el-form-item label="签收人">
+              {{form.signPerson}}
+            </el-form-item>
+            <el-form-item label="附件">
+              <attachment-lists :attachmentIdList="attachmentIdList" :objectId="form.id"
+                                :objectType="'waybill'"></attachment-lists>
+            </el-form-item>
+          </div>
+        </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[8].key === currentTab.key}">
+              {{pageSets[8].name}}</h3>
+          </div>
+          <div class="content">
             <map-path :formItem="formItem"></map-path>
           </div>
         </div>
@@ -267,7 +284,8 @@
           {name: '其他信息', key: 4},
           {name: '货品列表', key: 5},
           {name: '保温箱列表', key: 6},
-          {name: '派送情况', key: 7}
+          {name: '签收信息', key: 7},
+          {name: '派送情况', key: 8}
         ],
         currentTab: {},
         form: {
@@ -281,7 +299,8 @@
             }
           ]
         },
-        rules: {}
+        rules: {},
+        attachmentIdList: []
       };
     },
     computed: {},

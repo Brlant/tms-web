@@ -62,7 +62,7 @@
                   <dict :dict-group="'transportationCondition'" :dict-key="currentOrder.shipmentWay"></dict>
                 </el-form-item>
                 <el-form-item slot="right" label="委托单号">
-                  <oms-input v-model="currentOrder.tmsOrderNumber" placeholder="请输入委托单号"></oms-input>
+                  {{currentOrder.tmsOrderNumber}}
                 </el-form-item>
               </two-column>
                 <!--<el-form-item slot="right" label="服务方式">-->
