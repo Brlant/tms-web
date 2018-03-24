@@ -108,7 +108,7 @@ export const routes = [
           {
             path: '/permission/log',
             component: () => import('./components/common/log/list.vue'),
-            meta: {topMould: 'permission', title: '系统日志', perm: 'tms-system-log'}
+            meta: {moduleId: 'permission', title: '系统日志', perm: 'tms-system-log'}
           }
         ]
       }

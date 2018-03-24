@@ -104,11 +104,11 @@
           <table class="table" style="margin-bottom: 0">
             <thead>
             <tr>
-              <th width="4%"></th>
+              <th width="8%"></th>
               <th width="14%">包件数</th>
               <th width="30%">运单号</th>
-              <th width="26%">收货单位</th>
-              <th width="26%">收货地址</th>
+              <th width="24%">收货单位</th>
+              <th width="24%">收货地址</th>
             </tr>
             </thead>
           </table>
@@ -117,11 +117,11 @@
               <table class="table table-hover">
                 <tbody>
                 <tr v-for="item in dataRows" :class="{active: item.isChecked}" @click="rowClick(item)">
-                  <td width="4%">
+                  <td width="8%">
                     <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                   </td>
-                  <td width="12%">{{item.incubatorCount}}</td>
-                  <td width="32%" class="R">
+                  <td width="14%">{{item.incubatorCount}}</td>
+                  <td width="30%" class="R">
                     <div class="id-part">
                       <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
                     </div>
@@ -129,8 +129,8 @@
                       {{item.waybillNumber}}
                     </div>
                   </td>
-                  <td width="26%" class="R">{{item.receiverName}}</td>
-                  <td width="26%" class="R">{{item.receiverAddress}}</td>
+                  <td width="24%" class="R">{{item.receiverName}}</td>
+                  <td width="24%" class="R">{{item.receiverAddress}}</td>
                 </tr>
                 </tbody>
               </table>
@@ -155,7 +155,7 @@
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox"
                 :css="{'width':'800px','padding':0, 'z-index': 1000}">
-      <component :is="currentPart" :checkList="orderIdList" @change="submit"/>
+      <component :is="currentPart" :checkList="orderIdList"  @right-close="resetRightBox" @change="submit"/>
     </page-right>
   </div>
 </template>

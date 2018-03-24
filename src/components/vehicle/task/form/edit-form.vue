@@ -7,6 +7,7 @@
       left: 0;
     }
   }
+
   .info-part {
     .el-form-item {
       margin-bottom: 0;
@@ -16,7 +17,7 @@
 <template>
   <div class="content-part">
     <div class="content-right content-padding">
-      <h3>生成派送</h3>
+      <h3>编辑出车任务</h3>
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
         <div class="form-header-part">
           <div class="header">
@@ -79,24 +80,11 @@
             <h3 class="tit f-dib">派送信息</h3>
           </div>
           <div class="content">
-            <el-form-item label="承运商">
-              <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索承运商" :remote-method="filterTaskCarriers"
-                         :clearable="true"
-                         v-model="form.taskCarriers" popperClass="good-selects">
-                <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in orgList">
-                  <div style="overflow: hidden">
-                    <span class="pull-left" style="clear: right">{{org.name}}</span>
-                  </div>
-                  <div style="overflow: hidden">
-                    <span class="select-other-info pull-left">
-                      <span>系统代码:</span>{{org.manufacturerCode}}
-                    </span>
-                  </div>
-                </el-option>
-              </el-select>
-            </el-form-item>
             <two-column>
-              <el-form-item slot="left" label="任务类型">
+              <el-form-item slot="left" label="任务号">
+                {{form.transportTaskNo}}
+              </el-form-item>
+              <el-form-item slot="right" label="任务类型">
                 <el-select placeholder="请选择车型" v-model="form.type">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
                              v-for="item in deliveryTaskTypeList"></el-option>
@@ -104,11 +92,47 @@
               </el-form-item>
             </two-column>
             <two-column>
+              <el-form-item slot="left" label="承运商">
+                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索承运商" :remote-method="filterTaskCarriers"
+                           :clearable="true"
+                           v-model="form.taskCarriers" popperClass="good-selects">
+                  <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in orgList">
+                    <div style="overflow: hidden">
+                      <span class="pull-left" style="clear: right">{{org.name}}</span>
+                    </div>
+                    <div style="overflow: hidden">
+                    <span class="select-other-info pull-left">
+                      <span>系统代码:</span>{{org.manufacturerCode}}
+                    </span>
+                    </div>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item slot="right" label="包件数" prop="incubatorCount">
+                <oms-input type="number" :min="0" v-model="form.incubatorCount" placeholder="请输入包件数"
+                           @blur="setIncubatorCount(form.incubatorCount)"></oms-input>
+              </el-form-item>
+            </two-column>
+            <two-column>
+              <el-form-item slot="left" label="载重" prop="goodsWeight">
+                <oms-input v-model="form.carLoadBearing" placeholder="请输入车辆载重"
+                           @blur="setGoodsWeight(form.carLoadBearing)">
+                  <template slot="append">kg</template>
+                </oms-input>
+              </el-form-item>
+              <el-form-item slot="right" label="容积" prop="goodsVolume">
+                <oms-input v-model="form.carVolume" placeholder="请输入车辆容积"
+                           @blur="setGoodsVolume(form.carVolume)">
+                  <template slot="append">m³</template>
+                </oms-input>
+              </el-form-item>
+            </two-column>
+            <two-column>
               <el-form-item slot="left" label="理货员">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterTallyClerk"
                            :clearable="true"
-                           v-model="form.tallyClerkId" @change="setTallyClerk(form.tallyClerkId)"
-                           popperClass="good-selects">
+                           v-model="form.tallyClerkId" popperClass="good-selects"
+                           @change="setTallyClerk(form.tallyClerkId)">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in tallyClerkList">
                     <div style="overflow: hidden">
                       <span class="pull-left" style="clear: right">{{user.name}}</span>
@@ -140,9 +164,11 @@
 </template>
 <script>
   import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
+  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
 
   export default {
-    data () {
+    components: {TwoColumn},
+    data() {
       return {
         rules: {
           'driveId': [
@@ -167,7 +193,7 @@
         return this.$getDict('deliveryTaskType');
       }
     },
-    props: ['checkList'],
+    props: ['formItem'],
     watch: {
       checkList: {
         handler: function (val) {
@@ -185,6 +211,15 @@
             this.form.driveId = '';
           }
         }
+      },
+      formItem: function (val) {
+        if (val.id) {
+          this.form = val;
+          this.filterUser(this.form.defaultDriverName);
+          this.filterTallyClerk(this.form.tallyClerk);
+          this.getCarList(this.form.carPlateNumber);
+          this.filterTaskCarriers(this.form.taskCarriersName);
+        }
       }
     },
     methods: {
@@ -193,10 +228,23 @@
           this.orgList = res.data.list;
         });
       },
+      setIncubatorCount: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.incubatorCount = parseInt(value, 10);
+      },
+      setGoodsWeight: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.goodsWeight = parseFloat(value);
+      },
+      setGoodsVolume: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.goodsVolume = parseFloat(value);
+      },
       clearCarInfo: function () {
         this.form.carId = '';
         this.form.driveId = '';
         this.form.driverPhone = '';
+        this.form.driverName = '';
         this.carInfo = {};
       },
       filterUser: function (query) {
@@ -246,6 +294,8 @@
             if (val.id === id) {
               this.form.driveId = val.id;
               this.form.driverPhone = val.phone;
+              console.log(val.name);
+              this.form.driverName = val.name;
             }
           });
         }
@@ -264,18 +314,18 @@
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.doing = true;
-            TransportTask.save(this.form).then(res => {
+            TransportTask.update(this.form.id, this.form).then(res => {
               this.$notify.success({
                 duration: 2000,
                 name: '成功',
-                message: '新增派送任务成功'
+                message: '编辑派送任务成功'
               });
               this.doing = false;
               this.$emit('change', res.data);
               this.$emit('right-close');
             }).catch(error => {
               this.$notify.error({
-                message: error.response.data && error.response.data.msg || '新增派送任务失败'
+                message: error.response.data && error.response.data.msg || '编辑派送任务失败'
               });
               this.doing = false;
             });

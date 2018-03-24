@@ -11,7 +11,7 @@ export default {
     5: {'title': '已取消', status: '5', num: ''}
   },
   wayBillType: {
-    0: {'title': '待确定', status: '-1', num: ''},
+    0: {'title': '待确认', status: '-1', num: ''},
     1: {'title': '待派车', status: '0', num: ''},
     2: {'title': '待启运', status: '1', num: ''},
     3: {'title': '待签收', status: '2', num: ''},

@@ -20,6 +20,18 @@
             添加
           </el-button>
         </perm>
+        <perm label="tms-waybill-confirm">
+          <el-button plain size="small" @click="autoConfirmWayBill" v-if="activeStatus===0||activeStatus==='0'">
+            <f-a class="icon-small" name="wave"></f-a>
+            确认运单
+          </el-button>
+        </perm>
+        <perm label="tms-waybill-confirm">
+          <el-button plain size="small" @click="batchConfirmWayBill" v-if="activeStatus===0||activeStatus==='0'">
+            <f-a class="icon-small" name="wave"></f-a>
+            批量确认运单
+          </el-button>
+        </perm>
       </template>
     </search-part>
 
@@ -28,6 +40,8 @@
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="2">
+          <el-checkbox @change="checkAll" v-model="isCheckAll"
+                       v-if="activeStatus===0||activeStatus==='0'"></el-checkbox>
           运单号
         </el-col>
         <el-col :span="2">类型</el-col>
@@ -58,6 +72,10 @@
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="2" class="special-col R">
+              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
+                   v-if="activeStatus===0||activeStatus==='0'">
+                <el-checkbox v-model="item.isChecked"></el-checkbox>
+              </div>
               <div>
                 {{item.waybillNumber}}
               </div>
@@ -177,6 +195,9 @@
     <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentSignPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
+    <page-right :show="showConfirmIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentConfirmPart" :checkList="checkListPara" @right-close="resetRightBox" @change="submit"/>
+    </page-right>
 
   </div>
 </template>
@@ -188,6 +209,7 @@
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
   import StatusMixin from '@/mixins/statusMixin';
+  import confirmForm from './form/confirm-form';
 
   export default {
     components: {
@@ -203,9 +225,11 @@
         showIndex: -1,
         showInfoIndex: -1,
         showSignIndex: -1,
+        showConfirmIndex: -1,
         currentPart: null,
         currentInfoPart: null,
         currentSignPart: null,
+        currentConfirmPart: null,
         dialogComponents: {
           0: addForm
         },
@@ -214,6 +238,9 @@
         },
         dialogSignComponents: {
           0: signForm
+        },
+        dialogConfirmComponents: {
+          0: confirmForm
         },
         pager: {
           currentPage: 1,
@@ -252,6 +279,55 @@
       this.getTmsWayBillPage(1);
     },
     methods: {
+      batchConfirmWayBill: function () {
+        if (!this.checkList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选需要确认的运单'
+          });
+          return;
+        }
+        this.showConfirmIndex = 0;
+        this.currentConfirmPart = this.dialogConfirmComponents[0];
+        this.$nextTick(() => {
+          this.checkListPara = this.checkList.slice();
+        });
+      },
+      autoConfirmWayBill: function () {
+        this.$confirm('是否对状态为待确认的运单进行批量确认操作?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let param = Object.assign({}, this.filters);
+          TmsWayBill.autoConfirmWayBill(param).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '已成功生成运单'
+            });
+            this.filters = {
+              status: '0',
+              waybillNumber: '',
+              waybillType: '',
+              shipmentWay: '',
+              serviceType: '',
+              senderId: '',
+              receiverId: '',
+              startTime: '',
+              endTime: ''
+            };
+            this.getTmsWayBillPage(1);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.msg || '批量确认运单失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       confirm: function (item) {
         this.$confirm('确认运单"' + item.waybillNumber + '信息"?', '', {
           confirmButtonText: '确定',
@@ -274,6 +350,35 @@
         }).catch(() => {
 
         });
+      },
+      checkItem: function (item) {
+        // 单选
+        item.isChecked = !item.isChecked;
+        let index = this.checkList.indexOf(item);
+        if (item.isChecked) {
+          if (index === -1) {
+            this.checkList.push(item);
+          }
+        } else {
+          this.checkList.splice(index, 1);
+        }
+      },
+      checkAll() {
+        // 全选
+        if (this.isCheckAll) {
+          this.dataList.forEach(item => {
+            item.isChecked = true;
+            let index = this.checkList.indexOf(item);
+            if (index === -1) {
+              this.checkList.push(item);
+            }
+          });
+        } else {
+          this.dataList.forEach(item => {
+            item.isChecked = false;
+          });
+          this.checkList = [];
+        }
       },
       signWayBill: function (item) {
         this.showSignIndex = 0;
@@ -324,6 +429,7 @@
         this.showInfoIndex = -1;
         this.shoWayBillPart = false;
         this.showSignIndex = -1;
+        this.showConfirmIndex = -1;
       },
       getTmsWayBillPage: function (pageNo, isContinue = false) {
         this.pager.currentPage = pageNo;
@@ -333,6 +439,9 @@
         }, this.filters);
         this.loadingData = true;
         TmsWayBill.query(param).then(res => {
+          res.data.list.forEach(val => {
+            val.isChecked = false;
+          });
           if (isContinue) {
             this.dataList = this.showTypeList.concat(res.data.list);
           } else {
