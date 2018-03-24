@@ -167,7 +167,7 @@
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
   import {TmsOrder} from '@/resources';
-  import MapPath from '../../common/map-list';
+  import MapPath from '../../common/map-list-new';
 
   export default {
     components: {TwoColumn, MapPath},
@@ -183,7 +183,7 @@
           {name: '货品信息', key: 3},
           {name: '其他信息', key: 4},
           {name: '货品列表', key: 5},
-          {name: '派送轨迹', key: 6}
+          {name: '派送信息', key: 6}
         ],
         currentTab: {},
         form: {
