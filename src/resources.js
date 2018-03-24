@@ -94,7 +94,13 @@ export const TmsWayBill = resource('/tms-waybill', http, {
     return http.put('/tms-waybill/' + id + '/confirm', {});
   },
   signTmsWayBill: (id, obj) => {
-    return http.put('/tms-waybill/' + id + '/sign', {obj});
+    return http.put('/tms-waybill/' + id + '/sign', obj);
+  },
+  autoConfirmWayBill: (params) => {
+    return http.put('/tms-waybill/batch/confirm', params);
+  },
+  batchConfirmWayBill: (params) => {
+    return http.put('/tms-waybill/batch/confirm/list', params);
   }
 });
 
