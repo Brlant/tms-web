@@ -97,9 +97,11 @@
     <app-header :to-route="toRoute" v-if="userType"></app-header>
     <div class="main-body container">
       <div class="layer-loading" v-show="loading"><i></i><i></i><i></i></div>
-      <transition name="scale" mode="out-in" appear>
+      <el-scrollbar tag="div" class="body_scroll">
+        <transition name="scale" mode="out-in" appear>
           <router-view class="app-content-view"></router-view>
-      </transition>
+        </transition>
+      </el-scrollbar>
     </div>
     <attachmentDialog></attachmentDialog>
     <print-dialog></print-dialog>

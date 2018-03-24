@@ -3,20 +3,41 @@
 }
 
 .app-body {
+  height: 100%;
   position: relative;
   box-sizing: border-box;
   padding-top: 62px;
 }
 
 .main-body {
+  height: calc(100% - 62px);
+  overflow: hidden;
   min-height: 300px;
 }
 
+.app-content-view {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.main-header, .sub-menu {
+  .container {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+}
+
+.body_scroll {
+  height: 100%;
+  .el-scrollbar__wrap {
+    overflow-x: hidden;
+  }
+}
 
 .full-width .container {
   width: auto;
-  margin-left: 15px;
-  margin-right: 15px;
+  //margin-left: 15px;
+  //margin-right: 15px;
 }
 
 .full-width .container.d-table {
@@ -27,6 +48,8 @@
   margin-left: 0;
   margin-right: 0;
 }
+
+
 
 .sub-menu {
   background: #eee;
