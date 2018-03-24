@@ -32,7 +32,7 @@
         </el-form-item>
         <el-form-item label="附件">
           <oms-upload :fileList="attachmentList" @change="changeFiles"
-                      :formData="{ objectId: 'waybill', objectType: form.id}"></oms-upload>
+                      :formData="{ objectId: form.id, objectType: 'waybill'}"></oms-upload>
         </el-form-item>
       </el-form>
     </template>

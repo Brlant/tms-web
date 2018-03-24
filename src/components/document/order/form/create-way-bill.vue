@@ -40,8 +40,7 @@
         </div>
       </div>
       <div class="content-right min-row" v-show="currentOrder.id">
-        <el-form ref="currentOrder" :rules="rules" :model="currentOrder" class="clearfix" label-width="100px"
-                 onsubmit="return false">
+        <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
           <div class="form-header-part">
             <div class="header">
               <div class="sign f-dib"></div>
@@ -49,28 +48,24 @@
                 {{pageSets[0].name}}</h3>
             </div>
             <div class="content">
-              <two-column>
-                <el-form-item slot="left" label="订单号:">
-                  {{currentOrder.orderNo}}
-                </el-form-item>
-                <el-form-item slot="right" label="订单类型:">
-                  <dict :dict-group="'bizType'" :dict-key="currentOrder.waybillType"></dict>
-                </el-form-item>
-              </two-column>
-              <two-column>
-                <el-form-item slot="left" label="发运方式:">
-                  <dict :dict-group="'transportationCondition'" :dict-key="currentOrder.shipmentWay"></dict>
-                </el-form-item>
-                <el-form-item slot="right" label="委托单号:">
-                  {{currentOrder.tmsOrderNumber}}
-                </el-form-item>
-              </two-column>
-                <!--<el-form-item slot="right" label="服务方式">-->
-                  <!--<dict :dict-group="'serviceType'" :dict-key="currentOrder.serviceType"></dict>-->
-                <!--</el-form-item>-->
-              </two-column>
+              <oms-col label="订单号" :rowSpan="span" :value="form.orderNo"/>
+              <oms-col label="订单类型" :rowSpan="span" :value="form.waybillType">
+                <dict :dict-group="'bizType'" :dict-key="form.waybillType"></dict>
+              </oms-col>
+              <oms-col label="发运方式" :rowSpan="span" :value="form.shipmentWay">
+                <dict :dict-group="'transportationCondition'" :dict-key="form.shipmentWay"></dict>
+              </oms-col>
+              <oms-col label="委托单号" :rowSpan="span" :value="form.tmsOrderNumber"/>
+              <oms-col label="创建人" :rowSpan="span" :value="form.creatorName"/>
+              <oms-col label="创建时间" :rowSpan="span" :value="form.createTime">
+                {{form.createTime|time}}
+              </oms-col>
+              <oms-col label="修改人" :rowSpan="span" :value="form.updateName"/>
+              <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime">
+                {{form.updateTime|time}}
+              </oms-col>
             </div>
-            <div class="hr mb-10"></div>
+            <div class="hr mb-10 clearfix"></div>
           </div>
           <div class="form-header-part">
             <div class="header">
@@ -79,25 +74,13 @@
                 {{pageSets[1].name}}</h3>
             </div>
             <div class="content">
-              <el-form-item label="货主:">
-                {{currentOrder.orgName}}
-              </el-form-item>
-              <el-form-item label="发货单位:">
-                {{currentOrder.senderName}}
-              </el-form-item>
-              <two-column>
-                <el-form-item slot="left" label="发货联系人:">
-                  {{currentOrder.senderContact}}
-                </el-form-item>
-                <el-form-item slot="right" label="发货联系电话:">
-                  {{currentOrder.senderContactPhone}}
-                </el-form-item>
-              </two-column>
-              <el-form-item slot="right" label="发货地址:">
-                {{currentOrder.senderAddress}}
-              </el-form-item>
+              <oms-col label="货主" :rowSpan="span" :value="form.orgName"/>
+              <oms-col label="发货单位" :rowSpan="span" :value="form.senderName"/>
+              <oms-col label="发货联系人" :rowSpan="span" :value="form.senderContact"/>
+              <oms-col label="发货联系电话" :rowSpan="span" :value="form.senderContactPhone"/>
+              <oms-col label="发货地址" :rowSpan="span" :value="form.senderAddress"/>
             </div>
-            <div class="hr mb-10"></div>
+            <div class="hr mb-10 clearfix"></div>
           </div>
           <div class="form-header-part">
             <div class="header">
@@ -106,22 +89,12 @@
                 {{pageSets[2].name}}</h3>
             </div>
             <div class="content">
-              <el-form-item label="收货单位:">
-                {{currentOrder.receiverName}}
-              </el-form-item>
-              <two-column>
-                <el-form-item slot="left" label="收货联系人:">
-                  {{currentOrder.receiverContact}}
-                </el-form-item>
-                <el-form-item slot="right" label="收货联系电话:">
-                  {{currentOrder.receiverContractPhone}}
-                </el-form-item>
-              </two-column>
-              <el-form-item slot="right" label="收货地址:">
-                {{currentOrder.receiverAddress}}
-              </el-form-item>
+              <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName"/>
+              <oms-col label="收货联系人" :rowSpan="span" :value="form.receiverContact"/>
+              <oms-col label="收货联系电话" :rowSpan="8" :value="form.receiverContractPhone"/>
+              <oms-col label="收货地址" :rowSpan="6" :value="form.receiverAddress"/>
             </div>
-            <div class="hr mb-10"></div>
+            <div class="hr mb-10 clearfix"></div>
           </div>
           <div class="form-header-part">
             <div class="header">
@@ -130,60 +103,35 @@
                 {{pageSets[3].name}}</h3>
             </div>
             <div class="content">
-              <two-column>
-                <el-form-item slot="left" label="整装箱数:">
-                  {{currentOrder.wholeBoxCount}} <span v-if="currentOrder.wholeBoxCount">箱</span>
-                </el-form-item>
-                <el-form-item slot="right" label="散装箱数:">
-                  {{currentOrder.bulkBoxCount}} <span v-if="currentOrder.bulkBoxCount">箱</span>
-                </el-form-item>
-              </two-column>
-              <two-column>
-                <el-form-item slot="left" label="包件数:">
-                  {{currentOrder.incubatorCount}} <span v-if="currentOrder.incubatorCount">件</span>
-                </el-form-item>
-                <el-form-item slot="right" label="声明价格:">
-                  <span v-if="currentOrder.goodsPrice">人民币</span> {{currentOrder.goodsPrice}}
-                </el-form-item>
-              </two-column>
-              <two-column>
-                <el-form-item slot="left" label="重量:" prop="goodsWeight">
-                  {{currentOrder.goodsWeight}} <span v-if="currentOrder.goodsWeight">kg</span>
-                </el-form-item>
-                <el-form-item slot="right" label="体积:" prop="goodsVolume">
-                  {{currentOrder.goodsVolume}} <span v-if="currentOrder.goodsVolume">m³</span>
-                </el-form-item>
-              </two-column>
-              <el-form-item label="货品名称:">
-                {{currentOrder.goodsTotalName}}
-              </el-form-item>
+              <oms-col label="整装箱数" :rowSpan="span" :value="form.wholeBoxCount"/>
+              <oms-col label="散装箱数" :rowSpan="span" :value="form.bulkBoxCount"/>
+              <oms-col label="包件数" :rowSpan="span" :value="form.incubatorCount"/>
+              <oms-col label="声明价格" :rowSpan="span" :value="form.goodsPrice">
+                <span v-if="form.goodsPrice">¥</span> {{form.goodsPrice}}
+              </oms-col>
+              <oms-col label="重量" :rowSpan="span" :value="form.goodsWeight">
+                {{form.goodsWeight}} <span v-if="form.goodsWeight">kg</span>
+              </oms-col>
+              <oms-col label="体积" :rowSpan="span" :value="form.goodsVolume">
+                {{form.goodsVolume}} <span v-if="form.goodsVolume">m³</span>
+              </oms-col>
+              <oms-col label="货品名称" :rowSpan="span" :value="form.goodsTotalName"/>
             </div>
-            <div class="hr mb-10"></div>
+            <div class="hr mb-10 clearfix"></div>
           </div>
           <div class="form-header-part">
             <div class="header">
               <div class="sign f-dib"></div>
-              <h3 class="tit f-dib index-tit" :class="{active: pageSets[5].key === currentTab.key}">
+              <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">
                 {{pageSets[4].name}}</h3>
             </div>
             <div class="content">
-              <two-column>
-                <el-form-item slot="left" label="提货时间:">
-                  {{currentOrder.pickUpTime|date}}
-                </el-form-item>
-                <el-form-item slot="right" label="送达时限:">
-                  {{currentOrder.deliveryTime|date}}
-                </el-form-item>
-              </two-column>
-              <el-form-item label="始发地:">
-                {{currentOrder.provenance}}
-              </el-form-item>
-              <el-form-item label="目的地:">
-                {{currentOrder.destination}}
-              </el-form-item>
-              <el-form-item slot="right" label="备注:">
-                {{currentOrder.remark}}
-              </el-form-item>
+              <oms-col label="提货时间" :rowSpan="span" :value="form.pickUpTime">{{form.pickUpTime|date}}</oms-col>
+              <oms-col label="送达时限" :rowSpan="span" :value="form.deliveryTime">{{form.deliveryTime|date}}</oms-col>
+              <oms-col label="始发地" :rowSpan="span" :value="form.provenance"/>
+              <oms-col label="目的地" :rowSpan="span" :value="form.destination"/>
+              <oms-col label="备注" :rowSpan="span" :value="form.remark"/>
+              <div class="hr mb-10 clearfix"></div>
             </div>
           </div>
           <div class="form-header-part">
@@ -193,7 +141,7 @@
                 {{pageSets[5].name}}</h3>
             </div>
             <div class="content">
-              <el-table :data="currentOrder.goodsList" border style="width: 100%">
+              <el-table :data="form.goodsList" border style="width: 100%">
                 <el-table-column prop="goodsName" label="货品名称" width="200">
                 </el-table-column>
                 <el-table-column prop="weight" label="货品重量(kg)">
@@ -211,6 +159,16 @@
                 <el-table-column prop="code" label="货品追溯码">
                 </el-table-column>
               </el-table>
+            </div>
+          </div>
+          <div class="form-header-part">
+            <div class="header">
+              <div class="sign f-dib"></div>
+              <h3 class="tit f-dib index-tit" :class="{active: pageSets[6].key === currentTab.key}">
+                {{pageSets[6].name}}</h3>
+            </div>
+            <div class="content">
+              <map-path :formItem="formItem"></map-path>
             </div>
           </div>
         </el-form>
