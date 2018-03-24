@@ -20,10 +20,10 @@
             添加
           </el-button>
         </perm>
-        <perm label="tms-waybill-confirm">
+        <perm label="tms-waybill-verifyPass">
           <el-button plain size="small" @click="autoConfirmWayBill" v-if="activeStatus===0||activeStatus==='0'">
             <f-a class="icon-small" name="wave"></f-a>
-            确认运单
+            确认全部运单
           </el-button>
         </perm>
         <perm label="tms-waybill-confirm">
