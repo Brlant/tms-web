@@ -215,7 +215,7 @@
       formItem: function (val) {
         if (val.id) {
           this.form = val;
-          this.filterUser(this.form.defaultDriverName);
+          this.filterUser(this.form.driverName);
           this.filterTallyClerk(this.form.tallyClerk);
           this.getCarList(this.form.carPlateNumber);
           this.filterTaskCarriers(this.form.taskCarriersName);
