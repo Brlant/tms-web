@@ -93,7 +93,7 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="承运商">
-                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索承运商" :remote-method="filterTaskCarriers"
+                <el-select filterable remote placeholder="名称/拼音/系统代码搜索承运商" :remote-method="filterTaskCarriers"
                            :clearable="true"
                            v-model="form.taskCarriers" popperClass="good-selects">
                   <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in orgList">
@@ -129,7 +129,7 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="理货员">
-                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterTallyClerk"
+                <el-select filterable remote placeholder="名称/拼音搜索理货员" :remote-method="filterTallyClerk"
                            :clearable="true"
                            v-model="form.tallyClerkId" popperClass="good-selects"
                            @change="setTallyClerk(form.tallyClerkId)">
