@@ -141,14 +141,14 @@
               <div>
                 <div>
                   <perm label="tms-waybill-edit">
-                    <span @click.stop="edit(item)" v-if="activeStatus===0||activeStatus==='0'">
+                    <span @click.stop="edit(item)" v-if="activeStatus===-2||activeStatus==='-2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
                   </perm>
                   <perm label="tms-waybill-edit">
-                    <span @click.stop="confirm(item)" v-if="activeStatus===0||activeStatus==='0'">
+                    <span @click.stop="confirm(item)" v-if="activeStatus===-2||activeStatus==='-2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-verifyPass"></i>
                       </a>确认
@@ -157,7 +157,7 @@
                 </div>
                 <div style="padding-top: 2px">
                   <perm label="tms-waybill-cancel" class="opera-btn">
-                    <span @click.stop="cancelWayBill(item)" v-if="activeStatus===0||activeStatus==='0'">
+                    <span @click.stop="cancelWayBill(item)" v-if="activeStatus===-2||activeStatus==='-2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
@@ -251,7 +251,7 @@
         action: '',
         form: {},
         filters: {
-          status: '-1',
+          status: '-2',
           waybillNumber: '',
           waybillType: '',
           shipmentWay: '',
@@ -456,11 +456,12 @@
         TmsWayBill.queryStateNum(params).then(res => {
           let data = res.data;
           this.orderType[0].num = data['pend-confirm'];
-          this.orderType[1].num = data['pend-choose-car'];
-          this.orderType[2].num = data['pend-shipment'];
-          this.orderType[3].num = data['pend-sign'];
-          this.orderType[4].num = data['complete'];
-          this.orderType[5].num = data['canceled'];
+          this.orderType[1].num = data['pend-package'];
+          this.orderType[2].num = data['pend-choose-car'];
+          this.orderType[3].num = data['pend-shipment'];
+          this.orderType[4].num = data['pend-sign'];
+          this.orderType[5].num = data['complete'];
+          this.orderType[6].num = data['canceled'];
         });
       },
       showPart (index) {
