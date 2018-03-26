@@ -93,6 +93,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   confirmWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/confirm', {});
   },
+  packageWayBill: (id) => {
+    return http.put('/tms-waybill/' + id + '/pack', {});
+  },
   signTmsWayBill: (id, obj) => {
     return http.put('/tms-waybill/' + id + '/sign', obj);
   },

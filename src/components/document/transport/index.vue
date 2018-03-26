@@ -141,14 +141,14 @@
               <div>
                 <div>
                   <perm label="tms-waybill-edit">
-                    <span @click.stop="edit(item)" v-if="activeStatus===-2||activeStatus==='-2'">
+                    <span @click.stop="edit(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
                   </perm>
                   <perm label="tms-waybill-edit">
-                    <span @click.stop="confirm(item)" v-if="activeStatus===-2||activeStatus==='-2'">
+                    <span @click.stop="confirm(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-verifyPass"></i>
                       </a>确认
@@ -157,15 +157,22 @@
                 </div>
                 <div style="padding-top: 2px">
                   <perm label="tms-waybill-cancel" class="opera-btn">
-                    <span @click.stop="cancelWayBill(item)" v-if="activeStatus===-2||activeStatus==='-2'">
+                    <span @click.stop="cancelWayBill(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
                     </span>
                   </perm>
+                  <perm label="tms-waybill-pack" class="opera-btn">
+                    <span @click.stop="packageWayBill(item)" v-if="activeStatus===1||activeStatus==='1'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-basic"></i>
+                      </a>打包
+                    </span>
+                  </perm>
                 </div>
                   <perm label="tms-waybill-cancel" class="opera-btn">
-                    <span @click.stop="signWayBill(item)" v-if="activeStatus===3||activeStatus==='3'">
+                    <span @click.stop="signWayBill(item)" v-if="activeStatus===4||activeStatus==='4'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>签收
@@ -279,6 +286,29 @@
       this.getTmsWayBillPage(1);
     },
     methods: {
+      packageWayBill: function (item) {
+        this.$confirm('确认对运单"' + item.waybillNumber + '进行打包操作"?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TmsWayBill.packageWayBill(item.id).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '运单"' + item.waybillNumber + '已成功打包"'
+            });
+            this.getTmsWayBillPage(1);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.msg || '运单打包失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       batchConfirmWayBill: function () {
         if (!this.checkList.length) {
           this.$notify.warning({
