@@ -245,6 +245,10 @@
           this.formatVolume();
           this.formatWeight();
         }
+      },
+      dataRows: function () {
+        // 如果列表改变，清空数据
+        this.checkList = [];
       }
     },
     methods: {
