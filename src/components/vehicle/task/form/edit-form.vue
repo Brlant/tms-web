@@ -15,9 +15,12 @@
   }
 </style>
 <template>
-  <div class="content-part">
-    <div class="content-right content-padding">
-      <h3>编辑出车任务</h3>
+  <dialog-template :pageSets="pageSets" @selectTab="selectTab">
+    <template slot="title">编辑出车任务</template>
+    <template slot="btn">
+      <el-button plain @click="save('form')" :disabled="doing">保存</el-button>
+    </template>
+    <template slot="content">
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
         <div class="form-header-part">
           <div class="header">
@@ -159,8 +162,8 @@
           </el-form-item>
         </el-row>
       </el-form>
-    </div>
-  </div>
+    </template>
+  </dialog-template>
 </template>
 <script>
   import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
