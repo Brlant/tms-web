@@ -245,20 +245,22 @@
               {{pageSets[5].name}}</h3>
           </div>
           <div class="content">
-            <el-form-item label="提货时间">
-              <el-date-picker
-                v-model="form.pickUpTime"
-                type="date"
-                placeholder="选择提货时间" format="yyyy-MM-dd" @change="formatPickUpTime">
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="送达时限">
-              <el-date-picker
-                v-model="form.deliveryTime"
-                type="date"
-                placeholder="选择送达时限" format="yyyy-MM-dd" @change="formatDeliveryTime">
-              </el-date-picker>
-            </el-form-item>
+            <two-column>
+              <el-form-item slot="left" label="提货时间">
+                <el-date-picker
+                  v-model="form.pickUpTime"
+                  type="date"
+                  placeholder="选择提货时间" format="yyyy-MM-dd" @change="formatPickUpTime">
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item slot="right" label="送达时限">
+                <el-date-picker
+                  v-model="form.deliveryTime"
+                  type="date"
+                  placeholder="选择送达时限" format="yyyy-MM-dd" @change="formatDeliveryTime">
+                </el-date-picker>
+              </el-form-item>
+            </two-column>
             <el-form-item label="始发地">
               <oms-input v-model="form.provenance" placeholder="请输入始发地"></oms-input>
             </el-form-item>
@@ -276,8 +278,10 @@
 </template>
 <script>
   import {BaseInfo, TmsWayBill} from '@/resources';
+  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
 
   export default {
+    components: {TwoColumn},
     data () {
       return {
         list: [],
