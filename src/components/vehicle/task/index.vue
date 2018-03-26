@@ -21,12 +21,11 @@
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="3">任务号</el-col>
+        <el-col :span="4">任务号</el-col>
         <el-col :span="2">任务类型</el-col>
         <el-col :span="2">任务状态</el-col>
-        <el-col :span="1">司机</el-col>
+        <el-col :span="2">司机</el-col>
         <el-col :span="2">车牌号</el-col>
-        <el-col :span="2">理货员</el-col>
         <el-col :span="2">件数</el-col>
         <el-col :span="2">载重(kg)</el-col>
         <el-col :span="2">容积(m³)</el-col>
@@ -49,7 +48,7 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="3" class="R">
+            <el-col :span="4" class="R">
               <div>
                 {{item.transportTaskNo}}
               </div>
@@ -64,7 +63,7 @@
                 {{formatStatusTitle(item.status, orderType)}}
               </div>
             </el-col>
-            <el-col :span="1" class="R">
+            <el-col :span="2" class="R">
               <div>
                 {{item.driverName}}
               </div>
@@ -72,11 +71,6 @@
             <el-col :span="2" class="R">
               <div>
                 {{item.carPlateNumber}}
-              </div>
-            </el-col>
-            <el-col :span="2" class="R">
-              <div>
-                {{item.tallyClerk}}
               </div>
             </el-col>
             <el-col :span="2" class="R">

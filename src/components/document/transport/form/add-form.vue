@@ -232,7 +232,7 @@
                 </el-form-item>
               </two-column>
               <el-form-item label-width="120px">
-                <el-button @click.prevent="remove(hj)" :plain="true" type="danger">删货品详情</el-button>
+                <el-button @click.prevent="remove(hj)" :plain="true" type="danger">删除货品详情</el-button>
               </el-form-item>
             </div>
           </div>

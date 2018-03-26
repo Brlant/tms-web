@@ -38,64 +38,36 @@
               {{pageSets[0].name}}</h3>
           </div>
           <div class="content">
-            <two-column>
-              <el-form-item slot="left" label="任务编码:">
-                {{form.transportTaskNo}}
-              </el-form-item>
-              <el-form-item slot="right" label="任务名称:">
-                {{form.taskName}}
-              </el-form-item>
-            </two-column>
-            <two-column>
-              <el-form-item slot="left" label="任务类型:">
-                <dict :dict-group="'deliveryTaskType'" :dict-key="form.type"></dict>
-              </el-form-item>
-              <el-form-item slot="right" label="承运商:">
-                {{form.taskCarriersName}}
-              </el-form-item>
-            </two-column>
-            <two-column>
-              <el-form-item slot="left" label="车牌号:">
-                {{form.carPlateNumber}}
-              </el-form-item>
-              <el-form-item slot="right" label="司机:">
-                {{form.driverName}}
-              </el-form-item>
-            </two-column>
-            <two-column>
-              <el-form-item slot="left" label="理货员:">
-                {{form.tallyClerk}}
-              </el-form-item>
-              <el-form-item slot="right" label="件数:">
-                {{form.incubatorCount}}
-              </el-form-item>
-            </two-column>
-            <two-column>
-              <el-form-item slot="left" label="载重:">
-                {{form.carLoadBearing}} <span v-if="form.carLoadBearing">千克</span>
-              </el-form-item>
-              <el-form-item slot="right" label="容积:">
-                {{form.carVolume}} <span v-if="form.carVolume">立方米</span>
-              </el-form-item>
-            </two-column>
-            <two-column>
-              <el-form-item slot="left" label="创建人:">
-                {{form.creatorName}}
-              </el-form-item>
-              <el-form-item slot="right" label="创建时间:">
-                {{form.createTime|time}}
-              </el-form-item>
-            </two-column>
-            <two-column>
-              <el-form-item slot="left" label="修改人:">
-                {{form.updateName}}
-              </el-form-item>
-              <el-form-item slot="right" label="修改时间:">
-                {{form.updateTime|time}}
-              </el-form-item>
-            </two-column>
+            <oms-col label="任务编码" :rowSpan="span" :value="form.transportTaskNo"/>
+            <oms-col label="任务名称" :rowSpan="span" :value="form.taskName"/>
+            <oms-col label="任务名称" :rowSpan="span" :value="form.type">
+              <dict :dict-group="'deliveryTaskType'" :dict-key="form.type"></dict>
+            </oms-col>
+            <oms-col label="承运商" :rowSpan="span" :value="form.taskCarriersName"/>
+            <oms-col label="车牌号" :rowSpan="span" :value="form.carPlateNumber"/>
+            <oms-col label="司机" :rowSpan="span" :value="form.driverName"/>
+            <oms-col label="司机电话" :rowSpan="span" :value="form.driverPhone"/>
+            <span v-for="tallyClerk in form.tallyClerkDtoList">
+               <oms-col :label="'理货员'+tallyClerk.index+''" :rowSpan="span" :value="tallyClerk.userName"/>
+               <oms-col :label="'理货员'+tallyClerk.index+'电话'" :rowSpan="span" :value="tallyClerk.userPhone"/>
+            </span>
+            <oms-col label="件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>
+            <oms-col label="载重" :rowSpan="span" :value="form.carLoadBearing" isShow="true">
+              {{form.carLoadBearing}} <span v-if="form.carLoadBearing">千克</span>
+            </oms-col>
+            <oms-col label="容积" :rowSpan="span" :value="form.carLoadBearing" isShow="true">
+              {{form.carVolume}} <span v-if="form.carLoadBearing">立方米</span>
+            </oms-col>
+            <oms-col label="创建人" :rowSpan="span" :value="form.creatorName" isShow="true"/>
+            <oms-col label="创建时间" :rowSpan="span" :value="form.createTime" isShow="true">
+              {{form.createTime|time}}
+            </oms-col>
+            <oms-col label="修改人" :rowSpan="span" :value="form.updateName" isShow="true"/>
+            <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime" isShow="true">
+              {{form.updateTime|time}}
+            </oms-col>
           </div>
-          <div class="hr mb-10"></div>
+          <div class="hr mb-10 clearfix"></div>
         </div>
         <div class="form-header-part">
           <div class="header">
@@ -169,6 +141,7 @@
     components: {TwoColumn},
     data() {
       return {
+        span: 7,
         list: [],
         times: [],
         pageSets: [
@@ -203,6 +176,9 @@
         if (val.id) {
           TransportTask.getOneTransportTask(val.id).then(res => {
             this.form = res.data;
+            this.form.tallyClerkDtoList.forEach(val => {
+              val.index = this.form.tallyClerkDtoList.indexOf(val) + 1;
+            });
           });
         }
       },

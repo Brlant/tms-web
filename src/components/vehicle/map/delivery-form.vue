@@ -12,16 +12,27 @@
       margin-bottom: 0;
     }
   }
+
+  .part-hj-box {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
 </style>
 <template>
-  <div class="content-part">
-    <div class="content-right content-padding">
-      <h3>生成派送</h3>
+  <dialog-template :pageSets="pageSets" @selectTab="selectTab">
+    <template slot="title">生成派送</template>
+    <template slot="btn">
+      <el-button plain @click="save('form')" :disabled="doing">保存</el-button>
+    </template>
+    <template slot="content">
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib">车辆选择</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
+              {{pageSets[0].name}}</h3>
           </div>
           <div class="content">
             <el-form-item label="运货车辆" prop="receiverId">
@@ -76,27 +87,51 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib">派送信息</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">{{pageSets[1].name}}
+              <span @click="addTallyClerk" class="btn-circle"><i class="el-icon-t-plus"></i> </span>
+            </h3>
           </div>
           <div class="content">
-            <el-form-item label="承运商">
-              <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索承运商" :remote-method="filterTaskCarriers"
-                         :clearable="true"
-                         v-model="form.taskCarriers" popperClass="good-selects">
-                <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in orgList">
-                  <div style="overflow: hidden">
-                    <span class="pull-left" style="clear: right">{{org.name}}</span>
-                  </div>
-                  <div style="overflow: hidden">
-                    <span class="select-other-info pull-left">
-                      <span>系统代码:</span>{{org.manufacturerCode}}
-                    </span>
-                  </div>
-                </el-option>
-              </el-select>
-            </el-form-item>
+            <div class="part-hj-box" v-for="hj in form.clerkDtoList">
+              <two-column>
+                <el-form-item slot="left" label="理货员">
+                  <el-select filterable remote placeholder="请输入名称/拼音搜索" :remote-method="filterTallyClerk"
+                             :clearable="true"
+                             v-model="hj.userId"
+                             popperClass="good-selects">
+                    <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in tallyClerkList">
+                      <div style="overflow: hidden">
+                        <span class="pull-left" style="clear: right">{{user.name}}</span>
+                        <span class="pull-right">
+                        {{user.companyDepartmentName}}
+                      </span>
+                      </div>
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item slot="right" label="理货员电话">
+                  <oms-input v-model="hj.userPhone" placeholder="请输入理货员电话"></oms-input>
+                </el-form-item>
+              </two-column>
+              <el-form-item label-width="120px">
+                <el-button @click.prevent="remove(hj)" :plain="true" type="danger">删除理货员</el-button>
+              </el-form-item>
+            </div>
+          </div>
+          <div class="hr mb-10"></div>
+        </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">{{pageSets[2].name}}
+            </h3>
+          </div>
+          <div class="content">
             <two-column>
-              <el-form-item slot="left" label="任务类型">
+              <el-form-item slot="left" label="任务号">
+                {{form.transportTaskNo}}
+              </el-form-item>
+              <el-form-item slot="right" label="任务类型">
                 <el-select placeholder="请选择车型" v-model="form.type">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
                              v-for="item in deliveryTaskTypeList"></el-option>
@@ -104,39 +139,49 @@
               </el-form-item>
             </two-column>
             <two-column>
-              <el-form-item slot="left" label="理货员">
-                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterTallyClerk"
+              <el-form-item slot="left" label="承运商">
+                <el-select filterable remote placeholder="名称/拼音/系统代码搜索承运商" :remote-method="filterTaskCarriers"
                            :clearable="true"
-                           v-model="form.tallyClerkId" @change="setTallyClerk(form.tallyClerkId)"
-                           popperClass="good-selects">
-                  <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in tallyClerkList">
+                           v-model="form.taskCarriers" popperClass="good-selects">
+                  <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in orgList">
                     <div style="overflow: hidden">
-                      <span class="pull-left" style="clear: right">{{user.name}}</span>
-                      <span class="pull-right">
-                        {{user.companyDepartmentName}}
-                      </span>
+                      <span class="pull-left" style="clear: right">{{org.name}}</span>
+                    </div>
+                    <div style="overflow: hidden">
+                    <span class="select-other-info pull-left">
+                      <span>系统代码:</span>{{org.manufacturerCode}}
+                    </span>
                     </div>
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item slot="right" label="理货员电话">
-                <oms-input v-model="form.tallyClerkPhone" placeholder="请输入理货员电话"></oms-input>
+              <el-form-item slot="right" label="包件数" prop="incubatorCount">
+                <oms-input type="number" :min="0" v-model="form.incubatorCount" placeholder="请输入包件数"
+                           @blur="setIncubatorCount(form.incubatorCount)"></oms-input>
+              </el-form-item>
+            </two-column>
+            <two-column>
+              <el-form-item slot="left" label="载重" prop="goodsWeight">
+                <oms-input v-model="form.carLoadBearing" placeholder="请输入车辆载重"
+                           @blur="setGoodsWeight(form.carLoadBearing)">
+                  <template slot="append">kg</template>
+                </oms-input>
+              </el-form-item>
+              <el-form-item slot="right" label="容积" prop="goodsVolume">
+                <oms-input v-model="form.carVolume" placeholder="请输入车辆容积"
+                           @blur="setGoodsVolume(form.carVolume)">
+                  <template slot="append">m³</template>
+                </oms-input>
               </el-form-item>
             </two-column>
             <el-form-item label="派送要求">
               <oms-input v-model="form.remark" type="textarea" placeholder="请输入派送要求"></oms-input>
             </el-form-item>
           </div>
-          <div class="hr mb-10"></div>
         </div>
-        <el-row class="text-center" style="margin-right: 80px">
-          <el-form-item>
-            <el-button type="primary" @click="save('form')" :disabled="doing">保存</el-button>
-          </el-form-item>
-        </el-row>
       </el-form>
-    </div>
-  </div>
+    </template>
+  </dialog-template>
 </template>
 <script>
   import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
@@ -154,12 +199,19 @@
         carList: [],
         carInfo: {},
         form: {
-          orderIdList: []
+          orderIdList: [],
+          clerkDtoList: [{userId: '', userPhone: ''}]
         },
         doing: false,
         userList: [],
         tallyClerkList: [],
-        orgList: []
+        orgList: [],
+        pageSets: [
+          {name: '车辆选择', key: 0},
+          {name: '理货员信息', key: 1},
+          {name: '派送信息', key: 2}
+        ],
+        currentTab: {}
       };
     },
     computed: {
@@ -188,6 +240,20 @@
       }
     },
     methods: {
+      selectTab(item) {
+        this.currentTab = item;
+      },
+      remove: function (item) {
+        let index = this.form.clerkDtoList.indexOf(item);
+        // 移除删除项
+        this.form.clerkDtoList.splice(index, 1);
+      },
+      addTallyClerk: function () {
+        let tpl = {};
+        // 计算排序值
+        tpl = Object.assign(tpl, {userId: '', userPhone: ''});
+        this.form.clerkDtoList.splice(0, 0, tpl);
+      },
       filterTaskCarriers: function (query) {// 过滤承运商
         BaseInfo.query({keyWord: query}).then(res => {
           this.orgList = res.data.list;
@@ -250,19 +316,19 @@
           });
         }
       },
-      setTallyClerk: function (id) {
-        if (id) {
-          this.tallyClerkList.forEach(val => {
-            if (val.id === id) {
-              this.form.tallyClerkId = val.id;
-              this.form.tallyClerkPhone = val.phone;
-            }
-          });
-        }
-      },
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
+            // 处理理货员列表
+            if (this.form.clerkDtoList) {
+              let list = [];
+              this.form.clerkDtoList.forEach(val => {
+                if (val.userId !== '' || val.userPhone !== '') {
+                  list.push(val);
+                }
+              });
+              this.form.clerkDtoList = list;
+            }
             this.doing = true;
             TransportTask.save(this.form).then(res => {
               this.$notify.success({

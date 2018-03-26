@@ -25,7 +25,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib">车辆选择</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">{{pageSets[0].name}}
+            </h3>
           </div>
           <div class="content">
             <el-form-item label="运货车辆" prop="receiverId">
@@ -80,7 +81,42 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib">派送信息</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">{{pageSets[1].name}}
+              <span @click="addTallyClerk" class="btn-circle"><i class="el-icon-t-plus"></i> </span>
+            </h3>
+          </div>
+          <div class="content">
+            <div class="part-hj-box" v-for="hj in form.tallyClerkDtoList">
+              <two-column>
+                <el-form-item slot="left" label="理货员">
+                  <el-select filterable remote placeholder="请输入名称/拼音搜索" :remote-method="filterTallyClerk"
+                             :clearable="true" v-model="hj.userId" popperClass="good-selects">
+                    <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in tallyClerkList">
+                      <div style="overflow: hidden">
+                        <span class="pull-left" style="clear: right">{{user.name}}</span>
+                        <span class="pull-right">
+                        {{user.companyDepartmentName}}
+                      </span>
+                      </div>
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item slot="right" label="理货员电话">
+                  <oms-input v-model="hj.userPhone" placeholder="请输入理货员电话"></oms-input>
+                </el-form-item>
+              </two-column>
+              <el-form-item label-width="120px">
+                <el-button @click.prevent="remove(hj)" :plain="true" type="danger">删除理货员</el-button>
+              </el-form-item>
+            </div>
+          </div>
+          <div class="hr mb-10"></div>
+        </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">{{pageSets[2].name}}
+            </h3>
           </div>
           <div class="content">
             <two-column>
@@ -130,37 +166,11 @@
                 </oms-input>
               </el-form-item>
             </two-column>
-            <two-column>
-              <el-form-item slot="left" label="理货员">
-                <el-select filterable remote placeholder="名称/拼音搜索理货员" :remote-method="filterTallyClerk"
-                           :clearable="true"
-                           v-model="form.tallyClerkId" popperClass="good-selects"
-                           @change="setTallyClerk(form.tallyClerkId)">
-                  <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in tallyClerkList">
-                    <div style="overflow: hidden">
-                      <span class="pull-left" style="clear: right">{{user.name}}</span>
-                      <span class="pull-right">
-                        {{user.companyDepartmentName}}
-                      </span>
-                    </div>
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item slot="right" label="理货员电话">
-                <oms-input v-model="form.tallyClerkPhone" placeholder="请输入理货员电话"></oms-input>
-              </el-form-item>
-            </two-column>
             <el-form-item label="派送要求">
               <oms-input v-model="form.remark" type="textarea" placeholder="请输入派送要求"></oms-input>
             </el-form-item>
           </div>
-          <div class="hr mb-10"></div>
         </div>
-        <el-row class="text-center" style="margin-right: 80px">
-          <el-form-item>
-            <el-button type="primary" @click="save('form')" :disabled="doing">保存</el-button>
-          </el-form-item>
-        </el-row>
       </el-form>
     </template>
   </dialog-template>
@@ -183,12 +193,25 @@
         carList: [],
         carInfo: {},
         form: {
-          orderIdList: []
+          orderIdList: [],
+          tallyClerkDtoList: [{
+            id: '',
+            index: '',
+            userId: '',
+            userName: '',
+            userPhone: ''
+          }]
         },
         doing: false,
         userList: [],
         tallyClerkList: [],
-        orgList: []
+        orgList: [],
+        pageSets: [
+          {name: '车辆选择', key: 0},
+          {name: '理货员信息', key: 1},
+          {name: '派送信息', key: 2}
+        ],
+        currentTab: {}
       };
     },
     computed: {
@@ -217,15 +240,34 @@
       },
       formItem: function (val) {
         if (val.id) {
-          this.form = val;
-          this.filterUser(this.form.driverName);
-          this.filterTallyClerk(this.form.tallyClerk);
-          this.getCarList(this.form.carPlateNumber);
-          this.filterTaskCarriers(this.form.taskCarriersName);
+          TransportTask.getOneTransportTask(val.id).then(res => {
+            this.form = res.data;
+            this.filterUser(this.form.driverName);
+            this.getCarList(this.form.carPlateNumber);
+            this.filterTaskCarriers(this.form.taskCarriersName);
+            this.form.tallyClerkDtoList.forEach(val => {
+              val.index = this.form.tallyClerkDtoList.indexOf(val) + 1;
+              this.filterTallyClerk(val.userName);
+            });
+          });
         }
       }
     },
     methods: {
+      selectTab(item) {
+        this.currentTab = item;
+      },
+      remove: function (item) {
+        let index = this.form.tallyClerkDtoList.indexOf(item);
+        // 移除删除项
+        this.form.tallyClerkDtoList.splice(index, 1);
+      },
+      addTallyClerk: function () {
+        let tpl = {};
+        // 计算排序值
+        tpl = Object.assign(tpl, {tallyClerkId: '', tallyClerkPhone: ''});
+        this.form.tallyClerkDtoList.splice(0, 0, tpl);
+      },
       filterTaskCarriers: function (query) {// 过滤承运商
         BaseInfo.query({keyWord: query}).then(res => {
           this.orgList = res.data.list;
@@ -303,20 +345,20 @@
           });
         }
       },
-      setTallyClerk: function (id) {
-        if (id) {
-          this.tallyClerkList.forEach(val => {
-            if (val.id === id) {
-              this.form.tallyClerkId = val.id;
-              this.form.tallyClerkPhone = val.phone;
-            }
-          });
-        }
-      },
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.doing = true;
+            // 处理理货员列表
+            if (this.form.tallyClerkDtoList) {
+              let list = [];
+              this.form.tallyClerkDtoList.forEach(val => {
+                if (val.userId !== '' || val.userPhone !== '') {
+                  list.push(val);
+                }
+              });
+              this.form.tallyClerkDtoList = list;
+            }
             TransportTask.update(this.form.id, this.form).then(res => {
               this.$notify.success({
                 duration: 2000,
