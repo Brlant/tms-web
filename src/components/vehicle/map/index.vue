@@ -117,7 +117,7 @@
             <div class="m-list">
               <table class="table table-hover">
                 <tbody>
-                <tr v-for="item in dataRows" :class="{active: item.isChecked}" @click="rowClick(item)">
+                <tr v-for="item in dataRows" :class="{active: item.isChecked}" @click.stop.prevent="rowClick(item)">
                   <td width="8%">
                     <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                   </td>
@@ -249,7 +249,7 @@
       },
       dataRows: function () {
         // 如果列表改变，清空数据
-        this.checkList = [];
+        // this.checkList = [];
       }
     },
     methods: {
@@ -295,6 +295,17 @@
       },
       rowClick (item) {
         item.isChecked = !item.isChecked;
+        if (item.isChecked) {
+          // 勾选的数据置顶
+          let itemIndex = this.dataRows.indexOf(item);
+          this.dataRows.splice(itemIndex, 1);
+          this.dataRows.splice(0, 0, item);
+        } else {
+          // 勾选的数据置顶
+          let itemIndex = this.dataRows.indexOf(item);
+          this.dataRows.splice(itemIndex, 1);
+          this.dataRows.push(item);
+        }
         this.changeCheckStatus(item);
       },
       resetRightBox () {
@@ -324,16 +335,8 @@
           if (index === -1) {
             this.checkList.push(item);
           }
-          // 勾选的数据置顶
-          let itemIndex = this.dataRows.indexOf(item);
-          this.dataRows.splice(itemIndex, 1);
-          this.dataRows.splice(0, 0, item);
         } else {
           this.checkList.splice(index, 1);
-          // 勾选的数据置顶
-          let itemIndex = this.dataRows.indexOf(item);
-          this.dataRows.splice(itemIndex, 1);
-          this.dataRows.push(item);
         }
         this.setMarker(item._marker, item);
       },
