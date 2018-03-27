@@ -171,9 +171,7 @@
                   <el-col :span="4" class="text-right">
                     角色权限：
                   </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="24">
+                  <el-col :span="20">
                     <el-tree :data="checkedMenuList" :props="defaultProps" default-expand-all></el-tree>
                   </el-col>
                 </el-row>
