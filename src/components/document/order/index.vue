@@ -42,7 +42,7 @@
                        v-if="activeStatus===0||activeStatus==='0'"></el-checkbox>
           订单号
         </el-col>
-        <el-col :span="2">订单类型</el-col>
+        <el-col :span="2" class="text-center">类型</el-col>
         <el-col :span="3">发货单位</el-col>
         <el-col :span="3">收货单位</el-col>
         <el-col :span="3">收货地址</el-col>
@@ -78,9 +78,12 @@
                 {{item.orderNo}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="2" class="R text-center">
               <div>
                 <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
+              </div>
+              <div v-show="item.shipmentWay">
+                <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
               </div>
             </el-col>
             <el-col :span="3" class="R">
