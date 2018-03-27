@@ -272,6 +272,7 @@
         this.totalTicket = 0;
       },
       getWayBillOrderList: function (pageNo, isContinue = false) {
+        this.checkList = [];
         this.pager.currentPage = pageNo;
         let param = Object.assign({}, {
           pageNo: pageNo,
