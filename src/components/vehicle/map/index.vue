@@ -86,7 +86,8 @@
       <el-row class="second-part clearfix">
         <el-col :span="12">
           <h2 class="header f-dib">
-            您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米</h2>
+            您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米
+          </h2>
         </el-col>
         <el-col :span="2">
         </el-col>
@@ -323,8 +324,16 @@
           if (index === -1) {
             this.checkList.push(item);
           }
+          // 勾选的数据置顶
+          let itemIndex = this.dataRows.indexOf(item);
+          this.dataRows.splice(itemIndex, 1);
+          this.dataRows.splice(0, 0, item);
         } else {
           this.checkList.splice(index, 1);
+          // 勾选的数据置顶
+          let itemIndex = this.dataRows.indexOf(item);
+          this.dataRows.splice(itemIndex, 1);
+          this.dataRows.push(item);
         }
         this.setMarker(item._marker, item);
       },
