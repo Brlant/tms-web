@@ -193,6 +193,21 @@ export const Department = resource('oms/department', http, {
   }
 });
 
+export const GoodsArea = resource('goods-area', http, {
+  getPage: (params) => {
+    return http.get('goods-area', {params});
+  },
+  addGoodsAreaDetail: (params) => {
+    return http.post('goods-area/detail', params);
+  },
+  getDetailPage: (params) => {
+    return http.get('goods-area/detail', {params});
+  },
+  deleteDetail: (id) => {
+    return http.delete('goods-area/detail/' + id, {});
+  }
+});
+
 // dev设备对象
 export const Dev = resource('/dev', http, {});
 

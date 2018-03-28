@@ -116,21 +116,21 @@
           </div>
           <div class="content">
             <el-form-item label="收货单位" prop="receiverId">
-              <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索收货单位" :remote-method="filterReceiverOrg"
-                         :clearable="true"
-                         v-model="form.receiverId" popperClass="good-selects">
-                <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
-                  <div style="overflow: hidden">
-                    <span class="pull-left" style="clear: right">{{org.name}}</span>
-                  </div>
-                  <div style="overflow: hidden">
+            <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索收货单位" :remote-method="filterReceiverOrg"
+                       :clearable="true"
+                       v-model="form.receiverId" popperClass="good-selects">
+              <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
+                <div style="overflow: hidden">
+                  <span class="pull-left" style="clear: right">{{org.name}}</span>
+                </div>
+                <div style="overflow: hidden">
                     <span class="select-other-info pull-left">
                       <span>系统代码:</span>{{org.manufacturerCode}}
                     </span>
-                  </div>
-                </el-option>
-              </el-select>
-            </el-form-item>
+                </div>
+              </el-option>
+            </el-select>
+          </el-form-item>
             <two-column>
               <el-form-item slot="left" label="收货联系人">
                 <oms-input v-model="form.receiverContact" placeholder="请输入收货联系人"></oms-input>
