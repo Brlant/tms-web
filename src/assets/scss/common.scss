@@ -131,3 +131,15 @@
 .oms-col {
   padding-bottom: 5px;
 }
+
+// 穿梭框
+.transfer-list-two .el-transfer-panel {
+  width: 320px;
+  height: 360px;
+  .el-transfer-panel__list.is-filterable {
+    height: 240px;
+  }
+  .el-transfer-panel__filter .el-input__inner {
+    height: 30px;
+  }
+}

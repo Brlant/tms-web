@@ -8,15 +8,6 @@
 </style>
 <template>
   <div>
-    <!--<div class="order-list-status container">-->
-    <!--<div class="status-item" :class="{'active':key==activeStatus} "-->
-    <!--v-for="(item,key) in orgType"-->
-    <!--@click="changeType(key,item)">-->
-    <!--<div class="status-bg" :class="['b_color_'+key]"></div>-->
-    <!--<div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{item.title}}<span-->
-    <!--class="status-num">{{item.num}}</span></div>-->
-    <!--</div>-->
-    <!--</div>-->
     <div class="container d-table">
       <div class="d-table-left">
         <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
@@ -59,7 +50,7 @@
       </div>
       <div class="d-table-right">
         <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
-          <span class="pull-right">
+          <span class="pull-right" v-show="showTypeList.length !== 0">
                 <span class="btn-search-toggle open" v-show="showSearch">
                   <single-input v-model="filters.keyWord" placeholder="请输入关键字搜索"
                                 :showFocus="showSearch"></single-input>
@@ -74,7 +65,7 @@
                       </a>
                     </perm>
                 </span>
-          <div v-if="dataRows.length == 0" class="empty-info">
+          <div v-if="dataRows.length === 0" class="empty-info">
             暂无信息
           </div>
           <div v-else>
@@ -86,7 +77,6 @@
               </tr>
               </thead>
               <tbody>
-
               <tr v-for="row in dataRows">
                 <td>
                   {{row.orgName}}
@@ -111,7 +101,7 @@
         </div>
       </div>
     </div>
-    <page-right :show="showRight" @right-close="resetRightBox">
+    <page-right :show="showRight" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <edit-form :formItem="form" :title="formTitle" :action="action" :actionType="showRight" @close="showRight=false"
                  @change="itemChange"></edit-form>
     </page-right>
@@ -259,7 +249,7 @@
       add: function () {
         this.action = 'add';
         this.form = Object.assign({}, this.currentItem);
-        this.formTitle = '新增';
+        this.formTitle = '新增集货区单位';
         this.showRight = true;
       },
       addGoodsArea: function () {

@@ -1,7 +1,8 @@
-<style lang="less" scoped="">
+<style lang="scss" scoped="">
   .el-form .el-select {
     display: block;
   }
+
 </style>
 <template>
   <div>
@@ -11,22 +12,24 @@
       <el-form-item label="所属集货区">
         {{form.name}}
       </el-form-item>
-      <el-form-item label="收货单位" prop="orgId">
-        <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索单位" :remote-method="filterOrg"
-                   :clearable="true"
-                   v-model="form.orgId" popperClass="good-selects">
-          <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in orgList">
-            <div style="overflow: hidden">
-              <span class="pull-left" style="clear: right">{{org.name}}</span>
-            </div>
-            <div style="overflow: hidden">
-                    <span class="select-other-info pull-left">
-                      <span>系统代码:</span>{{org.manufacturerCode}}
-                    </span>
-            </div>
-          </el-option>
-        </el-select>
-      </el-form-item>
+      <div class="hide-content show-content">
+        <el-form ref="d-form" :rules="rules" :model="form"
+                 label-width="100px" style="padding-right: 20px">
+          <el-form-item label="单位">
+            <el-transfer v-loading="loading"
+                         v-model="form.orgIdList"
+                         :props="{key: 'id',label: 'name'}"
+                         filter-placeholder="请输入名称搜索单位"
+                         :data="orgList"
+                         filterable
+                         :filter-method="filterMethod"
+                         :titles="['未选单位', '已选单位']"
+                         class="transfer-list-two"
+                         :render-content="renderFunc">
+            </el-transfer>
+          </el-form-item>
+        </el-form>
+      </div>
       <el-form-item label-width="100px">
         <el-button type="primary" @click="onSubmit('accountform')" native-type="submit">保存</el-button>
         <el-button @click="doClose">取消</el-button>
@@ -35,7 +38,7 @@
   </div>
 </template>
 
-<script>
+<script type="text/jsx">
   import {BaseInfo, GoodsArea} from '@/resources';
 
   export default {
@@ -63,12 +66,11 @@
     },
     data: function () {
       return {
-        form: {orgId: ''},
+        form: {orgId: '', orgIdList: []},
         rules: {
-          orgId: [
-            {required: true, message: '请选择单位', trigger: 'change'}
-          ]
+          orgList: {required: true, type: '请选择单位', message: '请选择接种点', trigger: 'change'}
         },
+        loading: false,
         roleSelect: [],
         doing: false,
         departmentList: [],
@@ -79,13 +81,8 @@
       formItem: function (val) {
         if (val.id) {
           this.form = this.formItem;
-        } else {
-          this.form = {
-            name: '',
-            phone: '',
-            email: '',
-            list: []
-          };
+          this.form.orgIdList = [];
+          this.filterOrg();
         }
       },
       showRight: function (val) {
@@ -95,9 +92,29 @@
       }
     },
     methods: {
-      filterOrg: function (query) {// 过滤收货单位
+      filterMethod(query, item) {
+        if (!query) return true;
         BaseInfo.query({keyWord: query}).then(res => {
           this.orgList = res.data.list;
+        });
+        // return item.name && item.name.indexOf(query) > -1 ||
+        //   item.nameAcronymy && item.nameAcronymy.indexOf(query) > -1 ||
+        //   item.namePhonetic && item.namePhonetic.indexOf(query) > -1 ||
+        //   item.manufacturerCode && item.manufacturerCode.indexOf(query) > -1;
+      },
+      renderFunc(h, option) {
+        return (<span title={option.name}>{option.name}</span>);
+      },
+      filterOrg: function (query) {// 过滤收货单位
+        this.loading = true;
+        let param = Object.assign({}, {
+          pageNo: 1,
+          pageSize: 20,
+          keyWord: query
+        });
+        BaseInfo.query(param).then(res => {
+          this.orgList = res.data.list;
+          this.loading = false;
         });
       },
       onSubmit: function (formName) {
@@ -123,22 +140,6 @@
               });
               this.doing = false;
             });
-          } else {
-            // User.update(self.form.id, formData).then(() => {
-            //   this.doing = false;
-            //   this.$notify.success({
-            //     duration: 2000,
-            //     name: '成功',
-            //     message: '修改平台用户"' + self.form.name + '"成功'
-            //   });
-            //   self.$emit('change', formData);
-            // }).catch(() => {
-            //   this.$notify.error({
-            //     duration: 2000,
-            //     message: '修改平台用户"' + self.form.name + '"失败'
-            //   });
-            //   this.doing = false;
-            // });
           }
         });
       },
