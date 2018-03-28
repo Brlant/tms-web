@@ -5,37 +5,40 @@
 
 </style>
 <template>
-  <div>
-    <h2 class="clearfix">{{title}}</h2>
-    <el-form ref="accountform" :model="form" label-width="100px" :rules="rules"
-             @submit.prevent="onSubmit('accountform')" onsubmit="return false">
-      <el-form-item label="所属集货区">
-        {{form.name}}
-      </el-form-item>
-      <div class="hide-content show-content">
-        <el-form ref="d-form" :rules="rules" :model="form"
-                 label-width="100px" style="padding-right: 20px">
-          <el-form-item label="单位">
-            <el-transfer v-loading="loading"
-                         v-model="form.orgIdList"
-                         :props="{key: 'id',label: 'name'}"
-                         filter-placeholder="请输入名称搜索单位"
-                         :data="orgList"
-                         filterable
-                         :filter-method="filterMethod"
-                         :titles="['未选单位', '已选单位']"
-                         class="transfer-list-two"
-                         :render-content="renderFunc">
-            </el-transfer>
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-form-item label-width="100px">
-        <el-button type="primary" @click="onSubmit('accountform')" native-type="submit">保存</el-button>
-        <el-button @click="doClose">取消</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+  <dialog-template :pageSets="pageSets" @selectTab="selectTab">
+    <template slot="title">新增集货区单位</template>
+    <template slot="btn">
+      <el-button plain @click="onSubmit('form')" :disabled="doing">保存</el-button>
+    </template>
+    <template slot="content">
+      <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit">基本信息</h3>
+          </div>
+          <div class="content">
+            <el-form-item label="所属集货区">
+              {{form.name}}
+            </el-form-item>
+            <el-form-item label="单位">
+              <el-transfer v-loading="loading"
+                           v-model="form.orgIdList"
+                           :props="{key: 'id',label: 'name'}"
+                           filter-placeholder="请输入名称搜索单位"
+                           :data="orgList"
+                           filterable
+                           :filter-method="filterMethod"
+                           :titles="['未选单位', '已选单位']"
+                           class="transfer-list-two"
+                           :render-content="renderFunc">
+              </el-transfer>
+            </el-form-item>
+          </div>
+        </div>
+      </el-form>
+    </template>
+  </dialog-template>
 </template>
 
 <script type="text/jsx">
@@ -74,33 +77,37 @@
         roleSelect: [],
         doing: false,
         departmentList: [],
-        orgList: []
+        orgList: [],
+        pageSets: []
       };
     },
     watch: {
       formItem: function (val) {
         if (val.id) {
           this.form = this.formItem;
-          this.form.orgIdList = [];
+          this.form = Object.assign({}, {objectId: []}, this.form);
           this.filterOrg();
         }
       },
       showRight: function (val) {
         if (!val) {
-          this.$refs['accountform'].resetFields();
+          this.$refs['form'].resetFields();
         }
       }
     },
     methods: {
+      selectTab(item) {
+        this.currentTab = item;
+      },
       filterMethod(query, item) {
         if (!query) return true;
-        BaseInfo.query({keyWord: query}).then(res => {
-          this.orgList = res.data.list;
-        });
-        // return item.name && item.name.indexOf(query) > -1 ||
-        //   item.nameAcronymy && item.nameAcronymy.indexOf(query) > -1 ||
-        //   item.namePhonetic && item.namePhonetic.indexOf(query) > -1 ||
-        //   item.manufacturerCode && item.manufacturerCode.indexOf(query) > -1;
+        // BaseInfo.query({keyWord: query}).then(res => {
+        //   this.orgList = res.data.list;
+        // });
+        return item.name && item.name.indexOf(query) > -1 ||
+          item.nameAcronymy && item.nameAcronymy.indexOf(query) > -1 ||
+          item.namePhonetic && item.namePhonetic.indexOf(query) > -1 ||
+          item.manufacturerCode && item.manufacturerCode.indexOf(query) > -1;
       },
       renderFunc(h, option) {
         return (<span title={option.name}>{option.name}</span>);
@@ -145,7 +152,7 @@
       },
       doClose: function () {
         this.$emit('close');
-        this.$refs['accountform'].resetFields();
+        this.$refs['form'].resetFields();
       }
     }
   };

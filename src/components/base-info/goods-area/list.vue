@@ -101,7 +101,7 @@
         </div>
       </div>
     </div>
-    <page-right :show="showRight" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+    <page-right :show="showRight" @right-close="resetRightBox" :css="{'width':'1100px','padding':0}">
       <edit-form :formItem="form" :title="formTitle" :action="action" :actionType="showRight" @close="showRight=false"
                  @change="itemChange"></edit-form>
     </page-right>
