@@ -29,6 +29,9 @@
           </div>
           <div>
             <ul class="show-list">
+              <li class="list-item" @click="showAllType(1)" :class="{'active':showAll}">
+                全部
+              </li>
               <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
                   :class="{'active':item.id==currentItem.id}">
                 <perm label="tms-goods-area-delete">
@@ -49,18 +52,18 @@
         </div>
       </div>
       <div class="d-table-right">
-        <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
+        <div class="d-table-col-wrap">
           <span class="pull-right" v-show="showTypeList.length !== 0">
                 <span class="btn-search-toggle open" v-show="showSearch">
                   <single-input v-model="filters.keyWord" placeholder="请输入关键字搜索"
                                 :showFocus="showSearch"></single-input>
                   <i class="el-icon-t-search" @click.stop="showSearch=(!showSearch)"></i>
                 </span>
-                <a href="#" class="btn-circle" @click.stop.prevent="showSearch=(!showSearch)" v-show="!showSearch">
-                  <i class="el-icon-t-search"></i>
-                </a>
+                    <a href="#" class="btn-circle" @click.stop.prevent="showSearch=(!showSearch)" v-show="!showSearch">
+                      <i class="el-icon-t-search"></i>
+                    </a>
                     <perm label="tms-goods-area-detail-add">
-                      <a href="#" class="btn-circle" @click.stop.prevent="add">
+                      <a href="#" class="btn-circle" @click.stop.prevent="add" v-show="!showAll">
                         <i class="el-icon-t-plus"></i>
                       </a>
                     </perm>
@@ -73,6 +76,7 @@
               <thead>
               <tr>
                 <th>单位名称</th>
+                <th>集货区名称</th>
                 <th>操作</th>
               </tr>
               </thead>
@@ -80,6 +84,9 @@
               <tr v-for="row in dataRows">
                 <td>
                   {{row.orgName}}
+                </td>
+                <td>
+                  {{row.areaName}}
                 </td>
                 <td class="list-op">
                   <perm label="tms-goods-area-detail-delete">
@@ -165,12 +172,13 @@
       };
     },
     mounted() {
-      this.getGoodsAreaPage();
+      this.getGoodsAreaPage(1);
+      this.showAllType(1);
     },
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height - 70) + 'px';
+        return (height - 10) + 'px';
       }
     },
     filters: {
@@ -190,6 +198,12 @@
       }
     },
     methods: {
+      showAllType: function (pageNo) {
+        this.currentItem = {};
+        let data = {id: ''};
+        this.getDetailPage(data, pageNo);
+        this.showAll = true;
+      },
       showType: function (type, pageNo) {
         this.getDetailPage(type, pageNo);
         this.currentItem = type;
@@ -210,11 +224,19 @@
         this.$scrollLoadingData(event);
       },
       handleSizeChange(val) {
-        this.pager.pageSize = val;
-        this.showType(this.currentItem, 1);
+        if (this.showAll) {
+          this.showAllType(1);
+        } else if (!this.showAll && this.currentItem.id) {
+          this.pager.pageSize = val;
+          this.showType(this.currentItem, 1);
+        }
       },
       handleCurrentChange(val) {
-        this.showType(this.currentItem, val);
+        if (this.showAll) {
+          this.showAllType(val);
+        } else if (!this.showAll && this.currentItem.id) {
+          this.showType(this.currentItem, val);
+        }
       },
       resetRightBox: function () {
         this.showRight = false;
@@ -240,7 +262,9 @@
           } else {
             this.showTypeList = res.data.list;
             this.data = Object.assign({}, {'id': ''}, res.data.list[0]);
-            this.showType(this.data, 1);
+            if (this.typeTxt) {
+              this.showType(this.data, 1);
+            }
           }
           this.goodsAreaPage.totalPage = res.data.totalPage;
         });

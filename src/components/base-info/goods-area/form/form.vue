@@ -101,9 +101,6 @@
       },
       filterMethod(query, item) {
         if (!query) return true;
-        // BaseInfo.query({keyWord: query}).then(res => {
-        //   this.orgList = res.data.list;
-        // });
         return item.name && item.name.indexOf(query) > -1 ||
           item.nameAcronymy && item.nameAcronymy.indexOf(query) > -1 ||
           item.namePhonetic && item.namePhonetic.indexOf(query) > -1 ||
@@ -112,15 +109,14 @@
       renderFunc(h, option) {
         return (<span title={option.name}>{option.name}</span>);
       },
-      filterOrg: function (query) {// 过滤收货单位
+      filterOrg: function () {
         this.loading = true;
         let param = Object.assign({}, {
-          pageNo: 1,
-          pageSize: 20,
-          keyWord: query
+          deleteFlag: false,
+          orgAuditStatus: '1'
         });
-        BaseInfo.query(param).then(res => {
-          this.orgList = res.data.list;
+        BaseInfo.queryOrgMainInfoList(param).then(res => {
+          this.orgList = res.data;
           this.loading = false;
         });
       },
@@ -145,6 +141,7 @@
                 duration: 2000,
                 message: error.response && error.response.data && error.response.data.msg || '新增集货区单位失败'
               });
+              self.$emit('change', error);
               this.doing = false;
             });
           }

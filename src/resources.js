@@ -362,6 +362,9 @@ export const BaseInfo = resource('/orgs', http, {
   queryStateNum: (params) => {
     return http.get('/orgs/count', {params});
   },
+  queryOrgMainInfoList: (params) => {
+    return http.get('/orgs/main-info/list', {params});
+  },
   // 转成货主
   turnToOwner: (orgId) => {
     return http.put('/orgs/transform/consignor/' + orgId, {});
