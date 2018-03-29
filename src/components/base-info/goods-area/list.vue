@@ -75,20 +75,20 @@
             <table class="table table-hover">
               <thead>
               <tr>
-                <th>单位名称</th>
-                <th>集货区名称</th>
-                <th>操作</th>
+                <th width="50%">单位名称</th>
+                <th width="30%">集货区名称</th>
+                <th width="20%">操作</th>
               </tr>
               </thead>
               <tbody>
               <tr v-for="row in dataRows">
-                <td>
+                <td width="50%">
                   {{row.orgName}}
-                </td>
-                <td>
+                </td >
+                <td width="30%">
                   {{row.areaName}}
                 </td>
-                <td class="list-op">
+                <td class="list-op" width="20%">
                   <perm label="tms-goods-area-detail-delete">
                     <a href="#" @click.stop.prevent="deleteGoodsAreaDetail(row)"><i class="el-icon-t-delete"></i>删除</a>
                   </perm>
