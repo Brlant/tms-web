@@ -205,6 +205,9 @@ export const GoodsArea = resource('goods-area', http, {
   },
   deleteDetail: (id) => {
     return http.delete('goods-area/detail/' + id, {});
+  },
+  queryGoodsAreaOrgList: () => {
+    return http.get('goods-area/org-list', {});
   }
 });
 

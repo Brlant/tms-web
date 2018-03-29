@@ -111,11 +111,7 @@
       },
       filterOrg: function () {
         this.loading = true;
-        let param = Object.assign({}, {
-          deleteFlag: false,
-          orgAuditStatus: '1'
-        });
-        BaseInfo.queryOrgMainInfoList(param).then(res => {
+        GoodsArea.queryGoodsAreaOrgList().then(res => {
           this.orgList = res.data;
           this.loading = false;
         });
@@ -128,6 +124,7 @@
           }
           let formData = JSON.parse(JSON.stringify(this.form));
           if (this.action === 'add') {
+            this.doing = true;
             GoodsArea.addGoodsAreaDetail(formData).then(() => {
               this.doing = false;
               this.$notify.success({
