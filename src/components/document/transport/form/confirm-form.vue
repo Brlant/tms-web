@@ -106,7 +106,7 @@
               <oms-col label="散装箱数" :rowSpan="span" :value="form.bulkBoxCount" isShow="true"/>
               <oms-col label="包件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>
               <oms-col label="声明价格" :rowSpan="span" :value="form.goodsPrice" isShow="true">
-                <span v-if="form.goodsPrice">¥</span> {{form.goodsPrice}} <span v-if="form.goodsPrice">元</span>
+                <span v-if="form.goodsPrice">¥</span> {{form.goodsPrice}}
               </oms-col>
               <oms-col label="重量" :rowSpan="span" :value="form.goodsWeight" isShow="true">
                 {{form.goodsWeight}} <span v-if="form.goodsWeight">kg</span>
@@ -114,7 +114,13 @@
               <oms-col label="体积" :rowSpan="span" :value="form.goodsVolume" isShow="true">
                 {{form.goodsVolume}} <span v-if="form.goodsVolume">m³</span>
               </oms-col>
-              <oms-col label="货品名称" :rowSpan="span" :value="form.goodsTotalName"/>
+              <el-col :span="24">
+                <div>
+                  <oms-row label="货品名称" :span="4">
+                    <slot>{{form.goodsTotalName}}</slot>
+                  </oms-row>
+                </div>
+              </el-col>
             </div>
             <div class="hr mb-10 clearfix"></div>
           </div>
