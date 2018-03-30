@@ -90,31 +90,25 @@
         this.getLgtAndLat(this.formItem.provenance, this.formItem.receiverAddress, res => {
           let geoCodes = res.geocodes;
           if (!geoCodes.length) return;
-          window.AMapUI.loadUI(['overlay/SvgMarker'], SvgMarker => {
-            const shape = new SvgMarker.Shape.TriangleFlagPin({
-              height: 60, //高度
-              //width: **, //不指定时会维持默认的宽高比
-              fillColor: '#24ff0b', //填充色
-              strokeWidth: 1, //描边宽度
-              strokeColor: '#00ff00' //描边颜色
-            });
+          window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
             let position = [geoCodes[0].location.getLng(), geoCodes[0].location.getLat()];
             this.center = [(points[0] + position[0]) / 2, (points[1] + position[1]) / 2];
-            //利用该shape构建SvgMarker
-            const marker = new SvgMarker(
-              //第一个参数传入shape实例
-              shape,
-              //第二个参数为SimpleMarker的构造参数（iconStyle除外）
-              {
-                showPositionPoint: false, //显示定位点
-                map: this.amapManager._map,
-                position: position,
-                label: {
-                  content: `目的地：${this.formItem.receiverAddress}`,
-                  offset: new window.AMap.Pixel(20, 28)
-                }
+            const m =  new SimpleMarker({
+              //前景文字
+              iconLabel: '终',
+              //图标主题
+              iconTheme: 'default',
+              //背景图标样式
+              iconStyle: 'lightgreen',
+              //...其他Marker选项...，不包括content
+              map: this.amapManager._map,
+              showPositionPoint: false, //显示定位点
+              position: position,
+              label: {
+                content: `目的地：${this.formItem.receiverAddress}`,
+                offset: new window.AMap.Pixel(36, 10)
               }
-            );
+            });
           });
         });
       }

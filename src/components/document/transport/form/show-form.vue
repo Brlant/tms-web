@@ -236,7 +236,7 @@
           {name: '货品列表', key: 5},
           {name: '保温箱列表', key: 6},
           {name: '签收信息', key: 7},
-          {name: '派送情况', key: 8}
+          {name: '派送信息', key: 8}
         ],
         currentTab: {},
         form: {

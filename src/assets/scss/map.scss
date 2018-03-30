@@ -9,10 +9,10 @@
 .map-path {
   .amap-marker-label {
     font-size: 13px;
-    border: 1px solid #b8b8b8;
+    border: 1px solid #ccc;
     background: #fff;
-    border-radius: 6px 6px 6px 0;
-    color: #777;
+    border-radius: 6px 6px 6px 6px;
+    color: $activeColor;
     line-height: 130%;
   }
 }
