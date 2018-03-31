@@ -66,10 +66,12 @@
     .top-menu {
       position: absolute;
       top: 0;
+      bottom: 0;
       left: 200px;
       z-index: 1;
       right: 0;
       > ul {
+        height: 100%;
         display: flex;
         > li {
           margin: 0 10px;
