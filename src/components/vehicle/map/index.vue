@@ -296,6 +296,10 @@
       },
       rowClick (item) {
         item.isChecked = !item.isChecked;
+        this.setChecked(item);
+        this.changeCheckStatus(item);
+      },
+      setChecked: function (item) {
         if (item.isChecked) {
           // 勾选的数据置顶
           let itemIndex = this.dataRows.indexOf(item);
@@ -307,7 +311,6 @@
           this.dataRows.splice(itemIndex, 1);
           this.dataRows.push(item);
         }
-        this.changeCheckStatus(item);
       },
       resetRightBox () {
         this.showIndex = -1;
@@ -423,6 +426,7 @@
       clickMarker (marker, row) {
         row.isChecked = !row.isChecked;
         this.setMarker(marker, row);
+        this.setChecked(row);
         let index = this.checkList.indexOf(row);
         if (row.isChecked) {
           if (index === -1) {

@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-  import { AMapManager } from 'vue-amap';
+  import {AMapManager} from 'vue-amap';
 
   export default {
     props: ['formItem'],
@@ -93,7 +93,7 @@
           window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
             let position = [geoCodes[0].location.getLng(), geoCodes[0].location.getLat()];
             this.center = [(points[0] + position[0]) / 2, (points[1] + position[1]) / 2];
-            const m =  new SimpleMarker({
+            const m = new SimpleMarker({
               //前景文字
               iconLabel: '终',
               //图标主题
