@@ -32,6 +32,9 @@
             批量确认运单
           </el-button>
         </perm>
+        <el-button :plain="true" @click="exportFile" :disabled="isLoading">
+          导出Excel
+        </el-button>
       </template>
     </search-part>
 
@@ -286,6 +289,31 @@
       this.getTmsWayBillPage(1);
     },
     methods: {
+      exportFile: function () {
+        this.isLoading = true;
+        this.$store.commit('initPrint', {
+          isPrinting: true,
+          moduleId: '/document/transport'
+        });
+        let param = Object.assign({}, this.filters);
+        this.$http.get('tms-waybill/waybill/export', {params: param}).then(res => {
+          utils.download(res.data.path, '包装详情表');
+          this.isLoading = false;
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: '/document/transport'
+          });
+        }).catch(error => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: '/document/transport'
+          });
+          this.$notify.error({
+            message: error.response.data && error.response.data.msg || '导出失败'
+          });
+        });
+      },
       packageWayBill: function (item) {
         this.$confirm('确认对运单"' + item.waybillNumber + '进行打包操作"?', '', {
           confirmButtonText: '确定',
