@@ -74,7 +74,8 @@
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
               {{pageSets[1].name}}
-              <span @click="showAdd" class="btn-circle"><i class="el-icon-t-plus"></i> </span>
+              <span @click="showAdd" class="btn-circle" v-show="form.status==='0'"><i
+                class="el-icon-t-plus"></i> </span>
             </h3>
           </div>
           <div>
@@ -115,8 +116,8 @@
               </el-table-column>
               <el-table-column prop="incubatorCount" label="包件" width="50">
               </el-table-column>
-              <el-table-column prop="" label="操作" width="80">
-                <template slot-scope="scope">
+              <el-table-column prop="" label="操作" width="80" v-if="form.status==='0'">
+                <template slot-scope=" scope">
                   <perm label="tms-waybill-edit" class="opera-btn">
                     <span @click.stop="deleteDetail(scope.row)">
                       <a @click.pervent="" class="btn-circle btn-opera">
