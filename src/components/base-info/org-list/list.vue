@@ -8,10 +8,6 @@
       font-weight: bold;
     }
   }
-
-  .org-list {
-    cursor: pointer
-  }
 </style>
 <template>
   <div>
