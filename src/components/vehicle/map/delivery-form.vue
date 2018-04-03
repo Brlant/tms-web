@@ -128,10 +128,10 @@
           </div>
           <div class="content">
             <two-column>
-              <el-form-item slot="left" label="任务号">
+              <el-form-item slot="left" label="任务号" v-show="form.type">
                 {{form.transportTaskNo}}
               </el-form-item>
-              <el-form-item slot="right" label="任务类型">
+              <el-form-item :slot="form.type?'right':'left'" label="任务类型">
                 <el-select placeholder="请选择车型" v-model="form.type">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
                              v-for="item in deliveryTaskTypeList"></el-option>
