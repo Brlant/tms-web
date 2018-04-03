@@ -245,10 +245,14 @@
             this.filterUser(this.form.driverName);
             this.getCarList(this.form.carPlateNumber);
             this.filterTaskCarriers(this.form.taskCarriersName);
-            this.form.tallyClerkDtoList.forEach(val => {
-              val.index = this.form.tallyClerkDtoList.indexOf(val) + 1;
-              this.filterTallyClerk(val.userName);
-            });
+            if (this.form.tallyClerkDtoList.length !== 0) {
+              this.form.tallyClerkDtoList.forEach(val => {
+                val.index = this.form.tallyClerkDtoList.indexOf(val) + 1;
+                this.filterTallyClerk(val.userName);
+              });
+            } else {
+              this.form.tallyClerkDtoList = [{userId: '', userPhone: ''}];
+            }
           });
         }
       }
