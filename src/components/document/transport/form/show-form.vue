@@ -251,7 +251,8 @@
           ]
         },
         rules: {},
-        attachmentIdList: []
+        attachmentIdList: [],
+        attachmentList: []
       };
     },
     computed: {},

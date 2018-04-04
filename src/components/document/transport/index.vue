@@ -32,9 +32,11 @@
             批量确认运单
           </el-button>
         </perm>
-        <el-button :plain="true" @click="exportFile" :disabled="isLoading">
-          导出Excel
-        </el-button>
+        <perm label="tms-waybill-export">
+          <el-button plain size="small" @click="exportFile" :disabled="isLoading">
+            导出运单
+          </el-button>
+        </perm>
       </template>
     </search-part>
 
@@ -75,8 +77,7 @@
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="2" class="special-col R">
-              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
-                   v-if="activeStatus===0||activeStatus==='0'">
+              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
@@ -214,12 +215,13 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {TmsWayBill} from '@/resources';
+  import {http, TmsWayBill} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
   import StatusMixin from '@/mixins/statusMixin';
   import confirmForm from './form/confirm-form';
+  import Qs from 'qs';
 
   export default {
     components: {
@@ -274,7 +276,9 @@
         isCheckAll: false,
         checkList: [],
         checkListPara: [],
-        shoWayBillPart: false
+        shoWayBillPart: false,
+        isLoading: false,
+        waybillIdList: []
       };
     },
     watch: {
@@ -290,14 +294,27 @@
     },
     methods: {
       exportFile: function () {
+        if (!this.checkList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选需要导出的运单'
+          });
+          return;
+        }
         this.isLoading = true;
         this.$store.commit('initPrint', {
           isPrinting: true,
           moduleId: '/document/transport'
         });
-        let param = Object.assign({}, this.filters);
-        this.$http.get('tms-waybill/waybill/export', {params: param}).then(res => {
-          utils.download(res.data.path, '包装详情表');
+        let params = Object.assign({}, {waybillIdList: this.waybillIdList});
+        http({
+          url: 'tms-waybill/export',
+          params,
+          paramsSerializer(params) {
+            return Qs.stringify(params, {indices: false});
+          }
+        }).then(res => {
+          utils.download(res.data.url, '运单表');
           this.isLoading = false;
           this.$store.commit('initPrint', {
             isPrinting: false,
@@ -416,9 +433,11 @@
         if (item.isChecked) {
           if (index === -1) {
             this.checkList.push(item);
+            this.waybillIdList.push(item.id);
           }
         } else {
           this.checkList.splice(index, 1);
+          this.waybillIdList.splice(index, 1);
         }
       },
       checkAll() {
