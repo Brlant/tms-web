@@ -100,6 +100,19 @@
                 </oms-input>
               </el-form-item>
             </two-column>
+            <two-column>
+              <el-form-item slot="left" label="每公里运费" prop="carDto.perFreight">
+                <oms-input type="text" v-model="form.carDto.perFreight" min="0" placeholder="请输入车厢高度"
+                           @blur="formatPrice">
+                  <template slot="prepend">¥</template>
+                </oms-input>
+              </el-form-item>
+              <el-form-item slot="right" label="起步运费" prop="carDto.freight">
+                <oms-input type="text" v-model="form.carDto.freight" @blur="formatPrice">
+                  <template slot="prepend">¥</template>
+                </oms-input>
+              </el-form-item>
+            </two-column>
           </div>
           <div class="hr mb-10"></div>
         </div>
@@ -204,6 +217,7 @@
 <script>
   import {BaseInfo, CarArchives, User} from '@/resources';
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+  import utils from '@/tools/utils';
 
   export default {
     components: {TwoColumn},
@@ -238,7 +252,14 @@
           ],
           'carDto.loadBearing': [
             {required: true, type: 'number', message: '请输入车辆承重', trigger: 'blur'}
+          ],
+          'carDto.perFreight': [
+            {required: true, message: '请输入每公里运费', trigger: 'blur'}
+          ],
+          'carDto.freight': [
+            {required: true, message: '请输入起步运费', trigger: 'blur'}
           ]
+
         },
         pageSets: [
           {name: '主档信息', key: 0},
@@ -360,10 +381,16 @@
           if (this.form.carDto.defaultDriverName) {
             this.filterUser(this.form.carDto.defaultDriverName);
           }
+          this.form.carDto.perFreight = utils.autoformatDecimalPoint(this.form.carDto.perFreight ? this.form.carDto.perFreight.toString() : '');
+          this.form.carDto.freight = utils.autoformatDecimalPoint(this.form.carDto.freight ? this.form.carDto.freight.toString() : '');
         }
       }
     },
     methods: {
+      formatPrice() {// 格式化单价，保留两位小数
+        this.form.carDto.perFreight = utils.autoformatDecimalPoint(this.form.carDto.perFreight);
+        this.form.carDto.freight = utils.autoformatDecimalPoint(this.form.carDto.freight);
+      },
       selectTab(item) {
         this.currentTab = item;
       },

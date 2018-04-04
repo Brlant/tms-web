@@ -120,6 +120,9 @@
                   <goods-row label="车辆核定载人数" :span="8">
                     {{ data.carDto.authorizedNumber}} <span v-if="data.carDto.authorizedNumber">人</span>
                   </goods-row>
+                  <goods-row label="每公里运费" :span="8">
+                    <span v-if="data.carDto.perFreight">¥</span> {{ data.carDto.perFreight| formatMoney}}
+                  </goods-row>
                 </el-col>
                 <el-col :span="12">
                   <goods-row label="车辆承重" :span="8">
@@ -136,6 +139,9 @@
                   </goods-row>
                   <goods-row label="车厢容积" :span="8">
                     {{ data.carDto.volume}} <span v-if="data.carDto.volume">立方米</span>
+                  </goods-row>
+                  <goods-row label="起步运费" :span="8">
+                    <span v-if="data.carDto.freight">¥</span>{{ data.carDto.freight| formatMoney}}
                   </goods-row>
                 </el-col>
               </el-row>

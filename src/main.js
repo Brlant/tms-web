@@ -28,3 +28,41 @@ new Vue({
   router,
   store
 }).$mount('#app');
+
+Vue.filter('formatMoney', function (val) {
+  let num = '';
+  if (typeof val === 'string') {
+    num = val;
+  } else if (typeof val === 'number') {
+    num = val.toFixed(2).toString();
+  }
+  if (num) {
+    // 判断数字是否有负号
+    let count = num.indexOf('-');
+    let isMinusSign = false;
+    if (count !== -1) {
+      // 如果包含负号
+      isMinusSign = true;
+      // 先去除负号
+      num = num.replace('-', '');
+    }
+    // 整数部分进行千分位分割
+    let arr = num.split('.');
+    num = arr[0];
+    let result = '';
+    while (num.length > 3) {
+      result = ',' + num.slice(-3) + result;
+      num = num.slice(0, num.length - 3);
+    }
+    if (num) {
+      result = num + result;
+    }
+    // 拼接小数位
+    result = result + '.' + arr[1];
+    if (isMinusSign) {
+      // 如果原来包含负号则重新拼接
+      result = '-' + result;
+    }
+    return result;
+  }
+});
