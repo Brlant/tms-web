@@ -174,7 +174,7 @@
                 {{pageSets[6].name}}</h3>
             </div>
             <div class="content">
-              <map-path :formItem="formItem"></map-path>
+              <map-path :formItem="form"></map-path>
             </div>
           </div>
         </el-form>
@@ -185,11 +185,13 @@
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
   import {TmsOrder} from '@/resources';
+  import MapPath from '../../common/map-list-new';
 
   export default {
-    components: {TwoColumn},
+    components: {TwoColumn, MapPath},
     data() {
       return {
+        span: 7,
         dataList: [],
         times: [],
         pageSets: [
@@ -198,7 +200,8 @@
           {name: '收货信息', key: 2},
           {name: '货品信息', key: 3},
           {name: '其他信息', key: 4},
-          {name: '货品列表', key: 5}
+          {name: '货品列表', key: 5},
+          {name: '派送信息', key: 6}
         ],
         currentTab: {},
         form: {
@@ -264,12 +267,10 @@
         if (item.id) {
           TmsOrder.getOneTmsOrder(item.id).then(val => {
             this.currentOrder = val.data;
+            this.form = val.data;
             this.activeId = index;
           });
         }
-      },
-      selectTab(item) {
-        this.currentTab = item;
       },
       close() {
         this.$emit('right-close');
