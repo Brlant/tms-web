@@ -136,7 +136,7 @@
                   </oms-row>
                   <oms-row label="规格" :span="5" v-show="currentItem.specification">{{currentItem.specification }}</oms-row>
                   <oms-row label="体积" :span="5" v-show="currentItem.volume">{{currentItem.volume }} <span>m³</span></oms-row>
-                  <oms-row label="重量" :span="5" v-show="currentItem.volume">{{currentItem.weight }} <span>kg³</span></oms-row>
+                  <oms-row label="重量" :span="5" v-show="currentItem.weight">{{currentItem.weight }} <span>kg³</span></oms-row>
                 </el-col>
                 <el-col :span="8">
                   <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
