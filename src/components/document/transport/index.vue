@@ -221,7 +221,6 @@
   import signForm from './form/sign-form';
   import StatusMixin from '@/mixins/statusMixin';
   import confirmForm from './form/confirm-form';
-  import Qs from 'qs';
 
   export default {
     components: {
@@ -307,13 +306,7 @@
           moduleId: '/document/transport'
         });
         let params = Object.assign({}, {waybillIdList: this.waybillIdList});
-        http({
-          url: 'tms-waybill/export',
-          params,
-          paramsSerializer(params) {
-            return Qs.stringify(params, {indices: false});
-          }
-        }).then(res => {
+        http.post('tms-waybill/export', params).then(res => {
           utils.download(res.data.url, '运单表');
           this.isLoading = false;
           this.$store.commit('initPrint', {
