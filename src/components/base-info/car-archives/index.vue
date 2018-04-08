@@ -76,7 +76,7 @@
         </div>
       </div>
       <div class="d-table-right">
-        <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
+        <div class="d-table-col-wrap">
           <div v-if="!data.carDto.id" class="empty-info">
             暂无信息
           </div>
@@ -84,7 +84,18 @@
             <h2 class="clearfix">
                 <span class="pull-right">
                   <el-button-group>
-                    <!--<perm label="tms-car-archives-edit">-->
+                    <perm label="car-blacklist-add">
+                      <el-button @click="addBlacklist()">
+                        <i class="el-icon-t-edit"></i>
+                        新增黑名单
+                      </el-button>
+                    </perm>
+                    <perm label="car-blacklist-delete">
+                      <el-button @click="batchDeleteBlacklist()" v-show="blacklist.length> 0">
+                        <i class="el-icon-t-delete"></i>
+                        一键删除黑名单
+                      </el-button>
+                    </perm>
                       <el-button @click="edit()">
                         <i class="el-icon-t-edit"></i>
                         编辑
@@ -203,38 +214,107 @@
                   </goods-row>
                 </el-col>
               </el-row>
+              <el-row>
+                <el-col :span="24" style="font-size: 16px;">
+                  [ 运输黑名单列表 ]
+                  <div class="pull-right">
+                    <span class="btn-search-toggle open" v-show="showSearch">
+                      <single-input v-model="keyTxt" placeholder="请输入关键字搜索"
+                                    :showFocus="showSearch"></single-input>
+                      <i class="el-icon-t-search" @click.stop="showSearch=(!showSearch)"></i>
+                    </span>
+                    <a href="#" class="btn-circle" @click.stop.prevent="showSearch=(!showSearch)" v-show="!showSearch">
+                      <i class="el-icon-t-search"></i>
+                    </a>
+                  </div>
+                </el-col>
+              </el-row>
+              <el-row>
+                <div v-if="blacklist.length === 0" class="empty-info">
+                  暂无信息
+                </div>
+                <div v-else>
+                  <table class="table table-hover">
+                    <thead>
+                    <tr>
+                      <th width="50%">单位名称</th>
+                      <th width="30%"></th>
+                      <th width="20%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="row in blacklist">
+                      <td width="50%">
+                        {{row.orgName}}
+                      </td>
+                      <td width="30%">
+                      </td>
+                      <td class="list-op" width="20%">
+                        <perm label="car-blacklist-delete">
+                          <a href="#" @click.stop.prevent="deleteOrg(row)"><i class="el-icon-t-delete"></i>删除</a>
+                        </perm>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <div class="text-center" v-show="blacklist.length">
+                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                                   :current-page="orgPager.currentPage"
+                                   :page-sizes="[20,50,100]" :page-size="20"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="orgPager.count">
+                    </el-pagination>
+                  </div>
+                </div>
+              </el-row>
             </div>
           </div>
         </div>
       </div>
     </div>
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
-      <component :is="currentPart" :action="action" :formItem="form" @right-close="resetRightBox"  @change="onSubmit"/>
+      <component :is="currentPart" :action="action" :formItem="form" @right-close="resetRightBox" @change="onSubmit"/>
+    </page-right>
+    <page-right :show="showOrgIndex === 0" @right-close="resetRightBox" :css="{'width':'1100px','padding':0}">
+      <component :is="currentOrgPart" :action="action" :formItem="form" @right-close="resetRightBox"
+                 @change="getBlackList(currentItem.carDto.id,1)"/>
     </page-right>
   </div>
 
 </template>
 <script>
-  import {CarArchives} from '@/resources';
+  import {CarArchives, TransportBlacklist} from '@/resources';
   import editForm from './form/form.vue';
+  import blackForm from './form/blacklist';
   import goodsRow from './goods.row';
+  import Perm from '../../common/perm';
 
   export default {
     components: {
+      Perm,
       editForm, goodsRow
     },
     data: function () {
       return {
+        orgPager: {
+          currentPage: 1,
+          count: 0,
+          pageSize: 20
+        },
+        showSearch: false,
         showIndex: -1,
+        showOrgIndex: -1,
         currentPart: null,
+        currentOrgPart: null,
         dialogComponents: {
           0: editForm
         },
-        showRight: false,
+        dialogOrgComponents: {
+          0: blackForm
+        },
         showTypeRight: false,
         showTypeSearch: false,
         currentItem: 0,
-        showSearch: false,
         data: {
           carDto: {
             id: '',
@@ -277,6 +357,7 @@
           pageSize: 20,
           totalPage: 1
         },
+        blacklist: [],
         activeStatus: 0,
         doing: false
       };
@@ -300,14 +381,84 @@
       'typeTxt': function () {
         this.getPageList(1);
       },
+      'keyTxt': function () {
+        this.getBlackList(this.currentItem.carDto.id, 1);
+      },
       filters: {
         handler: function () {
           this.getPageList(1);
         },
         deep: true
+      },
+      'currentItem': function (val) {
+        if (val) {
+          this.getBlackList(val.carDto.id, 1);
+        }
       }
     },
     methods: {
+      batchDeleteBlacklist: function (item) {
+        this.$confirm('确认一键删除车辆' + this.currentItem.carDto.plateNumber + '的运输黑名单?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store.commit('initPrint', {
+            isPrinting: true,
+            text: '删除运输黑名单中',
+            moduleId: '/baseInfo/car-archives'
+          });
+          TransportBlacklist.batchDelete(this.currentItem.carDto.id).then(() => {
+            this.$store.commit('initPrint', {
+              isPrinting: false,
+              moduleId: '/baseInfo/car-archives'
+            });
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '删除车辆' + this.currentItem.carDto.plateNumber + '的运输黑名单成功'
+            });
+            this.getBlackList(this.currentItem.carDto.id, this.orgPager.currentPage);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.msg || '删除车辆' + this.currentItem.carDto.plateNumber + '的运输黑名单失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
+      deleteOrg: function (item) {
+        this.$confirm('确认删除单位' + item.orgName + '?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TransportBlacklist.delete(item.id).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '删除单位成功'
+            });
+            this.getBlackList(item.carId, this.orgPager.currentPage);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.msg || '删除单位失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
+      handleSizeChange(val) {
+        this.orgPager.pageSize = val;
+        this.getBlackList(this.currentItem.carDto.id, 1);
+      },
+      handleCurrentChange(val) {
+        this.getBlackList(this.currentItem.carDto.id, val);
+      },
       formatStatus: function (value) {
         if (!value) return '';
         return value.toString();
@@ -334,11 +485,25 @@
           this.pager.totalPage = res.data.totalPage;
         });
       },
+      getBlackList: function (carId, pageNo) {
+        this.orgPager.currentPage = pageNo;
+        let param = Object.assign({}, {
+          pageNo: pageNo,
+          pageSize: this.orgPager.pageSize,
+          keyword: this.keyTxt,
+          carId: this.currentItem.carDto.id
+        });
+        TransportBlacklist.query(param).then(res => {
+          this.blacklist = res.data.list;
+          this.orgPager.count = res.data.count;
+        });
+      },
       getMore: function () {
         this.getPageList(this.pager.currentPage + 1, true);
       },
       resetRightBox: function () {
         this.showIndex = -1;
+        this.showOrgIndex = -1;
       },
       showPart: function () {
         this.action = 'add';
@@ -382,6 +547,14 @@
         this.action = 'edit';
         this.showIndex = 0;
         this.currentPart = this.dialogComponents[0];
+        this.$nextTick(() => {
+          this.form = JSON.parse(JSON.stringify(this.data));
+        });
+      },
+      addBlacklist: function () {
+        this.showOrgIndex = 0;
+        this.action = 'add';
+        this.currentOrgPart = this.dialogOrgComponents[0];
         this.$nextTick(() => {
           this.form = JSON.parse(JSON.stringify(this.data));
         });

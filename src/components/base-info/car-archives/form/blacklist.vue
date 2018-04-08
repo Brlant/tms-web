@@ -6,7 +6,7 @@
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
-    <template slot="title">新增集货区单位</template>
+    <template slot="title">新增运输黑名单</template>
     <template slot="btn">
       <el-button plain @click="onSubmit('form')" :disabled="doing">保存</el-button>
     </template>
@@ -18,8 +18,8 @@
             <h3 class="tit f-dib index-tit">基本信息</h3>
           </div>
           <div class="content">
-            <el-form-item label="所属集货区">
-              {{form.name}}
+            <el-form-item label="所属车辆">
+              {{form.plateNumber}}
             </el-form-item>
             <el-form-item label="单位">
               <el-transfer v-loading="loading"
@@ -42,7 +42,7 @@
 </template>
 
 <script type="text/jsx">
-  import {BaseInfo, GoodsArea} from '@/resources';
+  import {TransportBlacklist} from '@/resources';
 
   export default {
     name: 'editForm',
@@ -69,7 +69,7 @@
     },
     data: function () {
       return {
-        form: {orgId: '', orgIdList: []},
+        form: {carId: '', orgIdList: []},
         rules: {
           orgList: {required: true, type: '请选择单位', message: '请选择接种点', trigger: 'change'}
         },
@@ -86,9 +86,10 @@
     },
     watch: {
       formItem: function (val) {
-        if (val.id) {
-          this.form = this.formItem;
+        if (val.carDto.id) {
+          this.form = this.formItem.carDto;
           this.form = Object.assign({}, {objectId: []}, this.form);
+          this.form.carId = val.carDto.id;
           this.filterOrg();
         }
       },
@@ -114,7 +115,10 @@
       },
       filterOrg: function () {
         this.loading = true;
-        GoodsArea.queryGoodsAreaOrgList().then(res => {
+        let data = Object.assign({}, {
+          carId: this.form.carId
+        });
+        TransportBlacklist.queryUnboundOrg(data).then(res => {
           this.orgList = res.data;
           this.loading = false;
         });
@@ -128,18 +132,28 @@
           let formData = JSON.parse(JSON.stringify(this.form));
           if (this.action === 'add') {
             this.doing = true;
-            GoodsArea.addGoodsAreaDetail(formData).then(() => {
+            this.$store.commit('initPrint', {
+              isPrinting: true,
+              text: '新增运输黑名单中',
+              moduleId: '/baseInfo/car-archives'
+            });
+            TransportBlacklist.save(formData).then(res => {
               this.doing = false;
+              this.$store.commit('initPrint', {
+                isPrinting: false,
+                text: '新增运输黑名单中',
+                moduleId: '/baseInfo/car-archives'
+              });
               this.$notify.success({
                 duration: 2000,
-                name: '成功',
-                message: '新增集货区"' + self.form.name + '"单位成功'
+                message: '新增运输黑名单成功'
               });
-              self.$emit('change', formData);
+              this.$emit('change', res.data);
+              this.$emit('right-close');
             }).catch(error => {
               this.$notify.error({
                 duration: 2000,
-                message: error.response && error.response.data && error.response.data.msg || '新增集货区单位失败'
+                message: error.response && error.response.data && error.response.data.msg || '新增运输黑名单失败'
               });
               self.$emit('change', error);
               this.doing = false;

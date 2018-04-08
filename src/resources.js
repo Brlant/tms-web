@@ -143,6 +143,19 @@ export const plateNumber = resource('/org-plate', http, {
 export const CarArchives = resource('/car-archives', http, {
   checkPlateNumber: (params) => {
     return http.get('/car-archives/check/plate-number', {params});
+  },
+  queryUnboundOrg: (params) => {
+    return http.get('/transport-blacklist/unbound/org', {params});
+  }
+});
+
+// 车辆运输黑名单
+export const TransportBlacklist = resource('/transport-blacklist', http, {
+  queryUnboundOrg: (params) => {
+    return http.get('/transport-blacklist/unbound/org', {params});
+  },
+  batchDelete: (id) => {
+    return http.delete('transport-blacklist/' + id + '/batch', {});
   }
 });
 
