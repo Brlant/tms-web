@@ -113,6 +113,17 @@
                 </oms-input>
               </el-form-item>
             </two-column>
+            <!--<el-form-item label="运输范围">-->
+              <!--<el-select placeholder="请选择运输范围" v-model="form.carDto.scopeList" multiple>-->
+                <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
+                           <!--v-for="item in transportScope"></el-option>-->
+              <!--</el-select>-->
+            <!--</el-form-item>-->
+            <el-form-item label="运输范围">
+              <el-select placeholder="请选择运输范围" v-model="form.carDto.scopeList" multiple>
+                <el-option :label="item.label" :value="item.id" :key="item.id" v-for="item in transportScope"></el-option>
+              </el-select>
+            </el-form-item>
           </div>
           <div class="hr mb-10"></div>
         </div>
@@ -313,6 +324,9 @@
       },
       carTypeList() {
         return this.$getDict('carType');
+      },
+      transportScope() {
+        return this.$getDict('transportationCondition');
       }
     },
     props: ['formItem', 'action'],
@@ -331,7 +345,8 @@
               type: '',
               carriageLength: '',
               carriageWidth: '',
-              carriageHeight: ''
+              carriageHeight: '',
+              scopeList: []
             };
           this.form.carDetailDto = {
             plateNumber: '',
@@ -363,6 +378,7 @@
             carriageWidth: '',
             carriageHeight: ''
           }, val.carDto);
+          this.form.carDto.scopeList = val.carDto.scopeList;
           this.form.carDetailDto = Object.assign({}, {
             id: '',
             ascriptionCompany: '',
