@@ -175,7 +175,7 @@
                     </span>
                   </perm>
                 </div>
-                  <perm label="tms-waybill-cancel" class="opera-btn">
+                  <perm label="tms-waybill-sign" class="opera-btn">
                     <span @click.stop="signWayBill(item)" v-if="activeStatus===4||activeStatus==='4'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
