@@ -6,7 +6,7 @@
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
-    <template slot="title">新增集货区单位</template>
+    <template slot="title">{{title}}集货区单位</template>
     <template slot="btn">
       <el-button plain @click="onSubmit('form')" :disabled="doing">保存</el-button>
     </template>

@@ -71,21 +71,21 @@
                   this.doing = false;
                 });
               } else {
-                // GoodsArea.update(this.form).then(res => {
-                //   this.$notify.success({
-                //     name: '成功',
-                //     message: '修改集货区"' + this.form.name + '"成功'
-                //   });
-                //   this.doing = false;
-                //   this.$emit('change', res.data);
-                //   this.$emit('right-close');
-                // }).catch(() => {
-                //   this.$notify.error({
-                //     duration: 2000,
-                //     message: '修改集货区' + this.form.name + '"失败'
-                //   });
-                //   this.doing = false;
-                // });
+                GoodsArea.update(this.form).then(res => {
+                  this.$notify.success({
+                    name: '成功',
+                    message: '修改集货区"' + this.form.name + '"成功'
+                  });
+                  this.doing = false;
+                  this.$emit('change', this.form);
+                  this.$emit('right-close');
+                }).catch(() => {
+                  this.$notify.error({
+                    duration: 2000,
+                    message: '修改集货区' + this.form.name + '"失败'
+                  });
+                  this.doing = false;
+                });
               }
             } else {
 

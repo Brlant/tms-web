@@ -9,13 +9,14 @@ import './assets/css/basic.css';
 import '../static/fonts/iconfont.css';
 import Vuex from 'vuex';
 import store from './store';
-import { init } from './tools/init';
+import {init} from './tools/init';
+import VueAMap from 'vue-amap';
+
 init(Vue);
 Vue.use(require('vue-moment'), {moment});
 Vue.use(tinyVue);
 Vue.use(Vuex);
 
-import VueAMap from 'vue-amap';
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
   key: 'b551e033d09a45de75ebbc1170025c20',
@@ -66,3 +67,27 @@ Vue.filter('formatMoney', function (val) {
     return result;
   }
 });
+
+// 滚动下拉加载
+Vue.prototype.$scrollLoadingData = function (event) {
+  let e = event ? event : window.event;
+  let target = e.target || e.srcElement;
+  if (!target) return false;
+  let difference = 20;
+  let height = target.scrollHeight - target.clientHeight;
+  let scrollTop = target.scrollTop;
+  if (height > 0 && height - scrollTop < difference) {
+    if (this.getMore && this.pager.currentPage < this.pager.totalPage && !this.$store.state.bottomLoading) {
+      this.$store.commit('initBottomLoading', true);
+      this.getMore();
+    }
+    if (this.getMore && this.goodsAreaPage.currentPage < this.goodsAreaPage.totalPage && !this.$store.state.bottomLoading) {
+      this.$store.commit('initBottomLoading', true);
+      this.getMore();
+    }
+    if (this.getOrgMore && this.typePager.currentPage < this.typePager.totalPage && !this.$store.state.bottomLoading) {
+      this.$store.commit('initBottomLoading', true);
+      this.getOrgMore();
+    }
+  }
+};

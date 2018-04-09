@@ -39,13 +39,19 @@
                     <i class="el-icon-t-delete"></i>
                   </a>
                 </perm>
+                <perm label="tms-goods-area-edit">
+                  <a href="#" @click.stop.prevent="editGoodsArea(item)" class="hover-show pull-right"
+                     style="padding-right: 20px">
+                    <i class="el-icon-t-edit"></i>
+                  </a>
+                </perm>
                 {{item.name}}
               </li>
             </ul>
             <div class="btn-left-list-more">
               <bottom-loading></bottom-loading>
               <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
-                <el-button v-show="pager.currentPage<pager.totalPage">加载更多</el-button>
+                <el-button v-show="goodsAreaPage.currentPage<goodsAreaPage.totalPage">加载更多</el-button>
               </div>
             </div>
           </div>
@@ -178,7 +184,8 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height - 10) + 'px';
+        height = (height - 10) + 'px';
+        return height;
       }
     },
     filters: {
@@ -198,6 +205,9 @@
       }
     },
     methods: {
+      getMore: function () {
+        this.getGoodsAreaPage(this.goodsAreaPage.currentPage + 1, true);
+      },
       showAllType: function (pageNo) {
         this.currentItem = {};
         let data = {id: ''};
@@ -280,6 +290,12 @@
         this.action = 'add';
         this.departmentForm = {};
         this.formTitle = '新增';
+        this.showDepartmentRight = true;
+      },
+      editGoodsArea: function (item) {
+        this.action = 'add';
+        this.departmentForm = Object.assign({}, item);
+        this.formTitle = '编辑';
         this.showDepartmentRight = true;
       },
       deleteGoodsArea: function (item) {
