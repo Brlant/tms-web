@@ -37,7 +37,7 @@
           <div class="content">
             <el-form-item label="运货车辆" prop="receiverId">
               <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="getCarList"
-                         :clearable="true" @change="setCarInfo(form.carId)"
+                         :clearable="true" @change="setCarInfo(form.carId)" @click.native.once="getCarList('')"
                          v-model="form.carId" popperClass="good-selects" @clear="clearCarInfo">
                 <el-option :value="car.carDto.id" :key="car.carDto.id" :label="car.carDto.plateNumber"
                            v-for="car in carList">
@@ -65,7 +65,7 @@
             <two-column>
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
-                           :clearable="true" @change="setDriverInfo(form.driveId)"
+                           :clearable="true" @change="setDriverInfo(form.driveId)" @click.native.once="filterUser('')"
                            v-model="form.driveId" popperClass="good-selects">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
                     <div style="overflow: hidden">
@@ -96,6 +96,7 @@
               <two-column>
                 <el-form-item slot="left" label="理货员">
                   <el-select filterable remote placeholder="请输入名称/拼音搜索" :remote-method="filterTallyClerk"
+                             @click.native.once="filterTallyClerk('')"
                              :clearable="true"
                              v-model="hj.userId"
                              popperClass="good-selects">
@@ -225,6 +226,13 @@
     watch: {
       checkList: {
         handler: function (val) {
+          this.form = {
+            driveId: '',
+            driverPhone: '',
+            orderIdList: [],
+            clerkDtoList: [{userId: '', userPhone: ''}]
+          };
+          this.carInfo = {};
           this.form.orderIdList = val;
         },
         deep: true
@@ -249,6 +257,18 @@
         let index = this.form.clerkDtoList.indexOf(item);
         // 移除删除项
         this.form.clerkDtoList.splice(index, 1);
+      },
+      setIncubatorCount: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.incubatorCount = parseInt(value, 10);
+      },
+      setGoodsWeight: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.goodsWeight = parseFloat(value);
+      },
+      setGoodsVolume: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.goodsVolume = parseFloat(value);
       },
       addTallyClerk: function () {
         let tpl = {};
@@ -339,6 +359,7 @@
                 message: '新增派送任务成功'
               });
               this.doing = false;
+              // 清空表单
               this.$emit('change', res.data);
               this.$emit('right-close');
             }).catch(error => {

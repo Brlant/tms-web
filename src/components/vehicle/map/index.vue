@@ -266,6 +266,9 @@
       },
       submit: function () {
         this.getWayBillOrderList(1);
+        // 清空勾选的运单列表
+        this.checkList = [];
+        this.orderIdList = [];
         this.totalIncubatorCount = 0;
         this.totalWeight = 0;
         this.totalVolume = 0;
