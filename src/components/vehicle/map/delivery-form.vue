@@ -128,7 +128,7 @@
           </div>
           <div class="content">
             <two-column>
-              <el-form-item slot="left" label="任务号" v-show="form.type">
+              <el-form-item slot="left" label="任务号" v-show="form.transportTaskNo">
                 {{form.transportTaskNo}}
               </el-form-item>
               <el-form-item :slot="form.type?'right':'left'" label="任务类型">
@@ -199,6 +199,8 @@
         carList: [],
         carInfo: {},
         form: {
+          driveId: '',
+          driverPhone: '',
           orderIdList: [],
           clerkDtoList: [{userId: '', userPhone: ''}]
         },
