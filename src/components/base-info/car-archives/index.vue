@@ -154,6 +154,11 @@
                   <goods-row label="起步运费" :span="8">
                     <span v-if="data.carDto.freight">¥</span>{{ data.carDto.freight| formatMoney}}
                   </goods-row>
+                  <goods-row label="运输范围" :span="8">
+                   <span v-for="(type,index) in data.carDto.scopeList">
+                    <dict :dict-group="'transportationCondition'" :dict-key="type"></dict><span v-if="(data.carDto.scopeList.length-1)!==index">/</span>
+                  </span>
+                  </goods-row>
                 </el-col>
               </el-row>
               <el-row>

@@ -113,15 +113,9 @@
                 </oms-input>
               </el-form-item>
             </two-column>
-            <!--<el-form-item label="运输范围">-->
-              <!--<el-select placeholder="请选择运输范围" v-model="form.carDto.scopeList" multiple>-->
-                <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
-                           <!--v-for="item in transportScope"></el-option>-->
-              <!--</el-select>-->
-            <!--</el-form-item>-->
             <el-form-item label="运输范围">
               <el-select placeholder="请选择运输范围" v-model="form.carDto.scopeList" multiple>
-                <el-option :label="item.label" :value="item.id" :key="item.id" v-for="item in transportScope"></el-option>
+                <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in transportScope"></el-option>
               </el-select>
             </el-form-item>
           </div>
@@ -378,7 +372,11 @@
             carriageWidth: '',
             carriageHeight: ''
           }, val.carDto);
-          this.form.carDto.scopeList = val.carDto.scopeList;
+          if (val.carDto.scopeList) {
+            this.form.carDto.scopeList = val.carDto.scopeList;
+          } else {
+            this.form.carDto.scopeList = [];
+          }
           this.form.carDetailDto = Object.assign({}, {
             id: '',
             ascriptionCompany: '',
