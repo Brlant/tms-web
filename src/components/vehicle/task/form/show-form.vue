@@ -51,6 +51,10 @@
                <oms-col :label="'理货员'+tallyClerk.index+''" :rowSpan="span" :value="tallyClerk.userName"/>
                <oms-col :label="'理货员'+tallyClerk.index+'电话'" :rowSpan="span" :value="tallyClerk.userPhone"/>
             </span>
+            <oms-col label="集货区" :rowSpan="span">
+              <span v-for="area in form.areaDtoList">{{area.name}}<span
+                v-if="form.areaDtoList.indexOf(area)!==form.areaDtoList.length-1">,</span></span>
+            </oms-col>
             <oms-col label="件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>
             <oms-col label="载重" :rowSpan="span" :value="form.carLoadBearing" isShow="true">
               {{form.carLoadBearing}} <span v-if="form.carLoadBearing">千克</span>
