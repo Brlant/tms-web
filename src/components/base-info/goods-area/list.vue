@@ -34,17 +34,18 @@
               </li>
               <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
                   :class="{'active':item.id==currentItem.id}">
-                <perm label="tms-goods-area-delete">
-                  <a href="#" @click.stop.prevent="deleteGoodsArea(item)" class="hover-show pull-right">
+                <span class="hover-show">
+                     <perm label="tms-goods-area-delete">
+                  <a href="#" @click.stop.prevent="deleteGoodsArea(item)" class="pull-right">
                     <i class="el-icon-t-delete"></i>
                   </a>
                 </perm>
                 <perm label="tms-goods-area-edit">
-                  <a href="#" @click.stop.prevent="editGoodsArea(item)" class="hover-show pull-right"
-                     style="padding-right: 20px">
+                  <a href="#" @click.stop.prevent="editGoodsArea(item)" class="pull-right">
                     <i class="el-icon-t-edit"></i>
                   </a>
                 </perm>
+                  </span>
                 {{item.name}}
               </li>
             </ul>
@@ -293,7 +294,7 @@
         this.showDepartmentRight = true;
       },
       editGoodsArea: function (item) {
-        this.action = 'add';
+        this.action = 'edit';
         this.departmentForm = Object.assign({}, item);
         this.formTitle = '编辑';
         this.showDepartmentRight = true;
