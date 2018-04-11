@@ -96,7 +96,7 @@
             <el-col :span="3" class="opera-btn">
               <div>
                 <div>
-                  <perm label="tms-task-car-task-confirm" class="opera-btn">
+                  <perm label="tms-task-car-task-confirm" class="opera-btn btn-line-block">
                     <span @click.stop="confirmTask(item)" v-if="item.status==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
@@ -105,14 +105,14 @@
                   </perm>
                 </div>
                 <div style="padding-top: 2px">
-                  <perm label="tms-task-car-task-edit">
+                  <perm label="tms-task-car-task-edit" class="btn-line-block">
                     <span @click.stop="editInfo(item)" v-if="item.status==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
                   </perm>
-                  <perm label="tms-task-car-task-cancel" class="opera-btn">
+                  <perm label="tms-task-car-task-cancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelTask(item)" v-if="item.status==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>

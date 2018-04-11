@@ -237,7 +237,7 @@
             <el-table-column label="操作" fixed="right" min-width="180">
               <template slot-scope="scope">
                 <div class="opera-btn">
-                  <perm label="tms-equipment-consumables-detail-edit">
+                  <perm label="tms-equipment-consumables-detail-edit" class="btn-line-block">
                     <span @click.stop="editDetailType(scope.row)">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>

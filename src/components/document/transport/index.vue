@@ -144,14 +144,14 @@
             <el-col :span="3" class="opera-btn">
               <div>
                 <div>
-                  <perm label="tms-waybill-edit">
+                  <perm label="tms-waybill-edit" class="btn-line-block">
                     <span @click.stop="edit(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
                   </perm>
-                  <perm label="tms-waybill-edit">
+                  <perm label="tms-waybill-edit" class="btn-line-block">
                     <span @click.stop="confirm(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-verifyPass"></i>
@@ -160,14 +160,14 @@
                   </perm>
                 </div>
                 <div style="padding-top: 2px">
-                  <perm label="tms-waybill-cancel" class="opera-btn">
+                  <perm label="tms-waybill-cancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelWayBill(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
                     </span>
                   </perm>
-                  <perm label="tms-waybill-pack" class="opera-btn">
+                  <perm label="tms-waybill-pack" class="opera-btn btn-line-block">
                     <span @click.stop="packageWayBill(item)" v-if="activeStatus===1||activeStatus==='1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-basic"></i>
@@ -175,7 +175,7 @@
                     </span>
                   </perm>
                 </div>
-                  <perm label="tms-waybill-sign" class="opera-btn">
+                  <perm label="tms-waybill-sign" class="opera-btn btn-line-block">
                     <span @click.stop="signWayBill(item)" v-if="activeStatus===4||activeStatus==='4'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>

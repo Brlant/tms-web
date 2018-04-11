@@ -129,14 +129,14 @@
             <el-col :span="3" class="opera-btn">
               <div>
                 <div>
-                  <perm label="tms-order-edit">
+                  <perm label="tms-order-edit" class="btn-line-block">
                     <span @click.stop="edit(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
                   </perm>
-                  <perm label="tms-order-delete">
+                  <perm label="tms-order-delete" class="btn-line-block">
                     <span @click.stop="deleteOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
@@ -145,14 +145,14 @@
                   </perm>
                 </div>
                 <div style="padding-top: 2px">
-                  <perm label="tms-order-cancel" class="opera-btn">
+                  <perm label="tms-order-cancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
                     </span>
                   </perm>
-                  <perm label="tms-order-dismantling" class="opera-btn">
+                  <perm label="tms-order-dismantling" class="opera-btn btn-line-block">
                     <span @click.stop="splitOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-basic"></i>

@@ -127,7 +127,7 @@
               </el-table-column>
               <el-table-column prop="" label="操作" width="80" v-if="form.status==='0'">
                 <template slot-scope=" scope">
-                  <perm label="tms-waybill-edit" class="opera-btn">
+                  <perm label="tms-waybill-edit" class="opera-btn btn-line-block">
                     <span @click.stop="deleteDetail(scope.row)">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
