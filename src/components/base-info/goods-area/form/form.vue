@@ -114,7 +114,7 @@
       },
       filterOrg: function () {
         this.loading = true;
-        GoodsArea.queryGoodsAreaOrgList().then(res => {
+        GoodsArea.queryGoodsAreaOrgList(this.form.id).then(res => {
           this.orgList = res.data;
           this.loading = false;
         });
