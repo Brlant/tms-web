@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="d-table-right">
-        <div class="d-table-col-wrap">
+        <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
           <span class="pull-right" v-show="showTypeList.length !== 0">
                 <span class="btn-search-toggle open" v-show="showSearch">
                   <single-input v-model="filters.keyWord" placeholder="请输入关键字搜索"
