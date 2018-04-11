@@ -284,7 +284,7 @@
       add: function () {
         this.action = 'add';
         this.form = Object.assign({}, this.currentItem);
-        this.formTitle = '新增集货区单位';
+        this.formTitle = '新增';
         this.showRight = true;
       },
       addGoodsArea: function () {
