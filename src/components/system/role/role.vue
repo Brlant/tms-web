@@ -41,6 +41,10 @@
       overflow: auto;
     }
   }
+
+  .d-table > div.d-table-right {
+    padding-right: 0;
+  }
 </style>
 <template>
   <div>
@@ -57,7 +61,8 @@
       </div>
       <div class="container d-table">
         <div class="d-table-left">
-          <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+          <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+            <div class="scrollbar-content">
             <h2 class="header">
                 <span class="pull-right">
                   <perm label="tms-access-role-add">
@@ -99,9 +104,11 @@
               </div>
             </div>
           </div>
+          </el-scrollbar>
         </div>
         <div class="d-table-right">
-          <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
+          <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
+            <div class="scrollbar-content">
             <div v-if="!currentItem.title" class="empty-info">
               暂无信息
             </div>
@@ -178,6 +185,7 @@
               </div>
             </div>
           </div>
+          </el-scrollbar>
         </div>
       </div>
     </div>

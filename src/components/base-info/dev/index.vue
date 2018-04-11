@@ -64,12 +64,17 @@
     }
   }
 
+  .d-table > div.d-table-right {
+    padding-right: 0;
+  }
+
 </style>
 <template>
   <div>
     <div class="container d-table">
       <div class="d-table-left">
-        <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+          <div class="scrollbar-content">
           <h2 class="header">
                 <span class="pull-right">
                   <perm label="tms-equipment-consumables-add">
@@ -114,9 +119,11 @@
             </div>
           </div>
         </div>
+        </el-scrollbar>
       </div>
       <div class="d-table-right">
-        <div class="d-table-col-wrap">
+        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
+          <div class="scrollbar-content">
         <div class="content-right">
           <div class="form-header-part part-bg p-r-20">
             <div class="header">
@@ -263,6 +270,7 @@
           </el-pagination>
         </div>
         </div>
+        </el-scrollbar>
       </div>
     </div>
     <page-right :show="showRight" @right-close="resetRightBox" :css="{width:'600px'}">

@@ -4,6 +4,11 @@
     <el-form-item label="集货区名称" prop="name">
       <oms-input type="text" v-model="form.name" placeholder="请输入集货区名称"></oms-input>
     </el-form-item>
+    <el-form-item label="运输范围">
+      <el-select placeholder="请选择运输范围" v-model="form.scope">
+        <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in transportScope"></el-option>
+      </el-select>
+    </el-form-item>
     <el-form-item label-width="120px">
       <el-button type="primary" @click="onSubmit('form')" :disabled="doing">保存</el-button>
       <el-button @click="cancel">取消</el-button>
@@ -21,7 +26,7 @@
             {required: true, message: '请输入集货区名称', trigger: 'blur'}
           ]
         },
-        form: this.formItem,
+        form: {id: '', scope: ''},
         doing: false,
         attachmentList: [],
         x: ''
@@ -30,16 +35,22 @@
     computed: {
       showTitle: function () {
         let title = '新增';
-        if (this.form.id) {
+        if (this.action === 'edit') {
           title = '修改';
         }
         return title;
+      },
+      transportScope() {
+        return this.$getDict('transportationCondition');
       }
     },
     props: ['formItem', 'action', 'actionType'],
     watch: {
       formItem: function (val) {
         this.form = Object.assign({}, val);
+        if (this.form.scope === null) {
+          this.form.scope = '';
+        }
         this.attachmentList = [];
       },
       actionType: function (val) {

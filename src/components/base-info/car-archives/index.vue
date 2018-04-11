@@ -28,12 +28,18 @@
   .d-table-col-wrap {
     overflow: auto;
   }
+
+  .d-table > div.d-table-right {
+    padding-right: 0;
+  }
+
 </style>
 <template>
   <div>
     <div class="d-table">
       <div class="d-table-left">
-        <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+        <div class="scrollbar-content">
           <h2 class="header">
             <span class="pull-right">
               <!--<perm label="qualityItem-add">-->
@@ -74,9 +80,11 @@
             </div>
           </div>
         </div>
+        </el-scrollbar>
       </div>
       <div class="d-table-right">
-        <div class="d-table-col-wrap">
+        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
+          <div class="scrollbar-content">
           <div v-if="!data.carDto.id" class="empty-info">
             暂无信息
           </div>
@@ -235,7 +243,7 @@
                 </el-col>
               </el-row>
               <el-row>
-                <div v-if="blacklist.length === 0" class="empty-info">
+                <div v-if="blacklist.length === 0" class="empty-info" style="padding-left: 20px">
                   暂无信息
                 </div>
                 <div v-else>
@@ -275,6 +283,7 @@
             </div>
           </div>
         </div>
+        </el-scrollbar>
       </div>
     </div>
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">

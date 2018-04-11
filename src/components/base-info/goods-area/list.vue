@@ -5,12 +5,17 @@
     display: block;
   }
 
+  .d-table > div.d-table-right {
+    padding-right: 0;
+  }
+
 </style>
 <template>
   <div>
     <div class="container d-table">
       <div class="d-table-left">
-        <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+          <div class="scrollbar-content">
           <h2 class="header">
             <span class="pull-right">
               <perm label="tms-goods-area-add">
@@ -46,6 +51,10 @@
                   </a>
                 </perm>
                   </span>
+                <div class="id-part" v-if="item.scope">
+                  运输范围-
+                  <dict :dict-group="'transportationCondition'" :dict-key="item.scope"/>
+                </div>
                 {{item.name}}
               </li>
             </ul>
@@ -57,9 +66,11 @@
             </div>
           </div>
         </div>
+        </el-scrollbar>
       </div>
       <div class="d-table-right">
-        <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
+        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
+          <div class="scrollbar-content">
           <span class="pull-right" v-show="showTypeList.length !== 0">
                 <span class="btn-search-toggle open" v-show="showSearch">
                   <single-input v-model="filters.keyWord" placeholder="请输入关键字搜索"
@@ -75,44 +86,47 @@
                       </a>
                     </perm>
                 </span>
-          <div v-if="dataRows.length === 0" class="empty-info">
-            暂无信息
-          </div>
-          <div v-else>
-            <table class="table table-hover">
-              <thead>
-              <tr>
-                <th width="50%">单位名称</th>
-                <th width="30%">集货区名称</th>
-                <th width="20%">操作</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="row in dataRows">
-                <td width="50%">
-                  {{row.orgName}}
-                </td >
-                <td width="30%">
-                  {{row.areaName}}
-                </td>
-                <td class="list-op" width="20%">
-                  <perm label="tms-goods-area-detail-delete">
-                    <a href="#" @click.stop.prevent="deleteGoodsAreaDetail(row)"><i class="el-icon-t-delete"></i>删除</a>
-                  </perm>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            <div class="text-center" v-show="dataRows.length">
-              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                             :current-page="pager.currentPage"
-                             :page-sizes="[20,50,100]" :page-size="20" layout="total, sizes, prev, pager, next, jumper"
-                             :total="pager.count">
-              </el-pagination>
+            <div v-if="dataRows.length === 0" class="empty-info">
+              暂无信息
             </div>
-          </div>
+            <div v-else>
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th width="50%">单位名称</th>
+                  <th width="30%">集货区名称</th>
+                  <th width="20%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="row in dataRows">
+                  <td width="50%">
+                    {{row.orgName}}
+                  </td>
+                  <td width="30%">
+                    {{row.areaName}}
+                  </td>
+                  <td class="list-op" width="20%">
+                    <perm label="tms-goods-area-detail-delete">
+                      <a href="#" @click.stop.prevent="deleteGoodsAreaDetail(row)"><i
+                        class="el-icon-t-delete"></i>删除</a>
+                    </perm>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <div class="text-center" v-show="dataRows.length">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                               :current-page="pager.currentPage"
+                               :page-sizes="[20,50,100]" :page-size="20"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="pager.count">
+                </el-pagination>
+              </div>
+            </div>
 
-        </div>
+          </div>
+        </el-scrollbar>
       </div>
     </div>
     <page-right :show="showRight" @right-close="resetRightBox" :css="{'width':'1100px','padding':0}">

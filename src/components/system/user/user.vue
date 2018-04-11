@@ -5,6 +5,10 @@
     display: block;
   }
 
+  .d-table > div.d-table-right {
+    padding-right: 0;
+  }
+
 </style>
 <template>
   <div>
@@ -19,7 +23,8 @@
     <!--</div>-->
     <div class="container d-table">
       <div class="d-table-left">
-        <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+          <div class="scrollbar-content">
           <h2 class="header">
             <span class="pull-right">
               <perm label="tms-department-add">
@@ -59,21 +64,23 @@
             </div>
           </div>
         </div>
+        </el-scrollbar>
       </div>
       <div class="d-table-right">
-        <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
-          <div>
-            <div class="order-list-status">
-              <div class="status-item" :class="{'active':item.status==filters.status}"
-                   v-for="(item,key) in orgType"
-                   @click="filters.status=item.status">
-                <div class="status-bg" :class="['b_color_'+key]"></div>
-                <div><i class="el-icon-caret-right" v-if="item.status==filters.status"></i>{{item.title}}<span
-                  class="status-num">{{item.num}}</span></div>
+        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
+          <div class="scrollbar-content" >
+            <div>
+              <div class="order-list-status">
+                <div class="status-item" :class="{'active':item.status==filters.status}"
+                     v-for="(item,key) in orgType"
+                     @click="filters.status=item.status">
+                  <div class="status-bg" :class="['b_color_'+key]"></div>
+                  <div><i class="el-icon-caret-right" v-if="item.status==filters.status"></i>{{item.title}}<span
+                    class="status-num">{{item.num}}</span></div>
+                </div>
               </div>
             </div>
-          </div>
-          <span class="pull-right">
+            <span class="pull-right">
                 <span class="btn-search-toggle open" v-show="showSearch">
                   <single-input v-model="filters.keyWord" placeholder="请输入关键字搜索"
                                 :showFocus="showSearch"></single-input>
@@ -88,67 +95,68 @@
                       </a>
                     </perm>
                 </span>
-          <div v-if="dataRows.length == 0" class="empty-info">
-            暂无信息
-          </div>
-          <div v-else>
-            <table class="table table-hover">
-              <thead>
-              <tr>
-                <th>姓名</th>
-                <th>角色</th>
-                <th>手机号码</th>
-                <th>邮箱</th>
-                <th>状态</th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody>
-
-              <tr v-for="row in dataRows">
-                <td>
-                  {{row.name}}
-                </td>
-                <td>
-                  {{ row.list | formatRole }}
-                </td>
-                <td>
-                  {{row.phone}}
-                </td>
-
-                <td>
-                  {{row.email}}
-                </td>
-
-                <td>
-                  <dict :dict-group="'orgUserStatus'" :dict-key="formatStatus(row.status)"></dict>
-                </td>
-                <td class="list-op">
-                  <perm label="tms-platform-user-edit">
-                    <a href="#" @click.stop.prevent="edit(row)"><i class="el-icon-t-edit"></i>编辑</a>
-                    <oms-forbid :item="row" @forbided="forbid" :tips='"确认停用平台用户\""+row.name +"\"?"'
-                                v-show="row.status!== '2'"><i
-                      class="el-icon-t-forbidden"></i>停用
-                    </oms-forbid>
-                    <oms-forbid :item="row" @forbided="useNormal" :tips='"确认启用平台用户\""+row.name +"\"?"'
-                                v-show="row.status=== '2'"><i
-                      class="el-icon-t-start"></i>启用
-                    </oms-forbid>
-                  </perm>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            <div class="text-center" v-show="dataRows.length">
-              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                             :current-page="pager.currentPage"
-                             :page-sizes="[20,50,100]" :page-size="20" layout="total, sizes, prev, pager, next, jumper"
-                             :total="pager.count">
-              </el-pagination>
+            <div v-if="dataRows.length == 0" class="empty-info">
+              暂无信息
             </div>
-          </div>
+            <div v-else>
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>姓名</th>
+                  <th>角色</th>
+                  <th>手机号码</th>
+                  <th>邮箱</th>
+                  <th>状态</th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody>
 
-        </div>
+                <tr v-for="row in dataRows">
+                  <td>
+                    {{row.name}}
+                  </td>
+                  <td>
+                    {{ row.list | formatRole }}
+                  </td>
+                  <td>
+                    {{row.phone}}
+                  </td>
+
+                  <td>
+                    {{row.email}}
+                  </td>
+
+                  <td>
+                    <dict :dict-group="'orgUserStatus'" :dict-key="formatStatus(row.status)"></dict>
+                  </td>
+                  <td class="list-op">
+                    <perm label="tms-platform-user-edit">
+                      <a href="#" @click.stop.prevent="edit(row)"><i class="el-icon-t-edit"></i>编辑</a>
+                      <oms-forbid :item="row" @forbided="forbid" :tips='"确认停用平台用户\""+row.name +"\"?"'
+                                  v-show="row.status!== '2'"><i
+                        class="el-icon-t-forbidden"></i>停用
+                      </oms-forbid>
+                      <oms-forbid :item="row" @forbided="useNormal" :tips='"确认启用平台用户\""+row.name +"\"?"'
+                                  v-show="row.status=== '2'"><i
+                        class="el-icon-t-start"></i>启用
+                      </oms-forbid>
+                    </perm>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <div class="text-center" v-show="dataRows.length">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                               :current-page="pager.currentPage"
+                               :page-sizes="[20,50,100]" :page-size="20" layout="total, sizes, prev, pager, next, jumper"
+                               :total="pager.count">
+                </el-pagination>
+              </div>
+            </div>
+
+          </div>
+        </el-scrollbar>
       </div>
     </div>
     <page-right :show="showRight" @right-close="resetRightBox">
@@ -165,7 +173,6 @@
 </template>
 <script>
   import {Department, User} from '../../../resources';
-  import utils from '@/tools/utils';
   import editForm from './form/form.vue';
   import departmentForm from './form/department.vue';
   import bgBox from '../../common/bgbox.vue';

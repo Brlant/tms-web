@@ -56,7 +56,6 @@ import Rate from 'element-ui/lib/rate';
 import Steps from 'element-ui/lib/steps';
 import Step from 'element-ui/lib/step';
 import Carousel from 'element-ui/lib/carousel';
-import Scrollbar from 'element-ui/lib/scrollbar';
 import CarouselItem from 'element-ui/lib/carousel-item';
 import Collapse from 'element-ui/lib/collapse';
 import CollapseItem from 'element-ui/lib/collapse-item';
@@ -66,29 +65,9 @@ import Transfer from 'element-ui/lib/transfer';
 import locale from 'element-ui/lib/locale';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 import {
-  Dict,
-  FA,
-  Forbid,
-  FormRow,
-  InputSingle,
-  LoadingBottom,
-  Nl2br,
-  PageRight,
-  Remove,
-  TimeLine,
-  TimeLineItem,
-  TinyInput,
-  TinyLoading,
-  TinyRow,
-  TinyCol,
-  goodsSwitch,
-  TotalCount,
-  orgSelect,
-  orgGoodsSelect,
-  goodsSelect,
-  statusList,
-  TwoColumn,
-  DesBtn
+  DesBtn, Dict, FA, Forbid, FormRow, goodsSelect, goodsSwitch, InputSingle, LoadingBottom, Nl2br, orgGoodsSelect,
+  orgSelect, PageRight, Remove, statusList, TimeLine, TimeLineItem, TinyCol, TinyInput, TinyLoading, TinyRow,
+  TotalCount, TwoColumn, Scrollbar
 } from '@dtop/dtop-web-common';
 
 import upload from '../components/common/upload/upload.vue';
@@ -97,6 +76,7 @@ import perm from '../components/common/perm.vue';
 import ElForm from '../components/common/form/src/form.vue';
 import DialogTemplate from '@/components/common/dialog-template';
 import SearchTemplate from '@/components/common/search-template';
+
 const tinyVue = [
   Pagination,
   Dialog,
@@ -149,7 +129,6 @@ const tinyVue = [
   Steps,
   Step,
   Carousel,
-  Scrollbar,
   CarouselItem,
   Collapse,
   CollapseItem,
@@ -186,7 +165,8 @@ const tinyVue = [
   TwoColumn,
   DesBtn,
   DialogTemplate,
-  SearchTemplate
+  SearchTemplate,
+  Scrollbar
 ];
 
 const install = function (Vue, opts = {}) {

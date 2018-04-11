@@ -113,7 +113,9 @@
             </tr>
             </thead>
           </table>
-          <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+
+          <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+            <div class="scrollbar-content">
             <div class="m-list">
               <table class="table table-hover">
                 <tbody>
@@ -143,6 +145,7 @@
               </div>
             </div>
           </div>
+          </el-scrollbar>
         </div>
         <div class="d-table-right">
           <el-amap vid="aMap" :plugin="plugins" :zoom="10" :center="center" :style="'height:'+ bodyHeight">
