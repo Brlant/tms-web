@@ -24,6 +24,7 @@
             <el-form-item label="单位">
               <el-transfer v-loading="loading"
                            v-model="form.orgIdList"
+                           ref="blacklist"
                            :props="{key: 'id',label: 'name'}"
                            filter-placeholder="请输入名称搜索单位"
                            :data="orgList"
@@ -90,6 +91,8 @@
           this.form = this.formItem.carDto;
           this.form = Object.assign({}, {objectId: []}, this.form);
           this.form.carId = val.carDto.id;
+          this.$refs['blacklist'].clearQuery('left');
+          this.$refs['blacklist'].clearQuery('right');
           this.filterOrg();
         }
       },
