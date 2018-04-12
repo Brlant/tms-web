@@ -27,7 +27,7 @@
                   <i class="el-icon-t-search"></i>
                 </a>
             </span>
-            集货区信息
+            集货区管理
           </h2>
           <div class="search-left-box" v-show="showTypeSearch">
             <oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>

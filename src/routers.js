@@ -91,7 +91,7 @@ export const routes = [
           {
             path: '/baseInfo/goods-area',
             component: resolve => require(['./components/base-info/goods-area/list.vue'], resolve),
-            meta: {moduleId: 'baseInfo', title: '集货区信息', perm: 'tms-goods-area-query'},
+            meta: {moduleId: 'baseInfo', title: '集货区管理', perm: 'tms-goods-area-query'},
             children: []
           }
         ]
