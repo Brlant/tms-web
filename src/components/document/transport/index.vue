@@ -34,7 +34,7 @@
         </perm>
         <perm label="tms-waybill-export">
           <el-button plain size="small" @click="exportFile" :disabled="isLoading">
-            导出运单
+            打印运单
           </el-button>
         </perm>
       </template>
