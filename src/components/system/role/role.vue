@@ -108,83 +108,83 @@
         </div>
         <div class="d-table-right">
           <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
-            <div class="scrollbar-content">
-            <div v-if="!currentItem.title" class="empty-info">
-              暂无信息
-            </div>
-            <div v-else>
-              <h2 class="clearfix">
-                <span class="pull-right">
-                 <el-button-group>
-                     <perm label="tms-access-role-edit">
-                       <el-button @click="edit()">
-                         <i class="el-icon-t-edit"></i>
-                         编辑
-                       </el-button>
-                     </perm>
-                      <perm label="tms-access-role-stop">
-                        <el-button @click="forbid()" v-show="resData.usableStatus == 1">
-                          <i class="el-icon-t-forbidden"></i>
-                          停用
-                        </el-button>
-                      </perm>
-                       <perm label="tms-access-role-start">
-                         <el-button @click="useNormal()" v-show="resData.usableStatus == 0">
-                           <i class="el-icon-t-start"></i>启用
-                         </el-button>
-                       </perm>
-                      <perm label="tms-access-role-delete">
-                         <el-button @click="remove()">
-                           <i class="el-icon-t-delete"></i>删除
-                         </el-button>
-                      </perm>
-                  </el-button-group>
-                </span>
-              </h2>
-              <div class="page-main-body">
-                <el-row>
-                  <el-col :span="4" class="text-right">
-                    角色名称：
-                  </el-col>
-                  <el-col :span="20">
-                    {{ resData.title }}
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="4" class="text-right">
-                    角色英文名称：
-                  </el-col>
-                  <el-col :span="20">
-                    {{ resData.name }}
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="4" class="text-right">
-                    角色状态：
-                  </el-col>
-                  <el-col :span="20">
-                    {{ resData.usableStatus == 1 ? '可用' : '停用' }}
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="4" class="text-right">
-                    角色描述：
-                  </el-col>
-                  <el-col :span="20">
-                    {{resData.remark}}
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="4" class="text-right">
-                    角色权限：
-                  </el-col>
-                  <el-col :span="20">
-                    <el-tree :data="checkedMenuList" :props="defaultProps" default-expand-all></el-tree>
-                  </el-col>
-                </el-row>
+              <div class="scrollbar-content">
+                  <div v-if="!currentItem.title" class="empty-info">
+                    暂无信息
+                  </div>
+                  <div v-else>
+                    <h2 class="clearfix">
+                      <span class="pull-right">
+                       <el-button-group>
+                           <perm label="tms-access-role-edit">
+                             <el-button @click="edit()">
+                               <i class="el-icon-t-edit"></i>
+                               编辑
+                             </el-button>
+                           </perm>
+                            <perm label="tms-access-role-stop">
+                              <el-button @click="forbid()" v-show="resData.usableStatus == 1">
+                                <i class="el-icon-t-forbidden"></i>
+                                停用
+                              </el-button>
+                            </perm>
+                             <perm label="tms-access-role-start">
+                               <el-button @click="useNormal()" v-show="resData.usableStatus == 0">
+                                 <i class="el-icon-t-start"></i>启用
+                               </el-button>
+                             </perm>
+                            <perm label="tms-access-role-delete">
+                               <el-button @click="remove()">
+                                 <i class="el-icon-t-delete"></i>删除
+                               </el-button>
+                            </perm>
+                        </el-button-group>
+                      </span>
+                    </h2>
+                    <div class="page-main-body">
+                      <el-row>
+                        <el-col :span="4" class="text-right">
+                          角色名称：
+                        </el-col>
+                        <el-col :span="20">
+                          {{ resData.title }}
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="4" class="text-right">
+                          角色英文名称：
+                        </el-col>
+                        <el-col :span="20">
+                          {{ resData.name }}
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="4" class="text-right">
+                          角色状态：
+                        </el-col>
+                        <el-col :span="20">
+                          {{ resData.usableStatus == 1 ? '可用' : '停用' }}
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="4" class="text-right">
+                          角色描述：
+                        </el-col>
+                        <el-col :span="20">
+                          {{resData.remark}}
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="4" class="text-right">
+                          角色权限：
+                        </el-col>
+                        <el-col :span="20">
+                          <el-tree :data="checkedMenuList" :props="defaultProps" default-expand-all></el-tree>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </div>
               </div>
-            </div>
-          </div>
           </el-scrollbar>
         </div>
       </div>
