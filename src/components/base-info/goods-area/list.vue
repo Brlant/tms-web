@@ -312,7 +312,7 @@
         this.showDepartmentRight = true;
       },
       deleteGoodsArea: function (item) {
-        this.$confirm('删除集货区会一并删除集货区下的所有单位信息,确认删除集货区' + item.name + '?', '', {
+        this.$confirm('删除集货区会一并删除集货区下的所有单位信息,确认删除集货区"' + item.name + '"?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
