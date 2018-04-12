@@ -28,6 +28,7 @@
                            filter-placeholder="请输入名称搜索单位"
                            :data="orgList"
                            filterable
+                           ref="org-transfer"
                            :filter-method="filterMethod"
                            :titles="['未选单位', '已选单位']"
                            class="transfer-list-two"
@@ -89,6 +90,8 @@
         if (val.id) {
           this.form = this.formItem;
           this.form = Object.assign({}, {objectId: []}, this.form);
+          this.$refs['org-transfer'].clearQuery('left');
+          this.$refs['org-transfer'].clearQuery('right');
           this.filterOrg();
         }
       },

@@ -86,6 +86,7 @@
                 GoodsArea.update(this.form).then(res => {
                   this.$notify.success({
                     name: '成功',
+                    duration: 2000,
                     message: '修改集货区"' + this.form.name + '"成功'
                   });
                   this.doing = false;

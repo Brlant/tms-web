@@ -52,8 +52,7 @@
                 </perm>
                   </span>
                 <div class="id-part" v-if="item.scope">
-                  运输范围-
-                  <dict :dict-group="'transportationCondition'" :dict-key="item.scope"/>
+                  运输范围 - <dict :dict-group="'transportationCondition'" :dict-key="item.scope"/>
                 </div>
                 {{item.name}}
               </li>
@@ -71,22 +70,22 @@
       <div class="d-table-right">
         <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
           <div class="scrollbar-content">
-          <span class="pull-right" v-show="showTypeList.length !== 0">
-                <span class="btn-search-toggle open" v-show="showSearch">
-                  <single-input v-model="filters.keyWord" placeholder="请输入关键字搜索"
-                                :showFocus="showSearch"></single-input>
-                  <i class="el-icon-t-search" @click.stop="showSearch=(!showSearch)"></i>
-                </span>
-                    <a href="#" class="btn-circle" @click.stop.prevent="showSearch=(!showSearch)" v-show="!showSearch">
-                      <i class="el-icon-t-search"></i>
-                    </a>
-                    <perm label="tms-goods-area-detail-add">
-                      <a href="#" class="btn-circle" @click.stop.prevent="add" v-show="!showAll">
-                        <i class="el-icon-t-plus"></i>
-                      </a>
-                    </perm>
-                </span>
-            <div v-if="dataRows.length === 0" class="empty-info">
+            <span class="pull-right" v-show="showTypeList.length !== 0">
+              <span class="btn-search-toggle open" v-show="showSearch">
+                <single-input v-model="filters.keyWord" placeholder="请输入关键字搜索"
+                              :showFocus="showSearch"></single-input>
+                <i class="el-icon-t-search" @click.stop="showSearch=(!showSearch)"></i>
+              </span>
+              <a href="#" class="btn-circle" @click.stop.prevent="showSearch=(!showSearch)" v-show="!showSearch">
+                <i class="el-icon-t-search"></i>
+              </a>
+              <perm label="tms-goods-area-detail-add">
+                <a href="#" class="btn-circle" @click.stop.prevent="add" v-show="!showAll">
+                  <i class="el-icon-t-plus"></i>
+                </a>
+              </perm>
+            </span>
+            <div v-if="dataRows.length === 0" class="empty-info clearfix">
               暂无信息
             </div>
             <div v-else>
@@ -124,7 +123,6 @@
                 </el-pagination>
               </div>
             </div>
-
           </div>
         </el-scrollbar>
       </div>
