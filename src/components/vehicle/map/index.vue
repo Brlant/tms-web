@@ -79,7 +79,8 @@
       <search-part @search="searchResult">
         <template slot="btn">
           <perm label="tms-task-add">
-            <el-button plain size="small" @click="showPart(0)">生成派送</el-button>
+            <el-button plain size="small" @click="showPart(0)">
+              <f-a class="icon-small" name="detail"></f-a> 生成派送</el-button>
           </perm>
         </template>
       </search-part>
