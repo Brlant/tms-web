@@ -27,7 +27,7 @@
   <div>
     <div class="content-part">
       <div class="content-left">
-        <h2 class="clearfix right-title">确认运单</h2>
+        <h2 class="clearfix right-title">自动排单</h2>
         <div class="dialog-left-list">
           <div class="dialog-left-item" v-for="(item, index) in dataList" :key="item.id"
                :class="{active:activeId === index}"
@@ -299,7 +299,7 @@
           }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: error.response && error.response.data && error.response.msg || '确认运单失败'
+              message: error.response && error.response.data && error.response.data.msg || '确认运单失败'
             });
             this.doing = false;
           });

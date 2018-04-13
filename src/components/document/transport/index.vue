@@ -32,6 +32,20 @@
             批量确认运单
           </el-button>
         </perm>
+        <perm label="tms-waybill-confirm">
+          <el-button plain size="small" @click="autoWayBillList"
+                     v-if="(activeStatus===2||activeStatus==='2')&&checkList.length">
+            <f-a class="icon-small" name="wave"></f-a>
+            自动排单
+          </el-button>
+        </perm>
+        <perm label="tms-waybill-confirm">
+          <el-button plain size="small" @click="batchAutoWayBillList"
+                     v-if="(activeStatus===2||activeStatus==='2')&&!checkList.length">
+            <f-a class="icon-small" name="wave"></f-a>
+            批量自动排单
+          </el-button>
+        </perm>
         <perm label="tms-waybill-export">
           <el-button plain size="small" @click="exportFile" :disabled="isLoading">
             <f-a class="icon-small" name="print"></f-a>
@@ -47,7 +61,7 @@
       <el-row class="order-list-header">
         <el-col :span="2">
           <el-checkbox @change="checkAll" v-model="isCheckAll"
-                       v-if="activeStatus===0||activeStatus==='0'"></el-checkbox>
+                       v-if="activeStatus===0||activeStatus==='0'||activeStatus===2||activeStatus==='2'"></el-checkbox>
           运单号
         </el-col>
         <el-col :span="2" class="text-center">类型</el-col>
@@ -78,7 +92,8 @@
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="2" class="special-col R">
-              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)">
+              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
+                   v-if="activeStatus===0||activeStatus==='0'||activeStatus===2||activeStatus==='2'">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
@@ -145,14 +160,14 @@
             <el-col :span="3" class="opera-btn">
               <div>
                 <div>
-                  <perm label="tms-waybill-edit" class="btn-line-block">
+                  <perm label="tms-waybill-edit">
                     <span @click.stop="edit(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
                   </perm>
-                  <perm label="tms-waybill-edit" class="btn-line-block">
+                  <perm label="tms-waybill-edit">
                     <span @click.stop="confirm(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-verifyPass"></i>
@@ -161,14 +176,14 @@
                   </perm>
                 </div>
                 <div style="padding-top: 2px">
-                  <perm label="tms-waybill-cancel" class="opera-btn btn-line-block">
+                  <perm label="tms-waybill-cancel" class="opera-btn">
                     <span @click.stop="cancelWayBill(item)" v-if="activeStatus===0||activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
                     </span>
                   </perm>
-                  <perm label="tms-waybill-pack" class="opera-btn btn-line-block">
+                  <perm label="tms-waybill-pack" class="opera-btn">
                     <span @click.stop="packageWayBill(item)" v-if="activeStatus===1||activeStatus==='1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-basic"></i>
@@ -176,7 +191,7 @@
                     </span>
                   </perm>
                 </div>
-                  <perm label="tms-waybill-sign" class="opera-btn btn-line-block">
+                <perm label="tms-waybill-sign" class="opera-btn">
                     <span @click.stop="signWayBill(item)" v-if="activeStatus===4||activeStatus==='4'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
@@ -210,6 +225,12 @@
     <page-right :show="showConfirmIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentConfirmPart" :checkList="checkListPara" @right-close="resetRightBox" @change="submit"/>
     </page-right>
+    <page-right :show="showAutoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentAutoPart" :checkList="checkListPara" @right-close="resetRightBox" @change="submit"/>
+    </page-right>
+    <page-right :show="showBatchAutoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentBatchAutoPart" :filters="condition" @right-close="resetRightBox" @change="autoSubmit"/>
+    </page-right>
 
   </div>
 </template>
@@ -222,6 +243,8 @@
   import signForm from './form/sign-form';
   import StatusMixin from '@/mixins/statusMixin';
   import confirmForm from './form/confirm-form';
+  import autoForm from './form/auto-form';
+  import batchAutoForm from './form/batch-auto-form';
 
   export default {
     components: {
@@ -238,10 +261,14 @@
         showInfoIndex: -1,
         showSignIndex: -1,
         showConfirmIndex: -1,
+        showAutoIndex: -1,
+        showBatchAutoIndex: -1,
         currentPart: null,
         currentInfoPart: null,
         currentSignPart: null,
         currentConfirmPart: null,
+        currentAutoPart: null,
+        currentBatchAutoPart: null,
         dialogComponents: {
           0: addForm
         },
@@ -253,6 +280,12 @@
         },
         dialogConfirmComponents: {
           0: confirmForm
+        },
+        dialogAutoComponents: {
+          0: autoForm
+        },
+        dialogBatchAutoComponents: {
+          0: batchAutoForm
         },
         pager: {
           currentPage: 1,
@@ -278,7 +311,8 @@
         checkListPara: [],
         shoWayBillPart: false,
         isLoading: false,
-        waybillIdList: []
+        waybillIdList: [],
+        condition: {}
       };
     },
     watch: {
@@ -341,11 +375,32 @@
           }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: error.response && error.response.data && error.response.msg || '运单打包失败'
+              message: error.response && error.response.data && error.response.data.msg || '运单打包失败'
             });
           });
         }).catch(() => {
 
+        });
+      },
+      autoWayBillList: function () {
+        if (!this.checkList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选需要自动排单的运单'
+          });
+          return;
+        }
+        this.showAutoIndex = 0;
+        this.currentAutoPart = this.dialogAutoComponents[0];
+        this.$nextTick(() => {
+          this.checkListPara = this.checkList.slice();
+        });
+      },
+      batchAutoWayBillList: function () {
+        this.showBatchAutoIndex = 0;
+        this.currentBatchAutoPart = this.dialogBatchAutoComponents[0];
+        this.$nextTick(() => {
+          this.condition = this.filters;
         });
       },
       batchConfirmWayBill: function () {
@@ -390,7 +445,7 @@
           }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: error.response && error.response.data && error.response.msg || '批量确认运单失败'
+              message: error.response && error.response.data && error.response.data.msg || '批量确认运单失败'
             });
           });
         }).catch(() => {
@@ -413,7 +468,7 @@
           }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: error.response && error.response.data && error.response.msg || '确认运单失败'
+              message: error.response && error.response.data && error.response.data.msg || '确认运单失败'
             });
           });
         }).catch(() => {
@@ -474,7 +529,7 @@
           }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: error.response && error.response.data && error.response.msg || '取消运单失败'
+              message: error.response && error.response.data && error.response.data.msg || '取消运单失败'
             });
           });
         }).catch(() => {
@@ -494,6 +549,8 @@
       checkStatus (item, key) {
         this.filters.status = item.status;
         this.activeStatus = key;
+        this.checkList = [];
+        this.checkListPara = [];
       },
       resetRightBox () {
         this.showIndex = -1;
@@ -501,6 +558,8 @@
         this.shoWayBillPart = false;
         this.showSignIndex = -1;
         this.showConfirmIndex = -1;
+        this.showAutoIndex = -1;
+        this.showBatchAutoIndex = -1;
       },
       getTmsWayBillPage: function (pageNo, isContinue = false) {
         this.pager.currentPage = pageNo;
@@ -571,6 +630,20 @@
         });
       },
       submit() {
+        this.getTmsWayBillPage(1);
+      },
+      autoSubmit() {
+        this.filters = {
+          status: '0',
+          waybillNumber: '',
+          waybillType: '',
+          shipmentWay: '',
+          serviceType: '',
+          senderId: '',
+          receiverId: '',
+          startTime: '',
+          endTime: ''
+        };
         this.getTmsWayBillPage(1);
       }
     }

@@ -236,7 +236,7 @@ export default {
       });
     }).catch(error => {
       that.$notify.error({
-        message: error.response && error.response.data && error.response.msg || '打印失败'
+        message: error.response && error.response.data && error.response.data.msg || '打印失败'
       });
     });
   },

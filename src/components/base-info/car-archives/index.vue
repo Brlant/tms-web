@@ -436,7 +436,7 @@
           }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: error.response && error.response.data && error.response.msg || '删除车辆' + this.currentItem.carDto.plateNumber + '的运输黑名单失败'
+              message: error.response && error.response.data && error.response.data.msg || '删除车辆' + this.currentItem.carDto.plateNumber + '的运输黑名单失败'
             });
           });
         }).catch(() => {
@@ -459,7 +459,7 @@
           }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: error.response && error.response.data && error.response.msg || '删除单位失败'
+              message: error.response && error.response.data && error.response.data.msg || '删除单位失败'
             });
           });
         }).catch(() => {

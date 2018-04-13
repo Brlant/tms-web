@@ -2,6 +2,16 @@
 //2.0变化
 
 .app-body {
+
+  // 滚动条
+  .el-scrollbar__bar {
+    opacity: 1;
+  }
+
+  .el-scrollbar__wrap {
+    overflow: auto;
+  }
+
   .warehouse-tree {
     .el-collapse-item__arrow {
       float: left;

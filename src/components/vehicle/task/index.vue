@@ -223,7 +223,7 @@
           }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: error.response && error.response.data && error.response.msg || '取消出车任务失败'
+              message: error.response && error.response.data && error.response.data.msg || '取消出车任务失败'
             });
           });
         }).catch(() => {
@@ -253,7 +253,7 @@
           }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: error.response && error.response.data && error.response.msg || '确认派送任务失败'
+              message: error.response && error.response.data && error.response.data.msg || '确认派送任务失败'
             });
           });
         }).catch(() => {

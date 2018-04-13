@@ -81,6 +81,9 @@ export const TmsOrder = resource('/tms-order', http, {
 
 // tms-waybill 对象
 export const TmsWayBill = resource('/tms-waybill', http, {
+  queryList: (params) => {
+    return http.get('/tms-waybill/list', {params});
+  },
   queryStateNum: (params) => {
     return http.get('/tms-waybill/count', {params});
   },
@@ -109,6 +112,12 @@ export const TmsWayBill = resource('/tms-waybill', http, {
 
 // transport-task 对象
 export const TransportTask = resource('/transport-task', http, {
+  batchAutoCreateWayBill: (params) => {
+    return http.post('/transport-task/auto', params);
+  },
+  autoCreateWayBill: (params) => {
+    return http.post('/transport-task/auto/list', params);
+  },
   getOneTransportTask: (id) => {
     return http.get('/transport-task/' + id, {});
   },
@@ -146,6 +155,9 @@ export const CarArchives = resource('/car-archives', http, {
   },
   queryUnboundOrg: (params) => {
     return http.get('/transport-blacklist/unbound/org', {params});
+  },
+  queryList: (params) => {
+    return http.get('/car-archives/list', {params});
   }
 });
 

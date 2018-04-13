@@ -121,7 +121,7 @@
             }).catch(error => {
               this.$notify.error({
                 duration: 2000,
-                message: error.response && error.response.data && error.response.msg || '签收运单失败'
+                message: error.response && error.response.data && error.response.data.msg || '签收运单失败'
               });
               this.doing = false;
             });
