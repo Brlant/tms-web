@@ -32,14 +32,14 @@
             批量确认运单
           </el-button>
         </perm>
-        <perm label="tms-waybill-confirm">
+        <perm label="tms-task-add">
           <el-button plain size="small" @click="autoWayBillList"
                      v-if="(activeStatus===2||activeStatus==='2')&&checkList.length">
             <f-a class="icon-small" name="wave"></f-a>
             自动排单
           </el-button>
         </perm>
-        <perm label="tms-waybill-confirm">
+        <perm label="tms-task-add">
           <el-button plain size="small" @click="batchAutoWayBillList"
                      v-if="(activeStatus===2||activeStatus==='2')&&!checkList.length">
             <f-a class="icon-small" name="wave"></f-a>

@@ -112,6 +112,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
 
 // transport-task 对象
 export const TransportTask = resource('/transport-task', http, {
+  queryAutoTaskList: (params) => {
+    return http.get('/transport-task/auto/pager', {params});
+  },
   batchAutoCreateWayBill: (params) => {
     return http.post('/transport-task/auto', params);
   },
