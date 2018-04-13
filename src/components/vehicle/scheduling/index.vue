@@ -96,7 +96,7 @@
         if (val === '0') {
           title = '进行中';
         }
-        if (val === '0') {
+        if (val === '1') {
           title = '已完成';
         }
         return title;
