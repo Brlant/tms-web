@@ -27,7 +27,7 @@
   <div>
     <div class="content-part">
       <div class="content-left">
-        <h2 class="clearfix right-title">确认运单</h2>
+        <h2 class="clearfix right-title">自动排单</h2>
         <div class="dialog-left-list">
           <div class="dialog-left-item" v-for="(item, index) in dataList" :key="item.id"
                :class="{active:activeId === index}">
@@ -54,7 +54,9 @@
               <table class="table" style="margin-bottom: 0">
                 <thead>
                 <tr>
-                  <th width="8%"></th>
+                  <th width="8%">
+                    <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
+                  </th>
                   <th width="14%">车牌号</th>
                   <th width="30%">运输范围</th>
                   <th width="24%">载重</th>
@@ -93,7 +95,6 @@
                 </table>
               </div>
             </div>
-            <div class="hr mb-10 clearfix"></div>
           </div>
         </el-form>
       </div>
@@ -108,6 +109,7 @@
     components: {TwoColumn},
     data() {
       return {
+        isCheckAll: false,
         showTypeSearch: false,
         typeTxt: '',
         span: 7,
@@ -155,6 +157,23 @@
       }
     },
     methods: {
+      checkAll() {
+        // 全选
+        if (this.isCheckAll) {
+          this.carList.forEach(item => {
+            item.isChecked = true;
+            let index = this.checkCarList.indexOf(item);
+            if (index === -1) {
+              this.checkCarList.push(item);
+            }
+          });
+        } else {
+          this.carList.forEach(item => {
+            item.isChecked = false;
+          });
+          this.checkCarList = [];
+        }
+      },
       rowClick(item) {
         item.isChecked = !item.isChecked;
         this.setChecked(item);
@@ -193,6 +212,7 @@
           res.data.forEach(val => {
             val.isChecked = true;
           });
+          this.isCheckAll = true;
           this.carList = res.data;
           this.carList.forEach(val => {
             let index = this.checkCarList.indexOf(val);
