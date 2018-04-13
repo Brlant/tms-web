@@ -176,7 +176,7 @@
       },
       rowClick(item) {
         item.isChecked = !item.isChecked;
-        this.setChecked(item);
+        // this.setChecked(item);
         this.changeCheckStatus(item);
       },
       setChecked: function (item) {
