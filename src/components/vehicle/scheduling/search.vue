@@ -11,7 +11,7 @@
             <oms-form-row label="创建人" :span="6">
               <el-select filterable remote placeholder="名称/字母搜索" :remote-method="filterUser"
                          :clearable="true" @click.native.once="filterUser('')"
-                         v-model="searchCondition.createBy" popperClass="good-selects">
+                         v-model="searchCondition.createdBy" popperClass="good-selects">
                 <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
                   <div style="overflow: hidden">
                     <span class="pull-left" style="clear: right">{{user.name}}</span>
@@ -24,15 +24,13 @@
             </oms-form-row>
           </el-col>
           <el-col :span="10">
-            <oms-form-row label="创建时间" :span="5">
-              <el-col :span="24">
+            <oms-form-row label="创建时间" :span="4">
                 <el-date-picker v-model="createdTime" type="datetimerange" placeholder="请选择">
                 </el-date-picker>
-              </el-col>
             </oms-form-row>
           </el-col>
           <el-col :span="10">
-            <oms-form-row label="结束时间" :span="5">
+            <oms-form-row label="结束时间" :span="4">
               <el-date-picker v-model="expectedTime" type="datetimerange" placeholder="请选择">
               </el-date-picker>
             </oms-form-row>
@@ -51,7 +49,7 @@
     data: function () {
       return {
         searchCondition: {
-          createBy: '',
+          createdBy: '',
           createStartTime: '',
           createEndTime: '',
           completeStartTime: '',
@@ -92,7 +90,7 @@
       },
       reset() {
         this.searchCondition = {
-          createBy: '',
+          createdBy: '',
           createStartTime: '',
           createEndTime: '',
           completeStartTime: '',

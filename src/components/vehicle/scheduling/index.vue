@@ -69,7 +69,7 @@
         },
         form: {},
         filters: {
-          createBy: '',
+          createdBy: '',
           createStartTime: '',
           createEndTime: '',
           completeStartTime: '',
