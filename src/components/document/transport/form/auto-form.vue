@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="opera-btn">
-          <div type="primary" class="btn" @click="saveAutoWayBill" :disabled="doing">保存</div>
+          <div type="primary" class="btn" @click="saveAutoWayBill" :disabled="doing">开始自动排单</div>
         </div>
       </div>
       <div class="content-right min-row">
