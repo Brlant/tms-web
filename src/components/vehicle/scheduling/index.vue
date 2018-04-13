@@ -23,17 +23,17 @@
             {{formatStatusTitle(scope.row.status)}}
           </template>
         </el-table-column>
-        <el-table-column prop="checkDate" label="结束时间">
-          <template slot-scope="scope">
-            {{ scope.row.completeTime | time}}
-          </template>
-        </el-table-column>
         <el-table-column prop="checkDate" label="创建时间">
           <template slot-scope="scope">
             {{ scope.row.createTime | time}}
           </template>
         </el-table-column>
         <el-table-column prop="createdName" label="创建人"></el-table-column>
+        <el-table-column prop="checkDate" label="结束时间">
+          <template slot-scope="scope">
+            {{ scope.row.completeTime | time}}
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
