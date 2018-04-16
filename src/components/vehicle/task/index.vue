@@ -22,14 +22,14 @@
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="4">任务号</el-col>
-        <el-col :span="2">任务类型</el-col>
+        <!--<el-col :span="2">任务类型</el-col>-->
         <el-col :span="2">任务状态</el-col>
         <el-col :span="2">司机</el-col>
-        <el-col :span="2">车牌号</el-col>
+        <el-col :span="3">车牌号</el-col>
         <el-col :span="2">件数</el-col>
-        <el-col :span="2">载重(kg)</el-col>
+        <el-col :span="3">载重(kg)</el-col>
         <el-col :span="2">容积(m³)</el-col>
-        <el-col :span="3">派车时间</el-col>
+        <el-col :span="3">创建时间</el-col>
         <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
@@ -53,11 +53,11 @@
                 {{item.transportTaskNo}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
-              <div>
-                <dict :dict-group="'deliveryTaskType'" :dict-key="item.type"></dict>
-              </div>
-            </el-col>
+            <!--<el-col :span="2" class="R">-->
+              <!--<div>-->
+                <!--<dict :dict-group="'deliveryTaskType'" :dict-key="item.type"></dict>-->
+              <!--</div>-->
+            <!--</el-col>-->
             <el-col :span="2" class="R">
               <div>
                 {{formatStatusTitle(item.status, orderType)}}
@@ -68,7 +68,7 @@
                 {{item.driverName}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="3" class="R">
               <div>
                 {{item.carPlateNumber}}
               </div>
@@ -78,7 +78,7 @@
                 {{item.incubatorCount}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="3" class="R">
               <div>
                 {{item.carLoadBearing}}
               </div>

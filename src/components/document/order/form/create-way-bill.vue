@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="opera-btn">
-          <div type="primary" class="btn" @click="createWayBill" :disabled="doing">生成运单</div>
+          <el-button plain @click="createWayBill" :disabled="doing">生成运单</el-button>
         </div>
       </div>
       <div class="content-right min-row" v-show="currentOrder.id">
