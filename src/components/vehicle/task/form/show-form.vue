@@ -122,7 +122,7 @@
               </el-table-column>
               <el-table-column prop="receiverName" label="收货单位" width="240">
               </el-table-column>
-              <el-table-column prop="receiverAddress" label="收货地址"  width="180">
+              <el-table-column prop="receiverAddress" label="收货地址" width="180">
               </el-table-column>
               <el-table-column prop="incubatorCount" label="包件" width="50">
               </el-table-column>
@@ -140,24 +140,37 @@
             </el-table>
           </div>
         </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
+              {{pageSets[2].name}}
+            </h3>
+          </div>
+          <div class="content">
+            <task-map :waybillList="form.waybillList"></task-map>
+          </div>
+        </div>
       </el-form>
     </template>
   </dialog-template>
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TransportTask} from '@/resources';
+  import { TransportTask } from '@/resources';
+  import TaskMap from './map';
 
   export default {
-    components: {TwoColumn},
-    data() {
+    components: {TwoColumn, TaskMap},
+    data () {
       return {
         span: 7,
         list: [],
         times: [],
         pageSets: [
           {name: '任务信息', key: 0},
-          {name: '运单明细', key: 1}
+          {name: '运单明细', key: 1},
+          {name: '派送地图', key: 2}
         ],
         currentTab: {},
         form: {
@@ -265,10 +278,10 @@
 
         });
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
-      close() {
+      close () {
         this.$emit('right-close');
       }
     }
