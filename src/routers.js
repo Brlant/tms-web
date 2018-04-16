@@ -44,14 +44,14 @@ export const routes = [
             meta: {moduleId: 'vehicle', title: '地图派送', perm: 'tms-task-map-manager'}
           },
           {
-            path: '/vehicle/delivery/task',
-            component: () => import('./components/vehicle/task/index.vue'),
-            meta: {moduleId: 'vehicle', title: '出车任务', perm: 'tms-task-car-task-query'}
-          },
-          {
             path: '/vehicle/scheduling',
             component: () => import('./components/vehicle/scheduling/index.vue'),
             meta: {moduleId: 'vehicle', title: '自动排单', perm: 'tms-task-add'}
+          },
+          {
+            path: '/vehicle/delivery/task',
+            component: () => import('./components/vehicle/task/index.vue'),
+            meta: {moduleId: 'vehicle', title: '出车任务', perm: 'tms-task-car-task-query'}
           }
         ]
       },
