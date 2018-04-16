@@ -33,10 +33,10 @@
         </div>
       </div>
       <div class="content-right min-row">
-        <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
+        <el-form ref="form" :rules="rules" :mode="form" class="clearfix" label-width="100px" onsubmit="return false">
           <div class="form-header-part">
             <el-form-item label="排单模式" prop="mode">
-              <el-radio-group v-mode="form.mode">
+              <el-radio-group v-model="form.mode">
                 <el-radio-button label="最低成本" value="0" key="0"></el-radio-button>
                 <el-radio-button label="最短距离" value="1" key="1"></el-radio-button>
               </el-radio-group>
@@ -46,7 +46,7 @@
               <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
                 {{pageSets[0].name}}
                 <!--<div class="search-left-box pull-right" v-show="showTypeSearch">-->
-                <!--<oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>-->
+                <!--<oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocu∂s="showTypeSearch"></oms-input>-->
                 <!--</div>-->
               </h3>
             </div>
