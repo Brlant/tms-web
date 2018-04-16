@@ -280,10 +280,19 @@
               mode: mode
             });
             this.doing = true;
+            this.$store.commit('initPrint', {
+              text: '自动排单中',
+              isPrinting: true,
+              moduleId: '/document/transport'
+            });
             TransportTask.autoCreateWayBill(param).then(res => {
               this.$notify.success({
                 duration: 2000,
                 message: '自动排单成功'
+              });
+              this.$store.commit('initPrint', {
+                isPrinting: false,
+                moduleId: '/document/transport'
               });
               this.doing = false;
               this.$emit('change', this.form);
