@@ -292,6 +292,10 @@
                 duration: 2000,
                 message: error.response && error.response.data && error.response.data.msg || '批量自动排单失败'
               });
+              this.$store.commit('initPrint', {
+                isPrinting: false,
+                moduleId: '/document/transport'
+              });
               this.doing = false;
             });
           }
