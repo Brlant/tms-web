@@ -69,8 +69,10 @@
             <el-col :span="24">
               <div>
                 <oms-row label="集货区" :span="3">
-                  <span v-for="area in form.areaDtoList">{{area.name}}<span
-                    v-if="form.areaDtoList.indexOf(area)!==form.areaDtoList.length-1">, </span></span>
+                  <span v-for="area in form.areaDtoList">
+                      <slot>{{area.name}} <span
+                        v-if="form.areaDtoList.indexOf(area)!==form.areaDtoList.length-1">,</span></slot>
+                  </span>
                 </oms-row>
               </div>
             </el-col>
@@ -116,15 +118,15 @@
           </div>
           <div class="content">
             <el-table :data="form.waybillList" border style="width: 100%">
-              <el-table-column prop="waybillNumber" label="运单号" width="150" >
+              <el-table-column prop="waybillNumber" label="运单号" width="140">
               </el-table-column>
               <el-table-column prop="receiverName" label="收货单位" width="240">
               </el-table-column>
               <el-table-column prop="receiverAddress" label="收货地址"  width="180">
               </el-table-column>
-              <el-table-column prop="incubatorCount" label="包件" width="80">
+              <el-table-column prop="incubatorCount" label="包件" width="50">
               </el-table-column>
-              <el-table-column prop="" label="操作" width="100" v-if="form.status==='0'">
+              <el-table-column prop="" label="操作" width="80" v-if="form.status==='0'">
                 <template slot-scope=" scope">
                   <perm label="tms-waybill-edit" class="opera-btn btn-line-block">
                     <span @click.stop="deleteDetail(scope.row)">
@@ -157,9 +159,7 @@
           {name: '任务信息', key: 0},
           {name: '运单明细', key: 1}
         ],
-        currentTab: {
-          key: 0
-        },
+        currentTab: {},
         form: {
           goodsList: [
             {
@@ -184,6 +184,7 @@
     props: ['formItem'],
     watch: {
       formItem: function (val) {
+        this.selectTab(this.pageSets[0]);
         if (val.id) {
           TransportTask.getOneTransportTask(val.id).then(res => {
             this.form = res.data;

@@ -9,6 +9,7 @@
       transform: translateY(-50%);
     }
   }
+
 </style>
 <template>
   <div class="order-page">
@@ -69,29 +70,19 @@
               </div>
             </el-col>
             <el-col :span="2" class="R">
-              <div>
-                {{item.carPlateNumber}}
-              </div>
+              <div>{{item.carPlateNumber}}</div>
             </el-col>
             <el-col :span="2" class="R">
-              <div>
-                {{item.incubatorCount}}
-              </div>
+              <div>{{item.incubatorCount}}</div>
             </el-col>
             <el-col :span="2" class="R">
-              <div>
-                {{item.carLoadBearing}}
-              </div>
+              <div>{{item.carLoadBearing}}</div>
             </el-col>
             <el-col :span="2" class="R">
-              <div>
-                {{item.carVolume}}
-              </div>
+              <div>{{item.carVolume}}</div>
             </el-col>
             <el-col :span="3" class="R">
-              <div>
-                {{item.updateTime|time}}
-              </div>
+              <div>{{item.updateTime|time}}</div>
             </el-col>
             <el-col :span="3" class="opera-btn">
               <div>

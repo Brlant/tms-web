@@ -60,8 +60,7 @@
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="2">
-          <el-checkbox @change="checkAll" v-model="isCheckAll"
-                       v-if="activeStatus===0||activeStatus==='0'||activeStatus===2||activeStatus==='2'"></el-checkbox>
+          <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
           运单号
         </el-col>
         <el-col :span="2" class="text-center">类型</el-col>
@@ -92,8 +91,7 @@
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="2" class="special-col R">
-              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
-                   v-if="activeStatus===0||activeStatus==='0'||activeStatus===2||activeStatus==='2'">
+              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
@@ -497,6 +495,7 @@
             let index = this.checkList.indexOf(item);
             if (index === -1) {
               this.checkList.push(item);
+              this.waybillIdList.push(item.id);
             }
           });
         } else {

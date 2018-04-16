@@ -352,6 +352,13 @@
         this.setMarker(item._marker, item);
       },
       searchResult (search) {
+        // 清空勾选的运单列表
+        this.checkList = [];
+        this.orderIdList = [];
+        this.totalIncubatorCount = 0;
+        this.totalWeight = 0;
+        this.totalVolume = 0;
+        this.totalTicket = 0;
         Object.assign(this.filters, search);
       },
       getLgtAndLat (query, callBack) {
