@@ -70,8 +70,8 @@
               <div>
                 <oms-row label="集货区" :span="3">
                   <span v-for="area in form.areaDtoList">
-                      <slot>{{area.name}} <span
-                        v-if="form.areaDtoList.indexOf(area)!==form.areaDtoList.length-1">,</span></slot>
+                      <slot>{{area.name}}<span
+                        v-if="form.areaDtoList.indexOf(area)!==form.areaDtoList.length-1">，</span></slot>
                   </span>
                 </oms-row>
               </div>
