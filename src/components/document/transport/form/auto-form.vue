@@ -126,6 +126,7 @@
         ],
         currentTab: {},
         form: {
+          mode: '',
           goodsList: [
             {
               goodsName: '',
@@ -249,6 +250,13 @@
           });
           return;
         }
+        if (!this.form.mode) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请选择排单模式'
+          });
+          return;
+        }
         this.$refs['form'].validate((valid) => {
           if (valid && this.doing === false) {
             let carIdList = [];
@@ -258,9 +266,17 @@
                 carIdList.push(val.id);
               }
             });
+            let mode = '';
+            if (this.form.mode === '最低成本') {
+              mode = '0';
+            }
+            if (this.form.mode === '最短距离') {
+              mode = '1';
+            }
             let param = Object.assign({}, {
               waybillList: this.orderIdList,
-              carList: carIdList
+              carList: carIdList,
+              mode: mode
             });
             this.doing = true;
             TransportTask.autoCreateWayBill(param).then(res => {

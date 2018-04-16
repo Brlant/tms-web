@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="content-right min-row">
-        <el-form ref="form" :rules="rules" :mode="form" class="clearfix" label-width="100px" onsubmit="return false">
+        <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
           <div class="form-header-part">
             <el-form-item label="排单模式" prop="mode">
               <el-radio-group v-model="form.mode">
@@ -120,6 +120,7 @@
         ],
         currentTab: {},
         form: {
+          mode: '',
           goodsList: [
             {
               goodsName: '',
@@ -241,6 +242,13 @@
           });
           return;
         }
+        if (!this.form.mode) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请选择排单模式'
+          });
+          return;
+        }
         this.$refs['form'].validate((valid) => {
           if (valid && this.doing === false) {
             let carIdList = [];
@@ -250,8 +258,16 @@
                 carIdList.push(val.id);
               }
             });
+            let mode = '';
+            if (this.form.mode === '最低成本') {
+              mode = '0';
+            }
+            if (this.form.mode === '最短距离') {
+              mode = '1';
+            }
             let param = Object.assign({}, {
-              carList: carIdList
+              carList: carIdList,
+              mode: mode
             }, this.condition);
             this.doing = true;
             TransportTask.batchAutoCreateWayBill(param).then(res => {
@@ -265,7 +281,7 @@
             }).catch(error => {
               this.$notify.error({
                 duration: 2000,
-                message: error.response && error.response.data && error.response.data.msg || '批量自动排单成功'
+                message: error.response && error.response.data && error.response.data.msg || '批量自动排单失败'
               });
               this.doing = false;
             });
