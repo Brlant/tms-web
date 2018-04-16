@@ -1,5 +1,5 @@
 <template>
-  <el-amap v-if="waybillList.length" vid="aMap"  :zoom="10" :center="center" :style="'height:700px'">
+  <el-amap v-if="waybillList.length" vid="aMap" :zoom="10" :center="center" :style="'height:700px'">
     <el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"
                     :label="marker.label"></el-amap-marker>
   </el-amap>
@@ -23,7 +23,7 @@
     computed: {
       markers () {
         if (!this.waybillList.length) return [];
-        return  this.waybillList.map(m => ({
+        return this.waybillList.map(m => ({
           position: [m.receiverAddressLongitude, m.receiverAddressDimension],
           label: {
             content: m.receiverName,
