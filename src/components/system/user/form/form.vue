@@ -11,7 +11,7 @@
       <el-form-item label="姓名" prop="name">
         <oms-input type="text" v-model="form.name" placeholder="请输入"></oms-input>
       </el-form-item>
-      <el-form-item label="手机号码" prop="phone">
+      <el-form-item label="手机号码" prop="phone" class="contact-check">
         <oms-input type="text" v-model="form.phone" placeholder="请输入"></oms-input>
       </el-form-item>
       <el-form-item label="Email">
@@ -119,6 +119,7 @@
     },
     watch: {
       formItem: function (val) {
+        this.$refs['accountform'].clearValidate();
         if (val.id) {
           this.form = this.formItem;
           this.form.list = this.formItem.list.map(m => m.roleId);
