@@ -35,6 +35,12 @@
       <div class="content-right min-row">
         <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
           <div class="form-header-part">
+            <el-form-item label="排单模式" prop="model">
+              <el-radio-group v-model="form.model">
+                <el-radio-button label="最低成本" value="0" key="0"></el-radio-button>
+                <el-radio-button label="最短距离" value="1" key="1"></el-radio-button>
+              </el-radio-group>
+            </el-form-item>
             <div class="header">
               <div class="sign f-dib"></div>
               <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
@@ -125,7 +131,9 @@
           ]
         },
         orderIdList: [],
-        rules: {},
+        rules: {
+          model: {required: true, message: '请选择排单模式', trigger: 'change'}
+        },
         activeId: '',
         doing: false,
         carList: [],
@@ -147,6 +155,9 @@
     props: ['filters'],
     watch: {
       filters: function (val) {
+        if (this.form.model) {
+          this.form.model = '';
+        }
         this.condition = val;
         // 查询车辆列表
         this.getCarList();
