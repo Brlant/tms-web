@@ -33,10 +33,10 @@
         </div>
       </div>
       <div class="content-right min-row">
-        <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
+        <el-form ref="form" :rules="rules" :mode="form" class="clearfix" label-width="100px" onsubmit="return false">
           <div class="form-header-part">
-            <el-form-item label="排单模式" prop="model">
-              <el-radio-group v-model="form.model">
+            <el-form-item label="排单模式" prop="mode">
+              <el-radio-group v-mode="form.mode">
                 <el-radio-button label="最低成本" value="0" key="0"></el-radio-button>
                 <el-radio-button label="最短距离" value="1" key="1"></el-radio-button>
               </el-radio-group>
@@ -46,7 +46,7 @@
               <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
                 {{pageSets[0].name}}
                 <!--<div class="search-left-box pull-right" v-show="showTypeSearch">-->
-                <!--<oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>-->
+                <!--<oms-input v-mode='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>-->
                 <!--</div>-->
               </h3>
             </div>
@@ -55,7 +55,7 @@
                 <thead>
                 <tr>
                   <th width="8%">
-                    <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
+                    <el-checkbox @change="checkAll" v-mode="isCheckAll"></el-checkbox>
                   </th>
                   <th width="14%">车牌号</th>
                   <th width="30%">运输范围</th>
@@ -75,7 +75,7 @@
                   <tbody v-if="carList.length !== 0">
                   <tr v-for="item in carList" :class="{active: item.isChecked}" @click.stop.prevent="rowClick(item)">
                     <td width="8%">
-                      <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
+                      <el-checkbox v-mode="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                     </td>
                     <td width="14%">{{item.plateNumber}}</td>
                     <td width="30%" class="R">
@@ -132,7 +132,7 @@
         },
         orderIdList: [],
         rules: {
-          model: {required: true, message: '请选择排单模式', trigger: 'change'}
+          mode: {required: true, message: '请选择排单模式', trigger: 'change'}
         },
         activeId: '',
         doing: false,
@@ -155,8 +155,8 @@
     props: ['filters'],
     watch: {
       filters: function (val) {
-        if (this.form.model) {
-          this.form.model = '';
+        if (this.form.mode) {
+          this.form.mode = '';
         }
         this.condition = val;
         // 查询车辆列表
