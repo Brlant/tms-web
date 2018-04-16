@@ -152,6 +152,7 @@
     watch: {
       checkList: function (val) {
         this.dataList = val;
+        this.orderIdList = [];
         if (this.form.mode) {
           this.form.mode = '';
         }
