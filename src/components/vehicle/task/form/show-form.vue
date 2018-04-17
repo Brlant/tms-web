@@ -158,7 +158,7 @@
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
   import { TransportTask } from '@/resources';
-  import TaskMap from './map';
+  import TaskMap from './map-new';
 
   export default {
     components: {TwoColumn, TaskMap},
