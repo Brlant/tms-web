@@ -95,7 +95,7 @@
                   <el-form-item label="运单" style="margin-top: 20px;margin-bottom: 20px">
                     <el-select filterable remote placeholder="请输入运单号搜索运单" :remote-method="getTmsOrderList"
                                :clearable="true"
-                               v-model="detailForm.list" popperClass="good-selects">
+                               v-model="detailForm.list" popperClass="good-selects" multiple>
                       <el-option :value="bill.id" :key="bill.id" :label="bill.waybillNumber"
                                  v-for="bill in wayBillList">
                         <div style="overflow: hidden">
@@ -157,7 +157,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import { TransportTask } from '@/resources';
+  import {TransportTask} from '@/resources';
   import TaskMap from './map';
 
   export default {
@@ -187,7 +187,8 @@
         rules: {},
         showAddFlag: false,
         detailForm: {
-          id: '', list: []
+          id: '',
+          list: []
         },
         wayBillList: [],
         doing: false
