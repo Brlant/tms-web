@@ -52,13 +52,19 @@
               <div class="sign f-dib"></div>
               <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
                 {{pageSets[0].name}}
+                <span @click="resetCarList" class="btn-circle"><i class="el-icon-t-reset"></i> </span>
                 <!--<div class="search-left-box pull-right" v-show="showTypeSearch">-->
                 <!--<oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>-->
                 <!--</div>-->
               </h3>
             </div>
             <div class="content">
-              <table class="table" style="margin-bottom: 0">
+              <el-row v-if="loadingData">
+                <el-col :span="24">
+                  <oms-loading :loading="loadingData"></oms-loading>
+                </el-col>
+              </el-row>
+              <table class="table" style="margin-bottom: 0" v-if="!loadingData">
                 <thead>
                 <tr>
                   <th width="8%">
@@ -73,7 +79,7 @@
                 </thead>
               </table>
 
-              <div class="m-list">
+              <div class="m-list" v-if="!loadingData">
                 <table class="table table-hover">
                   <tbody v-if="carList.length === 0">
                   <div class="empty-info">
@@ -125,6 +131,7 @@
     components: {TwoColumn},
     data() {
       return {
+        loadingData: true,
         isCheckAll: false,
         showTypeSearch: false,
         typeTxt: '',
@@ -180,6 +187,9 @@
       }
     },
     methods: {
+      resetCarList: function () {
+        this.getCarList();
+      },
       setCarInfo: function (item) {
         this.checkCarList.forEach(val => {
           if (val.id === item.id) {
@@ -238,6 +248,7 @@
         let param = Object.assign({}, {
           keyword: this.typeTxt
         });
+        this.loadingData = true;
         CarArchives.queryList(param).then(res => {
           res.data.forEach(val => {
             val.isChecked = true;
@@ -251,7 +262,7 @@
               this.checkCarList.push(val);
             }
           });
-
+          this.loadingData = false;
         });
       },
       saveAutoWayBill: function () {
