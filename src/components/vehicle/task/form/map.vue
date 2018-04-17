@@ -23,7 +23,7 @@
     computed: {
       markers () {
         if (!this.waybillList.length) return [];
-        return this.waybillList.map(m => ({
+        return this.waybillList.filter(f => f.receiverAddressLongitude).map(m => ({
           position: [m.receiverAddressLongitude, m.receiverAddressDimension],
           label: {
             content: m.receiverName,
