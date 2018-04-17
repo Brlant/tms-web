@@ -46,7 +46,7 @@ export const routes = [
           {
             path: '/vehicle/scheduling',
             component: () => import('./components/vehicle/scheduling/index.vue'),
-            meta: {moduleId: 'vehicle', title: '自动排单', perm: 'tms-task-add'}
+            meta: {moduleId: 'vehicle', title: '排单记录', perm: 'tms-task-add'}
           },
           {
             path: '/vehicle/delivery/task',

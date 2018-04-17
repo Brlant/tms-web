@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-  $labelWidth: 180px;
+  $labelWidth: 220px;
   .content-part {
     .content-left {
       width: $labelWidth;
@@ -58,9 +58,10 @@
                     <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
                   </th>
                   <th width="14%">车牌号</th>
-                  <th width="30%">运输范围</th>
-                  <th width="24%">载重</th>
-                  <th width="24%">容积</th>
+                  <th width="20%">运输范围</th>
+                  <th width="16%">载重(kg)</th>
+                  <th width="16%">容积(m³)</th>
+                  <th width="24%">最大里程数(km)</th>
                 </tr>
                 </thead>
               </table>
@@ -73,12 +74,12 @@
                   </div>
                   </tbody>
                   <tbody v-if="carList.length !== 0">
-                  <tr v-for="item in carList" :class="{active: item.isChecked}" @click.stop.prevent="rowClick(item)">
+                  <tr v-for="item in carList" :class="{active: item.isChecked}">
                     <td width="8%">
                       <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                     </td>
                     <td width="14%">{{item.plateNumber}}</td>
-                    <td width="30%" class="R">
+                    <td width="20%" class="R">
                       <div>
                        <span v-for="(type,index) in item.scopeList">
                         <dict :dict-group="'transportationCondition'" :dict-key="type"></dict><span
@@ -86,10 +87,18 @@
                         </span>
                       </div>
                     </td>
-                    <td width="24%" class="R">
-                      {{ item.loadBearing}} <span v-if="item.loadBearing">千克</span>
+                    <td width="16%" class="R">
+                      <oms-input type="number" v-model="item.loadBearing" @change="setCarInfo(item)"></oms-input>
+                      <!--{{ item.loadBearing}} <span v-if="item.loadBearing">千克</span>-->
                     </td>
-                    <td width="24%" class="R"> {{ item.volume}} <span v-if="item.volume">立方米</span></td>
+                    <td width="16%" class="R">
+                      <oms-input type="number" v-model="item.volume" @change="setCarInfo(item)"></oms-input>
+                      <!--{{ item.volume}} <span v-if="item.volume">立方米</span>-->
+                    </td>
+                    <td width="24%" class="R">
+                      <oms-input type="number" v-model="item.maxMileage" @change="setCarInfo(item)"></oms-input>
+                      <!--{{ item.volume}} <span v-if="item.volume">立方米</span>-->
+                    </td>
                   </tr>
                   </tbody>
                 </table>
@@ -168,6 +177,13 @@
       }
     },
     methods: {
+      setCarInfo: function (item) {
+        this.checkCarList.forEach(val => {
+          if (val.id === item.id) {
+            val = item;
+          }
+        });
+      },
       checkAll() {
         // 全选
         if (this.isCheckAll) {
@@ -222,6 +238,7 @@
         CarArchives.queryList(param).then(res => {
           res.data.forEach(val => {
             val.isChecked = true;
+            val.maxMileage = '999';
           });
           this.isCheckAll = true;
           this.carList = res.data;
@@ -251,11 +268,17 @@
         }
         this.$refs['form'].validate((valid) => {
           if (valid && this.doing === false) {
-            let carIdList = [];
+            let carList = [];
             this.checkCarList.forEach(val => {
-              let index = carIdList.indexOf(val.id);
+              let index = carList.indexOf(val);
               if (index === -1) {
-                carIdList.push(val.id);
+                let car = {
+                  id: val.id,
+                  loadBearing: val.loadBearing,
+                  volume: val.volume,
+                  maxMileage: val.maxMileage
+                };
+                carList.push(car);
               }
             });
             let mode = '';
@@ -266,7 +289,7 @@
               mode = '1';
             }
             let param = Object.assign({}, {
-              carList: carIdList,
+              carList: carList,
               mode: mode
             }, this.condition);
             this.doing = true;

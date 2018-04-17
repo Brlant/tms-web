@@ -223,10 +223,10 @@
     <page-right :show="showConfirmIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentConfirmPart" :checkList="checkListPara" @right-close="resetRightBox" @change="submit"/>
     </page-right>
-    <page-right :show="showAutoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+    <page-right :show="showAutoIndex === 0" @right-close="resetRightBox" :css="{'width':'1100px','padding':0}">
       <component :is="currentAutoPart" :checkList="checkListPara" @right-close="resetRightBox" @change="autoSubmit"/>
     </page-right>
-    <page-right :show="showBatchAutoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+    <page-right :show="showBatchAutoIndex === 0" @right-close="resetRightBox" :css="{'width':'1100px','padding':0}">
       <component :is="currentBatchAutoPart" :filters="condition" @right-close="resetRightBox" @change="autoSubmit"/>
     </page-right>
 
