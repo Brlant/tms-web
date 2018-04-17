@@ -189,8 +189,8 @@
               <el-form class="advanced-query-form clearfix" style="padding-top: 10px" onsubmit="return false">
                 <el-row>
                   <el-col :span="6">
-                    <oms-form-row label="编号" :span="6">
-                      <oms-input type="text" v-model="searchCondition.devNo" placeholder="请输入包装编号"></oms-input>
+                    <oms-form-row label="编号" :span="4">
+                      <oms-input type="text" v-model="searchCondition.devNo" placeholder="包装编号"></oms-input>
                     </oms-form-row>
                   </el-col>
                   <el-col :span="10">
@@ -223,25 +223,25 @@
           <div v-else-if="devDetailList.length===0">
             <div class="empty-info">暂无信息</div>
           </div>
-          <el-table v-else :data="devDetailList" class="header-list" border
+          <el-table v-else :data="devDetailList" class="header-list" border width="100%"
                     :header-row-class-name="'headerClass'" :maxHeight="tableHeight">
-            <el-table-column prop="devNo" label="包装编号" min-width="204" :sortable="true"></el-table-column>
-            <el-table-column prop="status" label="状态" min-width="100" :sortable="true">
+            <el-table-column prop="devNo" label="包装编号" min-width="150" :sortable="true"></el-table-column>
+            <el-table-column prop="status" label="状态" min-width="80" :sortable="true">
               <template slot-scope="scope">
                 <dict :dict-group="currentItem.type+'Status'" :dict-key="scope.row.status"></dict>
               </template>
             </el-table-column>
-            <el-table-column prop="validityDate" label="有效期" min-width="120" :sortable="true">
+            <el-table-column prop="validityDate" label="有效期" min-width="100" :sortable="true">
               <template slot-scope="scope">
                 {{scope.row.validityDate|date}}
               </template>
             </el-table-column>
-            <el-table-column prop="remark" label="备注" min-width="150">
+            <el-table-column prop="remark" label="备注" min-width="180">
               <template slot-scope="scope">
                 {{scope.row.remark}}
               </template>
             </el-table-column>
-            <el-table-column label="操作" fixed="right" min-width="180">
+            <el-table-column label="操作" fixed="right" min-width="200">
               <template slot-scope="scope">
                 <div class="opera-btn">
                   <perm label="tms-equipment-consumables-detail-edit" class="btn-line-block">
