@@ -398,7 +398,7 @@
         this.showBatchAutoIndex = 0;
         this.currentBatchAutoPart = this.dialogBatchAutoComponents[0];
         this.$nextTick(() => {
-          this.condition = this.filters;
+          this.condition = Object.assign({}, this.filters);
         });
       },
       batchConfirmWayBill: function () {

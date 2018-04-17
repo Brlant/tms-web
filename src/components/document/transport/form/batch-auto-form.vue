@@ -122,7 +122,6 @@
         showTypeSearch: false,
         typeTxt: '',
         span: 7,
-        dataList: [],
         times: [],
         pageSets: [
           {name: '车辆列表', key: 0}
@@ -140,7 +139,6 @@
             }
           ]
         },
-        orderIdList: [],
         rules: {
           mode: {required: true, message: '请选择排单模式', trigger: 'change'}
         },
