@@ -39,6 +39,7 @@
               <el-radio-group v-model="form.mode">
                 <el-radio-button label="最低成本" value="0" key="0"></el-radio-button>
                 <el-radio-button label="最短距离" value="1" key="1"></el-radio-button>
+                <el-radio-button label="最短时间" value="2" key="2"></el-radio-button>
               </el-radio-group>
             </el-form-item>
             <div class="header">
@@ -118,7 +119,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {CarArchives, TmsWayBill, TransportTask} from '@/resources';
+  import { CarArchives, TransportTask } from '@/resources';
 
   export default {
     components: {TwoColumn},
