@@ -49,8 +49,16 @@
             {{ scope.row.completeTime | time}}
           </template>
         </el-table-column>
-        <el-table-column prop="planTime" label="运输总时长(小时)"></el-table-column>
-        <el-table-column prop="maxTime" label="最长时长(小时)"></el-table-column>
+        <el-table-column prop="planTime" label="运输总时长(小时)">
+          <template slot-scope="scope">
+            {{ scope.row.planTime/3600| formatMoney}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="maxTime" label="最长时长(小时)">
+          <template slot-scope="scope">
+            {{ scope.row.maxTime/3600| formatMoney}}
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
