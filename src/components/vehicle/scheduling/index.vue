@@ -118,10 +118,10 @@
     methods: {
       formatTypeTitle: function (val) {
         let title = '';
-        if (val === '0') {
+        if (val === 0) {
           title = '自动排单';
         }
-        if (val === '1') {
+        if (val === 1) {
           title = '手动排单';
         }
         return title;
