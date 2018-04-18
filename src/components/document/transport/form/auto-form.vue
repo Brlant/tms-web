@@ -310,6 +310,9 @@
             if (this.form.mode === '最短距离') {
               mode = '1';
             }
+            if (this.form.mode === '最短时间') {
+              mode = '2';
+            }
             let param = Object.assign({}, {
               waybillList: this.orderIdList,
               carList: carList,
