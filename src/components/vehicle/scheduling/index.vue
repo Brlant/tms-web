@@ -17,10 +17,25 @@
     <div class="order-list" style="margin-top: 20px">
       <el-table :data="dataList" style="width: 100%;" border class="header-list" :header-row-class-name="'headerClass'"
                 v-loading="loadingData">
-        <el-table-column prop="id" label="任务id"></el-table-column>
-        <el-table-column prop="status" label="状态">
+        <!--<el-table-column prop="id" label="任务id" width="100"></el-table-column>-->
+        <el-table-column prop="status" label="状态" width="80">
           <template slot-scope="scope">
             {{formatStatusTitle(scope.row.status)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="cost" label="成本(元)">
+          <template slot-scope="scope">
+            {{ scope.row.cost}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="distance" label="距离(千米)">
+          <template slot-scope="scope">
+            {{ scope.row.distance}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="type" label="类型" width="80">
+          <template slot-scope="scope">
+            {{ formatTypeTitle(scope.row.type)}}
           </template>
         </el-table-column>
         <el-table-column prop="checkDate" label="创建时间">
@@ -34,6 +49,8 @@
             {{ scope.row.completeTime | time}}
           </template>
         </el-table-column>
+        <el-table-column prop="planTime" label="运输总时长(小时)"></el-table-column>
+        <el-table-column prop="maxTime" label="最长时长(小时)"></el-table-column>
       </el-table>
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
@@ -91,6 +108,16 @@
       this.getTransportTaskPage(1);
     },
     methods: {
+      formatTypeTitle: function (val) {
+        let title = '';
+        if (val === '0') {
+          title = '自动排单';
+        }
+        if (val === '1') {
+          title = '手动排单';
+        }
+        return title;
+      },
       formatStatusTitle: function (val) {
         let title = '';
         if (val === '0') {
