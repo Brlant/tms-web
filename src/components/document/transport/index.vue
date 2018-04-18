@@ -40,7 +40,9 @@
           </el-button>
         </perm>
         <perm label="tms-task-add">
-          <el-button plain size="small" @click="batchAutoWayBillList"
+          <el-button plain size
+
+            ="small" @click="batchAutoWayBillList"
                      v-if="(activeStatus===2||activeStatus==='2')&&!checkList.length">
             <f-a class="icon-small" name="wave"></f-a>
             批量自动排单
@@ -477,14 +479,17 @@
         // 单选
         item.isChecked = !item.isChecked;
         let index = this.checkList.indexOf(item);
+        let idIndex = this.waybillIdList.indexOf(item.id);
         if (item.isChecked) {
           if (index === -1) {
             this.checkList.push(item);
+          }
+          if (idIndex === -1) {
             this.waybillIdList.push(item.id);
           }
         } else {
           this.checkList.splice(index, 1);
-          this.waybillIdList.splice(index, 1);
+          this.waybillIdList.splice(idIndex, 1);
         }
       },
       checkAll() {
@@ -495,6 +500,9 @@
             let index = this.checkList.indexOf(item);
             if (index === -1) {
               this.checkList.push(item);
+            }
+            let idIndex = this.waybillIdList.indexOf(item.id);
+            if (idIndex === -1) {
               this.waybillIdList.push(item.id);
             }
           });
@@ -503,6 +511,7 @@
             item.isChecked = false;
           });
           this.checkList = [];
+          this.waybillIdList = [];
         }
       },
       signWayBill: function (item) {

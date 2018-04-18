@@ -12,7 +12,15 @@
 </style>
 <template>
   <div class="order-page">
-    <search-part @search="searchResult"></search-part>
+    <search-part @search="searchResult">
+      <template slot="btn">
+        <perm label="tms-task-car-task-export">
+          <el-button :plain="true" @click="exportFile" :disabled="isLoading">
+            导出Excel
+          </el-button>
+        </perm>
+      </template>
+    </search-part>
 
     <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus">
       <span class="btn-group-right">
@@ -21,7 +29,10 @@
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="4">任务号</el-col>
+        <el-col :span="4">
+          <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
+          任务号
+        </el-col>
         <!--<el-col :span="2">任务类型</el-col>-->
         <el-col :span="2">任务状态</el-col>
         <el-col :span="2">司机</el-col>
@@ -48,7 +59,10 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="4" class="R">
+            <el-col :span="4" class="special-col R">
+              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)">
+                <el-checkbox v-model="item.isChecked"></el-checkbox>
+              </div>
               <div>
                 {{item.transportTaskNo}}
               </div>
@@ -147,18 +161,21 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {TransportTask} from '@/resources';
+  import {http, TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
+  import Perm from '../../common/perm';
 
   export default {
     components: {
+      Perm,
       SearchPart
     },
     mixins: [StatusMixin],
     data() {
       return {
+        isLoading: false,
         loadingData: false,
         activeStatus: 0,
         orderType: utils.carTaskType,
@@ -192,7 +209,8 @@
         checkListPara: [],
         shoWayBillPart: false,
         currentItem: {},
-        currentItemId: ''
+        currentItemId: '',
+        taskIdList: []
       };
     },
     watch: {
@@ -207,6 +225,77 @@
       this.getTransportTaskPage(1);
     },
     methods: {
+      exportFile: function () {
+        if (!this.taskIdList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选需要导出的出车任务'
+          });
+          return;
+        }
+        this.isLoading = true;
+        this.$store.commit('initPrint', {
+          isPrinting: true,
+          moduleId: '/vehicle/delivery/task'
+        });
+        let params = Object.assign({}, {taskList: this.taskIdList});
+        http.post('transport-task/export', params).then(res => {
+          utils.download(res.data.url, '派车任务表');
+          this.isLoading = false;
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: '/vehicle/delivery/task'
+          });
+        }).catch(error => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: '/vehicle/delivery/task'
+          });
+          this.$notify.error({
+            message: error.response.data && error.response.data.msg || '导出失败'
+          });
+        });
+      },
+      checkAll() {
+        // 全选
+        if (this.isCheckAll) {
+          this.dataList.forEach(item => {
+            item.isChecked = true;
+            let index = this.checkList.indexOf(item);
+            if (index === -1) {
+              this.checkList.push(item);
+            }
+            let idIndex = this.taskIdList.indexOf(item.id);
+            if (idIndex === -1) {
+              this.taskIdList.push(item.id);
+            }
+          });
+        } else {
+          this.dataList.forEach(item => {
+            item.isChecked = false;
+          });
+          this.checkList = [];
+          this.taskIdList = [];
+        }
+      },
+      checkItem: function (item) {
+        // 单选
+        item.isChecked = !item.isChecked;
+        let index = this.checkList.indexOf(item);
+        let idIndex = this.taskIdList.indexOf(item.id);
+        if (item.isChecked) {
+          if (index === -1) {
+            this.checkList.push(item);
+          }
+          if (idIndex === -1) {
+            this.taskIdList.push(item.id);
+          }
+        } else {
+          this.checkList.splice(index, 1);
+          this.taskIdList.splice(idIndex, 1);
+        }
+      },
       cancelTask: function (item) {
         this.$confirm('确认取消出车任务"' + item.transportTaskNo + '"?', '', {
           confirmButtonText: '确定',
@@ -279,6 +368,9 @@
         }, this.filters);
         this.loadingData = true;
         TransportTask.query(param).then(res => {
+          res.data.list.forEach(val => {
+            val.isChecked = false;
+          });
           if (isContinue) {
             this.dataList = this.showTypeList.concat(res.data.list);
           } else {
