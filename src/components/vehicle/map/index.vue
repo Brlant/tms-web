@@ -440,15 +440,20 @@
       clickMarker (marker, row) {
         row.isChecked = !row.isChecked;
         this.setMarker(marker, row);
-        this.setChecked(row);
-        let index = this.checkList.indexOf(row);
-        if (row.isChecked) {
-          if (index === -1) {
-            this.checkList.push(row);
+        // 勾选列表中收货地址相同的运单
+        this.dataRows.forEach(data => {
+          if (data.receiverAddress === row.receiverAddress) {
+            this.setChecked(data);
+            let index = this.checkList.indexOf(data);
+            if (data.isChecked) {
+              if (index === -1) {
+                this.checkList.push(data);
+              }
+            } else {
+              this.checkList.splice(index, 1);
+            }
           }
-        } else {
-          this.checkList.splice(index, 1);
-        }
+        });
       },
       setMarker (marker, row) {
         // marker.animation = row.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE';
