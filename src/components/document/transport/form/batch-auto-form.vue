@@ -61,14 +61,15 @@
               <table class="table" style="margin-bottom: 0" v-if="!loadingData">
                 <thead>
                 <tr>
-                  <th width="8%">
+                  <th width="5%">
                     <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
                   </th>
-                  <th width="14%">车牌号</th>
-                  <th width="20%">运输范围</th>
-                  <th width="16%">载重(kg)</th>
-                  <th width="16%">容积(m³)</th>
-                  <th width="24%">最大里程数(km)</th>
+                  <th width="10%">车牌号</th>
+                  <th width="17%">运输范围</th>
+                  <th width="23%">载重(kg)</th>
+                  <th width="23%">容积(m³)</th>
+                  <th width="12%">最大里程数(km)</th>
+                  <th width="10%">最长运输时限(h)</th>
                 </tr>
                 </thead>
               </table>
@@ -82,11 +83,11 @@
                   </tbody>
                   <tbody v-if="carList.length !== 0">
                   <tr v-for="item in carList" :class="{active: item.isChecked}">
-                    <td width="8%">
+                    <td width="5%">
                       <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                     </td>
-                    <td width="14%">{{item.plateNumber}}</td>
-                    <td width="20%" class="R">
+                    <td width="10%">{{item.plateNumber}}</td>
+                    <td width="17%" class="R">
                       <div>
                        <span v-for="(type,index) in item.scopeList">
                         <dict :dict-group="'transportationCondition'" :dict-key="type"></dict><span
@@ -94,16 +95,20 @@
                         </span>
                       </div>
                     </td>
-                    <td width="16%" class="R">
+                    <td width="23%" class="R">
                       <oms-input type="number" v-model="item.loadBearing" @change="setCarInfo(item)"></oms-input>
                       <!--{{ item.loadBearing}} <span v-if="item.loadBearing">千克</span>-->
                     </td>
-                    <td width="16%" class="R">
+                    <td width="23%" class="R">
                       <oms-input type="number" v-model="item.volume" @change="setCarInfo(item)"></oms-input>
                       <!--{{ item.volume}} <span v-if="item.volume">立方米</span>-->
                     </td>
-                    <td width="24%" class="R">
+                    <td width="12%" class="R">
                       <oms-input type="number" v-model="item.maxMileage" @change="setCarInfo(item)"></oms-input>
+                      <!--{{ item.volume}} <span v-if="item.volume">立方米</span>-->
+                    </td>
+                    <td width="10%" class="R">
+                      <oms-input type="number" v-model="item.maxHour" @change="setCarInfo(item)"></oms-input>
                       <!--{{ item.volume}} <span v-if="item.volume">立方米</span>-->
                     </td>
                   </tr>
@@ -119,7 +124,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import { CarArchives, TransportTask } from '@/resources';
+  import {CarArchives, TransportTask} from '@/resources';
 
   export default {
     components: {TwoColumn},
@@ -248,7 +253,9 @@
         CarArchives.queryList(param).then(res => {
           res.data.forEach(val => {
             val.isChecked = true;
-            val.maxMileage = '999';
+            val.maxMileage = '250';
+            val.volume = val.volume * 0.7;
+            val.maxHour = 6;
           });
           this.isCheckAll = true;
           this.carList = res.data;
@@ -286,7 +293,8 @@
                   id: val.id,
                   loadBearing: val.loadBearing,
                   volume: val.volume,
-                  maxMileage: val.maxMileage
+                  maxMileage: val.maxMileage,
+                  maxHour: val.maxHour
                 };
                 carList.push(car);
               }
