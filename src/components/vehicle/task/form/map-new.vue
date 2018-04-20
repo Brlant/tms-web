@@ -28,16 +28,14 @@
       markers () {
         let {waybillList} = this;
         if (!waybillList.length) return [];
-        let start = [
-          {
-            position: [waybillList[0].senderAddressLongitude, waybillList[0].senderAddressDimension],
-            label: {
-              content: '起点',
-              offset: [20, 20]
-            }
+        let startPoint = {
+          position: [waybillList[0].senderAddressLongitude, waybillList[0].senderAddressDimension],
+          label: {
+            content: '起点',
+            offset: [20, 20]
           }
-        ];
-        return start.concat(this.waybillList.filter(f => f.receiverAddressLongitude).map(m => ({
+        };
+        return [startPoint].concat(this.waybillList.filter(f => f.receiverAddressLongitude).map(m => ({
           position: [m.receiverAddressLongitude, m.receiverAddressDimension],
           label: {
             content: m.receiverName,
@@ -59,6 +57,7 @@
           !isHas && ary.push(i);
         });
         ary.splice(0, 0, [val[0].senderAddressLongitude, val[0].senderAddressDimension]);
+        ary.push([val[0].senderAddressLongitude, val[0].senderAddressDimension]);
         this.drawPath(ary.map(m => ({lnglat: m})));
       }
     },
