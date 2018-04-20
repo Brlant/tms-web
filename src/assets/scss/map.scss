@@ -3,7 +3,17 @@
   &.active {
     border-color: red;
   }
+
   cursor: pointer;
+}
+
+#taskMap {
+  .amap-marker-label {
+    opacity: 0.3;
+    &:hover {
+      opacity: 1;
+    }
+  }
 }
 
 .map-path {
