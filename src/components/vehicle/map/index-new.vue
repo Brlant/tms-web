@@ -124,7 +124,7 @@
                   <tbody>
                   <tr v-for="item in dataRows" :class="{active: item.isChecked}" @click.stop.prevent="rowClick(item)">
                     <td width="8%">
-                      <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
+                      <el-checkbox v-model="item.isChecked"></el-checkbox>
                     </td>
                     <td width="14%">{{item.incubatorCount}}</td>
                     <td width="30%" class="R">
@@ -185,7 +185,7 @@
         pager: {
           currentPage: 1,
           count: 0,
-          pageSize: 20
+          pageSize: 100
         },
         showIndex: false,
         currentPart: null,
@@ -202,7 +202,6 @@
             defaultType: 0
           }
         ],
-        checkList: [],
         filters: {
           status: '0',
           waybillNumber: '',
@@ -226,6 +225,9 @@
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
         return (height - 150) + 'px';
+      },
+      checkList () {
+        return this.dataRows.filter(f => f.isChecked);
       }
     },
     mounted () {
@@ -252,10 +254,6 @@
           this.formatVolume();
           this.formatWeight();
         }
-      },
-      dataRows: function () {
-        // 如果列表改变，清空数据
-        // this.checkList = [];
       }
     },
     methods: {
@@ -273,7 +271,6 @@
       submit: function () {
         this.getWayBillOrderList(1);
         // 清空勾选的运单列表
-        this.checkList = [];
         this.orderIdList = [];
         this.totalIncubatorCount = 0;
         this.totalWeight = 0;
@@ -281,7 +278,6 @@
         this.totalTicket = 0;
       },
       getWayBillOrderList: function (pageNo, isContinue = false) {
-        // this.checkList = [];
         this.pager.currentPage = pageNo;
         let param = Object.assign({}, {
           pageNo: pageNo,
@@ -290,9 +286,15 @@
         TmsWayBill.query(param).then(res => {
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
+            res.data.list.forEach(i => {
+              i.isChecked = false;
+            });
             this.dataRows = this.dataRows.concat(res.data.list);
             this.addOverlays(res.data.list, true);
           } else {
+            res.data.list.forEach(i => {
+              i.isChecked = false;
+            });
             this.dataRows = [];
             this.dataRows = res.data.list;
             this.addOverlays(this.dataRows, false);
@@ -305,54 +307,32 @@
       },
       rowClick (item) {
         item.isChecked = !item.isChecked;
-        this.setChecked(item);
-        this.changeCheckStatus(item);
-      },
-      setChecked: function (item) {
-        let {dataRows} = this;
-        let itemIndex = -1;
-        dataRows.forEach((i, d) => {
-          if (i.id === item.id) itemIndex = d;
+        // 判断 其他选中的运单有没有此收货单位
+        this.$nextTick(() => {
+          const isOtherSameUnit = this.checkList.some(s => s.receiverAddress === item.receiverAddress);
+          this.setMarkerStyle(item, isOtherSameUnit);
         });
-        dataRows.splice(itemIndex, 1);
-        item.isChecked && dataRows.splice(0, 0, item) ||
-        dataRows.push(item);
       },
       resetRightBox () {
         this.showIndex = -1;
       },
       showPart (index) {
-        if (!this.checkList.length) {
-          this.$notify.warning({
+        let {checkList, $notify, dialogComponents} = this;
+        if (!checkList.length) {
+          $notify.warning({
             duration: 2000,
             message: '请选择需要生成派送任务的运单'
           });
           return;
         }
         this.showIndex = index;
-        this.currentPart = this.dialogComponents[index];
+        this.currentPart = dialogComponents[index];
         this.$nextTick(() => {
-          let orderIdList = [];
-          this.checkList.forEach(val => {
-            orderIdList.push(val.id);
-          });
-          this.orderIdList = orderIdList;
+          this.orderIdList = checkList.map(m => m.id);
         });
-      },
-      changeCheckStatus (item) {
-        let index = this.checkList.indexOf(item);
-        if (item.isChecked) {
-          if (index === -1) {
-            this.checkList.push(item);
-          }
-        } else {
-          this.checkList.splice(index, 1);
-        }
-        this.setMarker(item._marker, item);
       },
       searchResult (search) {
         // 清空勾选的运单列表
-        this.checkList = [];
         this.orderIdList = [];
         this.totalIncubatorCount = 0;
         this.totalWeight = 0;
@@ -360,6 +340,7 @@
         this.totalTicket = 0;
         Object.assign(this.filters, search);
       },
+      // 得到经纬度
       getLgtAndLat (query, callBack) {
         const AMap = window.AMap;
         const myGeo = new AMap.Geocoder();
@@ -369,6 +350,7 @@
           }
         });
       },
+      // 添加点
       addOverlays (list, isContinue) {
         // 清空覆盖物
         if (!isContinue || list.length === 0) {
@@ -390,32 +372,48 @@
           }
         });
       },
+      //生产15位随机数
+      guid () {
+        function s4 () {
+          return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        return (s4() + '-' + s4() + '-' + s4());
+      },
       addMarker (d, row, isHas = false) {
         // 判断点是否已经存在
-        let isExist = this.markers.some(s => s.receiverAddress === row.receiverAddress);
+        let marker = {};
+        let isExist = this.markers.some(s => {
+          let isEqual = s.receiverAddress === row.receiverAddress;
+          if (isEqual) marker = s;
+          return isEqual;
+        });
+        // 存在, 赋给当前运单
         if (isExist) {
-
+          row._marker = marker;
+          return;
         }
-        let marker = {
+        // 不存在, 新增点
+        let id = this.guid();
+        marker = {
           label: {
-            content: `<div class="index_${row.id}">${row.receiverName}</div>`,
+            content: `<div class="index_${id}">${row.receiverName}</div>`,
             offset: [20, 20]
           },
           icon: Icon,
           events: {
             click: () => {
-              this.clickMarker(marker, row);
+              this.clickMarker(row);
             },
             mouseover: () => {
-              if (row.isChecked) return;
-              this.setMarkerByMove(marker, row, !row.isChecked);
+              this.setMarkerStyle(row, !row.isChecked);
             },
             mouseout: () => {
-              if (row.isChecked) return;
-              this.setMarkerByMove(marker, row, row.isChecked);
+              this.setMarkerStyle(row, row.isChecked);
             }
           },
-          receiverAddress: row.receiverAddress
+          receiverAddress: row.receiverAddress,
+          markerId: id
         };
         if (!isHas) {
           marker.position = [d.location.getLng(), d.location.getLat()];
@@ -424,75 +422,50 @@
         }
         this.markers.push(marker);
         row._marker = marker;
-        this.createMarkerLabel(marker, row);
+        // 为点的标签绑定事件
+        this.bindMarkerLabelEvent(row);
       },
-      createMarkerLabel (marker, row) {
-        let time = setTimeout(() => {
-          this.createMarkerLabel(marker, row);
-        }, 300);
-        let ele_ary = this.$el.getElementsByClassName('index_' + row.id);
-        if (!ele_ary.length) return;
-        window.clearInterval(time);
+      // 绑定点的标签的事件
+      bindMarkerLabelEvent (row) {
+        let ele_ary = this.$el.getElementsByClassName(`index_${row._marker.markerId}`);
+        if (!ele_ary.length) {
+          // 若得不到dom对象, 延时100ms, 再次查找
+          setTimeout(() => {
+            this.bindMarkerLabelEvent(row);
+          }, 100);
+          return;
+        }
         const div = ele_ary[0];
+        row._marker._label = div;
         let aMapEvent = window.AMap.event;
         aMapEvent.addDomListener(div, 'click', () => {
-          this.clickMarker(marker, row);
+          this.clickMarker(row);
         });
         aMapEvent.addDomListener(div, 'mouseover', () => {
-          if (row.isChecked) return;
-          this.setMarkerByMove(marker, row, !row.isChecked);
+          this.setMarkerStyle(row, !row.isChecked);
         });
         aMapEvent.addDomListener(div, 'mouseout', () => {
-          if (row.isChecked) return;
-          this.setMarkerByMove(marker, row, row.isChecked);
+          this.setMarkerStyle(row, row.isChecked);
         });
       },
-      clickMarker (marker, row) {
+      clickMarker (row) {
         row.isChecked = !row.isChecked;
-        this.setMarker(marker, row);
-        // 勾选列表中收货地址相同的运单
-        let orderList = JSON.parse(JSON.stringify(this.dataRows));
-        orderList.forEach(data => {
-          if (data.receiverAddress === row.receiverAddress) {
-            let obj = {};
-            this.dataRows.forEach(i => {
-              if (i.id === data.id) obj = i;
-            });
-            obj.isChecked = !obj.isChecked;
-            let index = -1;
-            this.checkList.forEach((i, d) => {
-              if (i.id === obj.id) index = d;
-            });
-            if (obj.isChecked) {
-              if (index === -1) {
-                this.checkList.push(obj);
-              }
-            } else {
-              this.checkList.splice(index, 1);
-            }
-            // 勾选项置顶
-            this.setChecked(obj);
-          }
+        // 选中同一收货地址的所有运单
+        this.dataRows.forEach(i => {
+          if (i.receiverAddress === row.receiverAddress) i.isChecked = row.isChecked;
         });
+        this.setMarkerStyle(row, row.isChecked);
       },
-      setMarker (marker, row) {
-        marker.icon = row.isChecked ? IconActive : Icon;
-        this.setLabelBorderColor(row);
+      setMarkerStyle (row, isChecked) {
+        let rowCheck = typeof isChecked === 'boolean' ? isChecked : row.isChecked;
+        row._marker.icon = rowCheck ? IconActive : Icon;
+        this.setLabelBorderColor(row, rowCheck);
       },
-      setLabelBorderColor (row) {
-        const ele = this.$el.getElementsByClassName('index_' + row.id);
-        if (ele.length) {
-          const classList = ele[0].parentNode.classList;
-          row.isChecked ? classList.add('active') : classList.remove('active');
-        }
-      },
-      setMarkerByMove (marker, row, type) {
-        marker.icon = type ? IconActive : Icon;
-        const ele = this.$el.getElementsByClassName('index_' + row.id);
-        if (ele.length) {
-          const classList = ele[0].parentNode.classList;
-          type ? classList.add('active') : classList.remove('active');
-        }
+      setLabelBorderColor (row, isChecked) {
+        let label = row._marker._label;
+        if (!label) return;
+        const classList = label.parentNode.classList;
+        isChecked ? classList.add('active') : classList.remove('active');
       }
     }
   };

@@ -4,9 +4,11 @@ module.exports = {
   root: true,
   parser: 'babel-eslint',
   parserOptions: {
+    ecmaVersion: 2017,
     sourceType: 'module'
   },
   env: {
+    es6: true,
     browser: true
   },
   // required to lint *.vue files

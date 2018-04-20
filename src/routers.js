@@ -40,7 +40,7 @@ export const routes = [
         children: [
           {
             path: '/vehicle/map/delivery',
-            component: () => import('./components/vehicle/map/index.vue'),
+            component: () => import('./components/vehicle/map/index-new.vue'),
             meta: {moduleId: 'vehicle', title: '地图派送', perm: 'tms-task-map-manager'}
           },
           {
