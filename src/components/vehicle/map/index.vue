@@ -225,7 +225,7 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height - 90) + 'px';
+        return (height - 150) + 'px';
       }
     },
     mounted () {

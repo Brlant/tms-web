@@ -9,7 +9,7 @@ import './assets/css/basic.css';
 import '../static/fonts/iconfont.css';
 import Vuex from 'vuex';
 import store from './store';
-import { init } from './tools/init';
+import {init} from './tools/init';
 import VueAMap from 'vue-amap';
 
 init(Vue);
@@ -85,7 +85,7 @@ Vue.prototype.$scrollLoadingData = function (event) {
       this.$store.commit('initBottomLoading', true);
       this.getMore();
     }
-    if (this.getOrgMore && this.typePager && this.typePager.currentPage < this.typePager.totalPage && !this.$store.state.bottomLoading) {
+    if (this.getOrgMore && this.goodsAreaPage && this.typePager.currentPage < this.typePager.totalPage && !this.$store.state.bottomLoading) {
       this.$store.commit('initBottomLoading', true);
       this.getOrgMore();
     }
