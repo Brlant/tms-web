@@ -117,7 +117,8 @@
             </thead>
           </table>
 
-          <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+          <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight + 'px'"
+                        @scroll="scrollLoadingData">
             <div class="scrollbar-content">
               <div class="m-list">
                 <table class="table table-hover">
@@ -151,7 +152,8 @@
           </el-scrollbar>
         </div>
         <div class="d-table-right">
-          <el-amap vid="aMap" :plugin="plugins" :zoom="10" :center="center" :style="'height:'+ bodyHeight">
+          <el-amap vid="aMap" :plugin="plugins" :zoom="10" :center="center"
+                   :style="'height:'+ (bodyHeight + 39)  + 'px'">
             <el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"
                             :label="marker.label" :icon="marker.icon" :animation="marker.animation"
                             :events="marker.events"></el-amap-marker>
@@ -224,7 +226,7 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height - 150) + 'px';
+        return (height - 150);
       },
       checkList () {
         return this.dataRows.filter(f => f.isChecked);
