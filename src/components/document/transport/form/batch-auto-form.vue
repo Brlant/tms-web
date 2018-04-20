@@ -82,6 +82,24 @@
                   </div>
                   </tbody>
                   <tbody v-if="carList.length !== 0">
+                  <tr>
+                    <td width="5%">
+                    </td>
+                    <td width="10%"></td>
+                    <td width="17%" class="R"></td>
+                    <td width="23%" class="R">
+                      <oms-input type="number" v-model="quickLoadBearing" @change="quickSetCarInfo"></oms-input>
+                    </td>
+                    <td width="23%" class="R">
+                      <oms-input type="number" v-model="quickVolume" @change="quickSetCarInfo"></oms-input>
+                    </td>
+                    <td width="12%" class="R">
+                      <oms-input type="number" v-model="quickMaxMileage" @change="quickSetCarInfo"></oms-input>
+                    </td>
+                    <td width="10%" class="R">
+                      <oms-input type="number" v-model="quickMaxHour" @change="quickSetCarInfo"></oms-input>
+                    </td>
+                  </tr>
                   <tr v-for="item in carList" :class="{active: item.isChecked}">
                     <td width="5%">
                       <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
@@ -169,7 +187,11 @@
           receiverId: '',
           startTime: '',
           endTime: ''
-        }
+        },
+        quickLoadBearing: '',
+        quickVolume: '',
+        quickMaxMileage: '',
+        quickMaxHour: ''
       };
     },
     computed: {},
@@ -188,6 +210,28 @@
       }
     },
     methods: {
+      quickSetCarInfo: function () {
+        if (this.quickLoadBearing) {
+          this.carList.forEach(val => {
+            val.loadBearing = this.quickLoadBearing;
+          });
+        }
+        if (this.quickVolume) {
+          this.carList.forEach(val => {
+            val.volume = this.quickVolume;
+          });
+        }
+        if (this.quickMaxMileage) {
+          this.carList.forEach(val => {
+            val.maxMileage = this.quickMaxMileage;
+          });
+        }
+        if (this.quickMaxHour) {
+          this.carList.forEach(val => {
+            val.maxHour = this.quickMaxHour;
+          });
+        }
+      },
       resetCarList: function () {
         this.getCarList();
       },
