@@ -47,8 +47,7 @@
         <el-col :span="3">收货单位</el-col>
         <el-col :span="3">收货地址</el-col>
         <el-col :span="1">整件</el-col>
-        <el-col :span="1">散件</el-col>
-        <el-col :span="1">包件</el-col>
+        <el-col :span="2">散件</el-col>
         <el-col :span="2">送达时限</el-col>
         <el-col :span="2">状态</el-col>
         <el-col :span="3">操作</el-col>
@@ -106,14 +105,9 @@
                 {{item.wholeBoxCount}}
               </div>
             </el-col>
-            <el-col :span="1" class="R">
+            <el-col :span="2" class="R">
               <div>
                 {{item.bulkBoxCount}}
-              </div>
-            </el-col>
-            <el-col :span="1" class="R">
-              <div>
-                {{item.incubatorCount}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
