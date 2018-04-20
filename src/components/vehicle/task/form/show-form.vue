@@ -157,7 +157,7 @@
 </template>
 <script>
   import { TransportTask } from '@/resources';
-  import TaskMap from './map-new';
+  import TaskMap from './map-new-next';
 
   export default {
     components: {TaskMap},

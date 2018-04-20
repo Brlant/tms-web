@@ -391,13 +391,17 @@
         });
       },
       addMarker (d, row, isHas = false) {
+        // 判断点是否已经存在
+        let isExist = this.markers.some(s => s.receiverAddress === row.receiverAddress);
+        if (isExist) {
+
+        }
         let marker = {
           label: {
             content: `<div class="index_${row.id}">${row.receiverName}</div>`,
             offset: [20, 20]
           },
           icon: Icon,
-          animation: 'AMAP_ANIMATION_NONE',
           events: {
             click: () => {
               this.clickMarker(marker, row);
@@ -410,7 +414,8 @@
               if (row.isChecked) return;
               this.setMarkerByMove(marker, row, row.isChecked);
             }
-          }
+          },
+          receiverAddress: row.receiverAddress
         };
         if (!isHas) {
           marker.position = [d.location.getLng(), d.location.getLat()];
@@ -471,7 +476,6 @@
         });
       },
       setMarker (marker, row) {
-        // marker.animation = row.isChecked ? 'AMAP_ANIMATION_BOUNCE' : 'AMAP_ANIMATION_NONE';
         marker.icon = row.isChecked ? IconActive : Icon;
         this.setLabelBorderColor(row);
       },
