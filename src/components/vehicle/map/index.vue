@@ -80,7 +80,9 @@
         <template slot="btn">
           <perm label="tms-task-add">
             <el-button plain size="small" @click="showPart(0)">
-              <f-a class="icon-small" name="detail"></f-a> 生成派送</el-button>
+              <f-a class="icon-small" name="detail"></f-a>
+              生成派送
+            </el-button>
           </perm>
         </template>
       </search-part>
@@ -117,35 +119,35 @@
 
           <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
             <div class="scrollbar-content">
-            <div class="m-list">
-              <table class="table table-hover">
-                <tbody>
-                <tr v-for="item in dataRows" :class="{active: item.isChecked}" @click.stop.prevent="rowClick(item)">
-                  <td width="8%">
-                    <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
-                  </td>
-                  <td width="14%">{{item.incubatorCount}}</td>
-                  <td width="30%" class="R">
-                    <div class="id-part">
-                      <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
-                    </div>
-                    <div>
-                      {{item.waybillNumber}}
-                    </div>
-                  </td>
-                  <td width="24%" class="R">{{item.receiverName}}</td>
-                  <td width="24%" class="R">{{item.receiverAddress}}</td>
-                </tr>
-                </tbody>
-              </table>
-              <div class="btn-left-list-more">
-                <bottom-loading></bottom-loading>
-                <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
-                  <el-button v-show="pager.currentPage<pager.totalPage">加载更多</el-button>
+              <div class="m-list">
+                <table class="table table-hover">
+                  <tbody>
+                  <tr v-for="item in dataRows" :class="{active: item.isChecked}" @click.stop.prevent="rowClick(item)">
+                    <td width="8%">
+                      <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
+                    </td>
+                    <td width="14%">{{item.incubatorCount}}</td>
+                    <td width="30%" class="R">
+                      <div class="id-part">
+                        <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
+                      </div>
+                      <div>
+                        {{item.waybillNumber}}
+                      </div>
+                    </td>
+                    <td width="24%" class="R">{{item.receiverName}}</td>
+                    <td width="24%" class="R">{{item.receiverAddress}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+                <div class="btn-left-list-more">
+                  <bottom-loading></bottom-loading>
+                  <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
+                    <el-button v-show="pager.currentPage<pager.totalPage">加载更多</el-button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           </el-scrollbar>
         </div>
         <div class="d-table-right">
@@ -160,7 +162,7 @@
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox"
                 :css="{'width':'1000px','padding':0, 'z-index': 1000}">
-      <component :is="currentPart" :checkList="orderIdList"  @right-close="resetRightBox" @change="submit"/>
+      <component :is="currentPart" :checkList="orderIdList" @right-close="resetRightBox" @change="submit"/>
     </page-right>
   </div>
 </template>
@@ -168,7 +170,7 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
-  import {TmsWayBill} from '@/resources';
+  import { TmsWayBill } from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
 
@@ -307,17 +309,14 @@
         this.changeCheckStatus(item);
       },
       setChecked: function (item) {
-        if (item.isChecked) {
-          // 勾选的数据置顶
-          let itemIndex = this.dataRows.indexOf(item);
-          this.dataRows.splice(itemIndex, 1);
-          this.dataRows.splice(0, 0, item);
-        } else {
-          // 勾选的数据置顶
-          let itemIndex = this.dataRows.indexOf(item);
-          this.dataRows.splice(itemIndex, 1);
-          this.dataRows.push(item);
-        }
+        let {dataRows} = this;
+        let itemIndex = -1;
+        dataRows.forEach((i, d) => {
+          if (i.id === item.id) itemIndex = d;
+        });
+        dataRows.splice(itemIndex, 1);
+        item.isChecked && dataRows.splice(0, 0, item) ||
+        dataRows.push(item);
       },
       resetRightBox () {
         this.showIndex = -1;
@@ -370,7 +369,7 @@
           }
         });
       },
-      addOverlays(list, isContinue) {
+      addOverlays (list, isContinue) {
         // 清空覆盖物
         if (!isContinue || list.length === 0) {
           this.markers = [];
@@ -442,12 +441,14 @@
       clickMarker (marker, row) {
         this.setMarker(marker, row);
         // 勾选列表中收货地址相同的运单
-        let orderList = this.dataRows;
+        let orderList = JSON.parse(JSON.stringify(this.dataRows));
         orderList.forEach(data => {
           if (data.receiverAddress === row.receiverAddress) {
             data.isChecked = !data.isChecked;
-            let index = this.checkList.indexOf(data);
-            console.log(index, data.id);
+            let index = -1;
+            this.checkList.forEach((i, d) => {
+              if (i.id === data.id) index = d;
+            });
             if (data.isChecked) {
               if (index === -1) {
                 this.checkList.push(data);

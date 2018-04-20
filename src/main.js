@@ -9,7 +9,7 @@ import './assets/css/basic.css';
 import '../static/fonts/iconfont.css';
 import Vuex from 'vuex';
 import store from './store';
-import {init} from './tools/init';
+import { init } from './tools/init';
 import VueAMap from 'vue-amap';
 
 init(Vue);
@@ -77,15 +77,15 @@ Vue.prototype.$scrollLoadingData = function (event) {
   let height = target.scrollHeight - target.clientHeight;
   let scrollTop = target.scrollTop;
   if (height > 0 && height - scrollTop < difference) {
-    if (this.getMore && this.pager.currentPage < this.pager.totalPage && !this.$store.state.bottomLoading) {
+    if (this.getMore && this.pager && this.pager.currentPage < this.pager.totalPage && !this.$store.state.bottomLoading) {
       this.$store.commit('initBottomLoading', true);
       this.getMore();
     }
-    if (this.getMore && this.goodsAreaPage.currentPage < this.goodsAreaPage.totalPage && !this.$store.state.bottomLoading) {
+    if (this.getMore && this.goodsAreaPage && this.goodsAreaPage.currentPage < this.goodsAreaPage.totalPage && !this.$store.state.bottomLoading) {
       this.$store.commit('initBottomLoading', true);
       this.getMore();
     }
-    if (this.getOrgMore && this.typePager.currentPage < this.typePager.totalPage && !this.$store.state.bottomLoading) {
+    if (this.getOrgMore && this.typePager && this.typePager.currentPage < this.typePager.totalPage && !this.$store.state.bottomLoading) {
       this.$store.commit('initBottomLoading', true);
       this.getOrgMore();
     }
