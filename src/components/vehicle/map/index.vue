@@ -418,13 +418,15 @@
         }
         this.markers.push(marker);
         row._marker = marker;
-        setTimeout(() => {
-          this.createMarkerLabel(marker, row);
-        }, 300);
+        this.createMarkerLabel(marker, row);
       },
       createMarkerLabel (marker, row) {
+        let time = setTimeout(() => {
+          this.createMarkerLabel(marker, row);
+        }, 300);
         let ele_ary = this.$el.getElementsByClassName('index_' + row.id);
         if (!ele_ary.length) return;
+        window.clearInterval(time);
         const div = ele_ary[0];
         let aMapEvent = window.AMap.event;
         aMapEvent.addDomListener(div, 'click', () => {
@@ -438,13 +440,14 @@
         });
       },
       clickMarker (marker, row) {
-        row.isChecked = !row.isChecked;
         this.setMarker(marker, row);
         // 勾选列表中收货地址相同的运单
-        this.dataRows.forEach(data => {
+        let orderList = this.dataRows;
+        orderList.forEach(data => {
           if (data.receiverAddress === row.receiverAddress) {
-            this.setChecked(data);
+            data.isChecked = !data.isChecked;
             let index = this.checkList.indexOf(data);
+            console.log(index, data.id);
             if (data.isChecked) {
               if (index === -1) {
                 this.checkList.push(data);
@@ -452,6 +455,8 @@
             } else {
               this.checkList.splice(index, 1);
             }
+            // 勾选项置顶
+            this.setChecked(data);
           }
         });
       },
