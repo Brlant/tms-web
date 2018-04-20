@@ -575,7 +575,13 @@
           pageNo: pageNo,
           pageSize: this.pager.pageSize
         }, this.filters);
+        if (this.isCheckAll) {
+          this.isCheckAll = false;
+        }
         this.loadingData = true;
+        // 清空勾选列表
+        this.checkList = [];
+        this.checkListPara = [];
         TmsWayBill.query(param).then(res => {
           res.data.list.forEach(val => {
             val.isChecked = false;

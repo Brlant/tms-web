@@ -170,7 +170,7 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
-  import { TmsWayBill } from '@/resources';
+  import {TmsWayBill} from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
 
@@ -439,6 +439,7 @@
         });
       },
       clickMarker (marker, row) {
+        console.log(row.isChecked);
         this.setMarker(marker, row);
         // 勾选列表中收货地址相同的运单
         let orderList = JSON.parse(JSON.stringify(this.dataRows));

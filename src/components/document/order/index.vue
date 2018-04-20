@@ -340,6 +340,7 @@
       },
       checkItem: function (item) {
         // 单选
+        // 单选
         item.isChecked = !item.isChecked;
         let index = this.checkList.indexOf(item);
         if (item.isChecked) {
@@ -371,6 +372,8 @@
         Object.assign(this.filters, search);
       },
       checkStatus (item, key) {
+        this.checkList = [];
+        this.checkListPara = [];
         this.filters.status = item.status;
         this.activeStatus = key;
       },
@@ -387,6 +390,12 @@
           pageSize: this.pager.pageSize
         }, this.filters);
         this.loadingData = true;
+        if (this.isCheckAll) {
+          this.isCheckAll = false;
+        }
+        // 清空勾选列表
+        this.checkList = [];
+        this.checkListPara = [];
         TmsOrder.query(param).then(res => {
           res.data.list.forEach(val => {
             val.isChecked = false;
@@ -473,6 +482,8 @@
         });
       },
       submit() {
+        this.checkList = [];
+        this.checkListPara = [];
         this.getTmsOrderPage(1);
       }
     }
