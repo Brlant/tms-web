@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-  $labelWidth: 180px;
+  $labelWidth: 220px;
   .content-part {
     .content-left {
       width: $labelWidth;
@@ -218,7 +218,7 @@
                 {{pageSets[8].name}}</h3>
             </div>
             <div class="content">
-              <map-path :formItem="formItem"></map-path>
+              <map-path :formItem="form"></map-path>
             </div>
           </div>
         </el-form>
@@ -229,11 +229,13 @@
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
   import {TmsWayBill} from '@/resources';
+  import MapPath from '../../common/map-path-new';
 
   export default {
-    components: {TwoColumn},
+    components: {TwoColumn, MapPath},
     data() {
       return {
+        attachmentList: [],
         span: 7,
         dataList: [],
         times: [],
@@ -270,16 +272,30 @@
     props: ['checkList'],
     watch: {
       checkList: function (val) {
+        this.orderIdList = [];
         this.dataList = val;
         if (val.length) {
           this.dataList.forEach(val => {
-            this.orderIdList.push(val.id);
+            let index = this.orderIdList.indexOf(val.id);
+            if (index === -1) {
+              this.orderIdList.push(val.id);
+            }
           });
           this.showOrder(val[0], 0);
         }
       }
     },
     methods: {
+      changeFiles: function (fileList) {
+        let ids = [];
+        fileList.forEach(file => {
+          ids.push(file.attachmentId);
+        });
+        this.form.attachmentIdList = ids;
+        // 绑定附件
+        TmsWayBill.update(this.form.id, {attachmentIdList: ids}).then(res => {
+        });
+      },
       createWayBill: function () {
         this.$confirm('是否确认运单信息?', '', {
           confirmButtonText: '确定',

@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-  $labelWidth: 180px;
+  $labelWidth: 220px;
   .content-part {
     .content-left {
       width: $labelWidth;
@@ -227,9 +227,13 @@
     watch: {
       checkList: function (val) {
         this.dataList = val;
+        this.orderIdList = [];
         if (val.length) {
           this.dataList.forEach(val => {
-            this.orderIdList.push(val.id);
+            let index = this.orderIdList.indexOf(val.id);
+            if (index === -1) {
+              this.orderIdList.push(val.id);
+            }
           });
           this.showOrder(val[0], 0);
         }
