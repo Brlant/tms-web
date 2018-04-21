@@ -14,11 +14,12 @@
 </style>
 <template>
   <div class="map-part">
-    <el-amap ref="taskMap" v-if="waybillList.length" vid="taskMap" :zoom="10" :center="center" :style="'height:800px'">
+    <el-amap ref="taskMap" v-show="waybillList.length" vid="taskMap" :zoom="10" :center="center"
+             :style="'height:800px'">
       <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
       <!--:label="marker.label"></el-amap-marker>-->
     </el-amap>
-    <div v-else class="empty-info mini">暂无信息</div>
+    <div v-show class="empty-info mini">暂无信息</div>
     <el-checkbox class="map__checkbox" size="mini" v-model="isShowPath" @change="switchPath">连线</el-checkbox>
   </div>
 </template>
