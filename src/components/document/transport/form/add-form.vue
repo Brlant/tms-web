@@ -107,8 +107,8 @@
               <el-form-item slot="left" label="发货联系人">
                 <oms-input v-model="form.senderContact" placeholder="请输入发货联系人"></oms-input>
               </el-form-item>
-              <el-form-item slot="right" label="发货联系电话">
-                <oms-input v-model="form.senderContactPhone" placeholder="请输入发货联系电话"></oms-input>
+              <el-form-item slot="right" label="电话">
+                <oms-input v-model="form.senderContactPhone" placeholder="请输入电话"></oms-input>
               </el-form-item>
             </two-column>
             <el-form-item slot="right" label="发货地址">
@@ -143,8 +143,8 @@
               <el-form-item slot="left" label="收货联系人">
                 <oms-input v-model="form.receiverContact" placeholder="请输入收货联系人"></oms-input>
               </el-form-item>
-              <el-form-item slot="right" label="收货联系电话">
-                <oms-input v-model="form.receiverContractPhone" placeholder="请输入收货联系电话"></oms-input>
+              <el-form-item slot="right" label="电话">
+                <oms-input v-model="form.receiverContractPhone" placeholder="请输入电话"></oms-input>
               </el-form-item>
             </two-column>
             <el-form-item slot="right" label="收货地址" prop="receiverAddress">
