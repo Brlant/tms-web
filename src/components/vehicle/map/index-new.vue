@@ -162,7 +162,9 @@
       <div class="d-table">
         <div class="d-table-left" v-show="isShowList">
           <el-row class="custom-radio-list">
-            <el-col :span="12" :class="{on: receiveStatus==='1'}" @click.native="receiveStatus='1'">已选</el-col>
+            <el-col :span="12" :class="{on: receiveStatus==='1'}" @click.native="receiveStatus='1'">
+              已选 <span v-show="checkList.length">（{{checkList.length}})</span>
+            </el-col>
             <el-col :span="12" :class="{on: receiveStatus==='0'}" @click.native="receiveStatus='0'">全部</el-col>
           </el-row>
           <table class="table" style="margin-bottom: 0">
