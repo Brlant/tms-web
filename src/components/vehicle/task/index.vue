@@ -149,13 +149,16 @@
       </el-pagination>
     </div>
 
-    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
-      <component :is="currentPart" :formItem="form"/>
+    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
+      <component :is="currentPart" :formItem="form" :showBigMap="showBigMap"/>
     </page-right>
     <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
       <component :is="currentEditPart" :formItem="form" @change="submit"  @right-close="resetRightBox"/>
     </page-right>
-
+    <el-dialog title="地图派送" :visible.sync="isShowBigMap" width="100%" :fullscreen="true"
+               custom-class="custom-dialog-map">
+      <task-map mapRef="bigTaskMap" :waybillList="waybillList" :mapStyle="{height: bodyHeight}"></task-map>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -166,11 +169,13 @@
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
   import Perm from '../../common/perm';
+  import TaskMap from './form/map-new-next';
 
   export default {
     components: {
       Perm,
-      SearchPart
+      SearchPart,
+      TaskMap
     },
     mixins: [StatusMixin],
     data() {
@@ -210,8 +215,16 @@
         shoWayBillPart: false,
         currentItem: {},
         currentItemId: '',
-        taskIdList: []
+        taskIdList: [],
+        isShowBigMap: false,
+        waybillList: []
       };
+    },
+    computed: {
+      bodyHeight: function () {
+        let height = parseInt(this.$store.state.bodyHeight, 10);
+        return (height + 146) + 'px';
+      }
     },
     watch: {
       filters: {
@@ -225,6 +238,10 @@
       this.getTransportTaskPage(1);
     },
     methods: {
+      showBigMap (waybillList) {
+        this.waybillList = waybillList;
+        this.isShowBigMap = true;
+      },
       exportFile: function () {
         if (!this.taskIdList.length) {
           this.$notify.warning({

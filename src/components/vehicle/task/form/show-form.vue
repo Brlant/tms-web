@@ -20,7 +20,7 @@
   }
 
   .el-form-item {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 </style>
 <template>
@@ -145,6 +145,7 @@
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
               {{pageSets[2].name}}
+              <des-btn icon="detail" @click="showBigMap(form.waybillList)">查看大图</des-btn>
             </h3>
           </div>
           <div class="content">
@@ -194,7 +195,7 @@
       };
     },
     computed: {},
-    props: ['formItem'],
+    props: ['formItem', 'showBigMap'],
     watch: {
       formItem: function (val) {
         this.selectTab(this.pageSets[0]);

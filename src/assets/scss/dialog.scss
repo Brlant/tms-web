@@ -181,3 +181,9 @@ $leftWidth: 260px;
 .scrollbar-content {
   padding-right: 15px;
 }
+
+.custom-dialog-map {
+  .el-dialog__body {
+    padding: 0;
+  }
+}

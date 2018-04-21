@@ -13,14 +13,18 @@
   }
 </style>
 <template>
-  <div class="map-part">
-    <el-amap ref="taskMap" v-show="waybillList.length" vid="taskMap" :zoom="10" :center="center"
-             :style="'height:800px'">
-      <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
-      <!--:label="marker.label"></el-amap-marker>-->
-    </el-amap>
-    <div v-show class="empty-info mini">暂无信息</div>
-    <el-checkbox class="map__checkbox" size="mini" v-model="isShowPath" @change="switchPath">连线</el-checkbox>
+  <div>
+    <div class="map-part">
+      <el-amap ref="taskMap" v-show="waybillList.length" :vid="mapRef" :zoom="10" :center="center"
+               :style="mapStyle">
+        <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
+        <!--:label="marker.label"></el-amap-marker>-->
+      </el-amap>
+      <div v-show class="empty-info mini">暂无信息</div>
+      <el-checkbox class="map__checkbox" size="mini" v-show="waybillList.length" v-model="isShowPath"
+                   @change="switchPath">连线
+      </el-checkbox>
+    </div>
   </div>
 </template>
 <script>
@@ -31,6 +35,18 @@
         default () {
           return [];
         }
+      },
+      mapStyle: {
+        type: Object,
+        default () {
+          return {
+            height: '200px'
+          };
+        }
+      },
+      mapRef: {
+        type: String,
+        default: 'taskMap'
       }
     },
     data: function () {
@@ -69,6 +85,7 @@
     },
     watch: {
       markers (val) {
+        console.log(1);
         if (!val.length || !this.$refs.taskMap) return;
         let map = this.$refs.taskMap.$$getInstance();
         // map.setFeatures(['bg', 'road', 'building']);
@@ -108,7 +125,6 @@
         let points = [...markers, markers[0]].map(m => ({lnglat: m.position}));
         // 已经存在
         if (pathSimplifierIns) {
-          console.log(val);
           // 清除轨迹
           pathSimplifierIns.setData(val ? [{
             name: '派车路线',
