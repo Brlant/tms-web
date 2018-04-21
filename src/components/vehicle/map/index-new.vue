@@ -1,4 +1,5 @@
 <style lang="scss" scoped="">
+  @import "../../../assets/scss/mixins";
   .d-table {
     margin-top: 0;
     margin-bottom: 0;
@@ -17,9 +18,14 @@
   }
 
   .second-part {
+    position: relative;
     @extend .m-part;
     padding-top: 8px;
     padding-bottom: 8px;
+  }
+
+  .header--padding {
+    padding-left: 43px;
   }
 
   .bottom-part {
@@ -72,6 +78,53 @@
     background: #ffffff;
     height: 100%;
   }
+
+  .icon__point {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-right: 1px solid #eee;
+    cursor: pointer;
+    .el-icon-t-zoom-point {
+      font-size: 30px;
+      color: $activeColor;
+      transform: rotate(180deg);
+    }
+    &.on {
+      .el-icon-t-zoom-point {
+        transform: rotate(0);
+      }
+    }
+    &:hover {
+      background: $activeColor;
+      .el-icon-t-zoom-point {
+        color: #fff;
+      }
+    }
+  }
+
+  .custom-radio-list {
+    .el-col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 0;
+      border-bottom: 1px solid #eee;
+      border-right: 1px solid #eee;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      &.on {
+        border-bottom: 4px solid $activeColor;
+      }
+    }
+  }
 </style>
 <template>
   <div>
@@ -87,8 +140,11 @@
         </template>
       </search-part>
       <el-row class="second-part clearfix">
+        <div class="icon__point" :class="{on: isShowList}" @click="isShowList=!isShowList">
+          <f-a name="zoom-point"/>
+        </div>
         <el-col :span="12">
-          <h2 class="header f-dib">
+          <h2 class="header f-dib header--padding">
             您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米
           </h2>
         </el-col>
@@ -104,7 +160,11 @@
         </el-col>
       </el-row>
       <div class="d-table">
-        <div class="d-table-left">
+        <div class="d-table-left" v-show="isShowList">
+          <el-row class="custom-radio-list">
+            <el-col :span="12" :class="{on: receiveStatus==='1'}" @click.native="receiveStatus='1'">已选</el-col>
+            <el-col :span="12" :class="{on: receiveStatus==='0'}" @click.native="receiveStatus='0'">全部</el-col>
+          </el-row>
           <table class="table" style="margin-bottom: 0">
             <thead>
             <tr>
@@ -123,7 +183,8 @@
               <div class="m-list">
                 <table class="table table-hover">
                   <tbody>
-                  <tr v-for="item in dataRows" :class="{active: item.isChecked}" @click.stop.prevent="rowClick(item)">
+                  <tr v-for="item in dataRows" v-show="receiveStatus==='0' || receiveStatus==='1' && item.isChecked"
+                      :class="{active: item.isChecked}" @click.stop.prevent="rowClick(item)">
                     <td width="8%">
                       <el-checkbox v-model="item.isChecked"></el-checkbox>
                     </td>
@@ -220,13 +281,15 @@
         totalIncubatorCount: 0,
         totalWeight: 0,
         totalVolume: 0,
-        dataMap: []
+        dataMap: [],
+        isShowList: false,
+        receiveStatus: '0'
       };
     },
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height - 150);
+        return (height - 190);
       },
       checkList () {
         return this.dataRows.filter(f => f.isChecked);
