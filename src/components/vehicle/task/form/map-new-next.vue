@@ -1,9 +1,26 @@
+<style>
+  .map-part {
+    position: relative;
+  }
+
+  .map__checkbox {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 6px;
+    background: #fff;
+    border-radius: 2px;
+  }
+</style>
 <template>
-  <el-amap ref="taskMap" v-if="waybillList.length" vid="taskMap" :zoom="10" :center="center" :style="'height:700px'">
-    <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
-    <!--:label="marker.label"></el-amap-marker>-->
-  </el-amap>
-  <div v-else class="empty-info mini">暂无信息</div>
+  <div class="map-part">
+    <el-amap ref="taskMap" v-if="waybillList.length" vid="taskMap" :zoom="10" :center="center" :style="'height:800px'">
+      <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
+      <!--:label="marker.label"></el-amap-marker>-->
+    </el-amap>
+    <div v-else class="empty-info mini">暂无信息</div>
+    <el-checkbox class="map__checkbox" size="mini" v-model="isShowPath" @change="switchPath">连线</el-checkbox>
+  </div>
 </template>
 <script>
   export default {
@@ -17,7 +34,9 @@
     },
     data: function () {
       return {
-        center: [121.5273285, 31.21515044]
+        center: [121.5273285, 31.21515044],
+        isShowPath: false,
+        pathSimplifierIns: null
       };
     },
     computed: {
@@ -49,27 +68,78 @@
     },
     watch: {
       markers (val) {
+        if (!val.length || !this.$refs.taskMap) return;
         let map = this.$refs.taskMap.$$getInstance();
-        map.setFeatures(['bg', 'road', 'building']);
+        // map.setFeatures(['bg', 'road', 'building']);
         map.clearMap();
         val.forEach((i, index) => {
-          window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
-            const m = new SimpleMarker({
-              //前景文字
-              iconLabel: !index ? '起' : index,
-              //图标主题
-              iconTheme: 'default',
-              //背景图标样式
-              iconStyle: 'lightgreen',
-              map: map,
-              showPositionPoint: false, //显示定位点
-              position: i.position,
-              label: {
-                content: i.label,
-                offset: new window.AMap.Pixel(36, 10)
-              }
-            });
+          // 画点
+          this.drawPoint(map, i, index);
+        });
+        this.isShowPath = false;
+        this.pathSimplifierIns && this.pathSimplifierIns.setData([]);
+      }
+    },
+    methods: {
+      // 画点
+      drawPoint (map, i, index) {
+        window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
+          const m = new SimpleMarker({
+            //前景文字
+            iconLabel: !index ? '起' : index,
+            //图标主题
+            iconTheme: 'default',
+            //背景图标样式
+            iconStyle: 'lightgreen',
+            map: map,
+            showPositionPoint: false, //显示定位点
+            position: i.position,
+            label: {
+              content: i.label,
+              offset: new window.AMap.Pixel(36, 10)
+            }
           });
+        });
+      },
+      switchPath (val) {
+        let map = this.$refs.taskMap.$$getInstance();
+        let {markers, pathSimplifierIns} = this;
+        let points = [...markers, markers[0]].map(m => ({lnglat: m.position}));
+        // 已经存在
+        if (pathSimplifierIns) {
+          console.log(val);
+          // 清除轨迹
+          pathSimplifierIns.setData(val ? [{
+            name: '派车路线',
+            points
+          }] : []);
+          val && points.length && pathSimplifierIns.setSelectedPathIndex(0);
+          return;
+        }
+        // 不存在, 调绘制方法
+        val && this.drawPath(map, points);
+      },
+      // 画出轨迹
+      drawPath (map, points) {
+        window.AMapUI.loadUI(['misc/PathSimplifier'], PathSimplifier => {
+          const pathSimplifierIns = new PathSimplifier({
+            zIndex: 100,
+            map: map, //所属的地图实例
+            getPath: function (pathData, pathIndex) {
+              let points = pathData.points;
+              let lnglatList = [];
+              for (let i = 0, len = points.length; i < len; i++) {
+                lnglatList.push(points[i].lnglat);
+              }
+              return lnglatList;
+            }
+          });
+          this.pathSimplifierIns = pathSimplifierIns;
+          pathSimplifierIns.setData([{
+            name: '派车路线',
+            points
+          }]);
+          pathSimplifierIns.setSelectedPathIndex(0);
         });
       }
     }

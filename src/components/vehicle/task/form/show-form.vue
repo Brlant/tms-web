@@ -120,9 +120,9 @@
             <el-table :data="form.waybillList" border style="width: 100%">
               <el-table-column prop="waybillNumber" label="运单号" width="140">
               </el-table-column>
-              <el-table-column prop="receiverName" label="收货单位" width="240">
+              <el-table-column prop="receiverName" label="收货单位" mix-width="240">
               </el-table-column>
-              <el-table-column prop="receiverAddress" label="收货地址" width="180">
+              <el-table-column prop="receiverAddress" label="收货地址" mix-width="180">
               </el-table-column>
               <el-table-column prop="incubatorCount" label="包件" width="50">
               </el-table-column>

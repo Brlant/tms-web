@@ -149,7 +149,7 @@
       </el-pagination>
     </div>
 
-    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
+    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentPart" :formItem="form"/>
     </page-right>
     <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
@@ -161,7 +161,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {http, TransportTask} from '@/resources';
+  import { http, TransportTask } from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
