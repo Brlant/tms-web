@@ -85,10 +85,9 @@
     },
     watch: {
       markers (val) {
-        console.log(1);
         if (!val.length || !this.$refs.taskMap) return;
         let map = this.$refs.taskMap.$$getInstance();
-        // map.setFeatures(['bg', 'road', 'building']);
+        if (!map) return;
         map.clearMap();
         val.forEach((i, index) => {
           // 画点

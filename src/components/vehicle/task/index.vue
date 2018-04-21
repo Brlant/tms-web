@@ -239,8 +239,13 @@
     },
     methods: {
       showBigMap (waybillList) {
-        this.waybillList = waybillList;
+        this.waybillList = [];
         this.isShowBigMap = true;
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.waybillList = waybillList;
+          }, 300);
+        });
       },
       exportFile: function () {
         if (!this.taskIdList.length) {
