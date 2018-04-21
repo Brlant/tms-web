@@ -84,9 +84,9 @@
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
               {{pageSets[1].name}}
-              <span @click="showAdd" class="btn-circle" v-show="form.status==='0'"><i
-                class="el-icon-t-plus"></i> </span>
             </h3>
+            <span @click="showAdd" class="btn-circle" v-show="form.status==='0'"><i
+              class="el-icon-t-plus"></i> </span>
           </div>
           <div>
             <el-form ref="detailForm" :model="detailForm" class="clearfix" label-width="100px" v-show="showAddFlag">
@@ -145,8 +145,8 @@
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
               {{pageSets[2].name}}
-              <des-btn icon="detail" @click="showBigMap(form.waybillList)">查看大图</des-btn>
             </h3>
+            <des-btn icon="detail" @click="showBigMap(form.waybillList)">查看大图</des-btn>
           </div>
           <div class="content">
             <task-map :waybillList="form.waybillList"></task-map>
