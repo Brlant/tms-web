@@ -21,8 +21,7 @@
         <!--:label="marker.label"></el-amap-marker>-->
       </el-amap>
       <div v-show class="empty-info mini">暂无信息</div>
-      <el-checkbox class="map__checkbox" size="mini" v-show="waybillList.length" v-model="isShowPath"
-                   @change="switchPath">连线
+      <el-checkbox class="map__checkbox" size="mini" v-show="waybillList.length" v-model="isShowPath">连线
       </el-checkbox>
     </div>
   </div>
@@ -81,6 +80,9 @@
             label: title
           };
         })];
+      },
+      isShowLine () {
+        return this.$store.state.isShowLine;
       }
     },
     watch: {
@@ -95,6 +97,16 @@
         });
         this.isShowPath = false;
         this.pathSimplifierIns && this.pathSimplifierIns.setData([]);
+        let isShowLine = window.localStorage.getItem('isShowLine');
+        this.isShowPath = !!JSON.parse(isShowLine);
+        this.isShowPath && this.drawPath(map, [...val, val[0]].map(m => ({lnglat: m.position})));
+      },
+      isShowPath (val) {
+        this.$store.commit('initIsShowLine', val);
+        this.switchPath(val);
+      },
+      isShowLine (val) {
+        this.isShowPath = val;
       }
     },
     methods: {
@@ -112,13 +124,14 @@
             showPositionPoint: false, //显示定位点
             position: i.position,
             label: {
-              content: i.label,
+              content: `<div class="babel__container"><div class="bg"></div><div class="title">${i.label}</div><div>${i.label}</div></div>`,
               offset: new window.AMap.Pixel(36, 10)
             }
           });
         });
       },
       switchPath (val) {
+        window.localStorage.setItem('isShowLine', val);
         let map = this.$refs.taskMap.$$getInstance();
         let {markers, pathSimplifierIns} = this;
         let points = [...markers, markers[0]].map(m => ({lnglat: m.position}));
