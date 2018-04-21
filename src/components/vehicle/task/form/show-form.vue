@@ -20,7 +20,7 @@
   }
 
   .el-form-item {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 </style>
 <template>
@@ -84,9 +84,9 @@
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
               {{pageSets[1].name}}
-              <span @click="showAdd" class="btn-circle" v-show="form.status==='0'"><i
-                class="el-icon-t-plus"></i> </span>
             </h3>
+            <span @click="showAdd" class="btn-circle" v-show="form.status==='0'"><i
+              class="el-icon-t-plus"></i> </span>
           </div>
           <div>
             <el-form ref="detailForm" :model="detailForm" class="clearfix" label-width="100px" v-show="showAddFlag">
@@ -120,9 +120,9 @@
             <el-table :data="form.waybillList" border style="width: 100%">
               <el-table-column prop="waybillNumber" label="运单号" width="140">
               </el-table-column>
-              <el-table-column prop="receiverName" label="收货单位" width="240">
+              <el-table-column prop="receiverName" label="收货单位" mix-width="240">
               </el-table-column>
-              <el-table-column prop="receiverAddress" label="收货地址" width="180">
+              <el-table-column prop="receiverAddress" label="收货地址" mix-width="180">
               </el-table-column>
               <el-table-column prop="incubatorCount" label="包件" width="50">
               </el-table-column>
@@ -146,6 +146,7 @@
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
               {{pageSets[2].name}}
             </h3>
+            <des-btn icon="detail" @click="showBigMap(form.waybillList)">查看大图</des-btn>
           </div>
           <div class="content">
             <task-map :waybillList="form.waybillList"></task-map>
@@ -194,7 +195,7 @@
       };
     },
     computed: {},
-    props: ['formItem'],
+    props: ['formItem', 'showBigMap'],
     watch: {
       formItem: function (val) {
         this.selectTab(this.pageSets[0]);

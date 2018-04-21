@@ -17,7 +17,6 @@
 </template>
 <script>
   import { AMapManager } from 'vue-amap';
-  import CarImg from '@/assets/img/car.png';
 
   export default {
     props: ['formItem'],
@@ -38,7 +37,7 @@
         this.$http(`/track-transportation/order/${this.formItem.id}/latest`).then(res => {
           this.waybills = res.data.map(m => {
             return {
-              waybillNo: res.data.waybillNo,
+              waybillNo: m.waybillNo,
               center: [121.5273285, 31.21515044],
               amapManager: new AMapManager(),
               points: [m.longitude, m.latitude]
