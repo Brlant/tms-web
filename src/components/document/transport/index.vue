@@ -644,6 +644,8 @@
         });
       },
       submit() {
+        this.checkList = [];
+        this.checkListPara = [];
         this.getTmsWayBillPage(1);
       },
       autoSubmit() {

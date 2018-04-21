@@ -246,6 +246,8 @@
             isPrinting: false,
             moduleId: '/vehicle/delivery/task'
           });
+          // 清空列表
+          this.taskIdList = [];
         }).catch(error => {
           this.isLoading = false;
           this.$store.commit('initPrint', {
@@ -367,6 +369,9 @@
           pageSize: this.pager.pageSize
         }, this.filters);
         this.loadingData = true;
+        // 清空勾选列表
+        this.checkList = [];
+        this.checkListPara = [];
         TransportTask.query(param).then(res => {
           res.data.list.forEach(val => {
             val.isChecked = false;
@@ -410,6 +415,8 @@
         });
       },
       submit() {
+        this.checkList = [];
+        this.checkListPara = [];
         this.getTransportTaskPage(1);
       }
     }
