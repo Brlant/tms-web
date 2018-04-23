@@ -299,7 +299,7 @@
             val.isChecked = true;
             val.maxMileage = '250';
             val.volume = val.volume * 0.7;
-            val.maxHour = 6;
+            val.maxHour = 8;
           });
           this.isCheckAll = true;
           this.carList = res.data;
