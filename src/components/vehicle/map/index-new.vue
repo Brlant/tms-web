@@ -1,5 +1,6 @@
 <style lang="scss" scoped="">
   @import "../../../assets/scss/mixins";
+
   .d-table {
     margin-top: 0;
     margin-bottom: 0;
@@ -125,6 +126,7 @@
       }
     }
   }
+
 </style>
 <template>
   <div>
@@ -172,7 +174,9 @@
           <table class="table" style="margin-bottom: 0">
             <thead>
             <tr>
-              <th width="8%"></th>
+              <th width="8%" class="search-no-border" @click="isShowSearch = !isShowSearch">
+                <span><i class="el-icon-t-search"></i></span>
+              </th>
               <th width="14%">包件数</th>
               <th width="30%">运单号</th>
               <th width="24%">收货单位</th>
@@ -180,14 +184,20 @@
             </tr>
             </thead>
           </table>
-
           <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight + 'px'"
                         @scroll="scrollLoadingData">
             <div class="scrollbar-content">
               <div class="m-list">
                 <table class="table table-hover">
                   <tbody>
-                  <tr v-for="item in dataRows" v-show="receiveStatus==='0' || receiveStatus==='1' && item.isChecked"
+                  <tr v-show="isShowSearch">
+                    <td colspan="5">
+                      <oms-input class="search-input" v-model='typeTxt' placeholder="请输入运单号/收货单位/收货地址搜索"
+                                 :showFocus="isShowSearch"/>
+                    </td>
+                  </tr>
+                  <tr v-for="item in dataRows"
+                      v-show="(receiveStatus==='0' || receiveStatus==='1' && item.isChecked) && item.isHasSearchText"
                       :class="{active: item.isChecked}" @click.stop.prevent="rowClick(item)">
                     <td width="8%">
                       <el-checkbox v-model="item.isChecked"></el-checkbox>
@@ -287,7 +297,9 @@
         totalVolume: 0,
         dataMap: [],
         isShowList: false,
-        receiveStatus: '0'
+        receiveStatus: '0',
+        isShowSearch: false,
+        typeTxt: ''
       };
     },
     computed: {
@@ -323,6 +335,19 @@
           this.formatVolume();
           this.formatWeight();
         }
+      },
+      typeTxt (val) {
+        console.log(1);
+        this.dataRows.forEach(i => {
+          if (!val) {
+            i.isHasSearchText = true;
+            return;
+          }
+          i.isHasSearchText = i.waybillNumber.includes(val) ||
+            i.receiverName.includes(val) ||
+            i.receiverAddress.includes(val);
+          console.log(i.isHasSearchText);
+        });
       }
     },
     methods: {
@@ -357,6 +382,7 @@
           if (isContinue) {
             res.data.list.forEach(i => {
               i.isChecked = false;
+              i.isHasSearchText = true;
             });
             this.dataRows = this.dataRows.concat(res.data.list);
             this.addOverlays(res.data.list, true);
