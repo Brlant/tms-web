@@ -485,6 +485,7 @@
                 this.doing = false;
               });
             } else {
+              this.doing = true;
               TmsWayBill.update(this.form.id, this.form).then(res => {
                 this.$notify.success({
                   name: '成功',

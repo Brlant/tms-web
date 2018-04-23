@@ -459,6 +459,7 @@
                 this.doing = false;
               });
             } else {
+              this.doing = true;
               TmsOrder.update(this.form.id, this.form).then(res => {
                 this.$notify.success({
                   name: '成功',

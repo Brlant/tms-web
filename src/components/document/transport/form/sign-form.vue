@@ -110,6 +110,7 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
+            this.doing = true;
             TmsWayBill.signTmsWayBill(this.form.id, this.form).then(res => {
               this.$notify.success({
                 name: '成功',
