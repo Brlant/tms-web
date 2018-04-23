@@ -98,7 +98,9 @@
         this.isShowPath = false;
         this.pathSimplifierIns && this.pathSimplifierIns.setData([]);
         let isShowLine = window.localStorage.getItem('isShowLine');
-        this.isShowPath = !!JSON.parse(isShowLine);
+        this.$nextTick(() => {
+          this.isShowPath = !!JSON.parse(isShowLine);
+        });
         // this.isShowPath && this.drawPath(map, [...val, val[0]].map(m => ({lnglat: m.position})));
       },
       isShowPath (val) {
