@@ -14,6 +14,12 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
+        <perm label="tms-task-car-task-cancel">
+          <el-button plain size="small" @click="batchCancel" v-if="activeStatus===0||activeStatus==='0'">
+            <f-a class="icon-small" name="forbidden"></f-a>
+            批量取消
+          </el-button>
+        </perm>
         <perm label="tms-task-car-task-export">
           <el-button plain size="small" @click="exportFile" :disabled="isLoading">
             <f-a class="icon-small" name="print"></f-a>
@@ -240,6 +246,36 @@
       this.getTransportTaskPage(1);
     },
     methods: {
+      batchCancel: function () {
+        if (!this.taskIdList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选需要取消的出车任务'
+          });
+          return;
+        }
+        this.$confirm('确认取消勾选的出车任务?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TransportTask.batchCancel({idList: this.taskIdList}).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '批量取消出车任务成功'
+            });
+            this.getTransportTaskPage(1);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.data.msg || '批量取消出车任务失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       showBigMap (waybillList) {
         this.waybillList = [];
         this.isShowBigMap = true;

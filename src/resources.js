@@ -115,6 +115,9 @@ export const TransportTask = resource('/transport-task', http, {
   queryAutoTaskList: (params) => {
     return http.get('/transport-task/auto/pager', {params});
   },
+  batchCancel: (params) => {
+    return http.put('/transport-task/batch/cancel', params);
+  },
   batchAutoCreateWayBill: (params) => {
     return http.post('/transport-task/auto', params);
   },
