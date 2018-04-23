@@ -118,11 +118,17 @@
     methods: {
       formatTypeTitle: function (val) {
         let title = '';
+        if (val === -1) {
+          title = '手动排单';
+        }
         if (val === 0) {
-          title = '自动排单';
+          title = '最低成本';
         }
         if (val === 1) {
-          title = '手动排单';
+          title = '最短距离';
+        }
+        if (val === 2) {
+          title = '最短时间';
         }
         return title;
       },
