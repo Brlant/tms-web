@@ -139,6 +139,7 @@
         let points = [...markers, markers[0]].map(m => ({lnglat: m.position}));
         // 已经存在
         if (pathSimplifierIns) {
+          pathSimplifierIns.setData([]);
           // 清除轨迹
           pathSimplifierIns.setData(val ? [{
             name: '派车路线',
