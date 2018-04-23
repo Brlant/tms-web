@@ -112,6 +112,7 @@
                 this.doing = false;
               });
             } else {
+              this.doing = true;
               Department.update(this.form).then(res => {
                 this.$notify.success({
                   name: '成功',

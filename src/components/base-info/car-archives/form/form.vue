@@ -495,6 +495,7 @@
                 this.doing = false;
               });
             } else {
+              this.doing = true;
               CarArchives.update(this.form).then(res => {
                 this.$notify.success({
                   name: '成功',

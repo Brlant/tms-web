@@ -172,6 +172,7 @@
             };
           });
           if (this.action === 'add') {
+            this.doing = true;
             User.save(formData).then(() => {
               this.doing = false;
               this.$notify.success({
@@ -189,6 +190,7 @@
               this.doing = false;
             });
           } else {
+            this.doing = true;
             User.update(self.form.id, formData).then(() => {
               this.doing = false;
               this.$notify.success({
