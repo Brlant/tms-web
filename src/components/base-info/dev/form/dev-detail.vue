@@ -32,7 +32,7 @@
       <oms-input type="textarea" v-model="form.remark" placeholder="请输入备注"></oms-input>
     </el-form-item>
     <el-form-item label-width="100px">
-      <el-button type="primary" @click="onSubmit('form')">保存</el-button>
+      <el-button type="primary" @click="onSubmit('form')" :disabled="doing">保存</el-button>
       <el-button @click="cancel">取消</el-button>
     </el-form-item>
   </el-form>

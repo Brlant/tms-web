@@ -70,7 +70,7 @@
       </oms-input>
     </el-form-item>
     <el-form-item label-width="160px">
-      <el-button model="primary" @click="onSubmit('form')">保存</el-button>
+      <el-button model="primary" @click="onSubmit('form')" :disabled="doing">保存</el-button>
       <el-button @click="cancel">取消</el-button>
     </el-form-item>
   </el-form>
