@@ -386,7 +386,7 @@
                 moduleId: '/document/transport'
               });
               this.doing = false;
-              this.$emit('change', this.form);
+              this.$emit('change', res.data);
               this.$emit('right-close');
             }).catch(error => {
               this.$notify.error({
