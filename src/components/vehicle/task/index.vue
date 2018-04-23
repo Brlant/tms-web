@@ -20,6 +20,10 @@
             导出出车任务
           </el-button>
         </perm>
+        <el-button plain size="small" @click="showMultipleMap" :disabled="isLoading">
+          <f-a class="icon-small" name="search"></f-a>
+          合并查看地图
+        </el-button>
       </template>
     </search-part>
 
@@ -69,9 +73,9 @@
               </div>
             </el-col>
             <!--<el-col :span="2" class="R">-->
-              <!--<div>-->
-                <!--<dict :dict-group="'deliveryTaskType'" :dict-key="item.type"></dict>-->
-              <!--</div>-->
+            <!--<div>-->
+            <!--<dict :dict-group="'deliveryTaskType'" :dict-key="item.type"></dict>-->
+            <!--</div>-->
             <!--</el-col>-->
             <el-col :span="2" class="R">
               <div>
@@ -154,11 +158,17 @@
       <component :is="currentPart" :formItem="form" :showBigMap="showBigMap"/>
     </page-right>
     <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
-      <component :is="currentEditPart" :formItem="form" @change="submit"  @right-close="resetRightBox"/>
+      <component :is="currentEditPart" :formItem="form" @change="submit" @right-close="resetRightBox"/>
     </page-right>
     <el-dialog title="地图派送" :visible.sync="isShowBigMap" width="100%" :fullscreen="true"
                custom-class="custom-dialog-map">
       <task-map mapRef="bigTaskMap" :waybillList="waybillList" :mapStyle="{height: bodyHeight}"></task-map>
+    </el-dialog>
+    <el-dialog title="地图派送" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
+               custom-class="custom-dialog-map">
+      <map-multiple :waybillList="multipleWaybillList" :taskIdList="taskIdList"
+                    :mapStyle="{height: bodyHeight}" :isShowBigMap="isShowMulBigMap"
+                    v-show="isShowMulBigMap"></map-multiple>
     </el-dialog>
   </div>
 </template>
@@ -171,15 +181,17 @@
   import editForm from './form/edit-form';
   import Perm from '../../common/perm';
   import TaskMap from './form/map-new-next';
+  import MapMultiple from './form/map-multiple';
 
   export default {
     components: {
       Perm,
       SearchPart,
-      TaskMap
+      TaskMap,
+      MapMultiple
     },
     mixins: [StatusMixin],
-    data() {
+    data () {
       return {
         isLoading: false,
         loadingData: false,
@@ -218,7 +230,9 @@
         currentItemId: '',
         taskIdList: [],
         isShowBigMap: false,
-        waybillList: []
+        isShowMulBigMap: false,
+        waybillList: [],
+        multipleWaybillList: []
       };
     },
     computed: {
@@ -235,10 +249,29 @@
         deep: true
       }
     },
-    mounted() {
+    mounted () {
       this.getTransportTaskPage(1);
     },
     methods: {
+      showMultipleMap () {
+        if (!this.taskIdList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选需要导出的出车任务'
+          });
+          return;
+        }
+        this.multipleWaybillList = [];
+        this.taskIdList.forEach(i => {
+          TransportTask.getOneTransportTask(i).then(res => {
+            this.multipleWaybillList.push({
+              no: res.data.transportTaskNo,
+              list: res.data.waybillList
+            });
+          });
+        });
+        this.isShowMulBigMap = true;
+      },
       showBigMap (waybillList) {
         this.waybillList = [];
         this.isShowBigMap = true;
@@ -282,7 +315,7 @@
           });
         });
       },
-      checkAll() {
+      checkAll () {
         // 全选
         if (this.isCheckAll) {
           this.dataList.forEach(item => {
@@ -344,11 +377,11 @@
 
         });
       },
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.pager.pageSize = val;
         this.getTransportTaskPage(1);
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         this.getTransportTaskPage(val);
       },
       confirmTask: function (item) {
@@ -377,11 +410,11 @@
       searchResult: function (search) {
         Object.assign(this.filters, search);
       },
-      checkStatus(item, key) {
+      checkStatus (item, key) {
         this.filters.status = item.status;
         this.activeStatus = key;
       },
-      resetRightBox() {
+      resetRightBox () {
         this.showIndex = -1;
         this.showEditIndex = -1;
       },
@@ -437,7 +470,7 @@
           this.form = JSON.parse(JSON.stringify(item));
         });
       },
-      submit() {
+      submit () {
         this.checkList = [];
         this.checkListPara = [];
         this.getTransportTaskPage(1);
