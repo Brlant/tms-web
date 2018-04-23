@@ -9,11 +9,12 @@
 
 #taskMap, #bigTaskMap {
   .amap-marker-label {
-    border-color: #ddd;
     background: transparent;
+    border-color: transparent;
     .babel__container {
       padding: 4px;
       position: relative;
+      border-color: #ddd;
       .bg, .title {
         position: absolute;
         left: 0;
