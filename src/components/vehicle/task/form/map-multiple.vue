@@ -218,12 +218,12 @@
             getPath: function (pathData, pathIndex) {
               return pathData.path;
             },
+            getHoverTitle: function (pathData, pathIndex, pointIndex) {
+              return pathData.name;
+            },
             renderOptions: {
               pathLineStyle: {
                 dirArrowStyle: true
-              },
-              getHoverTitle: function (pathData, pathIndex, pointIndex) {
-                return pathData.name;
               },
               getPathStyle: function (pathItem, zoom) {
                 let color = Colors[pathItem.pathIndex % Colors.length];
