@@ -136,7 +136,6 @@
       },
       isShowLabel (val) {
         let eles = this.$el.querySelectorAll('.babel__container');
-        console.log(eles);
         [...eles].forEach(i => {
           i.style.display = val ? 'block' : 'none';
         });
@@ -194,7 +193,6 @@
       },
       // 画出轨迹
       drawPath (map, paths) {
-        console.log(paths);
         window.AMapUI.loadUI(['misc/PathSimplifier'], PathSimplifier => {
           const pathSimplifierIns = new PathSimplifier({
             zIndex: 100,
