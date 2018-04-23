@@ -93,18 +93,18 @@
                     <td width="5%">
                     </td>
                     <td width="10%"></td>
-                    <td width="17%" class="R"></td>
+                    <td width="17%" class="R">快捷修改</td>
                     <td width="23%" class="R">
-                      <oms-input type="number" v-model="quickLoadBearing" @change="quickSetCarInfo"></oms-input>
+                      <oms-input type="number" v-model="quickLoadBearing" @change="quickSetCarInfo" placeholder="载重"></oms-input>
                     </td>
                     <td width="23%" class="R">
-                      <oms-input type="number" v-model="quickVolume" @change="quickSetCarInfo"></oms-input>
+                      <oms-input type="number" v-model="quickVolume" @change="quickSetCarInfo" placeholder="容积"></oms-input>
                     </td>
                     <td width="12%" class="R">
-                      <oms-input type="number" v-model="quickMaxMileage" @change="quickSetCarInfo"></oms-input>
+                      <oms-input type="number" v-model="quickMaxMileage" @change="quickSetCarInfo" placeholder="里程数"></oms-input>
                     </td>
                     <td width="10%" class="R">
-                      <oms-input type="number" v-model="quickMaxHour" @change="quickSetCarInfo"></oms-input>
+                      <oms-input type="number" v-model="quickMaxHour" @change="quickSetCarInfo" placeholder="时限"></oms-input>
                     </td>
                   </tr>
                   <tr v-for="item in carList" :class="{active: item.isChecked}">
@@ -304,7 +304,7 @@
             val.isChecked = true;
             val.maxMileage = '250';
             val.volume = val.volume * 0.7;
-            val.maxHour = 6;
+            val.maxHour = 8;
           });
           this.isCheckAll = true;
           this.carList = res.data;
@@ -386,7 +386,7 @@
                 moduleId: '/document/transport'
               });
               this.doing = false;
-              this.$emit('change', this.form);
+              this.$emit('change', res.data);
               this.$emit('right-close');
             }).catch(error => {
               this.$notify.error({

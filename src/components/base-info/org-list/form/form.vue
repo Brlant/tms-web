@@ -115,7 +115,7 @@
         <h2 class="clearfix right-title">{{orgTitle}}基础信息</h2>
         <ul>
           <li align="center" style="margin-top:40px;position:absolute;bottom:30px;left:0;right:0;text-align: center">
-            <el-button type="primary" @click="onSubmit('baseform')">保存</el-button>
+            <el-button type="primary" @click="onSubmit('baseform')" :disabled="doing">保存</el-button>
           </li>
         </ul>
 

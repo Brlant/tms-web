@@ -25,6 +25,12 @@
               <oms-input v-model="searchCondition.carPlateNumber" placeholder="请输入车牌号" @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
+          <el-col :span="8">
+            <oms-form-row label="运单号" :span="5">
+              <oms-input v-model="searchCondition.waybillNo" placeholder="请输入运单号"
+                         @keyup.native.enter="search"></oms-input>
+            </oms-form-row>
+          </el-col>
           <div v-show="showSearch">
           </div>
         </el-row>
@@ -41,7 +47,8 @@
         searchCondition: {
           transportTaskNo: '',
           type: '',
-          carPlateNumber: ''
+          carPlateNumber: '',
+          waybillNo: ''
         },
         showSearch: false,
         list: [],
@@ -65,7 +72,8 @@
         this.searchCondition = {
           transportTaskNo: '',
           type: '',
-          carPlateNumber: ''
+          carPlateNumber: '',
+          waybillNo: ''
         };
         this.$emit('search', this.searchCondition);
       },

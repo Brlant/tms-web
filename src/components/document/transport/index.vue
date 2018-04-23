@@ -649,20 +649,8 @@
         this.getTmsWayBillPage(1);
       },
       autoSubmit() {
-        this.filters = {
-          status: '0',
-          waybillNumber: '',
-          waybillType: '',
-          shipmentWay: '',
-          serviceType: '',
-          senderId: '',
-          receiverId: '',
-          startTime: '',
-          endTime: ''
-        };
         this.checkList = [];
         this.checkListPara = [];
-        this.getTmsWayBillPage(1);
       }
     }
   };

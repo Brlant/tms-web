@@ -17,7 +17,7 @@
       <oms-input type="text" v-model="form.fax" placeholder="请输入部门传真"></oms-input>
     </el-form-item>
     <el-form-item label-width="120px">
-      <el-button type="primary" @click="onSubmit('form')">保存</el-button>
+      <el-button type="primary" @click="onSubmit('form')" :disabled="doing">保存</el-button>
       <el-button @click="cancel">取消</el-button>
     </el-form-item>
   </el-form>
