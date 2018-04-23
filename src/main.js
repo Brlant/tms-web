@@ -9,7 +9,7 @@ import './assets/css/basic.css';
 import '../static/fonts/iconfont.css';
 import Vuex from 'vuex';
 import store from './store';
-import {init} from './tools/init';
+import { init } from './tools/init';
 import VueAMap from 'vue-amap';
 
 init(Vue);
@@ -21,6 +21,7 @@ Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
   key: 'b551e033d09a45de75ebbc1170025c20',
   plugin: ['AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.Geocoder'],
+  v: '1.4.6',
   uiVersion: '1.0'
 });
 

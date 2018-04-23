@@ -22,7 +22,8 @@ const state = {
   isShowGoodsList: false,
   bottomLoading: false,
   menuParentIds: [], // 所有非叶子节点菜单
-  requestingDictAry: []
+  requestingDictAry: [],
+  isShowLine: false
 };
 
 const mutations = {
@@ -36,19 +37,19 @@ const mutations = {
 
     }
   },
-  initDev(state, data) {
+  initDev (state, data) {
     state.dev = data;
   },
-  initDict(state, data) {
+  initDict (state, data) {
     state.dict = data;
   },
-  initPermissions(state, data) {
+  initPermissions (state, data) {
     state.permissions = data;
   },
-  initPermList(state, data) {
+  initPermList (state, data) {
     state.allMenuList = data;
   },
-  changeAttachment(state, data) {
+  changeAttachment (state, data) {
     let currentId;
     if (typeof data === 'object') {
       currentId = data.currentId;
@@ -63,27 +64,30 @@ const mutations = {
       state.attachmentDialog.attachmentId = currentId;
     }
   },
-  closeAttachmentDialog(state) {
+  closeAttachmentDialog (state) {
     state.attachmentDialog.open = false;
   },
-  setBodyHeight(state, data) {
+  setBodyHeight (state, data) {
     state.bodyHeight = data;
   },
-  initPrint(state, data) {
+  initPrint (state, data) {
     data.text = data.text || '拼命打印中';
     state.print = data;
   },
   initIsShowGoodsList (state, data) {
     state.isShowGoodsList = data;
   },
-  initMenuParentIds(state, data) {
+  initMenuParentIds (state, data) {
     state.menuParentIds = data;
   },
-  initBottomLoading(state, data) {
+  initBottomLoading (state, data) {
     state.bottomLoading = data;
   },
   initRequestingDictAry (state, data) {
     state.requestingDictAry = data;
+  },
+  initIsShowLine (state, data) {
+    state.isShowLine = data;
   }
 };
 

@@ -22,6 +22,10 @@
   .el-form-item {
     margin-bottom: 0;
   }
+
+  .el-icon-zoom-in {
+    font-size: 16px;
+  }
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
@@ -146,7 +150,10 @@
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
               {{pageSets[2].name}}
             </h3>
-            <des-btn icon="detail" @click="showBigMap(form.waybillList)">查看大图</des-btn>
+            <span @click="showBigMap(form.waybillList)" class="des-btn">
+               <a href="#" class="btn-circle" @click.prevent="">
+                 <i class="el-icon-zoom-in"></i></a>查看大图
+            </span>
           </div>
           <div class="content">
             <task-map :waybillList="form.waybillList"></task-map>

@@ -7,12 +7,33 @@
   cursor: pointer;
 }
 
-#taskMap {
+#taskMap, #bigTaskMap {
   .amap-marker-label {
-    border-color: #ddd;
-    opacity: 0.8;
-    &:hover {
-      opacity: 1;
+    background: transparent;
+    border-color: transparent;
+    .babel__container {
+      padding: 4px;
+      position: relative;
+      border-color: #ddd;
+      .bg, .title {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .bg {
+        background: #fff;
+        opacity: 0.6;
+      }
+      &:hover {
+        .bg {
+          opacity: 1;
+        }
+      }
     }
   }
 }
