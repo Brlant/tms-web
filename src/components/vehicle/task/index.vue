@@ -165,7 +165,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TransportTask } from '@/resources';
+  import {http, TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
@@ -208,7 +208,8 @@
           status: '0',
           transportTaskNo: '',
           type: '',
-          carPlateNumber: ''
+          carPlateNumber: '',
+          waybillNo: ''
         },
         isCheckAll: false,
         checkList: [],
