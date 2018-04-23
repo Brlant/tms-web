@@ -36,7 +36,7 @@
       </div>
       <div class="map__checkbox__list">
         <div v-for="item in totalMarkers">
-          <el-checkbox size="mini" v-model="item.isShow">任务号{{item.no}}</el-checkbox>
+          <el-checkbox size="mini" v-model="item.isShow">{{item.no}}</el-checkbox>
         </div>
       </div>
     </div>
@@ -195,7 +195,7 @@
         let paths = [];
         markers.filter(f => f.isShow).forEach(i => {
           paths.push({
-            name: `任务号${i.no}`,
+            name: `${i.no}`,
             path: [...i.points, markers[0].points[0]].map(m => (m.position))
           });
         });
