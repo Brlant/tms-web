@@ -34,11 +34,11 @@
         <el-checkbox size="mini" v-show="waybillList.length" v-model="isShowLabel">标注</el-checkbox>
         <el-checkbox size="mini" v-show="waybillList.length" v-model="isShowPath">连线</el-checkbox>
       </div>
-      <!--<div class="map__checkbox__list">-->
-      <!--<div v-for="item in markers">-->
-      <!--<el-checkbox size="mini" v-model="item.isShow">任务号{{item.no}}</el-checkbox>-->
-      <!--</div>-->
-      <!--</div>-->
+      <div class="map__checkbox__list">
+        <div v-for="item in totalMarkers">
+          <el-checkbox size="mini" v-model="item.isShow">任务号{{item.no}}</el-checkbox>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -77,25 +77,26 @@
       return {
         center: [121.5273285, 31.21515044],
         isShowPath: false,
+        totalMarkers: [],
         pathSimplifierIns: null,
         isShowLabel: true
       };
     },
     computed: {
       markers () {
-        let {waybillList, taskIdList, isShowBigMap} = this;
+        let {totalMarkers, taskIdList, isShowBigMap} = this;
         if (!isShowBigMap) return;
-        if (!waybillList.length || !taskIdList) return [];
-        if (waybillList.length < taskIdList.length) return;
+        if (!totalMarkers.length || !taskIdList) return [];
+        if (totalMarkers.length < taskIdList.length) return;
         let start = {
-          position: [waybillList[0].list[0].senderAddressLongitude, waybillList[0].list[0].senderAddressDimension],
+          position: [totalMarkers[0].list[0].senderAddressLongitude, totalMarkers[0].list[0].senderAddressDimension],
           label: '起点'
         };
-        return waybillList.map((m, i) => {
+        return totalMarkers.map((m, i) => {
           let obj = {
             no: m.no,
             color: Colors[i],
-            isShow: true
+            isShow: m.isShow
           };
           let {list} = m;
           let set = new Set();
@@ -139,6 +140,10 @@
         this.$nextTick(() => {
           this.isShowPath = !!JSON.parse(isShowLine);
         });
+      },
+      waybillList (val) {
+        val.forEach(i => (i.isShow = true));
+        this.totalMarkers = JSON.parse(JSON.stringify(val));
       },
       isShowPath (val) {
         this.$store.commit('initIsShowLine', val);
