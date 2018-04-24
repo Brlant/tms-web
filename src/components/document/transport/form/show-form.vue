@@ -251,7 +251,6 @@
           ]
         },
         rules: {},
-        attachmentIdList: [],
         attachmentList: []
       };
     },
@@ -262,6 +261,7 @@
         if (val.id) {
           TmsWayBill.getOneTmsWayBill(val.id).then(res => {
             this.form = res.data;
+            this.attachmentList = [];
             this.getFileList();
           });
         }
