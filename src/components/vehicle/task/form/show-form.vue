@@ -122,10 +122,17 @@
           </div>
           <div class="content">
             <el-table :data="form.waybillList" border style="width: 100%">
-              <el-table-column prop="waybillNumber" label="运单号" width="140">
+              <el-table-column prop="waybillNumber" label="运单号" width="120">
                 <template slot-scope=" scope">
                   <span class="f-12">
                      {{scope.row.waybillNumber}}
+                  </span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="receiverName" label="发货单位" mix-width="240">
+                <template slot-scope=" scope">
+                  <span class="f-12">
+                     {{scope.row.senderName}}
                   </span>
                 </template>
               </el-table-column>
@@ -136,7 +143,7 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverAddress" label="收货地址" mix-width="180">
+              <el-table-column prop="receiverAddress" label="收货地址" mix-width="200">
                 <template slot-scope=" scope">
                   <span class="f-12">
                      {{scope.row.receiverAddress}}
