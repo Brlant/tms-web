@@ -25,15 +25,19 @@
             <f-a class="icon-small" name="print"></f-a>
             导出出车任务
           </el-button>
+        </perm>
+        <perm label="tms-task-car-task-export">
           <el-button plain size="small" @click="printFile" :disabled="isLoading">
             <f-a class="icon-small" name="print"></f-a>
             打印出车任务
           </el-button>
         </perm>
-        <el-button plain size="small" @click="showMultipleMap" :disabled="isLoading">
-          <f-a class="icon-small" name="search"></f-a>
-          合并查看地图
-        </el-button>
+        <perm label="tms-task-car-task-query">
+          <el-button plain size="small" @click="showMultipleMap" :disabled="isLoading">
+            <f-a class="icon-small" name="search"></f-a>
+            合并查看地图
+          </el-button>
+        </perm>
       </template>
     </search-part>
 
