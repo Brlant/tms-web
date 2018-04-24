@@ -1,6 +1,6 @@
 <template>
   <search-template :isShow="showSearch" @search="search" @reset="reset" @isShow="isShow">
-    <template slot="title">出车任务查询</template>
+    <template slot="title">任务查询</template>
     <template slot="btn">
       <slot name="btn"></slot>
     </template>
