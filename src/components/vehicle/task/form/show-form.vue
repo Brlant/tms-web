@@ -123,16 +123,36 @@
           <div class="content">
             <el-table :data="form.waybillList" border style="width: 100%">
               <el-table-column prop="waybillNumber" label="运单号" width="140">
+                <template slot-scope=" scope">
+                  <span class="f-12">
+                     {{scope.row.waybillNumber}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column prop="receiverName" label="收货单位" mix-width="240">
+                <template slot-scope=" scope">
+                  <span class="f-12">
+                     {{scope.row.receiverName}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column prop="receiverAddress" label="收货地址" mix-width="180">
+                <template slot-scope=" scope">
+                  <span class="f-12">
+                     {{scope.row.receiverAddress}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column prop="incubatorCount" label="包件" width="50">
+                <template slot-scope=" scope">
+                  <span class="f-12">
+                     {{scope.row.incubatorCount}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column prop="" label="操作" width="80" v-if="form.status==='0'">
                 <template slot-scope=" scope">
-                  <perm label="tms-waybill-edit" class="opera-btn btn-line-block">
+                  <perm label="tms-waybill-edit" class="opera-btn btn-line-block f-12">
                     <span @click.stop="deleteDetail(scope.row)">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
