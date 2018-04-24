@@ -326,7 +326,7 @@
         if (!this.taskIdList.length) {
           this.$notify.warning({
             duration: 2000,
-            message: '请勾选需要导出的出车任务'
+            message: '请勾选需要打印的出车任务'
           });
           return;
         }
