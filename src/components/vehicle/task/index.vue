@@ -331,7 +331,7 @@
           return;
         }
         let obj = {
-          taskIdList: this.taskIdList
+          taskList: this.taskIdList
         };
         this.isLoading = true;
         this.$store.commit('initPrint', {isPrinting: true});
@@ -339,6 +339,9 @@
           this.isLoading = false;
           this.$store.commit('initPrint', {isPrinting: false});
           utils.printLocation(this, {'type': 'transport_task', 'path': res.data.url});
+          // 清空列表
+          this.taskIdList = [];
+          this.checkList = [];
         }).catch(error => {
           this.isLoading = false;
           this.$store.commit('initPrint', {isPrinting: false});
@@ -370,6 +373,7 @@
           });
           // 清空列表
           this.taskIdList = [];
+          this.checkList = [];
         }).catch(error => {
           this.isLoading = false;
           this.$store.commit('initPrint', {
