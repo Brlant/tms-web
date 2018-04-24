@@ -342,9 +342,9 @@
             i.isHasSearchText = true;
             return;
           }
-          i.isHasSearchText = i.waybillNumber.includes(val) ||
-            i.receiverName.includes(val) ||
-            i.receiverAddress.includes(val);
+          i.isHasSearchText = i.waybillNumber && i.waybillNumber.includes(val) ||
+            i.receiverName && i.receiverName.includes(val) ||
+            i.receiverAddress && i.receiverAddress.includes(val);
         });
       }
     },
