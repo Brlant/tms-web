@@ -25,6 +25,10 @@
             <f-a class="icon-small" name="print"></f-a>
             导出出车任务
           </el-button>
+          <el-button plain size="small" @click="printFile" :disabled="isLoading">
+            <f-a class="icon-small" name="print"></f-a>
+            打印出车任务
+          </el-button>
         </perm>
         <el-button plain size="small" @click="showMultipleMap" :disabled="isLoading">
           <f-a class="icon-small" name="search"></f-a>
@@ -181,7 +185,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TransportTask } from '@/resources';
+  import {http, TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
@@ -316,6 +320,31 @@
           setTimeout(() => {
             this.waybillList = waybillList;
           }, 300);
+        });
+      },
+      printFile() {
+        if (!this.taskIdList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选需要导出的出车任务'
+          });
+          return;
+        }
+        let obj = {
+          taskIdList: this.taskIdList
+        };
+        this.isLoading = true;
+        this.$store.commit('initPrint', {isPrinting: true});
+        http.post('transport-task/export', obj).then(res => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {isPrinting: false});
+          utils.printLocation(this, {'type': 'transport_task', 'path': res.data.url});
+        }).catch(error => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {isPrinting: false});
+          this.$notify.error({
+            message: error.response.data && error.response.data.msg || '打印标签失败'
+          });
         });
       },
       exportFile: function () {
