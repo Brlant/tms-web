@@ -169,7 +169,7 @@
     </div>
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
-      <component :is="currentPart" :formItem="form" :showBigMap="showBigMap"/>
+      <component :is="currentPart" :formItem="form" :showBigMap="showBigMap" @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentEditPart" :formItem="form" @change="submit" @right-close="resetRightBox"/>
