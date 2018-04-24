@@ -337,16 +337,14 @@
         }
       },
       typeTxt (val) {
-        console.log(1);
         this.dataRows.forEach(i => {
           if (!val) {
             i.isHasSearchText = true;
             return;
           }
-          i.isHasSearchText = i.waybillNumber.includes(val) ||
-            i.receiverName.includes(val) ||
-            i.receiverAddress.includes(val);
-          console.log(i.isHasSearchText);
+          i.isHasSearchText = i.waybillNumber && i.waybillNumber.includes(val) ||
+            i.receiverName && i.receiverName.includes(val) ||
+            i.receiverAddress && i.receiverAddress.includes(val);
         });
       }
     },
@@ -389,6 +387,7 @@
           } else {
             res.data.list.forEach(i => {
               i.isChecked = false;
+              i.isHasSearchText = true;
             });
             this.dataRows = [];
             this.dataRows = res.data.list;

@@ -11,6 +11,15 @@
     background: #fff;
     border-radius: 2px;
   }
+
+  .map__checkbox__list {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background: #fff;
+    padding: 4px 6px;
+    border-radius: 2px;
+  }
 </style>
 <template>
   <div>
@@ -25,7 +34,11 @@
         <el-checkbox size="mini" v-show="waybillList.length" v-model="isShowLabel">标注</el-checkbox>
         <el-checkbox size="mini" v-show="waybillList.length" v-model="isShowPath">连线</el-checkbox>
       </div>
-
+      <div class="map__checkbox__list">
+        <div v-for="item in totalMarkers">
+          <el-checkbox size="mini" v-model="item.isShow">{{item.no}}</el-checkbox>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -35,7 +48,7 @@
     '#b82e2e', '#316395', '#994499', '#22aa99', '#aaaa11', '#6633cc', '#e67300', '#8b0707',
     '#651067', '#329262', '#5574a6', '#3b3eac'
   ];
-  const iconStyles = ['beige', 'blue', 'cadetblue', 'gray', 'green', 'lightblue', 'lightgray', 'lightgreen', 'lightpink', 'orange', 'orchid', 'pink', 'purple', 'red', 'salmon', 'white', 'black', 'darkblue', 'darkgreen', 'darkred'];
+  const iconStyles = ['lightgreen', 'blue', 'beige', 'gray', 'green', 'lightblue', 'lightpink', 'orange', 'orchid', 'pink', 'purple', 'red', 'salmon', 'white', 'black', 'darkblue', 'darkgreen', 'darkred', 'cadetblue', 'lightgray'];
 
   export default {
     props: {
@@ -64,24 +77,26 @@
       return {
         center: [121.5273285, 31.21515044],
         isShowPath: false,
+        totalMarkers: [],
         pathSimplifierIns: null,
         isShowLabel: true
       };
     },
     computed: {
       markers () {
-        let {waybillList, taskIdList, isShowBigMap} = this;
+        let {totalMarkers, taskIdList, isShowBigMap} = this;
         if (!isShowBigMap) return;
-        if (!waybillList.length || !taskIdList) return [];
-        if (waybillList.length < taskIdList.length) return;
+        if (!totalMarkers.length || !taskIdList) return [];
+        if (totalMarkers.length < taskIdList.length) return;
         let start = {
-          position: [waybillList[0].list[0].senderAddressLongitude, waybillList[0].list[0].senderAddressDimension],
+          position: [totalMarkers[0].list[0].senderAddressLongitude, totalMarkers[0].list[0].senderAddressDimension],
           label: '起点'
         };
-        return waybillList.map((m, i) => {
+        return totalMarkers.map((m, i) => {
           let obj = {
             no: m.no,
-            color: Colors[i]
+            color: Colors[i],
+            isShow: m.isShow
           };
           let {list} = m;
           let set = new Set();
@@ -113,7 +128,7 @@
         let map = this.$refs.taskMap.$$getInstance();
         if (!map) return;
         map.clearMap();
-        val.forEach((i, pIndex) => {
+        val.filter(f => f.isShow).forEach((i, pIndex) => {
           i.points.forEach((p, index) => {
             // 画点
             this.drawPoint(map, p, index, pIndex);
@@ -125,6 +140,10 @@
         this.$nextTick(() => {
           this.isShowPath = !!JSON.parse(isShowLine);
         });
+      },
+      waybillList (val) {
+        val.forEach(i => (i.isShow = true));
+        this.totalMarkers = JSON.parse(JSON.stringify(val));
       },
       isShowPath (val) {
         this.$store.commit('initIsShowLine', val);
@@ -161,8 +180,7 @@
             showPositionPoint: false, //显示定位点
             position: i.position,
             label: {
-              content: `<div class="babel__container">
-<div class="bg"></div><div class="title">${i.label}</div><div>${i.label}</div></div>`,
+              content: `<div class="babel__container"><div class="bg"></div><div class="title">${i.label}</div><div>${i.label}</div></div>`,
               offset: new window.AMap.Pixel(36, 10)
             }
           });
@@ -175,9 +193,9 @@
         // let paths = [...markers, markers[0]].map(m => ({lnglat: m.position}));
 
         let paths = [];
-        markers.forEach(i => {
+        markers.filter(f => f.isShow).forEach(i => {
           paths.push({
-            name: `任务号${i.no}`,
+            name: `${i.no}`,
             path: [...i.points, markers[0].points[0]].map(m => (m.position))
           });
         });
@@ -200,12 +218,12 @@
             getPath: function (pathData, pathIndex) {
               return pathData.path;
             },
+            getHoverTitle: function (pathData, pathIndex, pointIndex) {
+              return pathData.name;
+            },
             renderOptions: {
               pathLineStyle: {
                 dirArrowStyle: true
-              },
-              getHoverTitle: function (pathData, pathIndex, pointIndex) {
-                return pathData.name;
               },
               getPathStyle: function (pathItem, zoom) {
                 let color = Colors[pathItem.pathIndex % Colors.length];
