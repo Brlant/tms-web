@@ -98,7 +98,7 @@
                 <el-col :span="20">
                   <el-form-item label="运单" style="margin-top: 20px;margin-bottom: 20px">
                     <el-select filterable remote placeholder="请输入运单号搜索运单" :remote-method="getTmsOrderList"
-                               :clearable="true"
+                               :clearable="true" @click.native.once="getTmsOrderList('')"
                                v-model="detailForm.list" popperClass="good-selects" multiple>
                       <el-option :value="bill.id" :key="bill.id" :label="bill.waybillNumber"
                                  v-for="bill in wayBillList">
@@ -164,7 +164,7 @@
   </dialog-template>
 </template>
 <script>
-  import { TransportTask } from '@/resources';
+  import {TransportTask} from '@/resources';
   import TaskMap from './map-new-next';
 
   export default {
