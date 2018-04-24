@@ -88,7 +88,7 @@
               <div>
                 {{item.senderName}}
               </div>
-              <div class="f-grey">
+              <div>
                 {{item.senderAddress}}
               </div>
             </el-col>
@@ -96,7 +96,7 @@
               <div>
                 {{item.receiverName}}
               </div>
-              <div class="f-grey">
+              <div>
                 {{item.receiverAddress}}
               </div>
             </el-col>
