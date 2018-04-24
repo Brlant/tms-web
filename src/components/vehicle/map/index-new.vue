@@ -337,7 +337,6 @@
         }
       },
       typeTxt (val) {
-        console.log(1);
         this.dataRows.forEach(i => {
           if (!val) {
             i.isHasSearchText = true;
@@ -346,7 +345,6 @@
           i.isHasSearchText = i.waybillNumber.includes(val) ||
             i.receiverName.includes(val) ||
             i.receiverAddress.includes(val);
-          console.log(i.isHasSearchText);
         });
       }
     },
@@ -389,6 +387,7 @@
           } else {
             res.data.list.forEach(i => {
               i.isChecked = false;
+              i.isHasSearchText = true;
             });
             this.dataRows = [];
             this.dataRows = res.data.list;
