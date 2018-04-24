@@ -26,6 +26,10 @@
   .el-icon-zoom-in {
     font-size: 16px;
   }
+
+  .f-14 {
+    font-size: 14px;
+  }
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
@@ -122,37 +126,33 @@
           </div>
           <div class="content">
             <el-table :data="form.waybillList" border style="width: 100%">
-              <el-table-column prop="waybillNumber" label="运单号" width="120">
+              <el-table-column prop="waybillNumber" label="运单号" width="140">
                 <template slot-scope=" scope">
-                  <span class="f-12">
+                  <span class="f-14">
                      {{scope.row.waybillNumber}}
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="发货单位" mix-width="240">
+              <el-table-column prop="receiverName" label="发货单位" mix-width="330">
                 <template slot-scope=" scope">
-                  <span class="f-12">
+                  <div class="f-14">
                      {{scope.row.senderName}}
-                  </span>
+                  </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="收货单位" mix-width="240">
+              <el-table-column prop="receiverName" label="收货单位" mix-width="330">
                 <template slot-scope=" scope">
-                  <span class="f-12">
+                  <div class="f-14">
                      {{scope.row.receiverName}}
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="receiverAddress" label="收货地址" mix-width="200">
-                <template slot-scope=" scope">
-                  <span class="f-12">
+                  </div>
+                  <div class="f-14">
                      {{scope.row.receiverAddress}}
-                  </span>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column prop="incubatorCount" label="包件" width="50">
                 <template slot-scope=" scope">
-                  <span class="f-12">
+                  <span class="f-14">
                      {{scope.row.incubatorCount}}
                   </span>
                 </template>

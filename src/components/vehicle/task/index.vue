@@ -168,10 +168,10 @@
       </el-pagination>
     </div>
 
-    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'1100px','padding':0}">
+    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentPart" :formItem="form" :showBigMap="showBigMap"/>
     </page-right>
-    <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
+    <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentEditPart" :formItem="form" @change="submit" @right-close="resetRightBox"/>
     </page-right>
     <el-dialog title="地图派送" :visible.sync="isShowBigMap" width="100%" :fullscreen="true"
