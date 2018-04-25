@@ -318,6 +318,22 @@
           status: 1
         });
         User.query(data).then(res => {
+          let userList = res.data.list;
+          // 判断已选择的数据列表里是否存在
+          let userIdList = [];
+          userList.forEach(res => {
+            userIdList.push(res.id);
+          });
+          this.form.tallyClerkDtoList.forEach(val => {
+            if (val.userId !== '') {
+              let index = userIdList.indexOf(val.userId);
+              if (index === -1 && val.userId) {
+                User.queryInfo(val.userId).then(res => {
+                  userList.push({id: val.userId, name: res.data.name});
+                });
+              }
+            }
+          });
           this.tallyClerkList = res.data.list;
         });
       },
