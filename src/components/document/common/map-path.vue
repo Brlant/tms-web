@@ -6,8 +6,8 @@
 </style>
 <template>
   <div>
-    <div v-if="!points.length" class="empty-info mini">暂无轨迹信息</div>
-    <el-amap v-else ref="pathMap" vid="pathMap" :amap-manager="amapManager"
+    <div v-show="!points.length" class="empty-info mini">暂无轨迹信息</div>
+    <el-amap v-show="points.length" ref="pathMap" vid="pathMap" :amap-manager="amapManager"
              :zoom="10" :center="center" class="map-path">
     </el-amap>
   </div>
@@ -15,6 +15,7 @@
 <script>
   import { AMapManager } from 'vue-amap';
   import CarImg from '@/assets/img/car.png';
+
   export default {
     props: ['formItem'],
     data () {
@@ -27,6 +28,7 @@
     },
     watch: {
       formItem (val) {
+        console.log(1);
         this.points = [];
         if (!val.id) return;
         this.queryPath();
@@ -34,7 +36,7 @@
     },
     methods: {
       queryPath () {
-        this.$http(`/track-transportation/task/${this.formItem.id}`).then(res => {
+        this.$http(`/track-transportation/waybill/${this.formItem.id}`).then(res => {
           this.points = res.data.filter(f => f.longitude && f.latitude).map(m => {
             return {
               lnglat: [m.longitude, m.latitude]
@@ -90,9 +92,10 @@
       drawPath (points) {
         window.AMapUI.loadUI(['misc/PathSimplifier'], PathSimplifier => {
           const pathSimplifierIns = this.pathSimplifierIns ? this.pathSimplifierIns : this.createPathSimplifier(PathSimplifier);
+          console.log(pathSimplifierIns, points);
           pathSimplifierIns.setData([{points}]);
           pathSimplifierIns.setSelectedPathIndex(0);
-          this.createPathNavigator(PathSimplifier, pathSimplifierIns);
+          // this.createPathNavigator(PathSimplifier, pathSimplifierIns);
         });
       }
     }

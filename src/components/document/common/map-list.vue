@@ -6,8 +6,8 @@
 </style>
 <template>
   <div>
-    <div v-if="!waybills.length" class="empty-info mini">暂无轨迹信息</div>
-    <div v-else v-for="(item, index) in waybills" :key="index">
+    <div v-show="!waybills.length" class="empty-info mini">暂无轨迹信息</div>
+    <div v-show="waybills.length" v-for="(item, index) in waybills" :key="index">
       <h2>运单号:{{item.waybillNo}}</h2>
       <el-amap :ref="`pathMap${index}`" :vid="`pathMap${index}`" :amap-manager="item.amapManager"
                :zoom="10" :center="item.center" class="map-path">
@@ -17,7 +17,6 @@
 </template>
 <script>
   import { AMapManager } from 'vue-amap';
-  import CarImg from '@/assets/img/car.png';
 
   export default {
     props: ['formItem'],
@@ -80,18 +79,18 @@
           });
           pathSimplifierIns.setData([{points: item.points}]);
           pathSimplifierIns.setSelectedPathIndex(0);
-          const nav = pathSimplifierIns.createPathNavigator(0, {
-            loop: false,
-            speed: 5000,
-            pathNavigatorStyle: {
-              width: 16,
-              height: 32,
-              content: PathSimplifier.Render.Canvas.getImageContent(CarImg, onload, onerror),
-              strokeStyle: null,
-              fillStyle: null
-            }
-          });
-          nav.start();
+          // const nav = pathSimplifierIns.createPathNavigator(0, {
+          //   loop: false,
+          //   speed: 5000,
+          //   pathNavigatorStyle: {
+          //     width: 16,
+          //     height: 32,
+          //     content: PathSimplifier.Render.Canvas.getImageContent(CarImg, onload, onerror),
+          //     strokeStyle: null,
+          //     fillStyle: null
+          //   }
+          // });
+          // nav.start();
         });
       }
     }

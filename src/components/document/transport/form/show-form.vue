@@ -216,8 +216,8 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {OmsAttachment, TmsWayBill} from '@/resources';
-  import MapPath from '../../common/map-path-new';
+  import { OmsAttachment, TmsWayBill } from '@/resources';
+  import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
 
   export default {
