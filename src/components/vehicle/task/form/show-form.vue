@@ -26,6 +26,10 @@
   .el-icon-zoom-in {
     font-size: 16px;
   }
+
+  .f-14 {
+    font-size: 14px;
+  }
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
@@ -98,7 +102,7 @@
                 <el-col :span="20">
                   <el-form-item label="运单" style="margin-top: 20px;margin-bottom: 20px">
                     <el-select filterable remote placeholder="请输入运单号搜索运单" :remote-method="getTmsOrderList"
-                               :clearable="true"
+                               :clearable="true" @click.native.once="getTmsOrderList('')"
                                v-model="detailForm.list" popperClass="good-selects" multiple>
                       <el-option :value="bill.id" :key="bill.id" :label="bill.waybillNumber"
                                  v-for="bill in wayBillList">
@@ -123,16 +127,43 @@
           <div class="content">
             <el-table :data="form.waybillList" border style="width: 100%">
               <el-table-column prop="waybillNumber" label="运单号" width="140">
+                <template slot-scope=" scope">
+                  <span class="f-14">
+                     {{scope.row.waybillNumber}}
+                  </span>
+                </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="收货单位" mix-width="240">
+              <el-table-column prop="receiverName" label="发货单位" mix-width="220">
+                <template slot-scope=" scope">
+                  <div class="f-14">
+                     {{scope.row.senderName}}
+                  </div>
+                </template>
               </el-table-column>
-              <el-table-column prop="receiverAddress" label="收货地址" mix-width="180">
+              <el-table-column prop="receiverName" label="收货单位" mix-width="220">
+                <template slot-scope=" scope">
+                  <div class="f-14">
+                     {{scope.row.receiverName}}
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="receiverName" label="收货地址" mix-width="220">
+                <template slot-scope=" scope">
+                  <div class="f-14">
+                    {{scope.row.receiverAddress}}
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column prop="incubatorCount" label="包件" width="50">
+                <template slot-scope=" scope">
+                  <span class="f-14">
+                     {{scope.row.incubatorCount}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column prop="" label="操作" width="80" v-if="form.status==='0'">
                 <template slot-scope=" scope">
-                  <perm label="tms-waybill-edit" class="opera-btn btn-line-block">
+                  <perm label="tms-waybill-edit" class="opera-btn btn-line-block f-12">
                     <span @click.stop="deleteDetail(scope.row)">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
@@ -164,7 +195,7 @@
   </dialog-template>
 </template>
 <script>
-  import { TransportTask } from '@/resources';
+  import {TransportTask} from '@/resources';
   import TaskMap from './map-new-next';
 
   export default {

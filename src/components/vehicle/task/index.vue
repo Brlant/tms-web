@@ -26,10 +26,18 @@
             导出出车任务
           </el-button>
         </perm>
-        <el-button plain size="small" @click="showMultipleMap" :disabled="isLoading">
-          <f-a class="icon-small" name="search"></f-a>
-          合并查看地图
-        </el-button>
+        <perm label="tms-task-car-task-export">
+          <el-button plain size="small" @click="printFile" :disabled="isLoading">
+            <f-a class="icon-small" name="print"></f-a>
+            打印出车任务
+          </el-button>
+        </perm>
+        <perm label="tms-task-car-task-query">
+          <el-button plain size="small" @click="showMultipleMap" :disabled="isLoading">
+            <f-a class="icon-small" name="search"></f-a>
+            合并查看地图
+          </el-button>
+        </perm>
       </template>
     </search-part>
 
@@ -160,10 +168,10 @@
       </el-pagination>
     </div>
 
-    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
-      <component :is="currentPart" :formItem="form" :showBigMap="showBigMap"/>
+    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
+      <component :is="currentPart" :formItem="form" :showBigMap="showBigMap" @right-close="resetRightBox"/>
     </page-right>
-    <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
+    <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentEditPart" :formItem="form" @change="submit" @right-close="resetRightBox"/>
     </page-right>
     <el-dialog title="地图派送" :visible.sync="isShowBigMap" width="100%" :fullscreen="true"
@@ -181,7 +189,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TransportTask } from '@/resources';
+  import {http, TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
@@ -318,6 +326,34 @@
           }, 300);
         });
       },
+      printFile() {
+        if (!this.taskIdList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选需要打印的出车任务'
+          });
+          return;
+        }
+        let obj = {
+          taskList: this.taskIdList
+        };
+        this.isLoading = true;
+        this.$store.commit('initPrint', {isPrinting: true});
+        http.post('transport-task/export', obj).then(res => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {isPrinting: false});
+          utils.printLocation(this, {'type': 'transport_task', 'path': res.data.url});
+          // 清空列表
+          this.taskIdList = [];
+          this.checkList = [];
+        }).catch(error => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {isPrinting: false});
+          this.$notify.error({
+            message: error.response.data && error.response.data.msg || '打印标签失败'
+          });
+        });
+      },
       exportFile: function () {
         if (!this.taskIdList.length) {
           this.$notify.warning({
@@ -341,6 +377,7 @@
           });
           // 清空列表
           this.taskIdList = [];
+          this.checkList = [];
         }).catch(error => {
           this.isLoading = false;
           this.$store.commit('initPrint', {

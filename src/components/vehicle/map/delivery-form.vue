@@ -133,7 +133,7 @@
                 {{form.transportTaskNo}}
               </el-form-item>
               <el-form-item :slot="form.type?'right':'left'" label="任务类型">
-                <el-select placeholder="请选择车型" v-model="form.type">
+                <el-select placeholder="请选择任务类型" v-model="form.type">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
                              v-for="item in deliveryTaskTypeList"></el-option>
                 </el-select>

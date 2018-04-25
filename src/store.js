@@ -23,7 +23,8 @@ const state = {
   bottomLoading: false,
   menuParentIds: [], // 所有非叶子节点菜单
   requestingDictAry: [],
-  isShowLine: false
+  isShowLine: false,
+  windowSize: {width: 1000, height: 500}
 };
 
 const mutations = {
@@ -49,6 +50,10 @@ const mutations = {
   initPermList (state, data) {
     state.allMenuList = data;
   },
+  setBodyHeight(state, data) {
+    state.bodyHeight = data.height;
+    state.windowSize = data.window;
+  },
   changeAttachment (state, data) {
     let currentId;
     if (typeof data === 'object') {
@@ -66,9 +71,6 @@ const mutations = {
   },
   closeAttachmentDialog (state) {
     state.attachmentDialog.open = false;
-  },
-  setBodyHeight (state, data) {
-    state.bodyHeight = data;
   },
   initPrint (state, data) {
     data.text = data.text || '拼命打印中';

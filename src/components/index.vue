@@ -144,7 +144,10 @@
     components: {AppHeader, AppFooter, attachmentDialog, printDialog},
     methods: {
       setBodyHeight: function () {
-        this.$store.commit('setBodyHeight', window.innerHeight - 200 + 'px');
+        this.$store.commit('setBodyHeight', {
+          height: window.innerHeight - 200 + 'px',
+          window: {width: window.innerWidth, height: window.innerHeight}
+        });
       }
     },
     mounted: function () {

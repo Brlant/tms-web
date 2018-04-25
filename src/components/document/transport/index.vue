@@ -66,9 +66,8 @@
           运单号
         </el-col>
         <el-col :span="2">类型</el-col>
-        <el-col :span="3">发货单位</el-col>
-        <el-col :span="3">收货单位</el-col>
-        <el-col :span="4">收货地址</el-col>
+        <el-col :span="5">发货单位</el-col>
+        <el-col :span="5">收货单位</el-col>
         <el-col :span="1">整件</el-col>
         <el-col :span="1">散件</el-col>
         <el-col :span="1">包件</el-col>
@@ -108,21 +107,27 @@
                 <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
               </div>
             </el-col>
-            <el-col :span="3" class="R">
+            <el-col :span="5" class="R">
               <div>
                 {{item.senderName}}
               </div>
+              <div>
+                {{item.senderAddress}}
+              </div>
             </el-col>
-            <el-col :span="3" class="R">
+            <el-col :span="5" class="R">
               <div>
                 {{item.receiverName}}
               </div>
-            </el-col>
-            <el-col :span="4" class="R">
               <div>
                 {{item.receiverAddress}}
               </div>
             </el-col>
+            <!--<el-col :span="5" class="R">-->
+            <!--<div>-->
+            <!--{{item.receiverAddress}}-->
+            <!--</div>-->
+            <!--</el-col>-->
             <el-col :span="1" class="R">
               <div>
                 {{item.wholeBoxCount}}
