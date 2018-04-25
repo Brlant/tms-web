@@ -37,7 +37,7 @@
         this.$http(`/track-transportation/order/${this.formItem.id}`).then(res => {
           this.waybills = res.data.map(m => {
             return {
-              waybillNo: res.data.waybillNo,
+              waybillNo: m.waybillNo,
               center: [121.5273285, 31.21515044],
               amapManager: new AMapManager(),
               points: m.list && m.list.filter(f => f.longitude && f.latitude).map(m => {
