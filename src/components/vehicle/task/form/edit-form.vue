@@ -269,8 +269,9 @@
       addTallyClerk: function () {
         let tpl = {};
         // 计算排序值
-        tpl = Object.assign(tpl, {tallyClerkId: '', tallyClerkPhone: ''});
+        tpl = Object.assign(tpl, {userId: '', userPhone: ''});
         this.form.tallyClerkDtoList.splice(0, 0, tpl);
+        this.filterTallyClerk();
       },
       filterTaskCarriers: function (query) {// 过滤承运商
         BaseInfo.query({keyWord: query}).then(res => {
@@ -357,7 +358,7 @@
             if (this.form.tallyClerkDtoList) {
               let list = [];
               this.form.tallyClerkDtoList.forEach(val => {
-                if (val.userId !== '' || val.userPhone !== '') {
+                if (val.userId !== '') {
                   list.push(val);
                 }
               });

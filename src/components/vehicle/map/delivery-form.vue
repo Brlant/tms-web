@@ -275,6 +275,7 @@
         // 计算排序值
         tpl = Object.assign(tpl, {userId: '', userPhone: ''});
         this.form.clerkDtoList.splice(0, 0, tpl);
+        this.filterTallyClerk();
       },
       filterTaskCarriers: function (query) {// 过滤承运商
         BaseInfo.query({keyWord: query}).then(res => {
@@ -345,7 +346,7 @@
             if (this.form.clerkDtoList) {
               let list = [];
               this.form.clerkDtoList.forEach(val => {
-                if (val.userId !== '' || val.userPhone !== '') {
+                if (val.userId !== '') {
                   list.push(val);
                 }
               });
