@@ -133,20 +133,24 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="发货单位" mix-width="330">
+              <el-table-column prop="receiverName" label="发货单位" mix-width="220">
                 <template slot-scope=" scope">
                   <div class="f-14">
                      {{scope.row.senderName}}
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="收货单位" mix-width="330">
+              <el-table-column prop="receiverName" label="收货单位" mix-width="220">
                 <template slot-scope=" scope">
                   <div class="f-14">
                      {{scope.row.receiverName}}
                   </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="receiverName" label="收货地址" mix-width="220">
+                <template slot-scope=" scope">
                   <div class="f-14">
-                     {{scope.row.receiverAddress}}
+                    {{scope.row.receiverAddress}}
                   </div>
                 </template>
               </el-table-column>
