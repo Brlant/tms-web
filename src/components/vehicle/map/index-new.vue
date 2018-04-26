@@ -10,6 +10,7 @@
     .d-table-right {
       border: 1px;
       padding: 0;
+      position: relative;
     }
   }
 
@@ -127,6 +128,11 @@
     }
   }
 
+  .btn-tool {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
 </style>
 <template>
   <div>
@@ -137,6 +143,12 @@
             <el-button plain size="small" @click="showPart(0)">
               <f-a class="icon-small" name="detail"></f-a>
               生成派送
+            </el-button>
+          </perm>
+          <perm label="tms-task-add">
+            <el-button plain size="small" @click="showPart(1, '请勾选需要自动排单的运单')" v-show="checkList.length">
+              <f-a class="icon-small" name="wave"></f-a>
+              自动排单
             </el-button>
           </perm>
         </template>
@@ -227,17 +239,26 @@
           </el-scrollbar>
         </div>
         <div class="d-table-right">
-          <el-amap vid="aMap" :plugin="plugins" :zoom="10" :center="center"
+          <el-amap vid="aMap" ref="deliveryMap" :plugin="plugins" :zoom="10" :center="center"
                    :style="'height:'+ (bodyHeight + 39)  + 'px'">
             <el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"
                             :label="marker.label" :icon="marker.icon" :animation="marker.animation"
                             :events="marker.events"></el-amap-marker>
           </el-amap>
+          <div class="btn-tool">
+            <el-button size="mini" v-show="!isDrawArea" @click="drawArea">选择区域</el-button>
+            <el-button-group v-show="isDrawArea">
+              <el-button size="mini" @click="redrawArea">重新选择</el-button>
+              <el-button size="mini" @click="closeDrawArea">取消</el-button>
+              <el-button size="mini" @click="confirmArea" v-show="curArea">确认</el-button>
+
+            </el-button-group>
+          </div>
         </div>
       </div>
     </div>
 
-    <page-right :show="showIndex === 0" @right-close="resetRightBox"
+    <page-right :show="showIndex !== -1" @right-close="resetRightBox"
                 :css="{'width':'1000px','padding':0, 'z-index': 1000}">
       <component :is="currentPart" :checkList="orderIdList" @right-close="resetRightBox" @change="submit"/>
     </page-right>
@@ -250,6 +271,7 @@
   import { TmsWayBill } from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
+  import batchAutoForm from '@/components/document/transport/form/auto-form';
 
   export default {
     components: {
@@ -262,22 +284,19 @@
         pager: {
           currentPage: 1,
           count: 0,
-          pageSize: 100
+          pageSize: 200
         },
-        showIndex: false,
+        showIndex: -1,
         currentPart: null,
         dialogComponents: {
-          0: deliveryForm
+          0: deliveryForm,
+          1: batchAutoForm
         },
         center: [121.5273285, 31.21515044],
         markers: [],
         plugins: [
           {pName: 'ToolBar'},
-          {pName: 'Scale'},
-          {
-            pName: 'MapType',
-            defaultType: 0
-          }
+          {pName: 'Scale'}
         ],
         filters: {
           status: '0',
@@ -299,7 +318,11 @@
         isShowList: false,
         receiveStatus: '0',
         isShowSearch: false,
-        typeTxt: ''
+        typeTxt: '',
+        isDrawArea: false,
+        mouseTool: null,
+        curArea: null,
+        editorArea: null
       };
     },
     computed: {
@@ -401,6 +424,11 @@
       },
       rowClick (item) {
         item.isChecked = !item.isChecked;
+        this.$nextTick(() => {
+          this.setMarkerByRow(item);
+        });
+      },
+      setMarkerByRow (item) {
         // 判断 其他选中的运单有没有此收货单位
         this.$nextTick(() => {
           const isOtherSameUnit = this.checkList.some(s => s.receiverAddress === item.receiverAddress);
@@ -410,19 +438,19 @@
       resetRightBox () {
         this.showIndex = -1;
       },
-      showPart (index) {
+      showPart (index, str = '请选择需要生成派送任务的运单') { // 请勾选需要自动排单的运单
         let {checkList, $notify, dialogComponents} = this;
         if (!checkList.length) {
           $notify.warning({
             duration: 2000,
-            message: '请选择需要生成派送任务的运单'
+            message: str
           });
           return;
         }
         this.showIndex = index;
         this.currentPart = dialogComponents[index];
         this.$nextTick(() => {
-          this.orderIdList = checkList.map(m => m.id);
+          this.orderIdList = index === 0 ? checkList.map(m => m.id) : checkList.slice();
         });
       },
       searchResult (search) {
@@ -560,6 +588,50 @@
         if (!label) return;
         const classList = label.parentNode.classList;
         isChecked ? classList.add('active') : classList.remove('active');
+      },
+      // 开启绘制区域
+      drawArea () {
+        this.isDrawArea = true;
+        if (!this.mouseTool) {
+          let map = this.$refs.deliveryMap.$$getInstance();
+          this.mouseTool = new window.AMap.MouseTool(map);
+          this.mouseTool.on('draw', e => {
+            this.curArea = e.obj;
+            // 结束绘制
+            this.mouseTool.close(false);
+            // 区域可编辑
+            this.editorArea = new window.AMap.PolyEditor(map, e.obj);
+            this.editorArea.open();
+          }, this);
+        }
+        this.mouseTool.polygon({
+          strokeColor: '#f00'
+        });
+      },
+      // 重新绘制区域
+      redrawArea () {
+        this.mouseTool.close(true);
+        this.mouseTool.polygon();
+      },
+      // 取消绘制
+      closeDrawArea () {
+        this.mouseTool.close(true);
+        this.isDrawArea = false;
+        this.curArea = null;
+        this.editorArea && this.editorArea.close();
+        this.editorArea = null;
+      },
+      // 确认区域
+      confirmArea () {
+        // 循环设置所有运单选中状态
+        this.dataRows.forEach(i => {
+          if (i.isChecked) return;
+          i.isChecked = window.AMap.GeometryUtil.isPointInRing(i._marker.position, this.curArea.getPath());
+          this.setMarkerByRow(i);
+        });
+        this.isShowList = true;
+        this.receiveStatus = '1';
+        this.closeDrawArea();
       }
     }
   };
