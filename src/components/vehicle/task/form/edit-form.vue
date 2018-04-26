@@ -29,7 +29,7 @@
             </h3>
           </div>
           <div class="content">
-            <el-form-item label="运货车辆" prop="receiverId">
+            <el-form-item label="运货车辆" prop="carId">
               <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="getCarList"
                          :clearable="true" @change="setCarInfo(form.carId)"
                          v-model="form.carId" popperClass="good-selects" @clear="clearCarInfo">
@@ -184,8 +184,11 @@
     data() {
       return {
         rules: {
+          'carId': [
+            {required: true, message: '请选择运货车辆', trigger: 'change'}
+          ],
           'driveId': [
-            {required: true, message: '请输入司机', trigger: 'blur'}
+            {required: true, message: '请选择司机', trigger: 'change'}
           ]
         },
         list: [],
