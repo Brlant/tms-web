@@ -519,7 +519,10 @@
         let id = this.guid();
         marker = {
           label: {
-            content: `<div class="index_${id}">${row.receiverName}</div>`,
+            content: `<div class="babel__container index_${id}">
+                        <div class="bg"></div>
+                        <div class="title">${row.receiverName}</div><div>${row.receiverName}</div>
+                      </div>`,
             offset: [20, 20]
           },
           icon: Icon,
