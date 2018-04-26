@@ -101,12 +101,12 @@
     .el-button.is-plain {
       &:hover{
         background: #fff;
-        border-color: inherit;
-        color: #2eb8e6;
+        border-color: $activeColor;
+        color: $activeColor;
       }
-      &:active, &:focus {
-        background: #2eb8e6;
-        border-color: #2eb8e6;
+      &:focus, &:active {
+        background: $activeColor;
+        border-color: $activeColor;
         outline: none;
         color: #fff;
       }
