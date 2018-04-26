@@ -71,12 +71,12 @@
                   <th width="5%">
                     <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
                   </th>
-                  <th width="10%">车牌号</th>
+                  <th width="16%">车牌号</th>
                   <th width="17%">运输范围</th>
-                  <th width="23%">载重(kg)</th>
-                  <th width="23%">容积(m³)</th>
-                  <th width="12%">最大里程数(km)</th>
-                  <th width="10%">最长运输时限(h)</th>
+                  <th width="14%">载重(kg)</th>
+                  <th width="12%">容积(m³)</th>
+                  <th width="18%">最大里程数(km)</th>
+                  <th width="18%">最长运输时限(h)</th>
                 </tr>
                 </thead>
               </table>
@@ -92,26 +92,28 @@
                   <tr>
                     <td width="5%">
                     </td>
-                    <td width="10%"></td>
+                    <td width="16%"></td>
                     <td width="17%" class="R">快捷修改</td>
-                    <td width="23%" class="R">
-                      <oms-input type="number" v-model="quickLoadBearing" @change="quickSetCarInfo" placeholder="载重"></oms-input>
-                    </td>
-                    <td width="23%" class="R">
-                      <oms-input type="number" v-model="quickVolume" @change="quickSetCarInfo" placeholder="容积"></oms-input>
+                    <td width="14%" class="R">
+                      <oms-input v-model.number="quickLoadBearing" @change="quickSetCarInfo"
+                                 placeholder="载重"></oms-input>
                     </td>
                     <td width="12%" class="R">
-                      <oms-input type="number" v-model="quickMaxMileage" @change="quickSetCarInfo" placeholder="里程数"></oms-input>
+                      <oms-input v-model.number="quickVolume" @change="quickSetCarInfo" placeholder="容积"></oms-input>
                     </td>
-                    <td width="10%" class="R">
-                      <oms-input type="number" v-model="quickMaxHour" @change="quickSetCarInfo" placeholder="时限"></oms-input>
+                    <td width="18%" class="R">
+                      <oms-input v-model.number="quickMaxMileage" @change="quickSetCarInfo"
+                                 placeholder="里程数"></oms-input>
+                    </td>
+                    <td width="18%" class="R">
+                      <oms-input v-model.number="quickMaxHour" @change="quickSetCarInfo" placeholder="时限"></oms-input>
                     </td>
                   </tr>
                   <tr v-for="item in carList" :class="{active: item.isChecked}">
                     <td width="5%">
                       <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                     </td>
-                    <td width="10%">{{item.plateNumber}}</td>
+                    <td width="16%">{{item.plateNumber}}</td>
                     <td width="17%" class="R">
                       <div>
                        <span v-for="(type,index) in item.scopeList">
@@ -120,20 +122,24 @@
                         </span>
                       </div>
                     </td>
-                    <td width="23%" class="R">
-                      <oms-input type="number" v-model="item.loadBearing" @change="setCarInfo(item)"></oms-input>
+                    <td width="14%" class="R">
+                      <oms-input v-model.number="item.loadBearing" @change="setCarInfo(item)"
+                                 @blur="formatPrice(item,'loadBearing')"></oms-input>
                       <!--{{ item.loadBearing}} <span v-if="item.loadBearing">千克</span>-->
                     </td>
-                    <td width="23%" class="R">
-                      <oms-input type="number" v-model="item.volume" @change="setCarInfo(item)"></oms-input>
-                      <!--{{ item.volume}} <span v-if="item.volume">立方米</span>-->
-                    </td>
                     <td width="12%" class="R">
-                      <oms-input type="number" v-model="item.maxMileage" @change="setCarInfo(item)"></oms-input>
+                      <oms-input v-model.number="item.volume" @change="setCarInfo(item)"
+                                 @blur="formatPrice(item,'volume')"></oms-input>
                       <!--{{ item.volume}} <span v-if="item.volume">立方米</span>-->
                     </td>
-                    <td width="10%" class="R">
-                      <oms-input type="number" v-model="item.maxHour" @change="setCarInfo(item)"></oms-input>
+                    <td width="18%" class="R">
+                      <oms-input v-model.number="item.maxMileage" @change="setCarInfo(item)"
+                                 @blur="formatPrice(item,'maxMileage')"></oms-input>
+                      <!--{{ item.volume}} <span v-if="item.volume">立方米</span>-->
+                    </td>
+                    <td width="18%" class="R">
+                      <oms-input v-model.number="item.maxHour" @change="setCarInfo(item)"
+                                 @blur="formatPrice(item,'maxHour')"></oms-input>
                       <!--{{ item.volume}} <span v-if="item.volume">立方米</span>-->
                     </td>
                   </tr>
@@ -150,6 +156,7 @@
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
   import {CarArchives, TransportTask} from '@/resources';
+  import utils from '@/tools/utils';
 
   export default {
     components: {TwoColumn},
@@ -215,6 +222,9 @@
       }
     },
     methods: {
+      formatPrice(item, pop) {// 格式化单价，保留两位小数
+        item[pop] = utils.autoformatDecimalPoint(item[pop] + '');
+      },
       quickSetCarInfo: function () {
         if (this.quickLoadBearing) {
           this.carList.forEach(val => {
@@ -305,6 +315,8 @@
             val.maxMileage = '250';
             val.volume = val.volume * 0.7;
             val.maxHour = 8;
+            val.volume = val.volume.toFixed(2);
+            val.loadBearing = val.loadBearing.toFixed(2);
           });
           this.isCheckAll = true;
           this.carList = res.data;
