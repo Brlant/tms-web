@@ -64,8 +64,8 @@
                   <th width="5%">
                     <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
                   </th>
-                  <th width="16%">车牌号</th>
-                  <th width="17%">运输范围</th>
+                  <th width="14%">车牌号</th>
+                  <th width="19%">运输范围</th>
                   <th width="14%">载重(kg)</th>
                   <th width="12%">容积(m³)</th>
                   <th width="18%">最大里程数(km)</th>
@@ -85,8 +85,8 @@
                   <tr>
                     <td width="5%">
                     </td>
-                    <td width="16%"></td>
-                    <td width="17%" class="R">快捷修改</td>
+                    <td width="14%"></td>
+                    <td width="19%" class="R">快捷修改</td>
                     <td width="14%" class="R">
                       <oms-input v-model.number="quickLoadBearing" @change="quickSetCarInfo"
                                  placeholder="载重"></oms-input>
@@ -106,8 +106,8 @@
                     <td width="5%">
                       <el-checkbox v-model="item.isChecked" @change="changeCheckStatus(item)"></el-checkbox>
                     </td>
-                    <td width="16%">{{item.plateNumber}}</td>
-                    <td width="17%" class="R">
+                    <td width="14%">{{item.plateNumber}}</td>
+                    <td width="19%" class="R">
                       <div>
                        <span v-for="(type,index) in item.scopeList">
                         <dict :dict-group="'transportationCondition'" :dict-key="type"></dict><span
