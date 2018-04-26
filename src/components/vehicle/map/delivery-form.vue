@@ -275,6 +275,7 @@
         // 计算排序值
         tpl = Object.assign(tpl, {userId: '', userPhone: ''});
         this.form.clerkDtoList.splice(0, 0, tpl);
+        this.filterTallyClerk();
       },
       filterTaskCarriers: function (query) {// 过滤承运商
         BaseInfo.query({keyWord: query}).then(res => {
@@ -308,7 +309,23 @@
           status: 1
         });
         User.query(data).then(res => {
-          this.tallyClerkList = res.data.list;
+          let userList = res.data.list;
+          // 判断已选择的数据列表里是否存在
+          let userIdList = [];
+          userList.forEach(res => {
+            userIdList.push(res.id);
+          });
+          this.form.clerkDtoList.forEach(val => {
+            if (val.userId !== '') {
+              let index = userIdList.indexOf(val.userId);
+              if (index === -1 && val.userId) {
+                User.queryInfo(val.userId).then(res => {
+                  userList.push({id: val.userId, name: res.data.name});
+                });
+              }
+            }
+          });
+          this.tallyClerkList = userList;
         });
       },
       getCarList: function (query) {
@@ -345,7 +362,7 @@
             if (this.form.clerkDtoList) {
               let list = [];
               this.form.clerkDtoList.forEach(val => {
-                if (val.userId !== '' || val.userPhone !== '') {
+                if (val.userId !== '') {
                   list.push(val);
                 }
               });

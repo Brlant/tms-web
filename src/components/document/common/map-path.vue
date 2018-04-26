@@ -28,7 +28,6 @@
     },
     watch: {
       formItem (val) {
-        console.log(1);
         this.points = [];
         if (!val.id) return;
         this.queryPath();
