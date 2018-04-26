@@ -240,6 +240,13 @@ export default {
       });
     });
   },
+  getPos(e) {//这是一个 获取鼠标位置的函数
+    let oEvent = e || event;
+    return {
+      x: oEvent.clientX + document.documentElement.scrollLeft || document.body.scrollLeft,
+      y: oEvent.clientY + document.documentElement.scrollTop || document.body.scrollTop
+    };
+  },
   bindKeyUpEnterEvent (callback) {
     document.onkeydown = e => {
       let event = e || window.event;
