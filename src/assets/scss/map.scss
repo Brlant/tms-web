@@ -1,7 +1,7 @@
 .amap-marker-label {
   border-color: #0000ff;
   &.active {
-    border-color: red;
+    color: red;
   }
 
   cursor: pointer;
