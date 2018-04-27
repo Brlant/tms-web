@@ -73,7 +73,7 @@
 </template>
 
 <script>
-  import { Auth, LogisticsCenter } from '@/resources';
+  import {Auth, LogisticsCenter} from '@/resources';
   import AppFooter from '../layout/app.footer.vue';
 
   export default {
@@ -144,6 +144,7 @@
       }
     },
     mounted: function () {
+      this.$store.commit('initPermissions', []);
       // document.addEventListener('touchmove', function (e) {
       //   e.preventDefault();
       // });
