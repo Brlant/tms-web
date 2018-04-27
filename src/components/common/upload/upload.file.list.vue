@@ -56,7 +56,7 @@
 </template>
 <script>
   import Locale from 'element-ui/lib/mixins/locale';
-  import ElProgress from 'element-ui/packages/progress';
+  import ElProgress from 'element-ui/lib/progress';
 
   export default {
     mixins: [Locale],
