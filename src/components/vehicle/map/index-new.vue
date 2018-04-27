@@ -132,6 +132,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
+    font-size: 14px;
   }
 </style>
 <template>
@@ -246,12 +247,14 @@
                             :events="marker.events"></el-amap-marker>
           </el-amap>
           <div class="btn-tool">
-            <el-button size="mini" v-show="!isDrawArea" @click="drawArea">选择区域</el-button>
-            <el-button-group v-show="isDrawArea">
-              <el-button size="mini" @click="redrawArea">重新选择</el-button>
-              <el-button size="mini" @click="closeDrawArea">取消</el-button>
-              <el-button size="mini" @click="confirmArea" v-show="curArea">确认</el-button>
-
+            <el-button-group>
+              <el-button size="mini" class="el-button--checkbox">
+                <el-checkbox v-model="isShowLabel" size="mini" @change="switchShowLabel">标签</el-checkbox>
+              </el-button>
+              <el-button size="mini" v-show="!isDrawArea" @click="drawArea">选择区域</el-button>
+              <el-button size="mini" @click="redrawArea" v-show="isDrawArea">重新选择</el-button>
+              <el-button size="mini" @click="closeDrawArea" v-show="isDrawArea">取消</el-button>
+              <el-button size="mini" @click="confirmArea" v-show="curArea && isDrawArea">确认</el-button>
             </el-button-group>
           </div>
         </div>
@@ -322,7 +325,8 @@
         isDrawArea: false,
         mouseTool: null,
         curArea: null,
-        editorArea: null
+        editorArea: null,
+        isShowLabel: true
       };
     },
     computed: {
@@ -519,11 +523,11 @@
         let id = this.guid();
         marker = {
           label: {
-            content: `<div class="babel__container index_${id}">
+            content: `<div class="babel__container index_${id}" style="display:${this.isShowLabel ? 'block' : 'none'}">
                         <div class="bg"></div>
                         <div class="title">${row.receiverName}</div><div>${row.receiverName}</div>
                       </div>`,
-            offset: [20, 20]
+            offset: [15, 15]
           },
           icon: Icon,
           events: {
@@ -635,6 +639,13 @@
         this.isShowList = true;
         this.receiveStatus = '1';
         this.closeDrawArea();
+      },
+      // 是否显示点的标签
+      switchShowLabel (val) {
+        let elements = this.$el.querySelectorAll('.babel__container');
+        [...elements].forEach(i => {
+          i.style.display = val ? 'block' : 'none';
+        });
       }
     }
   };
