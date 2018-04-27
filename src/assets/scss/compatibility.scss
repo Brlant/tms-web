@@ -75,4 +75,11 @@
     margin-left: -1px;
     border-radius: 0;
   }
+  .el-button.el-button--checkbox {
+    padding: 4px 10px 3px 10px;
+    border-radius: 0;
+    .el-checkbox__label {
+      font-size: 12px;
+    }
+  }
 }
