@@ -80,8 +80,8 @@
           <div class="content">
             <oms-col label="收货联系人" :rowSpan="span" :value="form.receiverContact"/>
             <oms-col label="电话" :rowSpan="span" :value="form.receiverContractPhone"/>
-            <oms-col label="收货单位" :rowSpan="24" :value="form.receiverName"/>
-            <oms-col label="收货地址" :rowSpan="24" :value="form.receiverAddress"/>
+            <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName"/>
+            <oms-col label="收货地址" :rowSpan="span" :value="form.receiverAddress"/>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
