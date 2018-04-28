@@ -229,7 +229,7 @@
                   </tr>
                   </tbody>
                 </table>
-                <div class="btn-left-list-more">
+                <div class="btn-left-list-more" v-show="receiveStatus==='0'">
                   <bottom-loading></bottom-loading>
                   <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
                     <el-button v-show="pager.currentPage<pager.totalPage">加载更多</el-button>
@@ -271,7 +271,7 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
-  import { TmsWayBill } from '@/resources';
+  import {TmsWayBill} from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
   import batchAutoForm from '@/components/document/transport/form/auto-form';

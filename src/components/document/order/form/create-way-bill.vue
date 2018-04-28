@@ -105,7 +105,7 @@
             <div class="content">
               <oms-col label="整装箱数" :rowSpan="span" :value="form.wholeBoxCount" isShow="true"/>
               <oms-col label="散装箱数" :rowSpan="span" :value="form.bulkBoxCount" isShow="true"/>
-              <oms-col label="包件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>
+              <!--<oms-col label="包件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>-->
               <oms-col label="声明价格" :rowSpan="span" :value="form.goodsPrice" isShow="true">
                 <span v-if="form.goodsPrice">¥</span> {{form.goodsPrice}}
               </oms-col>

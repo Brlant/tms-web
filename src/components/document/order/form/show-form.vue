@@ -65,9 +65,9 @@
           <div class="content">
             <oms-col label="货主" :rowSpan="span" :value="form.orgName"/>
             <oms-col label="发货单位" :rowSpan="span" :value="form.senderName"/>
+            <oms-col label="发货地址" :rowSpan="span" :value="form.senderAddress"/>
             <oms-col label="发货联系人" :rowSpan="span" :value="form.senderContact"/>
             <oms-col label="电话" :rowSpan="span" :value="form.senderContactPhone"/>
-            <oms-col label="发货地址" :rowSpan="span" :value="form.senderAddress"/>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
@@ -78,10 +78,10 @@
               {{pageSets[2].name}}</h3>
           </div>
           <div class="content">
-            <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName"/>
             <oms-col label="收货联系人" :rowSpan="span" :value="form.receiverContact"/>
-            <oms-col label="电话" :rowSpan="8" :value="form.receiverContractPhone"/>
-            <oms-col label="收货地址" :rowSpan="6" :value="form.receiverAddress"/>
+            <oms-col label="电话" :rowSpan="span" :value="form.receiverContractPhone"/>
+            <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName"/>
+            <oms-col label="收货地址" :rowSpan="span" :value="form.receiverAddress"/>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
@@ -94,7 +94,7 @@
           <div class="content">
             <oms-col label="整装箱数" :rowSpan="span" :value="form.wholeBoxCount" isShow="true"/>
             <oms-col label="散装箱数" :rowSpan="span" :value="form.bulkBoxCount" isShow="true"/>
-            <oms-col label="包件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>
+            <!--<oms-col label="包件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>-->
             <oms-col label="声明价格" :rowSpan="span" :value="form.goodsPrice" isShow="true">
               <span v-if="form.goodsPrice">¥</span> {{form.goodsPrice}}
             </oms-col>
@@ -172,7 +172,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import { TmsOrder } from '@/resources';
+  import {TmsOrder} from '@/resources';
   import MapPath from '../../common/map-list';
 
   export default {

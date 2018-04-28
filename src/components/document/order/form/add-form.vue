@@ -161,17 +161,12 @@
                            @blur="setBulkBoxCount(form.bulkBoxCount)"></oms-input>
               </el-form-item>
             </two-column>
-            <two-column>
-              <el-form-item slot="left" label="包件数" prop="incubatorCount">
-                <oms-input type="number" :min="0" v-model="form.incubatorCount" placeholder="请输入包件数"
-                           @blur="setIncubatorCount(form.incubatorCount)"></oms-input>
-              </el-form-item>
-              <el-form-item slot="right" label="声明价格">
-                <oms-input type="number" :min="0" v-model="form.goodsPrice" placeholder="请输入声明价格">
-                  <template slot="prepend">¥</template>
-                </oms-input>
-              </el-form-item>
-            </two-column>
+            <!--<two-column>-->
+              <!--<el-form-item slot="left" label="包件数" prop="incubatorCount">-->
+              <!--<oms-input type="number" :min="0" v-model="form.incubatorCount" placeholder="请输入包件数"-->
+              <!--@blur="setIncubatorCount(form.incubatorCount)"></oms-input>-->
+              <!--</el-form-item>-->
+            <!--</two-column>-->
             <two-column>
               <el-form-item slot="left" label="重量" prop="goodsWeight">
                 <oms-input v-model="form.goodsWeight" placeholder="请输入货品重量"
@@ -185,10 +180,15 @@
                   <template slot="append">m³</template>
                 </oms-input>
               </el-form-item>
-              <el-form-item label="货品名称">
-                <oms-input v-model="form.goodsTotalName" placeholder="如果填写货品清淡，货品名称会根据货品清单自动生成。"></oms-input>
-              </el-form-item>
             </two-column>
+            <el-form-item label="声明价格">
+              <oms-input type="number" :min="0" v-model="form.goodsPrice" placeholder="请输入声明价格">
+                <template slot="prepend">¥</template>
+              </oms-input>
+            </el-form-item>
+            <el-form-item label="货品名称">
+              <oms-input v-model="form.goodsTotalName" placeholder="如果填写货品清淡，货品名称会根据货品清单自动生成。"></oms-input>
+            </el-form-item>
           </div>
           <div class="hr mb-10"></div>
         </div>

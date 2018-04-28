@@ -66,9 +66,9 @@
           <div class="content">
             <oms-col label="货主" :rowSpan="span" :value="form.orgName"/>
             <oms-col label="发货单位" :rowSpan="span" :value="form.senderName"/>
+            <oms-col label="发货地址" :rowSpan="span" :value="form.senderAddress"/>
             <oms-col label="发货联系人" :rowSpan="span" :value="form.senderContact"/>
             <oms-col label="电话" :rowSpan="span" :value="form.senderContactPhone"/>
-            <oms-col label="发货地址" :rowSpan="span" :value="form.senderAddress"/>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
@@ -79,10 +79,10 @@
               {{pageSets[2].name}}</h3>
           </div>
           <div class="content">
-            <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName"/>
             <oms-col label="收货联系人" :rowSpan="span" :value="form.receiverContact"/>
-            <oms-col label="电话" :rowSpan="8" :value="form.receiverContractPhone"/>
-            <oms-col label="收货地址" :rowSpan="6" :value="form.receiverAddress"/>
+            <oms-col label="电话" :rowSpan="span" :value="form.receiverContractPhone"/>
+            <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName"/>
+            <oms-col label="收货地址" :rowSpan="span" :value="form.receiverAddress"/>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
@@ -218,7 +218,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import { OmsAttachment, TmsWayBill } from '@/resources';
+  import {OmsAttachment, TmsWayBill} from '@/resources';
   import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
 
