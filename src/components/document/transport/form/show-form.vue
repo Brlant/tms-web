@@ -152,7 +152,7 @@
               </el-table-column>
               <el-table-column prop="specifications" label="货品规格">
               </el-table-column>
-              <el-table-column prop="code" label="货品追溯码">
+              <el-table-column prop="code" label="追溯码">
               </el-table-column>
             </el-table>
             <div class="hr mb-10"></div>
@@ -176,7 +176,7 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="codeList" label="货品追溯码">
+              <el-table-column prop="codeList" label="追溯码">
                 <template slot-scope="scope">
                  <span v-for="code in scope.row.codeList">
                       {{code}} <span v-if="scope.row.codeList.indexOf(code)!==scope.row.codeList.length-1">,</span>
