@@ -98,7 +98,7 @@
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{item.head}}
+                {{item.headName}}
               </div>
             </el-col>
             <el-col :span="3" class="R">
