@@ -180,7 +180,7 @@
                 <el-table-column prop="thermometerNoList" label="温度计列表">
                   <template slot-scope="scope">
                   <span v-for="no in scope.row.thermometerNoList">
-                      {{no}} <span
+                      {{no.thermometerNo}} <span
                     v-if="scope.row.thermometerNoList.indexOf(no)!==scope.row.thermometerNoList.length-1">,</span>
                   </span>
                   </template>
