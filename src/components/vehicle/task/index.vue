@@ -57,9 +57,9 @@
         <el-col :span="2">司机</el-col>
         <el-col :span="3">车牌号</el-col>
         <el-col :span="2">件数</el-col>
-        <el-col :span="3">载重(kg)</el-col>
+        <el-col :span="2">载重(kg)</el-col>
         <el-col :span="2">容积(m³)</el-col>
-        <el-col :span="3">创建时间</el-col>
+        <el-col :span="4">创建时间</el-col>
         <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
@@ -111,7 +111,7 @@
                 {{item.incubatorCount}}
               </div>
             </el-col>
-            <el-col :span="3" class="R">
+            <el-col :span="2" class="R">
               <div>
                 {{item.carLoadBearing}}
               </div>
@@ -121,9 +121,17 @@
                 {{item.carVolume}}
               </div>
             </el-col>
-            <el-col :span="3" class="R">
+            <el-col :span="4" class="R">
               <div>
-                {{item.updateTime|time}}
+                {{item.createTime|time}}
+              </div>
+              <div v-show="item.taskStartTime">
+                <span>[始] </span>
+                {{item.taskStartTime|time}}
+              </div>
+              <div v-show="item.taskEndTime">
+                <span>[终] </span>
+                {{item.taskEndTime|time}}
               </div>
             </el-col>
             <el-col :span="3" class="opera-btn">

@@ -74,6 +74,12 @@
             <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime" isShow="true">
               {{form.updateTime|time}}
             </oms-col>
+            <oms-col label="开始时间" :rowSpan="span" :value="form.taskStartTime" isShow="true">
+              {{form.taskStartTime|time}}
+            </oms-col>
+            <oms-col label="结束时间" :rowSpan="span" :value="form.taskEndTime" isShow="true">
+              {{form.taskEndTime|time}}
+            </oms-col>
             <el-col :span="24">
               <div>
                 <oms-row label="集货区" :span="3">
