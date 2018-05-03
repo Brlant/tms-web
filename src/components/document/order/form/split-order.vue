@@ -63,7 +63,7 @@
               </el-table-column>
               <el-table-column prop="specifications" label="货品规格">
               </el-table-column>
-              <el-table-column prop="code" label="货品追溯码">
+              <el-table-column prop="code" label="追溯码">
               </el-table-column>
               <el-table-column prop="" label="操作">
                 <template slot-scope="scope">

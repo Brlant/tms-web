@@ -219,8 +219,8 @@
                 <el-form-item slot="left" label="货品规格">
                   <oms-input v-model="hj.specifications" placeholder="请输入货品规格"></oms-input>
                 </el-form-item>
-                <el-form-item slot="right" label="货品追溯码">
-                  <oms-input v-model="hj.code" placeholder="请输入货品追溯码"></oms-input>
+                <el-form-item slot="right" label="追溯码">
+                  <oms-input v-model="hj.code" placeholder="请输入追溯码"></oms-input>
                 </el-form-item>
               </two-column>
               <el-form-item label-width="120px">

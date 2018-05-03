@@ -161,7 +161,7 @@
                 </el-table-column>
                 <el-table-column prop="specifications" label="货品规格">
                 </el-table-column>
-                <el-table-column prop="code" label="货品追溯码">
+                <el-table-column prop="code" label="追溯码">
                 </el-table-column>
               </el-table>
               <div class="hr mb-10"></div>
@@ -180,12 +180,12 @@
                 <el-table-column prop="thermometerNoList" label="温度计列表">
                   <template slot-scope="scope">
                   <span v-for="no in scope.row.thermometerNoList">
-                      {{no}} <span
+                      {{no.thermometerNo}} <span
                     v-if="scope.row.thermometerNoList.indexOf(no)!==scope.row.thermometerNoList.length-1">,</span>
                   </span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="codeList" label="货品追溯码">
+                <el-table-column prop="codeList" label="追溯码">
                   <template slot-scope="scope">
                  <span v-for="code in scope.row.codeList">
                       {{code}} <span v-if="scope.row.codeList.indexOf(code)!==scope.row.codeList.length-1">,</span>

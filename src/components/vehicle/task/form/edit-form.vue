@@ -76,6 +76,20 @@
               </el-form-item>
             </two-column>
           </div>
+          <el-form-item slot="left" label="负责人" prop="head">
+            <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterHead"
+                       :clearable="true" @click.native.once="filterHead('')"
+                       v-model="form.head" popperClass="good-selects">
+              <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in headList">
+                <div style="overflow: hidden">
+                  <span class="pull-left" style="clear: right">{{user.name}}</span>
+                  <span class="pull-right">
+                        {{user.companyDepartmentName}}
+                  </span>
+                </div>
+              </el-option>
+            </el-select>
+          </el-form-item>
           <div class="hr mb-10"></div>
         </div>
         <div class="form-header-part">
@@ -207,6 +221,7 @@
         },
         doing: false,
         userList: [],
+        headList: [],
         tallyClerkList: [],
         orgList: [],
         pageSets: [
@@ -299,6 +314,18 @@
         this.form.driverPhone = '';
         this.form.driverName = '';
         this.carInfo = {};
+      },
+      filterHead: function (query) {
+        let data = Object.assign({}, {
+          pageNo: 1,
+          pageSize: 20,
+          objectId: 'oms-system',
+          keyWord: query,
+          status: 1
+        });
+        User.query(data).then(res => {
+          this.headList = res.data.list;
+        });
       },
       filterUser: function (query) {
         let data = Object.assign({}, {

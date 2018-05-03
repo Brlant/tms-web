@@ -66,12 +66,12 @@
           运单号
         </el-col>
         <el-col :span="2">类型</el-col>
-        <el-col :span="5">发货单位</el-col>
+        <el-col :span="4">发货单位</el-col>
         <el-col :span="5">收货单位</el-col>
         <el-col :span="1">整件</el-col>
         <el-col :span="1">散件</el-col>
         <el-col :span="1">包件</el-col>
-        <el-col :span="3">时间</el-col>
+        <el-col :span="4">时间</el-col>
         <el-col :span="1">状态</el-col>
         <el-col :span="3">操作</el-col>
       </el-row>
@@ -107,7 +107,7 @@
                 <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
               </div>
             </el-col>
-            <el-col :span="5" class="R">
+            <el-col :span="4" class="R">
               <div>
                 {{item.senderName}}
               </div>
@@ -143,7 +143,7 @@
                 {{item.incubatorCount}}
               </div>
             </el-col>
-            <el-col :span="3" class="R">
+            <el-col :span="4" class="R">
               <div v-show="item.deliveryTime&&!item.waybillCompleteTime">
                 <span>送达时限:</span>
                 {{item.deliveryTime|date}}
