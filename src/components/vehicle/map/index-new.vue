@@ -271,7 +271,7 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
-  import {TmsWayBill} from '@/resources';
+  import { TmsWayBill } from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
   import batchAutoForm from '@/components/document/transport/form/auto-form';
@@ -340,6 +340,7 @@
     },
     mounted () {
       this.getWayBillOrderList(1);
+      this.initMapTools();
     },
     watch: {
       filters: {
@@ -376,6 +377,25 @@
       }
     },
     methods: {
+      initMapTools () {
+        let time = setTimeout(this.initMapTools, 100);
+        let deliveryMap = this.$refs.deliveryMap;
+        if (!deliveryMap) return;
+        let map = deliveryMap.$$getInstance();
+        if (!map) return;
+        window.clearInterval(time);
+        if (!this.mouseTool) {
+          this.mouseTool = new window.AMap.MouseTool(map);
+          this.mouseTool.on('draw', e => {
+            this.curArea = e.obj;
+            // 结束绘制
+            this.mouseTool.close(false);
+            // 区域可编辑
+            this.editorArea = new window.AMap.PolyEditor(map, e.obj);
+            this.editorArea.open();
+          }, this);
+        }
+      },
       getMore: function () {
         this.getWayBillOrderList(this.pager.currentPage + 1, true);
       },
@@ -596,21 +616,13 @@
         const classList = label.parentNode.classList;
         isChecked ? classList.add('active') : classList.remove('active');
       },
+      // 地图加载完成, 初始化工具
+      initTools () {
+        console.log(1);
+      },
       // 开启绘制区域
       drawArea () {
         this.isDrawArea = true;
-        if (!this.mouseTool) {
-          let map = this.$refs.deliveryMap.$$getInstance();
-          this.mouseTool = new window.AMap.MouseTool(map);
-          this.mouseTool.on('draw', e => {
-            this.curArea = e.obj;
-            // 结束绘制
-            this.mouseTool.close(false);
-            // 区域可编辑
-            this.editorArea = new window.AMap.PolyEditor(map, e.obj);
-            this.editorArea.open();
-          }, this);
-        }
         this.mouseTool.polygon({
           strokeColor: '#f00'
         });
@@ -618,7 +630,10 @@
       // 重新绘制区域
       redrawArea () {
         this.mouseTool.close(true);
-        this.mouseTool.polygon();
+        this.mouseTool.polygon({
+          strokeColor: '#f00'
+        });
+        this.editorArea && this.editorArea.close();
       },
       // 取消绘制
       closeDrawArea () {
