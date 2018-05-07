@@ -1,14 +1,13 @@
 <style scoped>
   .map-path {
-    height: 300px;
     margin-bottom: 10px;
   }
 </style>
 <template>
   <div>
     <div v-show="!points.length" class="empty-info mini">暂无轨迹信息</div>
-    <el-amap v-show="points.length" ref="pathMap" vid="pathMap" :amap-manager="amapManager"
-             :zoom="10" :center="center" class="map-path">
+    <el-amap v-show="points.length" ref="pathMap" :vid="vid" :amap-manager="amapManager"
+             :zoom="10" :center="center" class="map-path" :style="mapStyle">
     </el-amap>
   </div>
 </template>
@@ -17,7 +16,21 @@
   import CarImg from '@/assets/img/car.png';
 
   export default {
-    props: ['formItem'],
+    props: {
+      formItem: Object,
+      mapStyle: {
+        type: Object,
+        default () {
+          return {
+            height: '300px'
+          };
+        }
+      },
+      vid: {
+        type: String,
+        default: 'pathMap'
+      }
+    },
     data () {
       return {
         center: [121.5273285, 31.21515044],
@@ -36,9 +49,11 @@
     methods: {
       queryPath () {
         this.$http(`/track-transportation/waybill/${this.formItem.id}`).then(res => {
-          this.points = res.data.filter(f => f.longitude && f.latitude).map(m => {
+          this.points = res.data.filter(f => f.longitude && f.latitude).map((m, index) => {
             return {
-              lnglat: [m.longitude, m.latitude]
+              lnglat: [m.longitude, m.latitude],
+              time: this.$moment(m.positioningTime).format('YYYY-MM-DD HH:mm:ss'),
+              name: '收货地址:' + this.formItem.receiverAddress
             };
           });
           this.points.length && this.drawPath(this.points);
@@ -56,6 +71,10 @@
               lnglatList.push(points[i].lnglat);
             }
             return lnglatList;
+          },
+          getHoverTitle: function (pathData, pathIndex, pointIndex) {
+            if (!pointIndex) return pathData.points[0].name;
+            return pathData.points[0].name + '，' + pathData.points[pointIndex].time;
           },
           renderOptions: {
             startPointStyle: {
@@ -91,7 +110,6 @@
       drawPath (points) {
         window.AMapUI.loadUI(['misc/PathSimplifier'], PathSimplifier => {
           const pathSimplifierIns = this.pathSimplifierIns ? this.pathSimplifierIns : this.createPathSimplifier(PathSimplifier);
-          console.log(pathSimplifierIns, points);
           pathSimplifierIns.setData([{points}]);
           pathSimplifierIns.setSelectedPathIndex(0);
           // this.createPathNavigator(PathSimplifier, pathSimplifierIns);

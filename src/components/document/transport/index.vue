@@ -222,7 +222,7 @@
       <component :is="currentPart" :action="action" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
     <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
-      <component :is="currentInfoPart" :formItem="form" @right-close="resetRightBox"/>
+      <component :is="currentInfoPart" :formItem="form" :showBigMap="showBigMap" @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentSignPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
@@ -236,13 +236,17 @@
     <page-right :show="showBatchAutoIndex === 0" @right-close="resetRightBox" :css="{'width':'80%','padding':0}">
       <component :is="currentBatchAutoPart" :filters="condition" @right-close="resetRightBox" @change="autoSubmit"/>
     </page-right>
-
+    <el-dialog title="派送信息" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
+               custom-class="custom-dialog-map">
+      <map-path :formItem="formItem" :mapStyle="{height: bodyHeight}" vid="mapBigPath"
+                v-show="isShowMulBigMap"></map-path>
+    </el-dialog>
   </div>
 </template>
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {http, TmsWayBill} from '@/resources';
+  import { http, TmsWayBill } from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
@@ -250,10 +254,11 @@
   import confirmForm from './form/confirm-form';
   import autoForm from './form/auto-form';
   import batchAutoForm from './form/batch-auto-form';
+  import MapPath from '../common/map-path';
 
   export default {
     components: {
-      SearchPart, addForm
+      SearchPart, addForm, MapPath
     },
     mixins: [StatusMixin],
     data () {
@@ -317,8 +322,16 @@
         shoWayBillPart: false,
         isLoading: false,
         waybillIdList: [],
-        condition: {}
+        condition: {},
+        formItem: null,
+        isShowMulBigMap: false
       };
+    },
+    computed: {
+      bodyHeight: function () {
+        let height = parseInt(this.$store.state.bodyHeight, 10);
+        return (height + 136) + 'px';
+      }
     },
     watch: {
       filters: {
@@ -332,6 +345,15 @@
       this.getTmsWayBillPage(1);
     },
     methods: {
+      showBigMap (formItem) {
+        this.formItem = null;
+        this.isShowMulBigMap = true;
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.formItem = formItem;
+          }, 300);
+        });
+      },
       exportFile: function () {
         if (!this.checkList.length) {
           this.$notify.warning({

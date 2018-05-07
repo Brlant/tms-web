@@ -43,6 +43,7 @@
   }
   .el-input__inner {
     height: 36px;
+    line-height: 1;
   }
   a:focus {
     outline: none;
@@ -81,5 +82,11 @@
     .el-checkbox__label {
       font-size: 12px;
     }
+  }
+}
+
+.preloader {
+  .el-input__inner {
+    line-height: 1;
   }
 }
