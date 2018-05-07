@@ -207,6 +207,10 @@
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[8].key === currentTab.key}">
               {{pageSets[8].name}}</h3>
+            <span @click="showBigMap(formItem)" class="des-btn">
+               <a href="#" class="btn-circle" @click.prevent="">
+                 <i class="el-icon-zoom-in"></i></a>查看大图
+            </span>
           </div>
           <div class="content">
             <map-path :formItem="formItem"></map-path>
@@ -218,7 +222,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {OmsAttachment, TmsWayBill} from '@/resources';
+  import { OmsAttachment, TmsWayBill } from '@/resources';
   import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
 
@@ -257,7 +261,7 @@
       };
     },
     computed: {},
-    props: ['formItem'],
+    props: ['formItem', 'showBigMap'],
     watch: {
       formItem: function (val) {
         if (val.id) {
