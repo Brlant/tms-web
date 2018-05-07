@@ -173,7 +173,7 @@
       <component :is="currentPart" :action="action" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
     <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
-      <component :is="currentInfoPart" :formItem="form" @right-close="resetRightBox"/>
+      <component :is="currentInfoPart" :showBigMap="showBigMap" :formItem="form" @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="shoWayBillPart" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
       <component :is="currentWayBillPart" :checkList="checkListPara" @right-close="resetRightBox" @change="submit"/>
@@ -181,23 +181,28 @@
     <page-right :show="showSplitOrderPart" @right-close="resetRightBox" :css="{'width':'1200px','padding':0}">
       <component :is="currentSplitOrderPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
-
+    <el-dialog :title="`运单:${activeNo} 派送信息`" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
+               custom-class="custom-dialog-map">
+      <map-path :activeNo="activeNo" :formItem="formItem" :mapStyle="{height: bodyHeight}" vid="mapBigPath"
+                v-show="isShowMulBigMap"></map-path>
+    </el-dialog>
   </div>
 </template>
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {TmsOrder} from '@/resources';
+  import { TmsOrder } from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import splitForm from './form/split-order.vue';
   import wayBillForm from './form/create-way-bill.vue';
   import StatusMixin from '@/mixins/statusMixin';
   import Perm from '@/components/common/perm';
+  import MapPath from '../common/map-list';
 
   export default {
     components: {
-      Perm, SearchPart, addForm, wayBillForm
+      Perm, SearchPart, addForm, wayBillForm, MapPath
     },
     mixins: [StatusMixin],
     data () {
@@ -247,8 +252,17 @@
         checkList: [],
         checkListPara: [],
         shoWayBillPart: false,
-        showSplitOrderPart: false
+        showSplitOrderPart: false,
+        formItem: {},
+        activeNo: '',
+        isShowMulBigMap: false
       };
+    },
+    computed: {
+      bodyHeight: function () {
+        let height = parseInt(this.$store.state.bodyHeight, 10);
+        return (height + 116) + 'px';
+      }
     },
     watch: {
       filters: {
@@ -262,6 +276,17 @@
       this.getTmsOrderPage(1);
     },
     methods: {
+      showBigMap (formItem, item) {
+        this.formItem = {};
+        this.activeNo = '';
+        this.isShowMulBigMap = true;
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.formItem = formItem;
+            this.activeNo = item.waybillNo;
+          }, 100);
+        });
+      },
       autoCreateWayBill: function () {
         this.$confirm('确认将状态为待生成运单的订单自动生成为运单?', '', {
           confirmButtonText: '确定',

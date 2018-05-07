@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        // target: 'https://test-wms.sinopharm-bio.com/',
+        // target: 'https://test-tms.sinopharm-bio.com/',
         // target: 'http://wms.tinysoft.cc:88/',
         // target: 'http://localhost:8114/',
         // target: 'http://tms.tinysoft.cc:88/',

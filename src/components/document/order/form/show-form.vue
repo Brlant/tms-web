@@ -163,7 +163,7 @@
               {{pageSets[6].name}}</h3>
           </div>
           <div class="content">
-            <map-path :formItem="formItem"></map-path>
+            <map-path :formItem="formItem" :showBigMap="showBigMap"></map-path>
           </div>
         </div>
       </el-form>
@@ -172,7 +172,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TmsOrder} from '@/resources';
+  import { TmsOrder } from '@/resources';
   import MapPath from '../../common/map-list';
 
   export default {
@@ -207,7 +207,7 @@
       };
     },
     computed: {},
-    props: ['formItem'],
+    props: ['formItem', 'showBigMap'],
     watch: {
       formItem: function (val) {
         if (val.id) {

@@ -74,7 +74,7 @@
           },
           getHoverTitle: function (pathData, pathIndex, pointIndex) {
             if (!pointIndex) return pathData.points[0].name;
-            return pathData.points[0].name + '，' + pathData.points[pointIndex].time;
+            return pathData.points[0].name + '，' + pathData.points[pointIndex].time + '路过此地';
           },
           renderOptions: {
             startPointStyle: {

@@ -1,16 +1,22 @@
 <style scoped>
   .map-path {
-    height: 300px;
     margin: 10px 0;
   }
 </style>
 <template>
   <div>
     <div v-show="!waybills.length" class="empty-info mini">暂无轨迹信息</div>
-    <div v-show="waybills.length" v-for="(item, index) in waybills" :key="index">
-      <h2>运单号:{{item.waybillNo}}</h2>
-      <el-amap :ref="`pathMap${index}`" :vid="`pathMap${index}`" :amap-manager="item.amapManager"
-               :zoom="10" :center="item.center" class="map-path">
+    <div v-if="waybills.length || !activeNo || item.waybillNo === activeNo" v-for="(item, index) in waybills"
+         :key="index">
+      <h2 v-show="!activeNo">运单号:{{item.waybillNo}}
+        <span @click="showBigMap(formItem, item)" class="des-btn">
+               <a href="#" class="btn-circle" @click.prevent="">
+                 <i class="el-icon-zoom-in"></i></a>查看大图
+      </span>
+      </h2>
+      <el-amap :ref="`pathMap${index}`" :vid="activeNo ? `pathMap${index}activeNo`
+      :`pathMap${index}`" :amap-manager="item.amapManager"
+               :zoom="10" :center="item.center" class="map-path" :style="mapStyle">
       </el-amap>
     </div>
   </div>
@@ -19,7 +25,21 @@
   import { AMapManager } from 'vue-amap';
 
   export default {
-    props: ['formItem'],
+    props: {
+      formItem: Object,
+      mapStyle: {
+        type: Object,
+        default () {
+          return {
+            height: '300px'
+          };
+        }
+      },
+      activeNo: {
+        type: String
+      },
+      showBigMap: Function
+    },
     data () {
       return {
         waybills: []
@@ -78,7 +98,7 @@
             }
           });
           pathSimplifierIns.setData([{points: item.points}]);
-          pathSimplifierIns.setSelectedPathIndex(0);
+          item.points.length && pathSimplifierIns.setSelectedPathIndex(0);
           // const nav = pathSimplifierIns.createPathNavigator(0, {
           //   loop: false,
           //   speed: 5000,
