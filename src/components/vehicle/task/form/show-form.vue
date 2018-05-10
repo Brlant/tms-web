@@ -53,7 +53,7 @@
             </oms-col>
             <oms-col label="承运商" :rowSpan="span" :value="form.taskCarriersName"/>
             <oms-col label="车牌号" :rowSpan="span" :value="form.carPlateNumber"/>
-            <oms-col label="负责人" :rowSpan="headName" :value="form.headName"/>
+            <oms-col label="负责人" :rowSpan="span" :value="form.headName"/>
             <oms-col label="司机" :rowSpan="span" :value="form.driverName"/>
             <oms-col label="司机电话" :rowSpan="span" :value="form.driverPhone"/>
             <span v-for="tallyClerk in form.tallyClerkDtoList">
