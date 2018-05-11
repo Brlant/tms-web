@@ -49,7 +49,7 @@ export const routes = [
             meta: {moduleId: 'vehicle', title: '排单记录', perm: 'tms-task-add'}
           },
           {
-            path: '/vehicle/delivery/task',
+            path: '/vehicle/delivery/task/:id',
             component: () => import('./components/vehicle/task/index.vue'),
             meta: {moduleId: 'vehicle', title: '出车任务', perm: 'tms-task-car-task-query'}
           }
@@ -61,12 +61,12 @@ export const routes = [
         meta: {moduleId: 'document', title: '单据管理', icon: 'warehouse', perm: 'tms-documents-info'},
         children: [
           {
-            path: '/document/order',
+            path: '/document/order/:id',
             component: () => import('./components/document/order/index.vue'),
             meta: {moduleId: 'document', title: '订单管理', perm: 'tms-order-query'}
           },
           {
-            path: '/document/transport',
+            path: '/document/transport/:id',
             component: () => import('./components/document/transport/index.vue'),
             meta: {moduleId: 'document', title: '运单管理', perm: 'tms-waybill-query'}
           }

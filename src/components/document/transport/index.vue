@@ -246,7 +246,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TmsWayBill } from '@/resources';
+  import {http, TmsWayBill} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
@@ -343,6 +343,12 @@
     },
     mounted() {
       this.getTmsWayBillPage(1);
+      let id = this.$route.params.id;
+      if (id !== ':id') {
+        this.showInfo({id});
+      } else {
+        this.$router.push('/document/transport/list');
+      }
     },
     methods: {
       showBigMap (formItem) {
@@ -595,6 +601,7 @@
         this.showConfirmIndex = -1;
         this.showAutoIndex = -1;
         this.showBatchAutoIndex = -1;
+        this.$router.push('/document/transport/list');
       },
       getTmsWayBillPage: function (pageNo, isContinue = false) {
         this.pager.currentPage = pageNo;
@@ -668,6 +675,7 @@
         this.currentInfoPart = this.dialogInfoComponents[0];
         this.$nextTick(() => {
           this.form = JSON.parse(JSON.stringify(item));
+          this.$router.push('/document/transport/' + item.id);
         });
       },
       submit() {
