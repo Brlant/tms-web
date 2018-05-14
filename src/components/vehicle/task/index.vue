@@ -253,7 +253,6 @@
         checkList: [],
         checkListPara: [],
         shoWayBillPart: false,
-        currentItem: {},
         currentItemId: '',
         taskIdList: [],
         isShowBigMap: false,
@@ -278,6 +277,12 @@
     },
     mounted () {
       this.getTransportTaskPage(1);
+      let id = this.$route.params.id;
+      if (id !== ':id') {
+        this.showInfo({id});
+      } else {
+        this.$router.push('/vehicle/delivery/task/list');
+      }
     },
     methods: {
       batchCancel: function () {
@@ -503,6 +508,7 @@
       resetRightBox () {
         this.showIndex = -1;
         this.showEditIndex = -1;
+        this.$router.push('/vehicle/delivery/task/list');
       },
       getTransportTaskPage: function (pageNo, isContinue = false) {
         this.pager.currentPage = pageNo;
@@ -539,16 +545,15 @@
         });
       },
       showInfo: function (item) {
-        this.currentItem = item;
         this.currentItemId = item.id;
         this.showIndex = 0;
         this.currentPart = this.dialogComponents[0];
         this.$nextTick(() => {
           this.form = JSON.parse(JSON.stringify(item));
+          this.$router.push('/vehicle/delivery/task/' + item.id);
         });
       },
       editInfo: function (item) {
-        this.currentItem = item;
         this.currentItemId = item.id;
         this.showEditIndex = 0;
         this.currentEditPart = this.dialogEditComponents[0];

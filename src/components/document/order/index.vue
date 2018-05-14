@@ -274,6 +274,12 @@
     },
     mounted() {
       this.getTmsOrderPage(1);
+      let id = this.$route.params.id;
+      if (id !== ':id') {
+        this.showInfo({id});
+      } else {
+        this.$router.push('/document/order/list');
+      }
     },
     methods: {
       showBigMap (formItem, item) {
@@ -407,6 +413,7 @@
         this.showInfoIndex = -1;
         this.shoWayBillPart = false;
         this.showSplitOrderPart = false;
+        this.$router.push('/document/order/list');
       },
       getTmsOrderPage: function (pageNo, isContinue = false) {
         this.pager.currentPage = pageNo;
@@ -504,6 +511,7 @@
         this.currentInfoPart = this.dialogInfoComponents[0];
         this.$nextTick(() => {
           this.form = JSON.parse(JSON.stringify(item));
+          this.$router.push('/document/order/' + item.id);
         });
       },
       submit() {
