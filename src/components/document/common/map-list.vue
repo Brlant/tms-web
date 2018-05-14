@@ -62,7 +62,9 @@
               amapManager: new AMapManager(),
               points: m.list && m.list.filter(f => f.longitude && f.latitude).map(m => {
                 return {
-                  lnglat: [m.longitude, m.latitude]
+                  lnglat: [m.longitude, m.latitude],
+                  time: this.$moment(m.positioningTime).format('YYYY-MM-DD HH:mm:ss'),
+                  name: this.formItem.receiverAddress
                 };
               })
             };
@@ -87,6 +89,12 @@
                 lnglatList.push(points[i].lnglat);
               }
               return lnglatList;
+            },
+            getHoverTitle: function (pathData, pathIndex, pointIndex) {
+              if (typeof pointIndex !== 'number') return '收货地址：' + pathData.points[0].name;
+              if (pointIndex === 0) return pathData.points[pointIndex].time + '出发';
+              if (pointIndex === pathData.points.length - 1) return pathData.points[pointIndex].time + '到达目的地（' + pathData.points[0].name + '）';
+              return pathData.points[pointIndex].time + '路过此地';
             },
             renderOptions: {
               startPointStyle: {
