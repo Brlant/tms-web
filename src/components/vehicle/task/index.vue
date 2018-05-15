@@ -278,7 +278,7 @@
     mounted () {
       this.getTransportTaskPage(1);
       let id = this.$route.params.id;
-      if (id !== ':id') {
+      if (id !== 'list' && id !== ':id') {
         this.showInfo({id});
       } else {
         this.$router.push('/vehicle/delivery/task/list');

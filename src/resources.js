@@ -91,7 +91,7 @@ export const TmsWayBill = resource('/tms-waybill', http, {
     return http.get('/tms-waybill/' + id, {});
   },
   cancelWayBill: (id) => {
-    return http.get('/tms-waybill/' + id + '/cancel', {});
+    return http.put('/tms-waybill/' + id + '/cancel', {});
   },
   confirmWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/confirm', {});

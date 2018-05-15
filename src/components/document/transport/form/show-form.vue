@@ -225,9 +225,12 @@
   import { OmsAttachment, TmsWayBill } from '@/resources';
   import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
+  import OmsCol from '@dtop/dtop-web-common/packages/col';
 
   export default {
-    components: {TwoColumn, MapPath, attachmentLists},
+    components: {
+      OmsCol,
+      TwoColumn, MapPath, attachmentLists},
     data() {
       return {
         span: 7,

@@ -345,7 +345,7 @@
     mounted() {
       this.getTmsWayBillPage(1);
       let id = this.$route.params.id;
-      if (id !== ':id') {
+      if (id !== 'list' && id !== ':id') {
         this.showInfo({id});
       } else {
         this.$router.push('/document/transport/list');
@@ -561,7 +561,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          TmsWayBill.cancelOrder(item.id).then(() => {
+          TmsWayBill.cancelWayBill(item.id).then(() => {
             this.$notify.success({
               duration: 2000,
               title: '成功',
