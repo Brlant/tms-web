@@ -5,10 +5,6 @@
     display: block;
   }
 
-  .d-table > div.d-table-right {
-    padding-right: 10px;
-  }
-
 </style>
 <template>
   <div>
