@@ -34,8 +34,7 @@
   <div>
     <div class="d-table">
       <div class="d-table-left">
-        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
-        <div class="scrollbar-content">
+        <div>
           <h2 class="header">
             <span class="pull-right">
               <!--<perm label="qualityItem-add">-->
@@ -57,17 +56,20 @@
             暂无信息
           </div>
           <div v-else>
-            <ul class="show-list">
-              <li v-for="item in showTypeList" class="list-item" @click="showType(item)"
-                  :class="{'active':item.carDto.plateNumber==currentItem.carDto.plateNumber}">
-                <!--<perm label="tms-car-archives-delete">-->
-                <a href="#" class="pull-right hover-show" @click.prevent="removeType(item)">
-                  <i class="el-icon-t-delete"></i>
-                </a>
-                <!--</perm>-->
-                {{item.carDto.plateNumber}}
-              </li>
-            </ul>
+            <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight"
+                          @scroll="scrollLoadingData">
+              <ul class="show-list">
+                <li v-for="item in showTypeList" class="list-item" @click="showType(item)"
+                    :class="{'active':item.carDto.plateNumber==currentItem.carDto.plateNumber}">
+                  <!--<perm label="tms-car-archives-delete">-->
+                  <a href="#" class="pull-right hover-show" @click.prevent="removeType(item)">
+                    <i class="el-icon-t-delete"></i>
+                  </a>
+                  <!--</perm>-->
+                  {{item.carDto.plateNumber}}
+                </li>
+              </ul>
+            </el-scrollbar>
             <div class="btn-left-list-more">
               <bottom-loading></bottom-loading>
               <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
@@ -76,7 +78,6 @@
             </div>
           </div>
         </div>
-        </el-scrollbar>
       </div>
       <div class="d-table-right">
         <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">

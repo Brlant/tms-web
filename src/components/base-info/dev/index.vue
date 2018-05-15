@@ -69,8 +69,7 @@
   <div>
     <div class="container d-table">
       <div class="d-table-left">
-        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
-          <div class="scrollbar-content">
+        <div>
           <h2 class="header">
                 <span class="pull-right">
                   <perm label="tms-equipment-consumables-add">
@@ -94,19 +93,22 @@
             暂无信息
           </div>
           <div v-else>
-            <ul class="show-list">
-              <li v-for="(item,index) in showTypeList" class="list-item" @click="showType(item)"
-                  :class="{'active':item.id==currentItem.id}">
-                <div>
-                  <perm label="tms-equipment-consumables-update">
-                    <a href="#" class="pull-right hover-show" @click.prevent="editType(currentItem)">
-                      <i class="el-icon-t-edit"></i>
-                    </a>
-                  </perm>
-                  {{item.name}}
-                </div>
-              </li>
-            </ul>
+            <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight"
+                          @scroll="scrollLoadingData">
+              <ul class="show-list">
+                <li v-for="(item,index) in showTypeList" class="list-item" @click="showType(item)"
+                    :class="{'active':item.id==currentItem.id}">
+                  <div>
+                    <perm label="tms-equipment-consumables-update">
+                      <a href="#" class="pull-right hover-show" @click.prevent="editType(currentItem)">
+                        <i class="el-icon-t-edit"></i>
+                      </a>
+                    </perm>
+                    {{item.name}}
+                  </div>
+                </li>
+              </ul>
+            </el-scrollbar>
             <div class="btn-left-list-more">
               <bottom-loading></bottom-loading>
               <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
@@ -115,7 +117,6 @@
             </div>
           </div>
         </div>
-        </el-scrollbar>
       </div>
       <div class="d-table-right">
         <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
@@ -380,12 +381,12 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = (height - 17) + 'px';
+        height = (height - 27) + 'px';
         return height;
       },
       tableHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = height - 17 - 300;
+        height = height - 27 - 300;
         return height;
       },
       equipmentType: function () {

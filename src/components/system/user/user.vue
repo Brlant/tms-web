@@ -19,8 +19,7 @@
     <!--</div>-->
     <div class="container d-table">
       <div class="d-table-left">
-        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
-          <div class="scrollbar-content">
+        <div>
           <h2 class="header">
             <span class="pull-right">
               <perm label="tms-department-add">
@@ -38,20 +37,23 @@
             <oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>
           </div>
           <div>
-            <ul class="show-list">
-              <li class="list-item" @click="showAllType(1)" :class="{'active':showAll}">
-                全部
-              </li>
-              <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
-                  :class="{'active':item.id==currentItem.id}">
-                <perm label="tms-department-edit">
-                  <a href="#" @click.stop.prevent="editDepartment(item)" class="hover-show pull-right">
-                    <i class="el-icon-t-edit"></i>
-                  </a>
-                </perm>
-                {{item.name}}
-              </li>
-            </ul>
+            <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight"
+                          @scroll="scrollLoadingData">
+              <ul class="show-list">
+                <li class="list-item" @click="showAllType(1)" :class="{'active':showAll}">
+                  全部
+                </li>
+                <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
+                    :class="{'active':item.id==currentItem.id}">
+                  <perm label="tms-department-edit">
+                    <a href="#" @click.stop.prevent="editDepartment(item)" class="hover-show pull-right">
+                      <i class="el-icon-t-edit"></i>
+                    </a>
+                  </perm>
+                  {{item.name}}
+                </li>
+              </ul>
+            </el-scrollbar>
             <div class="btn-left-list-more">
               <bottom-loading></bottom-loading>
               <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
@@ -60,7 +62,6 @@
             </div>
           </div>
         </div>
-        </el-scrollbar>
       </div>
       <div class="d-table-right">
         <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">

@@ -10,8 +10,7 @@
   <div>
     <div class="container d-table">
       <div class="d-table-left">
-        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
-          <div class="scrollbar-content">
+        <div>
           <h2 class="header">
             <span class="pull-right">
               <perm label="tms-goods-area-add">
@@ -29,12 +28,14 @@
             <oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>
           </div>
           <div>
-            <ul class="show-list">
-              <li class="list-item" @click="showAllType(1)" :class="{'active':showAll}">
-                全部
-              </li>
-              <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
-                  :class="{'active':item.id==currentItem.id}">
+            <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight"
+                          @scroll="scrollLoadingData">
+              <ul class="show-list">
+                <li class="list-item" @click="showAllType(1)" :class="{'active':showAll}">
+                  全部
+                </li>
+                <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
+                    :class="{'active':item.id==currentItem.id}">
                 <span class="hover-show">
                      <perm label="tms-goods-area-delete">
                   <a href="#" @click.stop.prevent="deleteGoodsArea(item)" class="pull-right">
@@ -47,12 +48,14 @@
                   </a>
                 </perm>
                   </span>
-                <div class="id-part" v-if="item.scope">
-                  运输范围 - <dict :dict-group="'transportationCondition'" :dict-key="item.scope"/>
-                </div>
-                {{item.name}}
-              </li>
-            </ul>
+                  <div class="id-part" v-if="item.scope">
+                    运输范围 -
+                    <dict :dict-group="'transportationCondition'" :dict-key="item.scope"/>
+                  </div>
+                  {{item.name}}
+                </li>
+              </ul>
+            </el-scrollbar>
             <div class="btn-left-list-more">
               <bottom-loading></bottom-loading>
               <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
@@ -61,7 +64,6 @@
             </div>
           </div>
         </div>
-        </el-scrollbar>
       </div>
       <div class="d-table-right">
         <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
@@ -193,7 +195,7 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = (height - 10) + 'px';
+        height = (height - 30) + 'px';
         return height;
       }
     },

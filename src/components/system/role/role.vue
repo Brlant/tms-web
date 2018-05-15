@@ -57,8 +57,7 @@
       </div>
       <div class="container d-table">
         <div class="d-table-left">
-          <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
-            <div class="scrollbar-content">
+          <div>
             <h2 class="header">
                 <span class="pull-right">
                   <perm label="tms-access-role-add">
@@ -76,22 +75,25 @@
               暂无信息
             </div>
             <div v-else>
-              <ul class="show-list">
-                <li v-for="item in showTypeList" class="list-item" @click="showType(item)"
-                    :class="{'active':item.id===currentItem.id}">
-                  <perm label="tms-access-role-delete">
-                    <oms-remove :item="item" @removed="removeType" :tips='"确认删除角色\""+item.title +"\"?"'
-                                class="hover-show"><i
-                      class="el-icon-t-delete"></i></oms-remove>
-                  </perm>
-                  <div class="id-part">
-                    {{item.name }}
-                  </div>
-                  <div>
-                    {{item.title }}
-                  </div>
-                </li>
-              </ul>
+              <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight"
+                            @scroll="scrollLoadingData">
+                <ul class="show-list">
+                  <li v-for="item in showTypeList" class="list-item" @click="showType(item)"
+                      :class="{'active':item.id===currentItem.id}">
+                    <perm label="tms-access-role-delete">
+                      <oms-remove :item="item" @removed="removeType" :tips='"确认删除角色\""+item.title +"\"?"'
+                                  class="hover-show"><i
+                        class="el-icon-t-delete"></i></oms-remove>
+                    </perm>
+                    <div class="id-part">
+                      {{item.name }}
+                    </div>
+                    <div>
+                      {{item.title }}
+                    </div>
+                  </li>
+                </ul>
+              </el-scrollbar>
             </div>
             <div class="btn-left-list-more">
               <bottom-loading></bottom-loading>
@@ -100,7 +102,6 @@
               </div>
             </div>
           </div>
-          </el-scrollbar>
         </div>
         <div class="d-table-right">
           <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
