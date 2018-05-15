@@ -314,9 +314,12 @@
       menu: function () {
         let menuArr = routes[0].children.filter(item => item.meta.moduleId && this.$store.state.permissions.includes(item.meta.perm));
         menuArr.forEach(item => {
-          item.subMenu = item.children.filter(child => child.meta.perm === 'show' || this.$store.state.permissions.includes(child.meta.perm));
-          }
-        );
+          if (/:id$/.test(item.path)) item.path = item.path.replace(':id', 'list');
+          item.subMenu = item.children.filter(child => {
+            if (/:id$/.test(child.path)) child.path = child.path.replace(':id', 'list');
+            return this.$store.state.permissions.includes(child.meta.perm);
+          });
+        });
         return menuArr;
       },
       subMenu: function () {
