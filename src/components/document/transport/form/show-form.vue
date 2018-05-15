@@ -38,6 +38,9 @@
           </div>
           <div class="content">
             <oms-col label="运单号" :rowSpan="span" :value="form.waybillNumber"/>
+            <oms-col label="运单状态" :rowSpan="span" :value="form.status">
+              {{formatStatusTitle(form.status, orderType)}}
+            </oms-col>
             <oms-col label="来源订单号" :rowSpan="span" :value="form.orderNoList">
                  <span v-for="order in form.orderNoList">{{order}}<span
                    v-if="form.orderNoList.indexOf(order)!==form.orderNoList.length-1">,</span></span>
@@ -226,6 +229,7 @@
   import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
   import OmsCol from '@dtop/dtop-web-common/packages/col';
+  import utils from '@/tools/utils';
 
   export default {
     components: {
@@ -247,6 +251,7 @@
           {name: '签收信息', key: 7},
           {name: '派送信息', key: 8}
         ],
+        orderType: utils.wayBillType,
         currentTab: {},
         form: {
           goodsList: [
@@ -277,6 +282,23 @@
       }
     },
     methods: {
+      formatStatusTitle(status, statusType) {
+        let title = '';
+        Object.keys(statusType).forEach(k => {
+          if (status === null) {
+            if (statusType[k].status === status) {
+              title = statusType[k].title;
+            }
+          } else {
+            let s1 = Number(statusType[k].status);
+            let s2 = Number(status);
+            if (s1 === s2) {
+              title = statusType[k].title;
+            }
+          }
+        });
+        return title;
+      },
       getFileList: function () {
         if (!this.form.id) return;
         OmsAttachment.queryOneAttachmentList(this.form.id, 'waybill').then(res => {

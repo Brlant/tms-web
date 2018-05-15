@@ -38,6 +38,9 @@
           </div>
           <div class="content">
             <oms-col label="订单号" :rowSpan="span" :value="form.orderNo"/>
+            <oms-col label="订单状态" :rowSpan="span" :value="form.status">
+              {{formatStatusTitle(form.status, orderType)}}
+            </oms-col>
             <oms-col label="订单类型" :rowSpan="span" :value="form.waybillType">
               <dict :dict-group="'bizType'" :dict-key="form.waybillType"></dict>
             </oms-col>
@@ -174,6 +177,7 @@
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
   import { TmsOrder } from '@/resources';
   import MapPath from '../../common/map-list';
+  import utils from '@/tools/utils';
 
   export default {
     components: {TwoColumn, MapPath},
@@ -182,6 +186,7 @@
         span: 7,
         list: [],
         times: [],
+        orderType: utils.orderType,
         pageSets: [
           {name: '基本信息', key: 0},
           {name: '发货信息', key: 1},
@@ -218,6 +223,23 @@
       }
     },
     methods: {
+      formatStatusTitle(status, statusType) {
+        let title = '';
+        Object.keys(statusType).forEach(k => {
+          if (status === null) {
+            if (statusType[k].status === status) {
+              title = statusType[k].title;
+            }
+          } else {
+            let s1 = Number(statusType[k].status);
+            let s2 = Number(status);
+            if (s1 === s2) {
+              title = statusType[k].title;
+            }
+          }
+        });
+        return title;
+      },
       selectTab(item) {
         this.currentTab = item;
       },

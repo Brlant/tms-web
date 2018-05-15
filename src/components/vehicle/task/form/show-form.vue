@@ -47,6 +47,9 @@
           </div>
           <div class="content">
             <oms-col label="任务编码" :rowSpan="span" :value="form.transportTaskNo"/>
+            <oms-col label="任务状态" :rowSpan="span" :value="form.status">
+              {{formatStatusTitle(form.status, orderType)}}
+            </oms-col>
             <oms-col label="任务名称" :rowSpan="span" :value="form.taskName"/>
             <oms-col label="任务名称" :rowSpan="span" :value="form.type">
               <dict :dict-group="'deliveryTaskType'" :dict-key="form.type"></dict>
@@ -204,6 +207,7 @@
 <script>
   import {TransportTask} from '@/resources';
   import TaskMap from './map-new-next';
+  import utils from '@/tools/utils';
 
   export default {
     components: {TaskMap},
@@ -229,6 +233,7 @@
             }
           ]
         },
+        orderType: utils.carTaskType,
         rules: {},
         showAddFlag: false,
         detailForm: {
@@ -258,6 +263,23 @@
       }
     },
     methods: {
+      formatStatusTitle(status, statusType) {
+        let title = '';
+        Object.keys(statusType).forEach(k => {
+          if (status === null) {
+            if (statusType[k].status === status) {
+              title = statusType[k].title;
+            }
+          } else {
+            let s1 = Number(statusType[k].status);
+            let s2 = Number(status);
+            if (s1 === s2) {
+              title = statusType[k].title;
+            }
+          }
+        });
+        return title;
+      },
       onSubmit: function () {
         if (!this.detailForm.list.length) {
           this.$notify.warning({
