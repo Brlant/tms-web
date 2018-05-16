@@ -171,7 +171,7 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="" label="操作" width="80" v-if="form.status==='0'">
+              <el-table-column prop="" label="操作" width="80" v-if="form.status==='0'||form.status==='1'||form.status==='2'">
                 <template slot-scope=" scope">
                   <perm label="tms-waybill-edit" class="opera-btn btn-line-block f-12">
                     <span @click.stop="deleteDetail(scope.row)">
