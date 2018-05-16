@@ -96,6 +96,8 @@
           completeStartTime: '',
           completeEndTime: ''
         };
+        this.createdTime = '';
+        this.expectedTime = '';
         this.$emit('search', this.searchCondition);
       },
       search() {

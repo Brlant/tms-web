@@ -173,10 +173,15 @@
               </el-table-column>
               <el-table-column prop="thermometerNoList" label="温度计列表">
                 <template slot-scope="scope">
-                  <span v-for="no in scope.row.thermometerNoList">
-                      {{no.thermometerNo}} <span
-                    v-if="scope.row.thermometerNoList.indexOf(no)!==scope.row.thermometerNoList.length-1">,</span>
-                  </span>
+                  <el-tag v-for="no in scope.row.thermometerNoList" :key="no.id" closable
+                          @close="deleteThermometer(no)">
+                    {{no.thermometerNo}}
+                  </el-tag>
+                  <!--<span v-for="no in scope.row.thermometerNoList">-->
+
+                  <!--{{no.thermometerNo}} <span-->
+                  <!--v-if="scope.row.thermometerNoList.indexOf(no)!==scope.row.thermometerNoList.length-1">,</span>-->
+                  <!--</span>-->
                 </template>
               </el-table-column>
               <el-table-column prop="codeList" label="追溯码">
@@ -225,7 +230,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import { OmsAttachment, TmsWayBill } from '@/resources';
+  import {OmsAttachment, TmsPack, TmsWayBill} from '@/resources';
   import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
   import OmsCol from '@dtop/dtop-web-common/packages/col';
@@ -282,6 +287,26 @@
       }
     },
     methods: {
+      deleteThermometer: function (no) {
+        // 删除温度计
+        TmsPack.deleteTemperature(no.id).then(res => {
+          this.$notify.success({
+            duration: 2000,
+            message: '删除温度计' + no.thermometerNo + '成功'
+          });
+          // 刷新页面信息
+          TmsWayBill.getOneTmsWayBill(this.form.id).then(res => {
+            this.form = res.data;
+            this.attachmentList = [];
+            this.getFileList();
+          });
+        }).catch(error => {
+          this.$notify.error({
+            duration: 2000,
+            message: error.response && error.response.data && error.response.data.msg || '删除温度计' + no.thermometerNo + '失败'
+          });
+        });
+      },
       formatStatusTitle(status, statusType) {
         let title = '';
         Object.keys(statusType).forEach(k => {
