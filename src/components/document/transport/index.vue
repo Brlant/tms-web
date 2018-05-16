@@ -183,7 +183,7 @@
                 </div>
                 <div style="padding-top: 2px">
                   <perm label="tms-waybill-cancel" class="opera-btn">
-                    <span @click.stop="cancelWayBill(item)" v-if="activeStatus===0||activeStatus==='0'||activeStatus===1||activeStatus==='1'">
+                    <span @click.stop="cancelWayBill(item)">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
