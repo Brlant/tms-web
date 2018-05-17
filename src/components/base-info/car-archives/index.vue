@@ -29,10 +29,20 @@
     overflow: auto;
   }
 
+  .title-spacing {
+    padding-left: 30px;
+    font-size: 16px
+  }
+
+  .app-content-view {
+    margin-left: 15px;
+    margin-right: 30px;
+  }
+
 </style>
 <template>
   <div>
-    <div class="d-table">
+    <div class=" d-table">
       <div class="d-table-left">
         <div>
           <h2 class="header">
@@ -115,7 +125,7 @@
             </h2>
             <div class="page-main-body min-row">
               <el-row>
-                <el-col :span="24" style="font-size: 16px;">
+                <el-col :span="24" class="title-spacing">
                   [ 主档信息 ]
                 </el-col>
               </el-row>
@@ -167,7 +177,7 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="24" style="font-size: 16px;">
+                <el-col :span="24" class="title-spacing">
                   [ 行驶证信息 ]
                 </el-col>
               </el-row>
@@ -199,7 +209,7 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="24" style="font-size: 16px;">
+                <el-col :span="24" class="title-spacing">
                   [ 保险信息 ]
                 </el-col>
               </el-row>
@@ -225,7 +235,7 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="24" style="font-size: 16px;">
+                <el-col :span="24" class="title-spacing">
                   [ 运输黑名单列表 ]
                   <div class="pull-right">
                     <span class="btn-search-toggle open" v-show="showSearch">

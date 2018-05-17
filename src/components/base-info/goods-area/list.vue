@@ -5,10 +5,15 @@
     display: block;
   }
 
+  .app-content-view {
+    margin-left: 15px;
+    margin-right: 30px;
+  }
+
 </style>
 <template>
   <div>
-    <div class="container d-table">
+    <div class="d-table">
       <div class="d-table-left">
         <div>
           <h2 class="header">
