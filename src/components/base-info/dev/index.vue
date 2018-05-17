@@ -220,7 +220,7 @@
           <div v-else-if="devDetailList.length===0">
             <div class="empty-info">暂无信息</div>
           </div>
-          <el-table v-else :data="devDetailList" class="header-list" border style="width: 98%"
+          <el-table v-else :data="devDetailList" class="header-list" border style="margin-right:-15px"
                     :header-row-class-name="'headerClass'" :maxHeight="tableHeight">
             <el-table-column prop="devNo" label="包装编号" min-width="150" :sortable="true"></el-table-column>
             <el-table-column prop="status" label="状态" min-width="80" :sortable="true">
