@@ -13,11 +13,16 @@
   height: calc(100% - 62px);
   overflow: hidden;
   min-height: 300px;
+
+  .el-scrollbar__wrap {
+    overflow-x: auto;
+    overflow-y: scroll;
+  }
 }
 
 .app-content-view {
-  margin-left: 15px;
-  margin-right: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .main-header, .sub-menu {
@@ -31,6 +36,11 @@
   height: 100%;
   .el-scrollbar__wrap {
     overflow-x: hidden;
+  }
+
+  .el-scrollbar__wrap {
+    overflow-x: auto;
+    overflow-y: scroll;
   }
 }
 

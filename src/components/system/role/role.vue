@@ -55,7 +55,7 @@
             class="status-num">{{item.num}}</span></div>
         </div>
       </div>
-      <div class="container d-table">
+      <div class=" d-table">
         <div class="d-table-left">
           <div>
             <h2 class="header">
@@ -240,7 +240,7 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = (height - 70) + 'px';
+        height = (height - 110) + 'px';
         return height;
       },
       user() {

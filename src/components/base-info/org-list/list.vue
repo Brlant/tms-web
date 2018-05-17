@@ -20,7 +20,7 @@
             class="status-num">{{item.num}}</span></div>
         </div>
       </div>
-      <div class="container d-table">
+      <div class=" d-table">
         <div class="d-table-right">
           <h2>
             <span class="pull-right">

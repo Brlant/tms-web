@@ -67,7 +67,7 @@
 </style>
 <template>
   <div>
-    <div class="container d-table">
+    <div class="d-table">
       <div class="d-table-left">
         <div>
           <h2 class="header">
@@ -220,7 +220,7 @@
           <div v-else-if="devDetailList.length===0">
             <div class="empty-info">暂无信息</div>
           </div>
-          <el-table v-else :data="devDetailList" class="header-list" border width="100%"
+          <el-table v-else :data="devDetailList" class="header-list" border width="90%"
                     :header-row-class-name="'headerClass'" :maxHeight="tableHeight">
             <el-table-column prop="devNo" label="包装编号" min-width="150" :sortable="true"></el-table-column>
             <el-table-column prop="status" label="状态" min-width="80" :sortable="true">
@@ -381,12 +381,12 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = (height - 27) + 'px';
+        height = (height - 70) + 'px';
         return height;
       },
       tableHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = height - 27 - 300;
+        height = height - 70 - 300;
         return height;
       },
       equipmentType: function () {

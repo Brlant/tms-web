@@ -17,7 +17,7 @@
     <!--class="status-num">{{item.num}}</span></div>-->
     <!--</div>-->
     <!--</div>-->
-    <div class="container d-table">
+    <div class=" d-table">
       <div class="d-table-left">
         <div>
           <h2 class="header">

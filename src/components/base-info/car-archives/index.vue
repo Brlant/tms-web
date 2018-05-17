@@ -34,11 +34,6 @@
     font-size: 16px
   }
 
-  .app-content-view {
-    margin-left: 15px;
-    margin-right: 30px;
-  }
-
 </style>
 <template>
   <div>
