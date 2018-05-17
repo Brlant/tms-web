@@ -99,11 +99,18 @@
                 <li v-for="(item,index) in showTypeList" class="list-item" @click="showType(item)"
                     :class="{'active':item.id==currentItem.id}">
                   <div>
-                    <perm label="tms-equipment-consumables-update">
-                      <a href="#" class="pull-right hover-show" @click.prevent="editType(currentItem)">
-                        <i class="el-icon-t-edit"></i>
-                      </a>
-                    </perm>
+                    <span class="hover-show">
+                      <perm label="tms-equipment-consumables-delete">
+                        <a href="#" class="pull-right hover-show " @click.prevent="removeType(item)">
+                          <i class="el-icon-t-delete"></i>
+                        </a>
+                      </perm>
+                      <perm label="tms-equipment-consumables-update">
+                        <a href="#" class="pull-right hover-show" @click.prevent="editType(currentItem)">
+                          <i class="el-icon-t-edit"></i>
+                        </a>
+                      </perm>
+                    </span>
                     {{item.name}}
                   </div>
                 </li>
@@ -418,6 +425,30 @@
       }
     },
     methods: {
+      removeType: function (item) {
+        this.$confirm('删除包装耗材"' + item.name + '"会一并删除该包装耗材下的设备信息,确认删除设备"' + item.name + '"?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          Dev.delete(item.id).then(() => {
+            let index = this.showTypeList.indexOf(item);
+            this.showTypeList.splice(index, 1);
+            this.devDetailList = [];
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '已成功删除包装耗材"' + item.name + '"'
+            });
+          }).catch(() => {
+            this.$notify.error({
+              duration: 2000,
+              message: '删除包装耗材"' + item.name + '"失败'
+            });
+          });
+        }).catch(() => {
+        });
+      },
       changeStatus: function (val) {
         let value = '';
         this.typeList.forEach(item => {
