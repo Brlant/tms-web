@@ -129,34 +129,36 @@
             </div>
             <div class="content content-sp">
               <el-row>
-                <el-col :span="8">
+                <el-col :span="6">
                   <oms-row label="名称" :span="5" v-show="currentItem.name">{{currentItem.name }}</oms-row>
                   <oms-row label="型号" :span="5" v-show="currentItem.model">{{ currentItem.model}}</oms-row>
-                  <oms-row label="品牌" :span="5" v-show="currentItem.brand">{{currentItem.brand }}</oms-row>
+                  <oms-row label="规格" :span="5" v-show="currentItem.specification">{{currentItem.specification }}</oms-row>
                 </el-col>
-                <el-col :span="8">
-                  <oms-row label="类型" :span="5" v-show="currentItem.type">
+                <el-col :span="6">
+                  <oms-row label="类型" v-show="currentItem.type">
                     <dict :dict-group="'equipmentType'" :dict-key="currentItem.type"/>
                   </oms-row>
-                  <oms-row label="规格" :span="5" v-show="currentItem.specification">{{currentItem.specification }}</oms-row>
+                  <oms-row label="品牌" v-show="currentItem.brand">{{currentItem.brand }}</oms-row>
+                  <oms-row label="单次计费价格" v-show="currentItem.rentPrice">
+                    <span v-show="currentItem.rentPrice">¥</span>{{currentItem.rentPrice}}
+                  </oms-row>
+                </el-col>
+                <el-col :span="6">
                   <oms-row label="体积" :span="5" v-show="currentItem.volume">{{currentItem.volume }} <span>m³</span></oms-row>
                   <oms-row label="重量" :span="5" v-show="currentItem.weight">{{currentItem.weight }} <span>kg</span></oms-row>
+                  <oms-row label="租赁计费价格"  v-show="currentItem.singlePrice"><span
+                    v-show="currentItem.singlePrice">¥</span>{{currentItem.singlePrice}}
+                  </oms-row>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
+                  <oms-row label="库存数" :span="5" v-show="currentItem.count">{{ currentItem.count}}</oms-row>
                   <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
                   <oms-row label="采购价格"  v-show="currentItem.purchasePrice"><span
                     v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice}}
                   </oms-row>
-                  <oms-row label="单次计费价格" v-show="currentItem.rentPrice">
-                    <span v-show="currentItem.rentPrice">¥</span>{{currentItem.rentPrice}}
-                  </oms-row>
-                  <oms-row label="租赁计费价格"  v-show="currentItem.singlePrice"><span
-                    v-show="currentItem.singlePrice">¥</span>{{currentItem.singlePrice}}
-                  </oms-row>
                   <oms-row label="销售价格" v-show="currentItem.salePrice">
                     <span v-show="currentItem.salePrice">¥</span>{{currentItem.salePrice}}
                   </oms-row>
-                  <oms-row label="库存数量" >{{ currentItem.count}}</oms-row>
                 </el-col>
               </el-row>
             </div>
@@ -381,12 +383,12 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = (height - 70) + 'px';
+        height = (height - 10) + 'px';
         return height;
       },
       tableHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = height - 70 - 300;
+        height = height - 10 - 300;
         return height;
       },
       equipmentType: function () {
