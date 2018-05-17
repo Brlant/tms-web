@@ -434,6 +434,7 @@
           Dev.delete(item.id).then(() => {
             let index = this.showTypeList.indexOf(item);
             this.showTypeList.splice(index, 1);
+            this.currentItem = {};
             this.devDetailList = [];
             this.$notify.success({
               duration: 2000,
