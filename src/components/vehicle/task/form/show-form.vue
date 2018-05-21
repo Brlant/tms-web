@@ -112,7 +112,7 @@
                 <el-col :span="20">
                   <el-form-item label="运单" style="margin-top: 20px;margin-bottom: 20px">
                     <el-select filterable remote placeholder="请输入运单号搜索运单" :remote-method="getTmsOrderList"
-                               :clearable="true" @click.native.once="getTmsOrderList('')"
+                               :clearable="true" @click.native="getTmsOrderList('')"
                                v-model="detailForm.list" popperClass="good-selects" multiple>
                       <el-option :value="bill.id" :key="bill.id" :label="bill.waybillNumber"
                                  v-for="bill in wayBillList">
@@ -303,6 +303,7 @@
           });
           this.doing = false;
           this.detailForm.list = [];
+          this.wayBillList = [];
           this.showAddFlag = !this.showAddFlag;
         }).catch(error => {
           this.$notify.error({
