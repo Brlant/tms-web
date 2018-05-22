@@ -277,6 +277,7 @@
           keyWord: this.typeTxt
         });
         GoodsArea.getPage(param).then(res => {
+          if (param.keyWord !== this.typeTxt) return;
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
             this.showTypeList = this.showTypeList.concat(res.data.list);

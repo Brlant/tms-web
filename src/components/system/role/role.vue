@@ -308,6 +308,7 @@
           objectId: 'tms-system'
         }, this.filters);
         Access.query(param).then(res => {
+          if (param.keyword !== this.typeTxt) return;
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
             this.showTypeList = this.showTypeList.concat(res.data.list);

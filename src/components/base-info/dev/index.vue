@@ -563,6 +563,7 @@
           deleteFlag: false
         });
         Dev.query(param).then(res => {
+          if (param.keyWord !== this.typeTxt) return;
           if (isContinue) {
             this.showTypeList = this.showTypeList.concat(res.data.list);
           } else {
