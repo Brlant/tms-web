@@ -196,7 +196,8 @@
                 <el-row>
                   <el-col :span="6">
                     <oms-form-row label="编号" :span="4">
-                      <oms-input type="text" v-model="searchCondition.devNo" placeholder="包装编号"></oms-input>
+                      <oms-input type="text" v-model="searchCondition.devNo" placeholder="包装编号"
+                                 @keyup.native.enter="searchInOrder"></oms-input>
                     </oms-form-row>
                   </el-col>
                   <el-col :span="10">
@@ -422,6 +423,15 @@
       },
       'searchCondition.status': function () {
         this.searchInOrder();
+      },
+      'validityTimes': function (val) {
+        if (val) {
+          this.searchInOrder();
+        } else {
+          this.searchCondition.validityStartDate = '';
+          this.searchCondition.validityEndDate = '';
+          this.resetSearchForm();
+        }
       }
     },
     methods: {
