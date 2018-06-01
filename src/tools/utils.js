@@ -1,4 +1,5 @@
 import {Address} from '@dtop/dtop-web-common';
+import moment from 'moment';
 
 export default {
   address: Address.value,
@@ -260,7 +261,7 @@ export default {
     return this.formatTime(times[index], str);
   },
   formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
-    return time ? this.$moment(time).format(str) : '';
+    return time ? moment(time).format(str) : '';
   }
 
 };
