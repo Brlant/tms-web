@@ -254,5 +254,13 @@ export default {
         callback();
       }
     };
+  },
+  formatTimeAry(times, index, str) {
+    if (!times) return;
+    return this.formatTime(times[index], str);
+  },
+  formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
+    return time ? this.$moment(time).format(str) : '';
   }
+
 };

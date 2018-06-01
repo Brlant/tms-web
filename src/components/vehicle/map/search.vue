@@ -97,6 +97,7 @@
 </template>
 <script>
   import {BaseInfo} from '@/resources';
+  import utils from '@/tools/utils';
 
   export default {
     data: function () {
@@ -169,16 +170,8 @@
         this.$emit('search', this.searchCondition);
       },
       search () {
-        if (!this.deliveryDate[0]) {
-          this.searchCondition.startTime = '';
-        } else {
-          this.searchCondition.startTime = this.$moment(this.deliveryDate[0]).format('YYYY-MM-DD');
-        }
-        if (!this.deliveryDate[1]) {
-          this.searchCondition.endTime = '';
-        } else {
-          this.searchCondition.endTime = this.$moment(this.deliveryDate[1]).format('YYYY-MM-DD');
-        }
+        this.searchCondition.startTime = utils.formatTimeAry(this.deliveryDate, 0, 'YYYY-MM-DD');
+        this.searchCondition.endTime = utils.formatTimeAry(this.deliveryDate, 1, 'YYYY-MM-DD');
         this.$emit('search', this.searchCondition);
       },
       isShow (val) {

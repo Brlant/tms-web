@@ -43,7 +43,8 @@
   </search-template>
 </template>
 <script>
-  import {BaseInfo, User} from '@/resources';
+  import {User} from '@/resources';
+  import utils from '@/tools/utils';
 
   export default {
     data: function () {
@@ -101,26 +102,10 @@
         this.$emit('search', this.searchCondition);
       },
       search() {
-        if (!this.createdTime[0]) {
-          this.searchCondition.createStartTime = '';
-        } else {
-          this.searchCondition.createStartTime = this.$moment(this.createdTime[0]).format('YYYY-MM-DD HH:mm:ss');
-        }
-        if (!this.createdTime[1]) {
-          this.searchCondition.createEndTime = '';
-        } else {
-          this.searchCondition.createEndTime = this.$moment(this.createdTime[1]).format('YYYY-MM-DD HH:mm:ss');
-        }
-        if (!this.expectedTime[0]) {
-          this.searchCondition.completeStartTime = '';
-        } else {
-          this.searchCondition.completeStartTime = this.$moment(this.expectedTime[0]).format('YYYY-MM-DD HH:mm:ss');
-        }
-        if (!this.expectedTime[1]) {
-          this.searchCondition.completeEndTime = '';
-        } else {
-          this.searchCondition.completeEndTime = this.$moment(this.expectedTime[1]).format('YYYY-MM-DD HH:mm:ss');
-        }
+        this.searchCondition.createStartTime = utils.formatTimeAry(this.createdTime, 0, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.createEndTime = utils.formatTimeAry(this.createdTime, 1, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.completeStartTime = utils.formatTimeAry(this.expectedTime, 0, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.completeEndTime = utils.formatTimeAry(this.expectedTime, 1, 'YYYY-MM-DD HH:mm:ss');
         this.$emit('search', this.searchCondition);
       },
       formatTime(date) {
