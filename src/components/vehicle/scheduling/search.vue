@@ -25,13 +25,15 @@
           </el-col>
           <el-col :span="10">
             <oms-form-row label="创建时间" :span="4">
-                <el-date-picker v-model="createdTime" type="datetimerange" placeholder="请选择">
+              <el-date-picker v-model="createdTime" :default-time="['00:00:00', '23:59:59']" type="datetimerange"
+                              placeholder="请选择">
                 </el-date-picker>
             </oms-form-row>
           </el-col>
           <el-col :span="10">
             <oms-form-row label="结束时间" :span="4">
-              <el-date-picker v-model="expectedTime" type="datetimerange" placeholder="请选择">
+              <el-date-picker v-model="expectedTime" :default-time="['00:00:00', '23:59:59']" type="datetimerange"
+                              placeholder="请选择">
               </el-date-picker>
             </oms-form-row>
           </el-col>
@@ -43,7 +45,7 @@
   </search-template>
 </template>
 <script>
-  import {BaseInfo, User} from '@/resources';
+  import { User } from '@/resources';
 
   export default {
     data: function () {
