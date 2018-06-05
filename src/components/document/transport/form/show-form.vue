@@ -174,7 +174,12 @@
               <el-table-column prop="thermometerNoList" label="温度计列表">
                 <template slot-scope="scope">
                   <el-tag v-for="no in scope.row.thermometerNoList" :key="no.id" closable
-                          @close="deleteThermometer(no)" v-if="form.status!=='3'">
+                          @close="deleteThermometer(no)" v-if="form.status!=='3'"
+                          v-show="isShow('tms-waybill-temperature-delete')">
+                    {{no.thermometerNo}}
+                  </el-tag>
+                  <el-tag v-for="no in scope.row.thermometerNoList" :key="no.id" v-if="form.status!=='3'"
+                          v-show="!isShow('tms-waybill-temperature-delete')">
                     {{no.thermometerNo}}
                   </el-tag>
                   <el-tag v-for="no in scope.row.thermometerNoList" :key="no.id" v-if="form.status==='3'">
@@ -292,6 +297,10 @@
       }
     },
     methods: {
+      isShow: function (title) {
+        if (title === 'show') return true;
+        return this.$store.state.permissions.indexOf(title) !== -1;
+      },
       deleteThermometer: function (no) {
         // 删除温度计
         TmsPack.deleteTemperature(no.id).then(res => {
