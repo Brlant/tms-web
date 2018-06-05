@@ -174,7 +174,10 @@
               <el-table-column prop="thermometerNoList" label="温度计列表">
                 <template slot-scope="scope">
                   <el-tag v-for="no in scope.row.thermometerNoList" :key="no.id" closable
-                          @close="deleteThermometer(no)">
+                          @close="deleteThermometer(no)" v-if="form.status!=='3'">
+                    {{no.thermometerNo}}
+                  </el-tag>
+                  <el-tag v-for="no in scope.row.thermometerNoList" :key="no.id" v-if="form.status==='3'">
                     {{no.thermometerNo}}
                   </el-tag>
                   <!--<span v-for="no in scope.row.thermometerNoList">-->
@@ -235,9 +238,11 @@
   import attachmentLists from '../../../common/attachment/attachmentList';
   import OmsCol from '@dtop/dtop-web-common/packages/col';
   import utils from '@/tools/utils';
+  import Perm from '@/components/common/perm';
 
   export default {
     components: {
+      Perm,
       OmsCol,
       TwoColumn, MapPath, attachmentLists},
     data() {
