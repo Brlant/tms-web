@@ -23,6 +23,7 @@
 </template>
 <script>
   import { AMapManager } from 'vue-amap';
+  import MapMixin from '@/mixins/mapMixin';
 
   export default {
     props: {
@@ -40,6 +41,7 @@
       },
       showBigMap: Function
     },
+    mixins: [MapMixin],
     data () {
       return {
         waybills: []
@@ -69,6 +71,7 @@
               })
             };
           }) || [];
+
           this.$nextTick(() => {
             this.waybills.forEach(i => {
               this.drawPath(i);
@@ -107,6 +110,8 @@
           });
           pathSimplifierIns.setData([{points: item.points}]);
           item.points.length && pathSimplifierIns.setSelectedPathIndex(0);
+          // 添加工具
+          this.addMapTools(item.amapManager._map);
           // const nav = pathSimplifierIns.createPathNavigator(0, {
           //   loop: false,
           //   speed: 5000,

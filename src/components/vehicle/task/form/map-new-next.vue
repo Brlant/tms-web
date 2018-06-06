@@ -27,6 +27,8 @@
   </div>
 </template>
 <script>
+  import MapMixin from '@/mixins/mapMixin';
+
   export default {
     props: {
       waybillList: {
@@ -48,6 +50,7 @@
         default: 'taskMap'
       }
     },
+    mixins: [MapMixin],
     data: function () {
       return {
         center: [121.5273285, 31.21515044],
@@ -90,6 +93,8 @@
         if (!val.length || !this.$refs.taskMap) return;
         let map = this.$refs.taskMap.$$getInstance();
         if (!map) return;
+        // 添加工具
+        this.addMapTools(map);
         map.clearMap();
         val.forEach((i, index) => {
           // 画点

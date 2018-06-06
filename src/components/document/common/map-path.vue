@@ -14,6 +14,7 @@
 <script>
   import { AMapManager } from 'vue-amap';
   import CarImg from '@/assets/img/car.png';
+  import MapMixin from '@/mixins/mapMixin';
 
   export default {
     props: {
@@ -31,6 +32,7 @@
         default: 'pathMap'
       }
     },
+    mixins: [MapMixin],
     data () {
       return {
         center: [121.5273285, 31.21515044],
@@ -114,6 +116,7 @@
           const pathSimplifierIns = this.pathSimplifierIns ? this.pathSimplifierIns : this.createPathSimplifier(PathSimplifier);
           pathSimplifierIns.setData([{points}]);
           pathSimplifierIns.setSelectedPathIndex(0);
+          this.addMapTools();
           // this.createPathNavigator(PathSimplifier, pathSimplifierIns);
         });
       }
