@@ -42,7 +42,7 @@
 </style>
 <template>
   <el-card class="box-card main-card-box">
-    <div class="logo-part clearfix"><img src="../../assets/img/logo_pic.png"> OMS</div>
+    <div class="logo-part clearfix"><img src="../../assets/img/logo_pic.png">TMS运输管理</div>
     <div style="padding:0 20px">
       <h3 class="text-center">重置密码</h3>
       <div class="login-menu">
