@@ -225,7 +225,10 @@
               {{pageSets[8].name}}</h3>
           </div>
           <div class="content">
-            <el-form-item label="原因:">
+            <el-form-item label="中止原因:">
+              <dict :dict-group="'waybillEndReason'" :dict-key="form.suspendReason"></dict>
+            </el-form-item>
+            <el-form-item label="评估结论:">
               {{form.qualityInspection}}
             </el-form-item>
             <el-form-item label="质量评估:">

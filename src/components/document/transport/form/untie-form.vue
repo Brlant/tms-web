@@ -22,16 +22,17 @@
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
     <template slot="title">中止运单</template>
-    <template slot="btn">
-      <el-button plain @click="save('form')" :disabled="doing">保存</el-button>
-    </template>
     <template slot="content">
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
         <el-form-item label="中止原因" prop="reason">
-          <el-select v-model="form.reason" placeholder="请选择发运方式" :clearable="true">
+          <el-select v-model="form.reason" placeholder="请选择中止原因" :clearable="true">
             <el-option :label="item.label" :value="item.key" :key="item.key"
                        v-for="item in waybillEndReasonList"></el-option>
           </el-select>
+          <el-form-item label-width="100px" style="padding-top: 30px">
+            <el-button type="primary" @click="save('form')" native-type="submit" :disabled="doing">保存</el-button>
+            <el-button @click="doClose">取消</el-button>
+          </el-form-item>
         </el-form-item>
       </el-form>
     </template>
@@ -78,6 +79,9 @@
       }
     },
     methods: {
+      doClose: function () {
+        this.$emit('right-close');
+      },
       selectTab(item) {
         this.currentTab = item;
       },
@@ -96,11 +100,13 @@
               });
               this.$emit('change', this.form);
               this.$emit('right-close');
+              this.doing = false;
             }).catch(error => {
               this.$notify.error({
                 duration: 2000,
                 message: error.response && error.response.data && error.response.data.msg || '中止运单失败'
               });
+              this.doing = false;
             });
           }
         });
