@@ -27,9 +27,9 @@
     </template>
     <template slot="content">
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
-        <el-form-item label="是否合格" prop="flag">
+        <el-form-item label="是否合格" prop="qualityFlag">
           <el-switch active-text="合格" inactive-text="不合格" active-color="#13ce66" inactive-color="#ff4949"
-                     v-model="form.flag"></el-switch>
+                     v-model="form.qualityFlag"></el-switch>
         </el-form-item>
         <el-form-item label="评估结论" prop="remark">
           <oms-input v-model="form.remark" type="textarea" placeholder="请输入评估结论"></oms-input>
@@ -62,7 +62,7 @@
           remark: [
             {required: true, message: '请输入评估结论', trigger: 'blur'}
           ],
-          flag: [
+          qualityFlag: [
             {required: true, message: '请选择是否合格', trigger: 'blur'}
           ]
         },
@@ -88,7 +88,7 @@
       formItem: function (val) {
         if (val.id) {
           this.form = val;
-          this.form.flag = false;
+          this.form.qualityFlag = false;
           this.getFileList();
         }
       }
@@ -124,7 +124,12 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              TmsWayBill.assessmentTmsWayBill(this.form.id, this.form).then(res => {
+              let tempForm = {
+                flag: this.form.qualityFlag,
+                remark: this.form.remark,
+                attachmentIdList: this.form.attachmentIdList
+              };
+              TmsWayBill.assessmentTmsWayBill(this.form.id, tempForm).then(res => {
                 this.$notify.success({
                   name: '成功',
                   message: '保存运单"' + this.form.waybillNumber + '"评估结果成功'
