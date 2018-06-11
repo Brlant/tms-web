@@ -83,18 +83,6 @@
     data: function () {
       return {
         rules: {
-          name: [
-            {required: true, message: '请输入名称', trigger: 'blur'}
-          ],
-          model: [
-            {required: true, message: '请输入型号', trigger: 'blur'}
-          ],
-          brand: [
-            {required: true, message: '请输入包装品牌', trigger: 'blur'}
-          ],
-          specification: [
-            {required: true, message: '请输入规格', trigger: 'blur'}
-          ],
           type: [
             {required: true, message: '请选择包装类型', trigger: 'change'}
           ],
@@ -103,18 +91,6 @@
           ],
           weight: [
             {required: true, message: '请输入重量', trigger: 'blur'}
-          ],
-          purchasePrice: [
-            {required: true, message: '请输入采购价格', trigger: 'blur'}
-          ],
-          rentPrice: [
-            {required: true, message: '请输入单次租赁价格', trigger: 'blur'}
-          ],
-          singlePrice: [
-            {required: true, message: '请输入单次计费价格', trigger: 'blur'}
-          ],
-          salePrice: [
-            {required: true, message: '请输入销售价格', trigger: 'blur'}
           ]
         },
         form: this.formItem,
