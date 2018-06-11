@@ -21,13 +21,13 @@
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
-    <template slot="title">终止运单</template>
+    <template slot="title">中止运单</template>
     <template slot="btn">
       <el-button plain @click="save('form')" :disabled="doing">保存</el-button>
     </template>
     <template slot="content">
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
-        <el-form-item label="终止原因" prop="reason">
+        <el-form-item label="中止原因" prop="reason">
           <el-select v-model="form.reason" placeholder="请选择发运方式" :clearable="true">
             <el-option :label="item.label" :value="item.key" :key="item.key"
                        v-for="item in waybillEndReasonList"></el-option>
@@ -55,7 +55,7 @@
         doing: false,
         rules: {
           reason: [
-            {required: true, message: '请选择运单终止原因', trigger: 'change'}
+            {required: true, message: '请选择运单中止原因', trigger: 'change'}
           ]
         },
         customerList: [],

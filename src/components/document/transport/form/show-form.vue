@@ -225,7 +225,10 @@
               {{pageSets[8].name}}</h3>
           </div>
           <div class="content">
-            <el-form-item label="评估结果:" v-show="form.qualityFlag">
+            <el-form-item label="原因:">
+              {{form.qualityInspection}}
+            </el-form-item>
+            <el-form-item label="质量评估:">
               {{isQualityFlag(form.qualityFlag)}}
             </el-form-item>
             <el-form-item label="附件">

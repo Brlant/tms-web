@@ -88,6 +88,7 @@
       formItem: function (val) {
         if (val.id) {
           this.form = val;
+          this.form.flag = false;
           this.getFileList();
         }
       }
