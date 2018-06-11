@@ -232,8 +232,8 @@
               {{isQualityFlag(form.qualityFlag)}}
             </el-form-item>
             <el-form-item label="附件">
-              <attachment-lists :attachmentIdList="attachmentIdList" :objectId="form.id"
-                                :objectType="'assessment-waybill'" :permission="'show'" style="padding-top: 5px"/>
+              <attachment-lists :attachmentIdList="assessAttachmentIdList" :objectId="form.id"
+                                :objectType="'waybill-check'" :permission="'show'" style="padding-top: 5px"/>
             </el-form-item>
           </div>
         </div>
@@ -391,7 +391,7 @@
       },
       getAssessFileList: function () {
         if (!this.form.id) return;
-        OmsAttachment.queryOneAttachmentList(this.form.id, 'assessment-waybill').then(res => {
+        OmsAttachment.queryOneAttachmentList(this.form.id, 'waybill-check').then(res => {
           this.assattachmentList = res.data;
           let ids = [];
           this.assattachmentList.forEach(file => {

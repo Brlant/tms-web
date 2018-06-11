@@ -36,7 +36,7 @@
         </el-form-item>
         <el-form-item label="附件">
           <oms-upload :fileList="attachmentList" @change="changeFiles"
-                      :formData="{ objectId: form.id, objectType: 'assessment-waybill'}"></oms-upload>
+                      :formData="{ objectId: form.id, objectType: 'waybill-check'}"></oms-upload>
         </el-form-item>
       </el-form>
     </template>
@@ -88,7 +88,9 @@
       formItem: function (val) {
         if (val.id) {
           this.form = val;
-          this.form.qualityFlag = false;
+          if (!val.qualityFlag) {
+            this.form.qualityFlag = false;
+          }
           this.getFileList();
         }
       }
@@ -103,7 +105,7 @@
       },
       getFileList: function () {
         if (!this.form.id) return;
-        OmsAttachment.queryOneAttachmentList(this.form.id, 'waybill').then(res => {
+        OmsAttachment.queryOneAttachmentList(this.form.id, 'waybill-check').then(res => {
           this.attachmentList = res.data;
           let ids = [];
           this.attachmentList.forEach(file => {
@@ -125,7 +127,7 @@
               type: 'warning'
             }).then(() => {
               let tempForm = {
-                flag: this.form.qualityFlag,
+                flag: this.form.qualityFlag === null ? false : this.form.qualityFlag,
                 remark: this.form.remark,
                 attachmentIdList: this.form.attachmentIdList
               };
