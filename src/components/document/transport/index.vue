@@ -9,6 +9,10 @@
       transform: translateY(-50%);
     }
   }
+
+  .order-list-status-right {
+    justify-content: flex-end;
+  }
 </style>
 <template>
   <div class="order-page">
@@ -57,7 +61,33 @@
       </template>
     </search-part>
 
-    <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus"/>
+    <!--<status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus"/>-->
+    <el-row>
+      <el-col :span="16">
+        <div class="order-list-status " style="margin-bottom:20px">
+          <div class="status-item" v-show="key < 7"
+               :class="{'active':key==activeStatus}"
+               v-for="(item,key) in orderType"
+               @click="changeStatus(item,key)">
+            <div class="status-bg" :class="['b_color_'+key]"></div>
+            <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{item.title}}<span
+              class="status-num">{{item.num}}</span></div>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="order-list-status  order-list-status-right" style="margin-bottom:20px">
+          <div class="status-item" v-show="key > 6"
+               :class="{'active':key==activeStatus }"
+               v-for="(item,key) in orderType"
+               @click="changeStatus(item,key)">
+            <div class="status-bg" :class="['b_color_'+key]"></div>
+            <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{item.title}}<span
+              class="status-num">{{item.num}}</span></div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
 
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
@@ -203,7 +233,21 @@
                         <i class="el-icon-t-edit"></i>
                       </a>签收
                     </span>
-                  </perm>
+                </perm>
+                <perm label="tms-waybill-quality-inspection" class="opera-btn">
+                    <span @click.stop="assessmentWayBill(item)" v-if="activeStatus===7||activeStatus==='7'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-search"></i>
+                      </a>评估
+                    </span>
+                </perm>
+                <perm label="tms-waybill-suspend" class="opera-btn">
+                    <span @click.stop="untieWayBill(item)" v-if="activeStatus===4||activeStatus==='4'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-delete"></i>
+                      </a>中止
+                    </span>
+                </perm>
               </div>
             </el-col>
           </el-row>
@@ -228,6 +272,12 @@
     <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentSignPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
+    <page-right :show="showAssessmentIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentAssessmentPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
+    </page-right>
+    <page-right :show="showUntieIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentUntiePart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
+    </page-right>
     <page-right :show="showConfirmIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentConfirmPart" :checkList="checkListPara" @right-close="resetRightBox" @change="submit"/>
     </page-right>
@@ -251,6 +301,8 @@
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
+  import untieForm from './form/untie-form';
+  import assessmentForm from './form/assessment-form';
   import StatusMixin from '@/mixins/statusMixin';
   import confirmForm from './form/confirm-form';
   import autoForm from './form/auto-form';
@@ -271,15 +323,19 @@
         showIndex: -1,
         showInfoIndex: -1,
         showSignIndex: -1,
+        showAssessmentIndex: -1,
         showConfirmIndex: -1,
         showAutoIndex: -1,
         showBatchAutoIndex: -1,
+        showUntieIndex: -1,
         currentPart: null,
         currentInfoPart: null,
         currentSignPart: null,
         currentConfirmPart: null,
         currentAutoPart: null,
+        currentUntiePart: null,
         currentBatchAutoPart: null,
+        currentAssessmentPart: null,
         dialogComponents: {
           0: addForm
         },
@@ -288,6 +344,12 @@
         },
         dialogSignComponents: {
           0: signForm
+        },
+        dialogAssessmentComponents: {
+          0: assessmentForm
+        },
+        dialogUntieComponents: {
+          0: untieForm
         },
         dialogConfirmComponents: {
           0: confirmForm
@@ -555,6 +617,20 @@
           this.form = JSON.parse(JSON.stringify(item));
         });
       },
+      assessmentWayBill: function (item) {
+        this.showAssessmentIndex = 0;
+        this.currentAssessmentPart = this.dialogAssessmentComponents[0];
+        this.$nextTick(() => {
+          this.form = JSON.parse(JSON.stringify(item));
+        });
+      },
+      untieWayBill: function (item) {
+        this.showUntieIndex = 0;
+        this.currentUntiePart = this.dialogUntieComponents[0];
+        this.$nextTick(() => {
+          this.form = JSON.parse(JSON.stringify(item));
+        });
+      },
       cancelWayBill: function (item) {
         this.$confirm('确认取消运单"' + item.waybillNumber + '"?', '', {
           confirmButtonText: '确定',
@@ -594,14 +670,20 @@
         this.checkList = [];
         this.checkListPara = [];
       },
+      changeStatus: function (item, key) {// 订单分类改变
+        this.activeStatus = key;
+        this.filters.status = item.status;
+      },
       resetRightBox () {
         this.showIndex = -1;
         this.showInfoIndex = -1;
         this.shoWayBillPart = false;
         this.showSignIndex = -1;
+        this.showAssessmentIndex = -1;
         this.showConfirmIndex = -1;
         this.showAutoIndex = -1;
         this.showBatchAutoIndex = -1;
+        this.showUntieIndex = -1;
         this.$router.push('/document/transport/list');
       },
       getTmsWayBillPage: function (pageNo, isContinue = false) {
@@ -641,6 +723,8 @@
           this.orderType[4].num = data['pend-sign'];
           this.orderType[5].num = data['complete'];
           this.orderType[6].num = data['canceled'];
+          this.orderType[7].num = data['pend-check'];
+          this.orderType[8].num = data['suspend'];
         });
       },
       showPart (index) {

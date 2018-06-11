@@ -218,11 +218,27 @@
             </el-form-item>
           </div>
         </div>
-        <div class="form-header-part">
+        <div class="form-header-part" v-show="form.status==='6'">
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[8].key === currentTab.key}">
               {{pageSets[8].name}}</h3>
+          </div>
+          <div class="content">
+            <el-form-item label="评估结果:" v-show="form.qualityFlag">
+              {{isQualityFlag(form.qualityFlag)}}
+            </el-form-item>
+            <el-form-item label="附件">
+              <attachment-lists :attachmentIdList="attachmentIdList" :objectId="form.id"
+                                :objectType="'assessment-waybill'" :permission="'show'" style="padding-top: 5px"/>
+            </el-form-item>
+          </div>
+        </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[9].key === currentTab.key}">
+              {{pageSets[9].name}}</h3>
             <span @click="showBigMap(formItem)" class="des-btn">
                <a href="#" class="btn-circle" @click.prevent="">
                  <i class="el-icon-zoom-in"></i></a>查看大图
@@ -264,7 +280,8 @@
           {name: '货品列表', key: 5},
           {name: '保温箱列表', key: 6},
           {name: '签收信息', key: 7},
-          {name: '派送信息', key: 8}
+          {name: '评估结果', key: 8},
+          {name: '派送信息', key: 9}
         ],
         orderType: utils.wayBillType,
         currentTab: {},
@@ -280,7 +297,10 @@
           ]
         },
         rules: {},
-        attachmentList: []
+        attachmentList: [],
+        attachmentIdList: [],
+        assessAttachmentIdList: [],
+        assessAttachmentList: []
       };
     },
     computed: {},
@@ -292,11 +312,24 @@
             this.form = res.data;
             this.attachmentList = [];
             this.getFileList();
+            if (this.form.status === '6') {
+              this.assessAttachmentList = [];
+              this.getAssessFileList();
+            }
           });
         }
       }
     },
     methods: {
+      isQualityFlag: function (value) {
+        let title = '';
+        if (value) {
+          title = '合格';
+        } else {
+          title = '不合格';
+        }
+        return title;
+      },
       isShow: function (title) {
         if (title === 'show') return true;
         return this.$store.state.permissions.indexOf(title) !== -1;
@@ -313,6 +346,10 @@
             this.form = res.data;
             this.attachmentList = [];
             this.getFileList();
+            if (this.form.status === '6') {
+              this.assessAttachmentList = [];
+              this.getAssessFileList();
+            }
           });
         }).catch(error => {
           this.$notify.error({
@@ -347,6 +384,17 @@
             ids.push(file.attachmentId);
           });
           this.form.attachmentIdList = ids;
+        });
+      },
+      getAssessFileList: function () {
+        if (!this.form.id) return;
+        OmsAttachment.queryOneAttachmentList(this.form.id, 'assessment-waybill').then(res => {
+          this.assattachmentList = res.data;
+          let ids = [];
+          this.assattachmentList.forEach(file => {
+            ids.push(file.attachmentId);
+          });
+          this.form.assessAttachmentIdList = ids;
         });
       },
       changeFiles: function (fileList) {

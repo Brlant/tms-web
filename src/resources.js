@@ -100,6 +100,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   cancelWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/cancel', {});
   },
+  untieWayBill: (id, obj) => {
+    return http.put('/tms-waybill/' + id + '/suspend', obj);
+  },
   confirmWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/confirm', {});
   },
@@ -108,6 +111,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   },
   signTmsWayBill: (id, obj) => {
     return http.put('/tms-waybill/' + id + '/sign', obj);
+  },
+  assessmentTmsWayBill: (id, obj) => {
+    return http.put('/tms-waybill/' + id + '/quality-inspection', obj);
   },
   autoConfirmWayBill: (params) => {
     return http.put('/tms-waybill/batch/confirm', params);
