@@ -12,7 +12,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "@dtop/dtop-web-common": "git+https://gitee.com/tinygroup/dtop-web-common.git",
+    "@dtop/dtop-web-common": "git+https://git.sinopharm-bio.com/sinopharm-bio/dtop-web-common.git",
     "axios": "^0.16.1",
     "babel-polyfill": "^6.26.0",
     "element-ui": "^2.3.9",
