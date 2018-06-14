@@ -83,6 +83,9 @@ export const TmsOrder = resource('/tms-order', http, {
 export const TmsPack = resource('/tms-pack', http, {
   deleteTemperature: (id) => {
     return http.delete('/tms-pack/temperature/' + id, {});
+  },
+  deleteDevBox: (id) => {
+    return http.delete('/tms-pack/box/' + id, {});
   }
 });
 

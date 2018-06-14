@@ -170,6 +170,20 @@
           <div class="content">
             <el-table :data="form.incubatorDtoList" border style="width: 100%">
               <el-table-column prop="boxNo" label="保温箱编号" width="200">
+                <template slot-scope="scope">
+                  <el-tag :key="scope.row.id" closable
+                          @close="deleteDevBox(scope.row)" v-if="form.status!=='3'"
+                          v-show="isShow('tms-waybill-temperature-delete')">
+                    {{scope.row.boxNo}}
+                  </el-tag>
+                  <el-tag :key="scope.row.id" v-if="form.status!=='3'"
+                          v-show="!isShow('tms-waybill-temperature-delete')">
+                    {{scope.row.boxNo}}
+                  </el-tag>
+                  <el-tag :key="scope.row.id" v-if="form.status==='3'">
+                    {{scope.row.boxNo}}
+                  </el-tag>
+                </template>
               </el-table-column>
               <el-table-column prop="thermometerNoList" label="温度计列表">
                 <template slot-scope="scope">
@@ -339,6 +353,39 @@
       isShow: function (title) {
         if (title === 'show') return true;
         return this.$store.state.permissions.indexOf(title) !== -1;
+      },
+      deleteDevBox: function (item) {
+        // 删除温度计
+        this.$confirm('确认删除保温箱"' + item.boxNo + '"的数据?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TmsPack.deleteDevBox(item.id).then(res => {
+            this.$notify.success({
+              duration: 2000,
+              message: '删除保温箱' + item.boxNo + '成功'
+            });
+            // 刷新页面信息
+            TmsWayBill.getOneTmsWayBill(this.form.id).then(res => {
+              this.form = res.data;
+              this.attachmentList = [];
+              this.getFileList();
+              if (this.form.status === '6') {
+                this.assessAttachmentList = [];
+                this.getAssessFileList();
+              }
+            });
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.data.msg || '删除保温箱' + item.devNo + '失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+
       },
       deleteThermometer: function (no) {
         // 删除温度计
