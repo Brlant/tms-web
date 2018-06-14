@@ -22,12 +22,12 @@
     <el-form-item label="规格">
       <oms-input model="text" v-model="form.specification" placeholder="请输入型号"></oms-input>
     </el-form-item>
-    <el-form-item label="体积">
+    <el-form-item label="体积" prop="volume">
       <oms-input type="number" v-model.number="form.volume" min="0" placeholder="请输入包装体积">
         <template slot="append">m³</template>
       </oms-input>
     </el-form-item>
-    <el-form-item label="重量">
+    <el-form-item label="重量" prop="weight">
       <oms-input type="number" v-model.number="form.weight" min="0" placeholder="请输入包装重量">
         <template slot="append">kg</template>
       </oms-input>
@@ -83,32 +83,14 @@
     data: function () {
       return {
         rules: {
-          name: [
-            {required: true, message: '请输入名称', trigger: 'blur'}
-          ],
-          model: [
-            {required: true, message: '请输入型号', trigger: 'blur'}
-          ],
-          brand: [
-            {required: true, message: '请输入包装品牌', trigger: 'blur'}
-          ],
-          specification: [
-            {required: true, message: '请输入规格', trigger: 'blur'}
-          ],
           type: [
             {required: true, message: '请选择包装类型', trigger: 'change'}
           ],
-          purchasePrice: [
-            {required: true, message: '请输入采购价格', trigger: 'blur'}
+          volume: [
+            {required: true, message: '请输入体积', trigger: 'blur'}
           ],
-          rentPrice: [
-            {required: true, message: '请输入单次租赁价格', trigger: 'blur'}
-          ],
-          singlePrice: [
-            {required: true, message: '请输入单次计费价格', trigger: 'blur'}
-          ],
-          salePrice: [
-            {required: true, message: '请输入销售价格', trigger: 'blur'}
+          weight: [
+            {required: true, message: '请输入重量', trigger: 'blur'}
           ]
         },
         form: this.formItem,
