@@ -251,7 +251,7 @@
               <div>
                 <oms-row label="附件" :span="4">
                   <attachment-lists :attachmentIdList="assessAttachmentIdList" :objectId="form.id"
-                                    :objectType="'waybill-check'" :permission="'show'"/>
+                                    :objectType="'waybill-check'" :permission="'show'" style="padding-bottom: 10px"/>
                 </oms-row>
               </div>
             </el-col>
