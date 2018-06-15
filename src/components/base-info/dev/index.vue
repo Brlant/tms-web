@@ -101,12 +101,14 @@
                   <div>
                     <span class="hover-show">
                       <perm label="tms-equipment-consumables-delete">
-                        <a href="#" class="pull-right hover-show " @click.prevent="removeType(item)">
+                        <a href="#" class="pull-right "
+                           @click.prevent="removeType(item)">
                           <i class="el-icon-t-delete"></i>
                         </a>
                       </perm>
                       <perm label="tms-equipment-consumables-update">
-                        <a href="#" class="pull-right hover-show" @click.prevent="editType(currentItem)">
+                        <a href="#" class="pull-right "
+                           @click.prevent="editType(currentItem)">
                           <i class="el-icon-t-edit"></i>
                         </a>
                       </perm>

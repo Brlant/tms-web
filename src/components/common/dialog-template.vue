@@ -60,7 +60,7 @@
   export default {
     name: 'dialogTemplate',
     props: {
-      pageSets: Array,
+      pageSets: [Array, Object],
       indexClass: {
         type: String,
         default: 'index-tit'

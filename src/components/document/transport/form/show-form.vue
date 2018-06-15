@@ -171,39 +171,32 @@
             <el-table :data="form.incubatorDtoList" border style="width: 100%">
               <el-table-column prop="boxNo" label="保温箱编号" width="200">
                 <template slot-scope="scope">
-                  <el-tag :key="scope.row.id" closable
-                          @close="deleteDevBox(scope.row)" v-if="form.status!=='3'"
+                  <el-tag closable @close="deleteDevBox(scope.row)" v-if="form.status!=='3'"
                           v-show="isShow('tms-waybill-temperature-delete')">
                     {{scope.row.boxNo}}
                   </el-tag>
-                  <el-tag :key="scope.row.id" v-if="form.status!=='3'"
-                          v-show="!isShow('tms-waybill-temperature-delete')">
+                  <el-tag v-if="form.status!=='3'" v-show="!isShow('tms-waybill-temperature-delete')">
                     {{scope.row.boxNo}}
                   </el-tag>
-                  <el-tag :key="scope.row.id" v-if="form.status==='3'">
+                  <el-tag v-if="form.status==='3'">
                     {{scope.row.boxNo}}
                   </el-tag>
                 </template>
               </el-table-column>
               <el-table-column prop="thermometerNoList" label="温度计列表">
                 <template slot-scope="scope">
-                  <el-tag v-for="no in scope.row.thermometerNoList" :key="no.id" closable
+                  <el-tag v-for="no in scope.row.thermometerNoList" closable
                           @close="deleteThermometer(no)" v-if="form.status!=='3'"
                           v-show="isShow('tms-waybill-temperature-delete')">
                     {{no.thermometerNo}}
                   </el-tag>
-                  <el-tag v-for="no in scope.row.thermometerNoList" :key="no.id" v-if="form.status!=='3'"
+                  <el-tag v-for="no in scope.row.thermometerNoList" v-if="form.status!=='3'"
                           v-show="!isShow('tms-waybill-temperature-delete')">
                     {{no.thermometerNo}}
                   </el-tag>
-                  <el-tag v-for="no in scope.row.thermometerNoList" :key="no.id" v-if="form.status==='3'">
+                  <el-tag v-for="no in scope.row.thermometerNoList" v-if="form.status==='3'">
                     {{no.thermometerNo}}
                   </el-tag>
-                  <!--<span v-for="no in scope.row.thermometerNoList">-->
-
-                  <!--{{no.thermometerNo}} <span-->
-                  <!--v-if="scope.row.thermometerNoList.indexOf(no)!==scope.row.thermometerNoList.length-1">,</span>-->
-                  <!--</span>-->
                 </template>
               </el-table-column>
               <el-table-column prop="codeList" label="追溯码">
@@ -232,7 +225,7 @@
             </el-form-item>
           </div>
         </div>
-        <div class="form-header-part" v-show="form.status==='6'">
+        <div class="form-header-part" v-if="form.status==='6'&&form.qualityInspection">
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[8].key === currentTab.key}">
@@ -242,26 +235,27 @@
             <el-col :span="24">
               <div>
                 <oms-row label="中止原因" :span="4">
-                  <slot>
-                    <dict :dict-group="'waybillEndReason'" :dict-key="form.suspendReason"></dict>
-                  </slot>
+                  <slot>{{form.suspendReason}}</slot>
                 </oms-row>
               </div>
             </el-col>
-            <oms-col label="质量评估" rowSpan="8" :value="form.qualityFlag">
-              {{isQualityFlag(form.qualityFlag)}}
+            <oms-col label="质量评估" :rowSpan="8" :value="form.qualityFlag">
+              <el-tag :type="form.qualityFlag?'success':'danger'">
+                {{isQualityFlag(form.qualityFlag)}}
+              </el-tag>
             </oms-col>
-            <oms-col label="评估结论" rowSpan="8" :value="form.qualityInspection">
+            <oms-col label="评估结论" :rowSpan="8" :value="form.qualityInspection">
               {{form.qualityInspection}}
             </oms-col>
             <el-col :span="24">
               <div>
                 <oms-row label="附件" :span="4">
                   <attachment-lists :attachmentIdList="assessAttachmentIdList" :objectId="form.id"
-                                    :objectType="'waybill-check'" :permission="'show'" style="padding-top: 5px"/>
+                                    :objectType="'waybill-check'" :permission="'show'"/>
                 </oms-row>
               </div>
             </el-col>
+            <div class="hr mb-10 clearfix"></div>
           </div>
         </div>
         <div class="form-header-part">
@@ -323,31 +317,31 @@
     },
     computed: {
       pageSets() {
-        if (this.form.suspendReason) {
-          return [
-            {name: '基本信息', key: 0},
-            {name: '发货信息', key: 1},
-            {name: '收货信息', key: 2},
-            {name: '货品信息', key: 3},
-            {name: '其他信息', key: 4},
-            {name: '货品列表', key: 5},
-            {name: '保温箱列表', key: 6},
-            {name: '签收信息', key: 7},
-            {name: '质量评估', key: 8},
-            {name: '派送信息', key: 9}
-          ];
+        if (this.form.qualityInspection) {
+          return {
+            0: {name: '基本信息', key: 0},
+            1: {name: '发货信息', key: 1},
+            2: {name: '收货信息', key: 2},
+            3: {name: '货品信息', key: 3},
+            4: {name: '其他信息', key: 4},
+            5: {name: '货品列表', key: 5},
+            6: {name: '保温箱列表', key: 6},
+            7: {name: '签收信息', key: 7},
+            8: {name: '质量评估', key: 8},
+            9: {name: '派送信息', key: 9}
+          };
         } else {
-          return [
-            {name: '基本信息', key: 0},
-            {name: '发货信息', key: 1},
-            {name: '收货信息', key: 2},
-            {name: '货品信息', key: 3},
-            {name: '其他信息', key: 4},
-            {name: '货品列表', key: 5},
-            {name: '保温箱列表', key: 6},
-            {name: '签收信息', key: 7},
-            {name: '派送信息', key: 9}
-          ];
+          return {
+            0: {name: '基本信息', key: 0},
+            1: {name: '发货信息', key: 1},
+            2: {name: '收货信息', key: 2},
+            3: {name: '货品信息', key: 3},
+            4: {name: '其他信息', key: 4},
+            5: {name: '货品列表', key: 5},
+            6: {name: '保温箱列表', key: 6},
+            7: {name: '签收信息', key: 7},
+            9: {name: '派送信息', key: 9}
+          };
         }
       }
     },
