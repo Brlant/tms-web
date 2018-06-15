@@ -2,8 +2,8 @@
   .list-item {
     position: relative;
     line-height: 20px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding-top: 0;
+    padding-bottom: 0;
     border: 0;
     .download-link {
       display: none;
@@ -27,7 +27,7 @@
   </ul>
 </template>
 <script>
-  import {OmsAttachment} from '@/resources';
+  import { OmsAttachment } from '@/resources';
 
   export default {
     data() {
