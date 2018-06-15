@@ -171,31 +171,17 @@
             <el-table :data="form.incubatorDtoList" border style="width: 100%">
               <el-table-column prop="boxNo" label="保温箱编号" width="200">
                 <template slot-scope="scope">
-                  <el-tag closable @close="deleteDevBox(scope.row)" :key="scope.row.boxNo"
-                          v-if="form.status!=='3'&&isShow('tms-waybill-temperature-delete')">
-                    {{scope.row.boxNo}}
-                  </el-tag>
-                  <el-tag v-if="form.status!=='3'&&!isShow('tms-waybill-temperature-delete')" :key="scope.row.boxNo">
-                    {{scope.row.boxNo}}
-                  </el-tag>
-                  <el-tag v-if="form.status==='3'" :key="scope.row.boxNo">
+                  <el-tag :closable="form.status!=='3'&&isShow('tms-waybill-temperature-delete')"
+                          @close="deleteDevBox(scope.row)" :key="scope.row.boxNo">
                     {{scope.row.boxNo}}
                   </el-tag>
                 </template>
               </el-table-column>
               <el-table-column prop="thermometerNoList" label="温度计列表">
                 <template slot-scope="scope">
-                  <el-tag v-for="no in scope.row.thermometerNoList" closable
-                          :key="no.thermometerNo"
-                          @close="deleteThermometer(no)"
-                          v-if="form.status!=='3'&&isShow('tms-waybill-temperature-delete')">
-                    {{no.thermometerNo}}
-                  </el-tag>
-                  <el-tag v-for="no in scope.row.thermometerNoList" :key="no.thermometerNo"
-                          v-if="form.status!=='3'&&!isShow('tms-waybill-temperature-delete')">
-                    {{no.thermometerNo}}
-                  </el-tag>
-                  <el-tag v-for="no in scope.row.thermometerNoList" :key="no.thermometerNo" v-if="form.status==='3'">
+                  <el-tag v-for="no in scope.row.thermometerNoList"
+                          :closable="form.status!=='3'&&isShow('tms-waybill-temperature-delete')"
+                          :key="no.thermometerNo" @close="deleteThermometer(no)">
                     {{no.thermometerNo}}
                   </el-tag>
                 </template>
