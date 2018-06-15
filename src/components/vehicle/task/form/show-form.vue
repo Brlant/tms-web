@@ -200,17 +200,65 @@
             <task-map :waybillList="form.waybillList"></task-map>
           </div>
         </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">
+              {{pageSets[3].name}}</h3>
+          </div>
+          <div class="content">
+            <div v-if="loadingLog">
+              <oms-loading :loading="loadingLog"></oms-loading>
+            </div>
+            <div v-else>
+              <div class="order-cost-part">
+                <i class="el-icon-time"></i> 出车任务消耗时间:
+                <oms-cost-time :fDate="form.createTime" :tDate="form.taskEndTime"></oms-cost-time>
+                <el-tag v-if="form.taskEndTime" type="success">已结束</el-tag>
+                <el-tag v-if="!form.taskEndTime" type="success">进行中</el-tag>
+              </div>
+              <Timeline>
+                <template v-for="(log,index) in orderLogList">
+                  <TimelineItem color="green" v-if="log.showDate">
+                    <i class="iconfont icon-home" slot="dot"></i>
+                    <h3><span>{{log.dateWeek}}</span></h3>
+                  </TimelineItem>
+                  <TimelineItem color="grey">
+                    <el-row>
+                      <el-col :span="8">
+                        <div>{{log.time|time}}</div>
+                      </el-col>
+                      <el-col :span="16"><strong>{{log.title}}</strong>
+                        <el-tooltip class="item" effect="dark"
+                                    :content="log.operatorOrgName ? log.operatorOrgName : '平台用户' "
+                                    placement="right" v-show="log.operatorName">
+                          <span class="font-gray">[{{log.operatorName}}]</span>
+                        </el-tooltip>
+                      </el-col>
+                    </el-row>
+                  </TimelineItem>
+                </template>
+              </Timeline>
+              <div class="order-cost-part" v-if="orderLogList.length>0">
+                <i class="el-icon-time"></i> 出车任务消耗时间:
+                <oms-cost-time :fDate="form.createTime" :tDate="form.taskEndTime"></oms-cost-time>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </el-form>
     </template>
   </dialog-template>
 </template>
 <script>
-  import {TransportTask} from '@/resources';
+  import {TmsLog, TransportTask} from '@/resources';
   import TaskMap from './map-new-next';
   import utils from '@/tools/utils';
+  import OmsCostTime from '@/components/common/timeCost.vue';
 
   export default {
-    components: {TaskMap},
+    components: {TaskMap, OmsCostTime},
     data () {
       return {
         span: 7,
@@ -219,7 +267,8 @@
         pageSets: [
           {name: '任务信息', key: 0},
           {name: '运单明细', key: 1},
-          {name: '派送地图', key: 2}
+          {name: '派送地图', key: 2},
+          {name: '操作日志', key: 3}
         ],
         currentTab: {},
         form: {
@@ -233,6 +282,8 @@
             }
           ]
         },
+        orderLogList: [],
+        loadingLog: false,
         orderType: utils.carTaskType,
         rules: {},
         showAddFlag: false,
@@ -252,6 +303,8 @@
         if (val.id) {
           TransportTask.getOneTransportTask(val.id).then(res => {
             this.form = res.data;
+            // 查询日志信息
+            this.queryLog(val.id);
             this.form.tallyClerkDtoList.forEach(val => {
               val.index = this.form.tallyClerkDtoList.indexOf(val) + 1;
             });
@@ -263,6 +316,22 @@
       }
     },
     methods: {
+      queryLog: function (id) {
+        if (!id) return;
+        this.loadingLog = true;
+        let params = Object.assign({}, {
+          pageNo: 1,
+          pageSize: 100,
+          objId: id,
+          objType: 'tms-task'
+        });
+        TmsLog.queryLog(params).then(res => {
+          this.orderLogList = res.data.list;
+          this.loadingLog = false;
+        }).catch(error => {
+          this.loadingLog = false;
+        });
+      },
       formatStatusTitle(status, statusType) {
         let title = '';
         Object.keys(statusType).forEach(k => {

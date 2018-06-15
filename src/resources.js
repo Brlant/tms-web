@@ -57,6 +57,13 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+// tmsLog 对象
+export const TmsLog = resource('/tms-log', http, {
+  queryLog: (params) => {
+    return http.get('/tms-log/' + params.objId + '/type/' + params.objType, {params});
+  }
+});
+
 // tmsOrder 对象
 export const TmsOrder = resource('/tms-order', http, {
   queryStateNum: (params) => {

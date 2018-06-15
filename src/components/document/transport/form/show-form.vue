@@ -257,24 +257,72 @@
             <map-path :formItem="formItem"></map-path>
           </div>
         </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[10].key === currentTab.key}">
+              {{pageSets[10].name}}</h3>
+          </div>
+          <div class="content">
+            <div v-if="loadingLog">
+              <oms-loading :loading="loadingLog"></oms-loading>
+            </div>
+            <div v-else>
+              <div class="order-cost-part">
+                <i class="el-icon-time"></i> 运单消耗时间:
+                <oms-cost-time :fDate="form.createTime" :tDate="form.waybillCompleteTime"></oms-cost-time>
+                <el-tag v-if="form.waybillCompleteTime" type="success">已结束</el-tag>
+                <el-tag v-if="!form.waybillCompleteTime" type="success">进行中</el-tag>
+              </div>
+              <Timeline>
+                <template v-for="(log,index) in orderLogList">
+                  <TimelineItem color="green" v-if="log.showDate">
+                    <i class="iconfont icon-home" slot="dot"></i>
+                    <h3><span>{{log.dateWeek}}</span></h3>
+                  </TimelineItem>
+                  <TimelineItem color="grey">
+                    <el-row>
+                      <el-col :span="8">
+                        <div>{{log.time|time}}</div>
+                      </el-col>
+                      <el-col :span="16"><strong>{{log.title}}</strong>
+                        <el-tooltip class="item" effect="dark"
+                                    :content="log.operatorOrgName ? log.operatorOrgName : '平台用户' "
+                                    placement="right" v-show="log.operatorName">
+                          <span class="font-gray">[{{log.operatorName}}]</span>
+                        </el-tooltip>
+                      </el-col>
+                    </el-row>
+                  </TimelineItem>
+                </template>
+              </Timeline>
+              <div class="order-cost-part" v-if="orderLogList.length>0">
+                <i class="el-icon-time"></i> 运单消耗时间:
+                <oms-cost-time :fDate="form.createTime" :tDate="form.waybillCompleteTime"></oms-cost-time>
+              </div>
+            </div>
+          </div>
+        </div>
       </el-form>
     </template>
   </dialog-template>
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {OmsAttachment, TmsPack, TmsWayBill} from '@/resources';
+  import {OmsAttachment, TmsLog, TmsPack, TmsWayBill} from '@/resources';
   import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
   import OmsCol from '@dtop/dtop-web-common/packages/col';
   import utils from '@/tools/utils';
   import Perm from '@/components/common/perm';
+  import OmsCostTime from '@/components/common/timeCost.vue';
 
   export default {
     components: {
       Perm,
       OmsCol,
-      TwoColumn, MapPath, attachmentLists},
+      TwoColumn, MapPath, attachmentLists, OmsCostTime
+    },
     data() {
       return {
         span: 7,
@@ -294,6 +342,8 @@
           ]
         },
         rules: {},
+        orderLogList: [],
+        loadingLog: false,
         attachmentList: [],
         attachmentIdList: [],
         assessAttachmentIdList: [],
@@ -313,7 +363,8 @@
             6: {name: '保温箱列表', key: 6},
             7: {name: '签收信息', key: 7},
             8: {name: '质量评估', key: 8},
-            9: {name: '派送信息', key: 9}
+            9: {name: '派送信息', key: 9},
+            10: {name: '操作日志', key: 10}
           };
         } else {
           return {
@@ -325,7 +376,8 @@
             5: {name: '货品列表', key: 5},
             6: {name: '保温箱列表', key: 6},
             7: {name: '签收信息', key: 7},
-            9: {name: '派送信息', key: 9}
+            9: {name: '派送信息', key: 9},
+            10: {name: '操作日志', key: 10}
           };
         }
       }
@@ -338,6 +390,8 @@
             this.form = res.data;
             this.attachmentList = [];
             this.getFileList();
+            // 查询日志信息
+            this.queryLog(val.id);
             if (this.form.status === '6') {
               this.assessAttachmentList = [];
               this.getAssessFileList();
@@ -347,6 +401,22 @@
       }
     },
     methods: {
+      queryLog: function (id) {
+        if (!id) return;
+        this.loadingLog = true;
+        let params = Object.assign({}, {
+          pageNo: 1,
+          pageSize: 100,
+          objId: id,
+          objType: 'tms-waybill'
+        });
+        TmsLog.queryLog(params).then(res => {
+          this.orderLogList = res.data.list;
+          this.loadingLog = false;
+        }).catch(error => {
+          this.loadingLog = false;
+        });
+      },
       isQualityFlag: function (value) {
         let title = '';
         if (value) {
