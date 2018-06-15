@@ -239,12 +239,10 @@
                 </oms-row>
               </div>
             </el-col>
-            <oms-col label="质量评估" :rowSpan="8" :value="form.qualityFlag">
+            <oms-col label="评估结论" :rowSpan="8" :value="form.qualityFlag">
               <el-tag :type="form.qualityFlag?'success':'danger'">
                 {{isQualityFlag(form.qualityFlag)}}
               </el-tag>
-            </oms-col>
-            <oms-col label="评估结论" :rowSpan="8" :value="form.qualityInspection">
               {{form.qualityInspection}}
             </oms-col>
             <el-col :span="24">
