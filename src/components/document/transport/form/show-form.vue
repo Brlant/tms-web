@@ -239,19 +239,29 @@
               {{pageSets[8].name}}</h3>
           </div>
           <div class="content">
-            <el-form-item label="中止原因:">
-              <dict :dict-group="'waybillEndReason'" :dict-key="form.suspendReason"></dict>
-            </el-form-item>
-            <el-form-item label="评估结论:">
-              {{form.qualityInspection}}
-            </el-form-item>
-            <el-form-item label="质量评估:">
+            <el-col :span="24">
+              <div>
+                <oms-row label="中止原因" :span="4">
+                  <slot>
+                    <dict :dict-group="'waybillEndReason'" :dict-key="form.suspendReason"></dict>
+                  </slot>
+                </oms-row>
+              </div>
+            </el-col>
+            <oms-col label="质量评估" rowSpan="8" :value="form.qualityFlag">
               {{isQualityFlag(form.qualityFlag)}}
-            </el-form-item>
-            <el-form-item label="附件">
-              <attachment-lists :attachmentIdList="assessAttachmentIdList" :objectId="form.id"
-                                :objectType="'waybill-check'" :permission="'show'" style="padding-top: 5px"/>
-            </el-form-item>
+            </oms-col>
+            <oms-col label="评估结论" rowSpan="8" :value="form.qualityInspection">
+              {{form.qualityInspection}}
+            </oms-col>
+            <el-col :span="24">
+              <div>
+                <oms-row label="附件" :span="4">
+                  <attachment-lists :attachmentIdList="assessAttachmentIdList" :objectId="form.id"
+                                    :objectType="'waybill-check'" :permission="'show'" style="padding-top: 5px"/>
+                </oms-row>
+              </div>
+            </el-col>
           </div>
         </div>
         <div class="form-header-part">
@@ -291,18 +301,6 @@
         span: 7,
         list: [],
         times: [],
-        pageSets: [
-          {name: '基本信息', key: 0},
-          {name: '发货信息', key: 1},
-          {name: '收货信息', key: 2},
-          {name: '货品信息', key: 3},
-          {name: '其他信息', key: 4},
-          {name: '货品列表', key: 5},
-          {name: '保温箱列表', key: 6},
-          {name: '签收信息', key: 7},
-          {name: '评估结果', key: 8},
-          {name: '派送信息', key: 9}
-        ],
         orderType: utils.wayBillType,
         currentTab: {},
         form: {
@@ -323,7 +321,36 @@
         assessAttachmentList: []
       };
     },
-    computed: {},
+    computed: {
+      pageSets() {
+        if (this.form.suspendReason) {
+          return [
+            {name: '基本信息', key: 0},
+            {name: '发货信息', key: 1},
+            {name: '收货信息', key: 2},
+            {name: '货品信息', key: 3},
+            {name: '其他信息', key: 4},
+            {name: '货品列表', key: 5},
+            {name: '保温箱列表', key: 6},
+            {name: '签收信息', key: 7},
+            {name: '质量评估', key: 8},
+            {name: '派送信息', key: 9}
+          ];
+        } else {
+          return [
+            {name: '基本信息', key: 0},
+            {name: '发货信息', key: 1},
+            {name: '收货信息', key: 2},
+            {name: '货品信息', key: 3},
+            {name: '其他信息', key: 4},
+            {name: '货品列表', key: 5},
+            {name: '保温箱列表', key: 6},
+            {name: '签收信息', key: 7},
+            {name: '派送信息', key: 9}
+          ];
+        }
+      }
+    },
     props: ['formItem', 'showBigMap'],
     watch: {
       formItem: function (val) {
