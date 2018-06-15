@@ -188,8 +188,7 @@
                   <el-tag v-for="no in scope.row.thermometerNoList" closable
                           :key="no.thermometerNo"
                           @close="deleteThermometer(no)"
-                          v-if="form.status!=='3'&&isShow('tms-waybill-temperature-delete')"
-                          v-show="">
+                          v-if="form.status!=='3'&&isShow('tms-waybill-temperature-delete')">
                     {{no.thermometerNo}}
                   </el-tag>
                   <el-tag v-for="no in scope.row.thermometerNoList" :key="no.thermometerNo"
