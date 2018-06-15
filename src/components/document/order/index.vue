@@ -21,7 +21,8 @@
           </el-button>
         </perm>
         <perm label="tms-order-generate">
-          <el-button plain size="small" @click="autoCreateWayBill" v-if="activeStatus===0||activeStatus==='0'">
+          <el-button plain size="small" @click="autoCreateWayBill"
+                     v-if="(activeStatus===0||activeStatus==='0')&&(!checkList||checkList.length==0)">
             <f-a class="icon-small" name="wave"></f-a>
             自动生成运单
           </el-button>
@@ -191,7 +192,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { TmsOrder } from '@/resources';
+  import {TmsOrder} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import splitForm from './form/split-order.vue';
