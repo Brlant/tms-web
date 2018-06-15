@@ -1,19 +1,31 @@
-<style lang="scss" scoped>
-  $labelWidth: 180px;
-  .content-part {
-    .content-left {
-      width: $labelWidth;
-    }
-    .content-right {
-      > h3 {
-        left: $labelWidth;
+<style lang="scss">
+  .dialog-template {
+    $width: 180px;
+    &.content-part {
+      .content-left {
+        width: $width;
       }
-      left: $labelWidth;
+      .content-right {
+        > h3 {
+          left: $width;
+          margin-bottom: 0;
+        }
+        left: $width;
+        padding-top: 65px;
+        padding-right: 0;
+      }
+    }
+    .dialog-template_scroll {
+      overflow: hidden;
+      height: 100%;
+    }
+    .dialog-template_scroll_content {
+      padding-right: 30px;
     }
   }
 </style>
 <template>
-  <div class="content-part">
+  <div class="content-part dialog-template">
     <div class="content-left">
       <h2 class="clearfix right-title">
         <slot name="title"></slot>
@@ -27,13 +39,24 @@
         <slot name="btn"></slot>
       </div>
     </div>
-    <div class="content-right content-padding" @scroll="setIndex">
+    <div class="content-right content-padding">
       <h3>{{title}}</h3>
-      <slot name="content"></slot>
+      <el-scrollbar tag="div" class="dialog-template_scroll" @scroll="throttle">
+        <div class="dialog-template_scroll_content">
+          <slot name="content"></slot>
+          <div class="btn-save" :style="{'padding-left': `${btnSavePosition}px`}">
+            <slot name="btnSave"></slot>
+          </div>
+        </div>
+      </el-scrollbar>
+
     </div>
   </div>
 </template>
 <script>
+  const wait = 500;
+  let canRun = true;
+
   export default {
     name: 'dialogTemplate',
     props: {
@@ -41,51 +64,84 @@
       indexClass: {
         type: String,
         default: 'index-tit'
+      },
+      btnSavePosition: {
+        type: Number,
+        default: 80
       }
     },
     data () {
       return {
         index: 0,
         title: '',
-        title_ele: [],
-        titleOffsetTop: []
+        isClickLeftTab: false,
+        titleAry: null,
+        dialogWarp: null
       };
     },
     computed: {
-      isShow () {
+      showIndex () {
         return this.$parent.$parent.show;
       }
     },
     watch: {
-      isShow (val) {
-        if (!val) {
+      showIndex (val) {
+        if (!val && this.pageSets) {
           this.selectTab(this.pageSets[0], 0);
         }
+        this.titleAry = null;
+        this.dialogWarp = null;
       }
     },
     methods: {
+      setTitleAry () {
+        if (this.titleAry) return;
+        this.titleAry = this.$el.querySelectorAll('.' + this.indexClass);
+      },
+      getDialogWarp () {
+        if (this.dialogWarp) return;
+        this.dialogWarp = this.$el.getElementsByClassName('el-scrollbar__wrap')[0];
+      },
       selectTab (item, key) {
         this.index = key;
         this.title = item.name;
+        this.isClickLeftTab = true;
         this.setScrollTop(key);
         this.$emit('selectTab', item);
       },
+      // 节流
+      throttle (e) {
+        this.setTitleAry();
+        if (!canRun) return;
+        canRun = false;
+        setTimeout(() => {
+          this.setIndex(e);
+          canRun = true;
+        }, wait);
+      },
       setIndex (e) {
-        let event = e || window.event;
-        let target = event.target || e.srcElement;
-
-        !this.title_ele.length && (this.title_ele = target.getElementsByClassName(this.indexClass));
-        if (!this.titleOffsetTop.length) {
-          for (let i = 0; i < this.title_ele.length; i++) {
-            this.titleOffsetTop.push(this.title_ele[i].offsetTop - 65);
-          }
-        }
-        let scrollTop = target.scrollHeight - target.clientHeight;
-        if (target.scrollTop === scrollTop) {
+        if (this.isClickLeftTab) {
+          this.isClickLeftTab = false;
           return;
         }
-        for (let i = 0; i < this.titleOffsetTop.length; i++) {
-          if (target.scrollTop > this.titleOffsetTop[i] - 20) {
+        let event = e || window.event;
+        let target = event.target || e.srcElement;
+        let {titleAry} = this;
+        if (!titleAry) return;
+        let scrollTop = target.scrollHeight - target.clientHeight;
+        // 滚到底处理
+        if (scrollTop - target.scrollTop < 20) {
+          let index = titleAry.length - 1;
+          this.index = index;
+          this.title = this.pageSets[index].name;
+          this.$emit('selectTab', this.pageSets[index]);
+          return;
+        }
+        for (let i = 0; i < titleAry.length; i++) {
+          if (!titleAry[i]) return;
+          let curOffsetTop = titleAry[i].offsetTop - 65;
+          let nexOffsetTop = i < titleAry.length - 1 ? titleAry[i + 1].offsetTop - 65 : 0;
+          if (target.scrollTop > curOffsetTop && target.scrollTop < nexOffsetTop) {
             this.index = i;
             this.title = this.pageSets[i].name;
             this.$emit('selectTab', this.pageSets[i]);
@@ -93,11 +149,14 @@
         }
       },
       setScrollTop (index) {
-        !this.title_ele.length && (this.title_ele = this.$el.getElementsByClassName(this.indexClass));
-        let ele_warp = this.$el.getElementsByClassName('content-right')[0];
-        let scrollTop = ele_warp.scrollHeight - ele_warp.clientHeight;
-        let otp = this.title_ele[index].offsetTop - 65;
-        ele_warp && (ele_warp.scrollTop = scrollTop > otp ? otp : scrollTop);
+        this.setTitleAry();
+        this.getDialogWarp();
+        let {titleAry, dialogWarp} = this;
+        if (!titleAry || !dialogWarp) return;
+        let scrollTop = dialogWarp.scrollHeight - dialogWarp.clientHeight;
+        if (!titleAry[index]) return;
+        let otp = titleAry[index].offsetTop - 65;
+        dialogWarp && (dialogWarp.scrollTop = scrollTop > otp ? otp : scrollTop);
       }
     }
   };
