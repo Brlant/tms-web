@@ -188,9 +188,9 @@
               </el-table-column>
               <el-table-column prop="codeList" label="追溯码">
                 <template slot-scope="scope">
-                 <span v-for="code in scope.row.codeList">
-                      {{code}} <span v-if="scope.row.codeList.indexOf(code)!==scope.row.codeList.length-1">,</span>
-                  </span>
+                  <div v-for="code in scope.row.codeList">
+                    {{code}}
+                  </div>
                 </template>
               </el-table-column>
             </el-table>
