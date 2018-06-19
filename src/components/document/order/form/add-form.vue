@@ -242,14 +242,14 @@
                 <el-date-picker
                   v-model="form.pickUpTime"
                   type="date"
-                  placeholder="选择提货时间" format="yyyy-MM-dd" @change="formatPickUpTime">
+                  placeholder="选择提货时间" format="yyyy-MM-dd" value-format="timestamp">
                 </el-date-picker>
               </el-form-item>
               <el-form-item slot="right" label="送达时限">
               <el-date-picker
                 v-model="form.deliveryTime"
                 type="date"
-                placeholder="选择送达时限" format="yyyy-MM-dd" @change="formatDeliveryTime">
+                placeholder="选择送达时限" format="yyyy-MM-dd" value-format="timestamp">
               </el-date-picker>
             </el-form-item>
             </two-column>
@@ -374,14 +374,6 @@
         let index = this.form.goodsList.indexOf(item);
         // 移除删除项
         this.form.goodsList.splice(index, 1);
-      },
-      formatDeliveryTime: function (date) {
-        if (!date) return '';
-        this.form.deliveryTime = this.$moment(date).format('YYYY-MM-DD');
-      },
-      formatPickUpTime: function (date) {
-        if (!date) return '';
-        this.form.pickUpTime = this.$moment(date).format('YYYY-MM-DD');
       },
       setWholeBoxCount: function (value) {
         if (!value || isNaN(value)) return;

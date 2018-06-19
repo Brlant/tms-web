@@ -145,7 +145,7 @@
                 <el-date-picker
                   v-model="form.carDetailDto.createDate"
                   type="date"
-                  placeholder="选择车辆注册日期" format="yyyy-MM-dd" @change="formatCreateDate">
+                  placeholder="选择车辆注册日期" format="yyyy-MM-dd" value-format="timestamp">
                 </el-date-picker>
               </el-form-item>
             </two-column>
@@ -154,14 +154,14 @@
                 <el-date-picker
                   v-model="form.carDetailDto.issuingDate"
                   type="date"
-                  placeholder="选择车辆发证日期" format="yyyy-MM-dd" @change="formatIssuingDate">
+                  placeholder="选择车辆发证日期" format="yyyy-MM-dd" value-format="timestamp">
                 </el-date-picker>
               </el-form-item>
               <el-form-item slot="right" label="检验有效期">
                 <el-date-picker
                   v-model="form.carDetailDto.checkValidityDate"
                   type="date"
-                  placeholder="选择检验有效期" format="yyyy-MM-dd" @change="formatCheckValidityDate">
+                  placeholder="选择检验有效期" format="yyyy-MM-dd" value-format="timestamp">
                 </el-date-picker>
               </el-form-item>
             </two-column>
@@ -170,7 +170,7 @@
                 <el-date-picker
                   v-model="form.carDetailDto.forciblyDiscardedDay"
                   type="date"
-                  placeholder="选择强制报废日" format="yyyy-MM-dd" @change="formatForciblyDiscardedDay">
+                  placeholder="选择强制报废日" format="yyyy-MM-dd" value-format="timestamp">
                 </el-date-picker>
               </el-form-item>
             </two-column>
@@ -195,7 +195,7 @@
                 <el-date-picker
                   v-model="form.carDetailDto.ctaliEndDate"
                   type="date"
-                  placeholder="选择交强险截止日期" format="yyyy-MM-dd" @change="formatCtaliEndDate">
+                  placeholder="选择交强险截止日期" format="yyyy-MM-dd" value-format="timestamp">
                 </el-date-picker>
               </el-form-item>
             </two-column>
@@ -208,7 +208,7 @@
                 <el-date-picker
                   v-model="form.carDetailDto.thirdPartyInsuranceEndDate"
                   type="date"
-                  placeholder="选择第三责任险截止日期" format="yyyy-MM-dd" @change="formatThirdPartyInsuranceEndDate">
+                  placeholder="选择第三责任险截止日期" format="yyyy-MM-dd" value-format="timestamp">
                 </el-date-picker>
               </el-form-item>
             </two-column>
@@ -407,30 +407,6 @@
       },
       selectTab(item) {
         this.currentTab = item;
-      },
-      formatThirdPartyInsuranceEndDate: function (date) {
-        if (!date) return '';
-        this.form.carDetailDto.thirdPartyInsuranceEndDate = this.$moment(date).format('YYYY-MM-DD');
-      },
-      formatCtaliEndDate: function (date) {
-        if (!date) return '';
-        this.form.carDetailDto.ctaliEndDate = this.$moment(date).format('YYYY-MM-DD');
-      },
-      formatCheckValidityDate: function (date) {
-        if (!date) return '';
-        this.form.carDetailDto.checkValidityDate = this.$moment(date).format('YYYY-MM-DD');
-      },
-      formatForciblyDiscardedDay: function (date) {
-        if (!date) return '';
-        this.form.carDetailDto.forciblyDiscardedDay = this.$moment(date).format('YYYY-MM-DD');
-      },
-      formatIssuingDate: function (date) {
-        if (!date) return '';
-        this.form.carDetailDto.issuingDate = this.$moment(date).format('YYYY-MM-DD');
-      },
-      formatCreateDate: function (date) {
-        if (!date) return '';
-        this.form.carDetailDto.createDate = this.$moment(date).format('YYYY-MM-DD');
       },
       calculateVolume: function (item) {
         if (item.carriageLength && item.carriageWidth && item.carriageHeight) {
