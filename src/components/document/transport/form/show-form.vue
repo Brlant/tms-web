@@ -275,14 +275,17 @@
                 <el-tag v-if="!form.waybillCompleteTime" type="success">进行中</el-tag>
               </div>
               <Timeline>
-                <template v-for="(log,index) in orderLogList" style="padding-left: 5px">
+                <template v-for="(log,index) in orderLogList">
+                  <TimelineItem color="green" v-if="log.showDate">
+                    <i class="iconfont icon-home" slot="dot"></i>
+                    <h3><span>{{log.dateWeek}}</span></h3>
+                  </TimelineItem>
                   <TimelineItem color="grey">
-                    <i class="tiny-timeline-item-head" slot="dot"></i>
                     <el-row class="tiny-timeline-content">
-                      <el-col :span="8">
-                        <div>{{log.time|time}}</div>
+                      <el-col :span="4">
+                        <div>{{log.time}}</div>
                       </el-col>
-                      <el-col :span="16"><strong>{{log.title}}</strong>
+                      <el-col :span="18"><strong>{{log.title}}</strong>
                         <el-tooltip class="item" effect="dark"
                                     :content="log.operatorOrgName ? log.operatorOrgName : '平台用户' "
                                     placement="right" v-show="log.operatorName">
@@ -408,6 +411,18 @@
           objType: 'tms-waybill'
         });
         TmsLog.queryLog(params).then(res => {
+          let dateArr = [];
+          res.data.list.forEach(item => {
+            let time = this.$moment(item.time);// .format('YYYY年MM月DD日/dddd');
+            item.dateWeek = time.format('YYYY年MM月DD日 dddd');
+            item.time = time.format('HH:mm:ss');
+            if (dateArr.includes(item.dateWeek)) {
+              item.showDate = false;
+            } else {
+              dateArr.push(item.dateWeek);
+              item.showDate = true;
+            }
+          });
           this.orderLogList = res.data.list;
           this.loadingLog = false;
         }).catch(error => {
