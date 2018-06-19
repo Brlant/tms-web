@@ -166,3 +166,11 @@
     width: 420px;
   }
 }
+
+.tiny-timeline {
+  .tiny-timeline-content {
+    display: flex;
+    align-items: center;
+    padding-top: 3px;
+  }
+}

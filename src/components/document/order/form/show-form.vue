@@ -190,9 +190,9 @@
                 <template v-for="(log,index) in orderLogList">
                   <TimelineItem color="grey">
                     <i class="tiny-timeline-item-head" slot="dot"></i>
-                    <el-row style="padding-top: 3px">
+                    <el-row class="tiny-timeline-content">
                       <el-col :span="8">
-                        <div style="padding-top: 3px">{{log.time|time}}</div>
+                        <div>{{log.time|time}}</div>
                       </el-col>
                       <el-col :span="16"><strong>{{log.title}}</strong>
                         <el-tooltip class="item" effect="dark"
@@ -218,7 +218,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TmsLog, TmsOrder} from '@/resources';
+  import { TmsLog, TmsOrder } from '@/resources';
   import MapPath from '../../common/map-list';
   import utils from '@/tools/utils';
   import OmsCostTime from '@/components/common/timeCost.vue';
