@@ -219,14 +219,11 @@
               </div>
               <Timeline>
                 <template v-for="(log,index) in orderLogList">
-                  <TimelineItem color="green" v-if="log.showDate">
-                    <i class="iconfont icon-home" slot="dot"></i>
-                    <h3><span>{{log.dateWeek}}</span></h3>
-                  </TimelineItem>
                   <TimelineItem color="grey">
-                    <el-row>
+                    <i class="tiny-timeline-item-head" slot="dot"></i>
+                    <el-row style="padding-top: 3px">
                       <el-col :span="8">
-                        <div>{{log.time|time}}</div>
+                        <div style="padding-top: 3px">{{log.time|time}}</div>
                       </el-col>
                       <el-col :span="16"><strong>{{log.title}}</strong>
                         <el-tooltip class="item" effect="dark"
