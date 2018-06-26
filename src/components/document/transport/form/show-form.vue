@@ -52,7 +52,6 @@
               <dict :dict-group="'transportationCondition'" :dict-key="form.shipmentWay"></dict>
             </oms-col>
             <oms-col label="创建人" :rowSpan="span" :value="form.creatorName"/>
-            <oms-col label="创建时间" :rowSpan="span" :value="form.createTime">{{form.createTime|time}}</oms-col>
             <oms-col label="修改人" :rowSpan="span" :value="form.updateName"/>
             <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime">{{form.updateTime|time}}</oms-col>
             <oms-col label="司机" :rowSpan="span" :value="form.driverName"/>
