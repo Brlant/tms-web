@@ -83,6 +83,9 @@ export const TmsOrder = resource('/tms-order', http, {
 export const TmsPack = resource('/tms-pack', http, {
   deleteTemperature: (id) => {
     return http.delete('/tms-pack/temperature/' + id, {});
+  },
+  deleteDevBox: (id) => {
+    return http.delete('/tms-pack/box/' + id, {});
   }
 });
 
@@ -100,6 +103,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   cancelWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/cancel', {});
   },
+  untieWayBill: (id, obj) => {
+    return http.put('/tms-waybill/' + id + '/suspend', obj);
+  },
   confirmWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/confirm', {});
   },
@@ -108,6 +114,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   },
   signTmsWayBill: (id, obj) => {
     return http.put('/tms-waybill/' + id + '/sign', obj);
+  },
+  assessmentTmsWayBill: (id, obj) => {
+    return http.put('/tms-waybill/' + id + '/quality-inspection', obj);
   },
   autoConfirmWayBill: (params) => {
     return http.put('/tms-waybill/batch/confirm', params);

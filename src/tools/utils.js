@@ -18,7 +18,9 @@ export default {
     3: {'title': '待启运', status: '1', num: ''},
     4: {'title': '待签收', status: '2', num: ''},
     5: {'title': '已完成', status: '3', num: ''},
-    6: {'title': '已取消', status: '4', num: ''}
+    6: {'title': '已取消', status: '4', num: ''},
+    7: {'title': '质量待评估', status: '5', num: ''},
+    8: {'title': '已中止', status: '6', num: ''}
   },
   carTaskType: {
     0: {'title': '待确认', status: '0', num: ''},

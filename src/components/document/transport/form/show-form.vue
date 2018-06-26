@@ -172,6 +172,20 @@
           <div class="content">
             <el-table :data="form.incubatorDtoList" border style="width: 100%">
               <el-table-column prop="boxNo" label="保温箱编号" width="200">
+                <template slot-scope="scope">
+                  <el-tag :key="scope.row.id" closable
+                          @close="deleteDevBox(scope.row)" v-if="form.status!=='3'"
+                          v-show="isShow('tms-waybill-temperature-delete')">
+                    {{scope.row.boxNo}}
+                  </el-tag>
+                  <el-tag :key="scope.row.id" v-if="form.status!=='3'"
+                          v-show="!isShow('tms-waybill-temperature-delete')">
+                    {{scope.row.boxNo}}
+                  </el-tag>
+                  <el-tag :key="scope.row.id" v-if="form.status==='3'">
+                    {{scope.row.boxNo}}
+                  </el-tag>
+                </template>
               </el-table-column>
               <el-table-column prop="thermometerNoList" label="温度计列表">
                 <template slot-scope="scope">
@@ -220,11 +234,33 @@
             </el-form-item>
           </div>
         </div>
-        <div class="form-header-part">
+        <div class="form-header-part" v-show="form.status==='6'">
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[8].key === currentTab.key}">
               {{pageSets[8].name}}</h3>
+          </div>
+          <div class="content">
+            <el-form-item label="中止原因:">
+              <dict :dict-group="'waybillEndReason'" :dict-key="form.suspendReason"></dict>
+            </el-form-item>
+            <el-form-item label="评估结论:">
+              {{form.qualityInspection}}
+            </el-form-item>
+            <el-form-item label="质量评估:">
+              {{isQualityFlag(form.qualityFlag)}}
+            </el-form-item>
+            <el-form-item label="附件">
+              <attachment-lists :attachmentIdList="assessAttachmentIdList" :objectId="form.id"
+                                :objectType="'waybill-check'" :permission="'show'" style="padding-top: 5px"/>
+            </el-form-item>
+          </div>
+        </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[9].key === currentTab.key}">
+              {{pageSets[9].name}}</h3>
             <span @click="showBigMap(formItem)" class="des-btn">
                <a href="#" class="btn-circle" @click.prevent="">
                  <i class="el-icon-zoom-in"></i></a>查看大图
@@ -266,7 +302,8 @@
           {name: '货品列表', key: 5},
           {name: '保温箱列表', key: 6},
           {name: '签收信息', key: 7},
-          {name: '派送信息', key: 8}
+          {name: '评估结果', key: 8},
+          {name: '派送信息', key: 9}
         ],
         orderType: utils.wayBillType,
         currentTab: {},
@@ -282,7 +319,10 @@
           ]
         },
         rules: {},
-        attachmentList: []
+        attachmentList: [],
+        attachmentIdList: [],
+        assessAttachmentIdList: [],
+        assessAttachmentList: []
       };
     },
     computed: {},
@@ -294,14 +334,60 @@
             this.form = res.data;
             this.attachmentList = [];
             this.getFileList();
+            if (this.form.status === '6') {
+              this.assessAttachmentList = [];
+              this.getAssessFileList();
+            }
           });
         }
       }
     },
     methods: {
+      isQualityFlag: function (value) {
+        let title = '';
+        if (value) {
+          title = '合格';
+        } else {
+          title = '不合格';
+        }
+        return title;
+      },
       isShow: function (title) {
         if (title === 'show') return true;
         return this.$store.state.permissions.indexOf(title) !== -1;
+      },
+      deleteDevBox: function (item) {
+        // 删除温度计
+        this.$confirm('确认删除保温箱"' + item.boxNo + '"的数据?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TmsPack.deleteDevBox(item.id).then(res => {
+            this.$notify.success({
+              duration: 2000,
+              message: '删除保温箱' + item.boxNo + '成功'
+            });
+            // 刷新页面信息
+            TmsWayBill.getOneTmsWayBill(this.form.id).then(res => {
+              this.form = res.data;
+              this.attachmentList = [];
+              this.getFileList();
+              if (this.form.status === '6') {
+                this.assessAttachmentList = [];
+                this.getAssessFileList();
+              }
+            });
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.data.msg || '删除保温箱' + item.devNo + '失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+
       },
       deleteThermometer: function (no) {
         // 删除温度计
@@ -315,6 +401,10 @@
             this.form = res.data;
             this.attachmentList = [];
             this.getFileList();
+            if (this.form.status === '6') {
+              this.assessAttachmentList = [];
+              this.getAssessFileList();
+            }
           });
         }).catch(error => {
           this.$notify.error({
@@ -349,6 +439,17 @@
             ids.push(file.attachmentId);
           });
           this.form.attachmentIdList = ids;
+        });
+      },
+      getAssessFileList: function () {
+        if (!this.form.id) return;
+        OmsAttachment.queryOneAttachmentList(this.form.id, 'waybill-check').then(res => {
+          this.assattachmentList = res.data;
+          let ids = [];
+          this.assattachmentList.forEach(file => {
+            ids.push(file.attachmentId);
+          });
+          this.form.assessAttachmentIdList = ids;
         });
       },
       changeFiles: function (fileList) {
