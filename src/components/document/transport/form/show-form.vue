@@ -55,6 +55,8 @@
             <oms-col label="创建时间" :rowSpan="span" :value="form.createTime">{{form.createTime|time}}</oms-col>
             <oms-col label="修改人" :rowSpan="span" :value="form.updateName"/>
             <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime">{{form.updateTime|time}}</oms-col>
+            <oms-col label="司机" :rowSpan="span" :value="form.driverName"/>
+            <oms-col label="车牌号" :rowSpan="span" :value="form.carNo"/>
             <oms-col label="启运时间" :rowSpan="span" :value="form.startTransportTime">{{form.startTransportTime|time}}</oms-col>
             <oms-col label="送达时间" :rowSpan="span" :value="form.waybillCompleteTime">{{form.waybillCompleteTime|time}}</oms-col>
           </div>
