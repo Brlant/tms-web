@@ -52,6 +52,11 @@ export const routes = [
             path: '/vehicle/delivery/task/:id',
             component: () => import('./components/vehicle/task/index.vue'),
             meta: {moduleId: 'vehicle', title: '出车任务', perm: 'tms-task-car-task-query'}
+          },
+          {
+            path: '/vehicle/distribution',
+            component: () => import('./components/vehicle/distribution/index.vue'),
+            meta: {moduleId: 'vehicle', title: '车辆分布', perm: 'tms-carmap-scan'}
           }
         ]
       },

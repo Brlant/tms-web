@@ -48,3 +48,26 @@
     line-height: 130%;
   }
 }
+
+$lbg: rgba(0, 0, 0, 0.5);
+#vehicleMap {
+  .amap-marker-label {
+    position: relative;
+    border: 0;
+    border-radius: 4px;
+    background: $lbg;
+    color: #fff;
+    .arraw {
+      width: 0;
+      height: 0;
+      border: 8px solid transparent;
+      border-right-color: $lbg;
+      position: absolute;
+      left: -16px;
+      top: 10px;
+    }
+    .item {
+      padding: 2px 4px;
+    }
+  }
+}
