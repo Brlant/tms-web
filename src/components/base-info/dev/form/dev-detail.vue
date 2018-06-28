@@ -25,7 +25,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="包装有效期">
-      <el-date-picker v-model="form.validityDate" format="yyyy-MM-dd" placeholder="选择日期" @change="changeValidityDate">
+      <el-date-picker v-model="form.validityDate" format="yyyy-MM-dd" placeholder="选择日期" value-format="timestamp">
       </el-date-picker>
     </el-form-item>
     <el-form-item label="备注">
@@ -94,12 +94,6 @@
       }
     },
     methods: {
-      changeValidityDate(date) {
-        this.form.validityDate = this.changeTime(date);
-      },
-      changeTime(date) {
-        return date ? this.$moment(date).format('YYYY-MM-DD') : '';
-      },
       onSubmit: function (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {

@@ -217,7 +217,7 @@
                     <!--</el-select>-->
                     <!--</oms-form-row>-->
                     <oms-form-row label="有效期" :span="4">
-                      <el-date-picker v-model="validityTimes" type="daterange" ></el-date-picker>
+                      <el-date-picker v-model="validityTimes" type="daterange"></el-date-picker>
                     </oms-form-row>
                   </el-col>
                 </el-row>

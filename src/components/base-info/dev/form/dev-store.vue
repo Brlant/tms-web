@@ -14,7 +14,7 @@
   <el-form ref="form" :rules="rules" :model="form" label-width="100px" class="demo-ruleForm">
     <h2 class="clearfix">包装出入库记录</h2>
     <el-form-item label="出入库时间">
-      <el-date-picker v-model="form.createTime" format="yyyy-MM-dd" placeholder="选择出入库时间" @change="changeCreateTime">
+      <el-date-picker v-model="form.createTime" format="yyyy-MM-dd" placeholder="选择出入库时间" value-format="timestamp">
       </el-date-picker>
     </el-form-item>
     <el-form-item label="关联订单">
@@ -84,9 +84,6 @@
     watch: {
       formItem: function (val) {
         this.form = Object.assign({}, val);
-        if (this.form.createTime) {
-          this.changeCreateTime(this.form.createTime);
-        }
       }
     },
     methods: {
@@ -147,12 +144,6 @@
       },
       cancel: function () {
         this.$emit('right-close');
-      },
-      changeCreateTime: function (date) {
-        if (!date) {
-          this.form.createTime = '';
-        }
-        this.form.createTime = this.$moment(date).format('YYYY-MM-DD');
       }
     }
   };
