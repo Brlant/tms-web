@@ -104,8 +104,12 @@
             <el-col :span="3" class="R">
               <div>
                 {{item.carPlateNumber}}
-                <el-tag v-if="item.status==='2'&&isOverTime(item.latestCarDataTime)" type="danger">离线</el-tag>
-                <el-tag v-if="item.status==='2'&&!isOverTime(item.latestCarDataTime)" type="success">在线</el-tag>
+                <el-tooltip class="item" effect="dark"
+                            :content="item.latestCarDataTime?formatTime(item.latestCarDataTime):'无时间数据'"
+                            placement="right-start">
+                  <el-tag v-if="item.status==='2'&&isOverTime(item.latestCarDataTime)" type="danger">离线</el-tag>
+                  <el-tag v-if="item.status==='2'&&!isOverTime(item.latestCarDataTime)" type="success">在线</el-tag>
+                </el-tooltip>
               </div>
               <div>
                 {{item.driverName}}
@@ -210,6 +214,7 @@
   import Perm from '../../common/perm';
   import TaskMap from './form/map-new-next';
   import MapMultiple from './form/map-multiple';
+  import moment from 'moment';
 
   export default {
     components: {
@@ -287,15 +292,20 @@
       }
     },
     methods: {
+      formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
+        return time ? moment(time).format(str) : '';
+      },
       isOverTime: function (time) {
         if (time) {
           let now = new Date();
           let over = now.getTime() - time;
           if (over >= 1000 * 60 * 10) {
             return true;
+          } else {
+            return false;
           }
-          return false;
         }
+        return true;
       },
       batchCancel: function () {
         if (!this.taskIdList.length) {
