@@ -104,6 +104,8 @@
             <el-col :span="3" class="R">
               <div>
                 {{item.carPlateNumber}}
+                <el-tag v-if="item.status==='2'&&isOverTime(item.latestCarDataTime)" type="danger">离线</el-tag>
+                <el-tag v-if="item.status==='2'&&!isOverTime(item.latestCarDataTime)" type="success">在线</el-tag>
               </div>
               <div>
                 {{item.driverName}}
@@ -285,6 +287,16 @@
       }
     },
     methods: {
+      isOverTime: function (time) {
+        if (time) {
+          let now = new Date();
+          let over = now.getTime() - time;
+          if (over >= 1000 * 60 * 10) {
+            return true;
+          }
+          return false;
+        }
+      },
       batchCancel: function () {
         if (!this.taskIdList.length) {
           this.$notify.warning({
