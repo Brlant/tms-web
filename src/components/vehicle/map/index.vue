@@ -170,7 +170,7 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
-  import { TmsWayBill } from '@/resources';
+  import {TmsWayBill, TransportTask} from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
 
@@ -287,7 +287,7 @@
           pageNo: pageNo,
           pageSize: this.pager.pageSize
         }, this.filters);
-        TmsWayBill.query(param).then(res => {
+        TransportTask.validWayBill(param).then(res => {
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
             this.dataRows = this.dataRows.concat(res.data.list);
