@@ -48,7 +48,8 @@
       mapRef: {
         type: String,
         default: 'taskMap'
-      }
+      },
+      position: Array
     },
     mixins: [MapMixin],
     data: function () {
@@ -82,7 +83,7 @@
             position: [v[0], v[1]],
             label: title
           };
-        })];
+        })].filter(f => f.position[0] && f.position[1]);
       },
       isShowLine () {
         return this.$store.state.isShowLine;
@@ -114,9 +115,38 @@
       },
       isShowLine (val) {
         this.isShowPath = val;
+      },
+      position (val) {
+        if (!val) return;
+        this.drawCurPosition(val);
       }
     },
     methods: {
+      drawCurPosition (position) {
+        if (!position[0] || !position[1]) return;
+        let map = this.$refs.taskMap.$$getInstance();
+        if (!map) {
+          setTimeout(() => {
+            this.drawCurPosition(position);
+          }, 100);
+          return;
+        }
+        window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
+          const m = new SimpleMarker({
+            //图标主题
+            iconTheme: 'fresh',
+            //背景图标样式
+            iconStyle: 'darkblue',
+            map: map,
+            showPositionPoint: false, //显示定位点
+            position: position,
+            label: {
+              content: '<div class="babel__container"><div class="bg"></div><div class="title">当前位置</div><div>当前位置</div></div>',
+              offset: new window.AMap.Pixel(36, 10)
+            }
+          });
+        });
+      },
       // 画点
       drawPoint (map, i, index) {
         window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
