@@ -296,16 +296,17 @@
         return time ? moment(time).format(str) : '';
       },
       isOverTime: function (time) {
-        if (time) {
-          let now = new Date();
-          let over = now.getTime() - time;
-          if (over >= 1000 * 60 * 10) {
-            return true;
-          } else {
-            return false;
-          }
+        // 如果时间为空
+        if (!time) {
+          return false;
         }
-        return true;
+        let now = new Date();
+        let over = now.getTime() - time;
+        if (over >= 1000 * 60 * 10) {
+          return true;
+        } else {
+          return false;
+        }
       },
       batchCancel: function () {
         if (!this.taskIdList.length) {
