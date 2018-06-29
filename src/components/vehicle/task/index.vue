@@ -187,14 +187,16 @@
     </div>
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
-      <component :is="currentPart" :formItem="form" :showBigMap="showBigMap" @right-close="resetRightBox"/>
+      <component :is="currentPart" :formItem="form" :isOverTime="isOverTime" :showBigMap="showBigMap"
+                 @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentEditPart" :formItem="form" @change="submit" @right-close="resetRightBox"/>
     </page-right>
     <el-dialog title="地图派送" :visible.sync="isShowBigMap" width="100%" :fullscreen="true"
                custom-class="custom-dialog-map">
-      <task-map mapRef="bigTaskMap" :waybillList="waybillList" :mapStyle="{height: bodyHeight}"></task-map>
+      <task-map mapRef="bigTaskMap" :waybillList="waybillList" :position="curPosition"
+                :mapStyle="{height: bodyHeight}"></task-map>
     </el-dialog>
     <el-dialog title="地图派送" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
                custom-class="custom-dialog-map">
@@ -207,7 +209,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {http, TransportTask} from '@/resources';
+  import { http, TransportTask } from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
@@ -265,7 +267,8 @@
         isShowBigMap: false,
         isShowMulBigMap: false,
         waybillList: [],
-        multipleWaybillList: []
+        multipleWaybillList: [],
+        curPosition: null
       };
     },
     computed: {
@@ -354,12 +357,13 @@
         });
         this.isShowMulBigMap = true;
       },
-      showBigMap (waybillList) {
+      showBigMap (waybillList, curPosition) {
         this.waybillList = [];
         this.isShowBigMap = true;
         this.$nextTick(() => {
           setTimeout(() => {
             this.waybillList = waybillList;
+            this.curPosition = curPosition;
           }, 300);
         });
       },

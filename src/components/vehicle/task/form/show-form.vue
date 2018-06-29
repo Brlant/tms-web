@@ -191,13 +191,13 @@
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
               {{pageSets[2].name}}
             </h3>
-            <span @click="showBigMap(form.waybillList)" class="des-btn">
+            <span @click="showBigMap(form.waybillList, curPosition)" class="des-btn">
                <a href="#" class="btn-circle" @click.prevent="">
                  <i class="el-icon-zoom-in"></i></a>查看大图
             </span>
           </div>
           <div class="content">
-            <task-map :waybillList="form.waybillList"></task-map>
+            <task-map :waybillList="form.waybillList" :position="curPosition"></task-map>
           </div>
         </div>
         <div class="form-header-part">
@@ -252,7 +252,7 @@
   </dialog-template>
 </template>
 <script>
-  import {TmsLog, TransportTask} from '@/resources';
+  import { TmsLog, TransportTask } from '@/resources';
   import TaskMap from './map-new-next';
   import utils from '@/tools/utils';
   import OmsCostTime from '@/components/common/timeCost.vue';
@@ -292,17 +292,21 @@
           list: []
         },
         wayBillList: [],
-        doing: false
+        doing: false,
+        curPosition: null
       };
     },
     computed: {},
-    props: ['formItem', 'showBigMap'],
+    props: ['formItem', 'showBigMap', 'isOverTime'],
     watch: {
       formItem: function (val) {
+        this.curPosition = null;
         this.selectTab(this.pageSets[0]);
         if (val.id) {
           TransportTask.getOneTransportTask(val.id).then(res => {
             this.form = res.data;
+            // 设置当前车辆的经纬度
+            this.setCurPosition();
             // 查询日志信息
             this.queryLog(val.id);
             this.form.tallyClerkDtoList.forEach(val => {
@@ -316,6 +320,13 @@
       }
     },
     methods: {
+      setCurPosition () {
+        if (this.formItem.status !== '2') {
+          this.curPosition = null;
+          return;
+        }
+        this.curPosition = [this.form.latestCarLongitude, this.form.latestCarLatitude];
+      },
       queryLog: function (id) {
         if (!id) return;
         this.loadingLog = true;
