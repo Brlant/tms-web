@@ -108,7 +108,7 @@
             title: '最新时间：',
             format (val) {
               if (!val) return '';
-              return that.$moment(val).format('YYYY-MM-DD HH:hh:ss');
+              return that.$moment(val).format('YYYY-MM-DD HH:mm:ss');
             }
           }
         };
