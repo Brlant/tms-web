@@ -158,11 +158,10 @@
     },
     methods: {
       showActionType: function (item) {
-        let title = '';
         if (item === 'login') {
-          title = '登录';
+          item = '登录';
         }
-        return title;
+        return item;
       },
       filterUser: function (query) {
         let data = Object.assign({}, {
