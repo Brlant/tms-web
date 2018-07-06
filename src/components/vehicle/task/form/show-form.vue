@@ -33,7 +33,7 @@
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
-    <template slot="title">查看任务详情</template>
+    <template slot="title">任务详情</template>
     <template slot="btn">
       <el-button plain @click="close()">关闭</el-button>
     </template>

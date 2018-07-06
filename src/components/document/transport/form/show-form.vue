@@ -24,7 +24,7 @@
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
-    <template slot="title">查看运单</template>
+    <template slot="title">运单</template>
     <template slot="btn">
       <el-button plain @click="close()">关闭</el-button>
     </template>
