@@ -143,21 +143,21 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="发货单位" mix-width="220">
+              <el-table-column prop="receiverName" label="发货单位" mix-width="190">
                 <template slot-scope=" scope">
                   <div class="f-14">
                      {{scope.row.senderName}}
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="收货单位" mix-width="220">
+              <el-table-column prop="receiverName" label="收货单位" mix-width="190">
                 <template slot-scope=" scope">
                   <div class="f-14">
                      {{scope.row.receiverName}}
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="收货地址" mix-width="220">
+              <el-table-column prop="receiverName" label="收货地址" mix-width="200">
                 <template slot-scope=" scope">
                   <div class="f-14">
                     {{scope.row.receiverAddress}}
@@ -168,6 +168,13 @@
                 <template slot-scope=" scope">
                   <span class="f-14">
                      {{scope.row.incubatorCount}}
+                  </span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="status" label="状态" width="80">
+                <template slot-scope=" scope">
+                  <span class="f-14">
+                    {{formatStatusTitle(scope.row.status, wayBillType)}}
                   </span>
                 </template>
               </el-table-column>
@@ -293,7 +300,8 @@
         },
         wayBillList: [],
         doing: false,
-        curPosition: null
+        curPosition: null,
+        wayBillType: utils.wayBillType
       };
     },
     computed: {},
