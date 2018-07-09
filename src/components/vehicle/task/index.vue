@@ -177,6 +177,11 @@
           <div class="order-list-item-bg"></div>
         </div>
       </div>
+      <el-row class="order-list-header" v-show="dataList.length">
+        <el-col :span="11" align="left">合计</el-col>
+        <el-col :span="2">{{totalCount.incubatorCount}}</el-col>
+        <el-col :span="11"></el-col>
+      </el-row>
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -275,6 +280,15 @@
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
         return (height + 146) + 'px';
+      },
+      totalCount () {
+        let total = {
+          incubatorCount: 0
+        };
+        this.dataList.forEach(i => {
+          total.incubatorCount += i.incubatorCount;
+        });
+        return total;
       }
     },
     watch: {

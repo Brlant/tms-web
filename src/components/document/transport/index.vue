@@ -254,6 +254,13 @@
           <div class="order-list-item-bg"></div>
         </div>
       </div>
+      <el-row class="order-list-header" v-show="dataList.length">
+        <el-col :span="13" align="left">合计</el-col>
+        <el-col :span="1">{{totalCount.whole}}</el-col>
+        <el-col :span="1">{{totalCount.buck}}</el-col>
+        <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
+        <el-col :span="8"></el-col>
+      </el-row>
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -297,7 +304,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {http, TmsWayBill} from '@/resources';
+  import { http, TmsWayBill } from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
@@ -394,6 +401,19 @@
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
         return (height + 136) + 'px';
+      },
+      totalCount () {
+        let total = {
+          whole: 0,
+          buck: 0,
+          incubatorCount: 0
+        };
+        this.dataList.forEach(i => {
+          total.whole += i.wholeBoxCount;
+          total.buck += i.bulkBoxCount;
+          total.incubatorCount += i.incubatorCount;
+        });
+        return total;
       }
     },
     watch: {

@@ -161,6 +161,12 @@
           <div class="order-list-item-bg"></div>
         </div>
       </div>
+      <el-row class="order-list-header" v-show="dataList.length">
+        <el-col :span="15" align="left">合计</el-col>
+        <el-col :span="1">{{totalCount.whole}}</el-col>
+        <el-col :span="1">{{totalCount.buck}}</el-col>
+        <el-col :span="7"></el-col>
+      </el-row>
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -192,7 +198,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {TmsOrder} from '@/resources';
+  import { TmsOrder } from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import splitForm from './form/split-order.vue';
@@ -263,6 +269,17 @@
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
         return (height + 116) + 'px';
+      },
+      totalCount () {
+        let total = {
+          whole: 0,
+          buck: 0
+        };
+        this.dataList.forEach(i => {
+          total.whole += i.wholeBoxCount;
+          total.buck += i.bulkBoxCount;
+        });
+        return total;
       }
     },
     watch: {
