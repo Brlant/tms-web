@@ -60,7 +60,7 @@
   export default {
     name: 'dialogTemplate',
     props: {
-      pageSets: [Array, Object],
+      pageSets: Array,
       indexClass: {
         type: String,
         default: 'index-tit'
@@ -81,12 +81,12 @@
     },
     computed: {
       showIndex () {
-        return this.$parent.$parent.show;
+        return this.$parent.$parent.$parent.showIndex;
       }
     },
     watch: {
       showIndex (val) {
-        if (!val && this.pageSets) {
+        if (val === -1 && this.pageSets) {
           this.selectTab(this.pageSets[0], 0);
         }
         this.titleAry = null;
@@ -139,8 +139,8 @@
         }
         for (let i = 0; i < titleAry.length; i++) {
           if (!titleAry[i]) return;
-          let curOffsetTop = titleAry[i].offsetTop - 65;
-          let nexOffsetTop = i < titleAry.length - 1 ? titleAry[i + 1].offsetTop - 65 : 0;
+          let curOffsetTop = titleAry[i].parentNode.parentNode.offsetTop - 65;
+          let nexOffsetTop = i < titleAry.length - 1 ? titleAry[i + 1].parentNode.parentNode.offsetTop - 65 : 0;
           if (target.scrollTop > curOffsetTop && target.scrollTop < nexOffsetTop) {
             this.index = i;
             this.title = this.pageSets[i].name;
@@ -155,7 +155,7 @@
         if (!titleAry || !dialogWarp) return;
         let scrollTop = dialogWarp.scrollHeight - dialogWarp.clientHeight;
         if (!titleAry[index]) return;
-        let otp = titleAry[index].offsetTop - 65;
+        let otp = titleAry[index].parentNode.parentNode.offsetTop - 65;
         dialogWarp && (dialogWarp.scrollTop = scrollTop > otp ? otp : scrollTop);
       }
     }
