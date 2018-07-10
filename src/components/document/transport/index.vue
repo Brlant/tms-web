@@ -100,8 +100,9 @@
         <el-col :span="5">收货单位</el-col>
         <el-col :span="1">整件</el-col>
         <el-col :span="1">散件</el-col>
-        <el-col :span="1">包件</el-col>
-        <el-col :span="4">时间</el-col>
+        <el-col :span="1">实际包件</el-col>
+        <el-col :span="1">预估包件</el-col>
+        <el-col :span="3">时间</el-col>
         <el-col :span="1">状态</el-col>
         <el-col :span="3">操作</el-col>
       </el-row>
@@ -173,7 +174,12 @@
                 {{item.incubatorCount}}
               </div>
             </el-col>
-            <el-col :span="4" class="R">
+            <el-col :span="1" class="R">
+              <div>
+                {{item.preIncubatorCount}}
+              </div>
+            </el-col>
+            <el-col :span="3" class="R">
               <div v-show="item.deliveryTime&&!item.waybillCompleteTime">
                 <span>送达时限:</span>
                 {{item.deliveryTime|date}}
