@@ -161,7 +161,7 @@
           <div class="order-list-item-bg"></div>
         </div>
       </div>
-      <el-row class="order-list-header" v-show="dataList.length">
+      <el-row class="order-list-header" v-show="dataList.length && !loadingData">
         <el-col :span="15" align="left">合计</el-col>
         <el-col :span="1">{{totalCount.whole}}</el-col>
         <el-col :span="1">{{totalCount.buck}}</el-col>
