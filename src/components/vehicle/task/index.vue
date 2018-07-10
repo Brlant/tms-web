@@ -177,7 +177,7 @@
           <div class="order-list-item-bg"></div>
         </div>
       </div>
-      <el-row class="order-list-header" v-show="dataList.length">
+      <el-row class="order-list-header" v-show="dataList.length && !loadingData">
         <el-col :span="11" align="left">合计</el-col>
         <el-col :span="2">{{totalCount.incubatorCount}}</el-col>
         <el-col :span="11"></el-col>
