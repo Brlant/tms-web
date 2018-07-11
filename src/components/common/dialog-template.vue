@@ -91,6 +91,12 @@
         }
         this.titleAry = null;
         this.dialogWarp = null;
+      },
+      pageSets: {
+        handler (val) {
+          val && this.$emit('selectTab', this.pageSets[0]);
+        },
+        immediate: true // 初始化tab时，直接选中第一个
       }
     },
     methods: {
@@ -131,10 +137,7 @@
         let scrollTop = target.scrollHeight - target.clientHeight;
         // 滚到底处理
         if (scrollTop - target.scrollTop < 20) {
-          let index = titleAry.length - 1;
-          this.index = index;
-          this.title = this.pageSets[index].name;
-          this.$emit('selectTab', this.pageSets[index]);
+          this.setLeftPageSets(titleAry.length - 1);
           return;
         }
         for (let i = 0; i < titleAry.length; i++) {
@@ -142,9 +145,7 @@
           let curOffsetTop = titleAry[i].parentNode.parentNode.offsetTop - 65;
           let nexOffsetTop = i < titleAry.length - 1 ? titleAry[i + 1].parentNode.parentNode.offsetTop - 65 : 0;
           if (target.scrollTop > curOffsetTop && target.scrollTop < nexOffsetTop) {
-            this.index = i;
-            this.title = this.pageSets[i].name;
-            this.$emit('selectTab', this.pageSets[i]);
+            this.setLeftPageSets(i);
           }
         }
       },
@@ -154,9 +155,40 @@
         let {titleAry, dialogWarp} = this;
         if (!titleAry || !dialogWarp) return;
         let scrollTop = dialogWarp.scrollHeight - dialogWarp.clientHeight;
-        if (!titleAry[index]) return;
-        let otp = titleAry[index].parentNode.parentNode.offsetTop - 65;
+        let curItem = this.getCurTitleItem(index);
+        if (!curItem) return;
+        let otp = curItem.parentNode.parentNode.offsetTop - 65;
         dialogWarp && (dialogWarp.scrollTop = scrollTop > otp ? otp : scrollTop);
+      },
+      // 根据左侧选中的tab的key值，得到右边对应的title;
+      // index值可能为数组的索引值，对象的key值
+      getCurTitleItem (index) {
+        let curItem = null;
+        if (this.pageSets instanceof Array) {
+          curItem = this.titleAry[index];
+        } else {
+          Object.keys(this.pageSets).forEach((k, d) => {
+            if (k === index) {
+              curItem = this.titleAry[d];
+            }
+          });
+        }
+        return curItem;
+      },
+      // 根据右侧滚动选中的title的索引值，设置左边的tab
+      setLeftPageSets (index) {
+        let curIndex = index;
+        let {pageSets} = this;
+        if (pageSets instanceof Object) {
+          Object.keys(pageSets).forEach((k, d) => {
+            if (d === index) {
+              curIndex = k;
+            }
+          });
+        }
+        this.index = curIndex;
+        this.title = pageSets[curIndex].name;
+        this.$emit('selectTab', pageSets[curIndex]);
       }
     }
   };
