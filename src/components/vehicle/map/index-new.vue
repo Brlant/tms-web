@@ -360,15 +360,16 @@
           this.totalTicket = val.length;
           this.incubatorCount = 0;
           this.preIncubatorCount = 0;
+          debugger;
           val.forEach(item => {
             if (item.status === '0') {
               this.totalIncubatorCount = this.totalIncubatorCount + item.incubatorCount;
-              this.incubatorCount = this.incubatorCount + item.incubatorCount;
             }
             if (item.status === '-1') {
               this.totalIncubatorCount = this.totalIncubatorCount + item.preIncubatorCount;
-              this.preIncubatorCount = this.preIncubatorCount + item.preIncubatorCount;
             }
+            this.incubatorCount = this.incubatorCount + item.incubatorCount;
+            this.preIncubatorCount = this.preIncubatorCount + item.preIncubatorCount;
             this.totalWeight = this.totalWeight + item.goodsWeight;
             this.totalVolume = this.totalVolume + item.goodsVolume;
           });
