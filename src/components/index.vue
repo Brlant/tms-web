@@ -1,8 +1,8 @@
 <style lang="scss">
 
-  .d-table {
-    min-height: 500px;
-  }
+  /*.d-table {*/
+  /*min-height: 500px;*/
+  /*}*/
 
   @-webkit-keyframes bouncedelay {
     0%, 80%, 100% {
@@ -113,7 +113,7 @@
   import AppFooter from './layout/app.footer.vue';
   import utils from '../tools/utils';
   import attachmentDialog from './common/attachment/attachment.dialog.vue';
-  import {Auth, DictGroup} from '@/resources';
+  import { Auth } from '@/resources';
   import printDialog from './common/print.loading.vue';
 
   export default {
