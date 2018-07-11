@@ -154,8 +154,15 @@
                       </a>确认派送
                     </span>
                   </perm>
+                  <perm label="tms-task-car-task-cancel" class="opera-btn btn-line-block">
+                    <span @click.stop="cancelTask(item)" v-if="item.status==='1'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-forbidden"></i>
+                      </a>取消
+                    </span>
+                  </perm>
                 </div>
-                <div style="padding-top: 2px">
+                <div :style="item.status==='1'?'padding-top: 2px':''">
                   <perm label="tms-task-car-task-edit" class="btn-line-block">
                     <span @click.stop="editInfo(item)" v-if="item.status==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
@@ -214,7 +221,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TransportTask } from '@/resources';
+  import {http, TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
