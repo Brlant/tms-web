@@ -242,7 +242,7 @@
         </div>
         <div class="d-table-right">
           <el-amap vid="aMap" ref="deliveryMap" :plugin="plugins" :zoom="10" :center="center"
-                   :style="'height:'+ (bodyHeight + 39)  + 'px'">
+                   :style="'height:'+ (bodyHeight + 90)  + 'px'">
             <el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"
                             :label="marker.label" :icon="marker.icon" :animation="marker.animation"
                             :events="marker.events"></el-amap-marker>
@@ -272,7 +272,7 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
-  import {TmsWayBill, TransportTask} from '@/resources';
+  import { TransportTask } from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
   import batchAutoForm from '@/components/document/transport/form/auto-form';
