@@ -158,14 +158,15 @@
         <div class="icon__point" :class="{on: isShowList}" @click="isShowList=!isShowList">
           <f-a name="zoom-point"/>
         </div>
-        <el-col :span="12">
+        <el-col :span="16">
           <h2 class="header f-dib header--padding">
-            您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米
+            您已选择：共有{{totalTicket}}票，{{totalIncubatorCount}}件，{{totalWeight}}公斤，{{totalVolume}}立方米，预估包装
+            {{preIncubatorCount}}件，实际包装 {{incubatorCount}}件
           </h2>
         </el-col>
         <el-col :span="2">
         </el-col>
-        <el-col :span="10" class="text-right">
+        <el-col :span="6" class="text-right">
           <!--<el-button-group>-->
           <!--<perm label="tms-task-add">-->
           <!--<el-button plain size="small" @click="showPart(0)">生成派送</el-button>-->
@@ -215,7 +216,7 @@
                     <td width="8%">
                       <el-checkbox v-model="item.isChecked"></el-checkbox>
                     </td>
-                    <td width="14%">{{item.incubatorCount}}</td>
+                    <td width="14%">{{showIncubatorCount(item)}}</td>
                     <td width="30%" class="R">
                       <div class="id-part">
                         <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
@@ -317,6 +318,8 @@
         totalIncubatorCount: 0,
         totalWeight: 0,
         totalVolume: 0,
+        incubatorCount: 0,
+        preIncubatorCount: 0,
         dataMap: [],
         isShowList: false,
         receiveStatus: '0',
@@ -355,8 +358,17 @@
           this.totalWeight = 0;
           this.totalVolume = 0;
           this.totalTicket = val.length;
+          this.incubatorCount = 0;
+          this.preIncubatorCount = 0;
           val.forEach(item => {
-            this.totalIncubatorCount = this.totalIncubatorCount + item.incubatorCount;
+            if (item.status === '0') {
+              this.totalIncubatorCount = this.totalIncubatorCount + item.incubatorCount;
+              this.incubatorCount = this.incubatorCount + item.incubatorCount;
+            }
+            if (item.status === '-1') {
+              this.totalIncubatorCount = this.totalIncubatorCount + item.preIncubatorCount;
+              this.preIncubatorCount = this.preIncubatorCount + item.preIncubatorCount;
+            }
             this.totalWeight = this.totalWeight + item.goodsWeight;
             this.totalVolume = this.totalVolume + item.goodsVolume;
           });
@@ -377,6 +389,12 @@
       }
     },
     methods: {
+      showIncubatorCount: function (item) {
+        if (item.status === '-1') {
+          return item.preIncubatorCount;
+        }
+        return item.incubatorCount;
+      },
       initMapTools () {
         let time = setTimeout(this.initMapTools, 100);
         let deliveryMap = this.$refs.deliveryMap;
@@ -412,6 +430,8 @@
         // 清空勾选的运单列表
         this.orderIdList = [];
         this.totalIncubatorCount = 0;
+        this.incubatorCount = 0;
+        this.preIncubatorCount = 0;
         this.totalWeight = 0;
         this.totalVolume = 0;
         this.totalTicket = 0;
@@ -481,6 +501,8 @@
         // 清空勾选的运单列表
         this.orderIdList = [];
         this.totalIncubatorCount = 0;
+        this.incubatorCount = 0;
+        this.preIncubatorCount = 0;
         this.totalWeight = 0;
         this.totalVolume = 0;
         this.totalTicket = 0;
