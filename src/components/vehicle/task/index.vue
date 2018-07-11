@@ -146,14 +146,7 @@
             </el-col>
             <el-col :span="3" class="opera-btn">
               <div>
-                <div>
-                  <perm label="tms-task-car-task-confirm" class="opera-btn btn-line-block">
-                    <span @click.stop="confirmTask(item)" v-if="item.status==='0'">
-                      <a @click.pervent="" class="btn-circle btn-opera">
-                        <i class="el-icon-t-delete"></i>
-                      </a>确认派送
-                    </span>
-                  </perm>
+                <div v-if="item.status==='1'">
                   <perm label="tms-task-car-task-cancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelTask(item)" v-if="item.status==='1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
@@ -162,7 +155,16 @@
                     </span>
                   </perm>
                 </div>
-                <div :style="item.status==='1'?'padding-top: 2px':''">
+                <div v-if="item.status==='0'">
+                  <perm label="tms-task-car-task-confirm" class="opera-btn btn-line-block">
+                    <span @click.stop="confirmTask(item)" v-if="item.status==='0'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-delete"></i>
+                      </a>确认派送
+                    </span>
+                  </perm>
+                </div>
+                <div style="padding-top: 2px" v-if="item.status==='0'">
                   <perm label="tms-task-car-task-edit" class="btn-line-block">
                     <span @click.stop="editInfo(item)" v-if="item.status==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
