@@ -32,7 +32,7 @@
       </h2>
       <ul v-if="pageSets">
         <li class="list-style" v-for="(item, key) in pageSets" @click="selectTab(item, key)"
-            v-bind:class="{ 'active' : index === key}"><span>{{ item.name }}</span>
+            v-bind:class="{ 'active' : index == key}"><span>{{ item.name }}</span>
         </li>
       </ul>
       <div class="btn-group-lt-bm-part">
@@ -60,7 +60,7 @@
   export default {
     name: 'dialogTemplate',
     props: {
-      pageSets: Array,
+      pageSets: [Array, Object],
       indexClass: {
         type: String,
         default: 'index-tit'
@@ -81,12 +81,12 @@
     },
     computed: {
       showIndex () {
-        return this.$parent.$parent.$parent.showIndex;
+        return this.$parent.$parent.show;
       }
     },
     watch: {
       showIndex (val) {
-        if (val === -1 && this.pageSets) {
+        if (!val && this.pageSets) {
           this.selectTab(this.pageSets[0], 0);
         }
         this.titleAry = null;
