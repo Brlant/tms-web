@@ -13,6 +13,13 @@
   .order-list-status-right {
     justify-content: flex-end;
   }
+
+  .order-list .order-list-header {
+    background: #dfebf8;
+    line-height: 15px;
+    padding: 10px 5px 10px 15px;
+    margin: 10px 0 5px 0;
+  }
 </style>
 <template>
   <div class="order-page">
@@ -90,22 +97,25 @@
     </el-row>
 
     <div class="order-list" style="margin-top: 20px">
-      <el-row class="order-list-header">
-        <el-col :span="2">
-          <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
-          运单号
-        </el-col>
-        <el-col :span="2">类型</el-col>
-        <el-col :span="4">发货单位</el-col>
-        <el-col :span="4">收货单位</el-col>
-        <el-col :span="1">整件</el-col>
-        <el-col :span="1">散件</el-col>
-        <el-col :span="2">实际包件</el-col>
-        <el-col :span="2">预估包件</el-col>
-        <el-col :span="2">时间</el-col>
-        <el-col :span="1">状态</el-col>
-        <el-col :span="3">操作</el-col>
-      </el-row>
+      <div class="flex-list-dom">
+        <el-row class="order-list-header">
+          <el-col :span="2">
+            <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
+            运单号
+          </el-col>
+          <el-col :span="2">类型</el-col>
+          <el-col :span="4">发货单位</el-col>
+          <el-col :span="4">收货单位</el-col>
+          <el-col :span="1">整件</el-col>
+          <el-col :span="1">散件</el-col>
+          <el-col :span="1">实际包件</el-col>
+          <el-col :span="1">预估包件</el-col>
+          <!--<el-col :span="2">预估包件</el-col>-->
+          <el-col :span="3">时间</el-col>
+          <el-col :span="1">状态</el-col>
+          <el-col :span="3">操作</el-col>
+        </el-row>
+      </div>
       <el-row v-if="loadingData">
         <el-col :span="24">
           <oms-loading :loading="loadingData"></oms-loading>
@@ -169,17 +179,22 @@
                 {{item.bulkBoxCount}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="1" class="R">
               <div>
                 {{item.incubatorCount}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="1" class="R">
               <div>
                 {{item.preIncubatorCount}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <!--<el-col :span="2" class="R">-->
+            <!--<div>-->
+            <!--{{item.preIncubatorCount}}-->
+            <!--</div>-->
+            <!--</el-col>-->
+            <el-col :span="3" class="R">
               <div v-show="item.deliveryTime&&!item.waybillCompleteTime">
                 <span>送达时限:</span>
                 {{item.deliveryTime|date}}
@@ -261,10 +276,11 @@
         </div>
       </div>
       <el-row class="order-list-header" v-show="dataList.length && !loadingData">
-        <el-col :span="13" align="left">合计</el-col>
+        <el-col :span="12" align="left">合计</el-col>
         <el-col :span="1">{{totalCount.whole}}</el-col>
         <el-col :span="1">{{totalCount.buck}}</el-col>
         <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
+        <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
         <el-col :span="8"></el-col>
       </el-row>
     </div>
@@ -310,7 +326,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TmsWayBill } from '@/resources';
+  import {http, TmsWayBill} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
@@ -412,12 +428,14 @@
         let total = {
           whole: 0,
           buck: 0,
-          incubatorCount: 0
+          incubatorCount: 0,
+          preIncubatorCount: 0
         };
         this.dataList.forEach(i => {
           total.whole += i.wholeBoxCount;
           total.buck += i.bulkBoxCount;
           total.incubatorCount += i.incubatorCount;
+          total.preIncubatorCount += i.preIncubatorCount;
         });
         return total;
       }
