@@ -360,7 +360,6 @@
           this.totalTicket = val.length;
           this.incubatorCount = 0;
           this.preIncubatorCount = 0;
-          debugger;
           val.forEach(item => {
             if (item.status === '0') {
               this.totalIncubatorCount = this.totalIncubatorCount + item.incubatorCount;
