@@ -45,7 +45,7 @@
         </perm>
         <perm label="tms-task-add">
           <el-button plain size="small" @click="autoWayBillList"
-                     v-if="(activeStatus===2||activeStatus==='2')&&checkList.length">
+                     v-if="filters.status==='0'&&checkList.length">
             <f-a class="icon-small" name="wave"></f-a>
             自动排单
           </el-button>
@@ -54,7 +54,7 @@
           <el-button plain size
 
             ="small" @click="batchAutoWayBillList"
-                     v-if="(activeStatus===2||activeStatus==='2')&&!checkList.length">
+                     v-if="filters.status==='0'&&!checkList.length">
             <f-a class="icon-small" name="wave"></f-a>
             批量自动排单
           </el-button>
