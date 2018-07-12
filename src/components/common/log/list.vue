@@ -92,7 +92,8 @@
             {{ scope.row.operationTime | time}}
           </template>
         </el-table-column>
-        <el-table-column prop="userName" label="日志操作人" :sortable="true" width="250"></el-table-column>
+        <el-table-column prop="userName" label="日志操作人" :sortable="true" width="120"></el-table-column>
+        <el-table-column prop="orgName" label="所属单位" :sortable="true" width="250"></el-table-column>
         <el-table-column prop="actionType" label="日志操作类型" :sortable="true" width="180">
           <template slot-scope="scope">
             {{ showActionType(scope.row.actionType)}}
