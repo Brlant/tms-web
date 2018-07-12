@@ -209,7 +209,7 @@
     </page-right>
     <el-dialog title="地图派送" :visible.sync="isShowBigMap" width="100%" :fullscreen="true"
                custom-class="custom-dialog-map">
-      <task-map mapRef="bigTaskMap" :waybillList="waybillList" :position="curPosition"
+      <task-map mapRef="bigTaskMap" :formItem="mapBigFormItem"
                 :mapStyle="{height: bodyHeight}"></task-map>
     </el-dialog>
     <el-dialog title="地图派送" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
@@ -223,12 +223,12 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {http, TransportTask} from '@/resources';
+  import { http, TransportTask } from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
   import Perm from '../../common/perm';
-  import TaskMap from './form/map-new-next';
+  import TaskMap from './form/map-car-task';
   import MapMultiple from './form/map-multiple';
   import moment from 'moment';
 
@@ -280,9 +280,8 @@
         taskIdList: [],
         isShowBigMap: false,
         isShowMulBigMap: false,
-        waybillList: [],
-        multipleWaybillList: [],
-        curPosition: null
+        mapBigFormItem: {},
+        multipleWaybillList: []
       };
     },
     computed: {
@@ -380,13 +379,12 @@
         });
         this.isShowMulBigMap = true;
       },
-      showBigMap (waybillList, curPosition) {
-        this.waybillList = [];
+      showBigMap (formItem) {
+        this.mapBigFormItem = {};
         this.isShowBigMap = true;
         this.$nextTick(() => {
           setTimeout(() => {
-            this.waybillList = waybillList;
-            this.curPosition = curPosition;
+            this.mapBigFormItem = formItem;
           }, 300);
         });
       },

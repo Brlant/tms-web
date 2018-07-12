@@ -198,13 +198,13 @@
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
               {{pageSets[2].name}}
             </h3>
-            <span @click="showBigMap(form.waybillList, curPosition)" class="des-btn">
+            <span @click="showBigMap(form)" class="des-btn">
                <a href="#" class="btn-circle" @click.prevent="">
                  <i class="el-icon-zoom-in"></i></a>查看大图
             </span>
           </div>
           <div class="content">
-            <task-map :waybillList="form.waybillList" :position="curPosition"></task-map>
+            <task-map :formItem="form"></task-map>
           </div>
         </div>
         <div class="form-header-part">
@@ -260,7 +260,7 @@
 </template>
 <script>
   import { TmsLog, TransportTask } from '@/resources';
-  import TaskMap from './map-new-next';
+  import TaskMap from './map-car-task';
   import utils from '@/tools/utils';
   import OmsCostTime from '@/components/common/timeCost.vue';
 
