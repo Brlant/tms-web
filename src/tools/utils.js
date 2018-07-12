@@ -1,4 +1,4 @@
-import {Address} from '@dtop/dtop-web-common';
+import { Address } from '@dtop/dtop-web-common';
 import moment from 'moment';
 
 export default {
@@ -12,15 +12,16 @@ export default {
     5: {'title': '已取消', status: '5', num: ''}
   },
   wayBillType: {
-    0: {'title': '待确认', status: '-2', num: ''},
-    1: {'title': '待打包', status: '-1', num: ''},
-    2: {'title': '待派车', status: '0', num: ''},
-    3: {'title': '待启运', status: '1', num: ''},
-    4: {'title': '待签收', status: '2', num: ''},
-    5: {'title': '已完成', status: '3', num: ''},
-    6: {'title': '已取消', status: '4', num: ''},
-    7: {'title': '质量待评估', status: '5', num: ''},
-    8: {'title': '已中止', status: '6', num: ''}
+    0: {'title': '所有', status: null, num: ''},
+    1: {'title': '待确认', status: '-2', num: ''},
+    2: {'title': '待打包', status: '-1', num: ''},
+    3: {'title': '待派车', status: '0', num: ''},
+    4: {'title': '待启运', status: '1', num: ''},
+    5: {'title': '待签收', status: '2', num: ''},
+    6: {'title': '已完成', status: '3', num: ''},
+    7: {'title': '已取消', status: '4', num: ''},
+    8: {'title': '质量待评估', status: '5', num: ''},
+    9: {'title': '已中止', status: '6', num: ''}
   },
   carTaskType: {
     0: {'title': '待确认', status: '0', num: ''},

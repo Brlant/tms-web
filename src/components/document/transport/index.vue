@@ -65,6 +65,12 @@
             打印运单
           </el-button>
         </perm>
+        <perm label="tms-waybill-list-export">
+          <el-button plain size="small" @click="exportSearchFile" :disabled="isLoading">
+            <f-a class="icon-small" name="export"></f-a>
+            导出Excel
+          </el-button>
+        </perm>
       </template>
     </search-part>
 
@@ -217,7 +223,7 @@
               <div>
                 <div>
                   <perm label="tms-waybill-edit">
-                    <span @click.stop="edit(item)" v-if="activeStatus===0||activeStatus==='0'">
+                    <span @click.stop="edit(item)" v-if="item.status === '-2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
@@ -225,7 +231,7 @@
                   </perm>
                   <perm label="tms-waybill-edit">
                     <span @click.stop="confirm(item)"
-                          v-if="activeStatus===0||activeStatus==='0'">
+                          v-if="item.status === '-2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-verifyPass"></i>
                       </a>确认
@@ -234,14 +240,14 @@
                 </div>
                 <div style="padding-top: 2px">
                   <perm label="tms-waybill-cancel" class="opera-btn">
-                    <span @click.stop="cancelWayBill(item)" v-if="activeStatus===0||activeStatus==='0'||activeStatus===1||activeStatus==='1'">
+                    <span @click.stop="cancelWayBill(item)" v-if="item.status === '-2'||item.status === '-1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
                     </span>
                   </perm>
                   <perm label="tms-waybill-pack" class="opera-btn">
-                    <span @click.stop="packageWayBill(item)" v-if="activeStatus===1||activeStatus==='1'">
+                    <span @click.stop="packageWayBill(item)" v-if="item.status === '-1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-basic"></i>
                       </a>打包
@@ -249,21 +255,21 @@
                   </perm>
                 </div>
                 <perm label="tms-waybill-sign" class="opera-btn">
-                    <span @click.stop="signWayBill(item)" v-if="activeStatus===4||activeStatus==='4'">
+                    <span @click.stop="signWayBill(item)" v-if="item.status === '2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>签收
                     </span>
                 </perm>
                 <perm label="tms-waybill-quality-inspection" class="opera-btn">
-                    <span @click.stop="assessmentWayBill(item)" v-if="activeStatus===7||activeStatus==='7'">
+                    <span @click.stop="assessmentWayBill(item)" v-if="item.status === '5'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-search"></i>
                       </a>评估
                     </span>
                 </perm>
                 <perm label="tms-waybill-suspend" class="opera-btn">
-                    <span @click.stop="untieWayBill(item)" v-if="activeStatus===4||activeStatus==='4'">
+                    <span @click.stop="untieWayBill(item)" v-if="item.status === '2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
                       </a>中止
@@ -326,7 +332,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {http, TmsWayBill} from '@/resources';
+  import { http, TmsWayBill } from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
@@ -398,7 +404,7 @@
         action: '',
         form: {},
         filters: {
-          status: '-2',
+          status: null,
           waybillNumber: '',
           waybillType: '',
           shipmentWay: '',
@@ -467,6 +473,33 @@
           }, 300);
         });
       },
+      exportSearchFile: function () {
+        this.isLoading = true;
+        this.$store.commit('initPrint', {
+          isPrinting: true,
+          moduleId: '/document/transport',
+          text: '正在导出'
+        });
+        let params = Object.assign({}, this.filters);
+        http.get('/tms-waybill/list/export/excel', {params}).then(res => {
+          utils.download(res.data.path, '运单表');
+          this.isLoading = false;
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: '/document/transport'
+          });
+        }).catch(error => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: '/document/transport'
+          });
+          this.$notify.error({
+            message: error.response.data && error.response.data.msg || '导出失败'
+          });
+        });
+      },
+
       exportFile: function () {
         if (!this.checkList.length) {
           this.$notify.warning({
@@ -760,15 +793,18 @@
       queryStateNum: function (params) {
         TmsWayBill.queryStateNum(params).then(res => {
           let data = res.data;
-          this.orderType[0].num = data['pend-confirm'];
-          this.orderType[1].num = data['pend-package'];
-          this.orderType[2].num = data['pend-choose-car'];
-          this.orderType[3].num = data['pend-shipment'];
-          this.orderType[4].num = data['pend-sign'];
-          this.orderType[5].num = data['complete'];
-          this.orderType[6].num = data['canceled'];
-          this.orderType[7].num = data['pend-check'];
-          this.orderType[8].num = data['suspend'];
+          let count = 0;
+          Object.keys(data).map(k => (count += data[k]));
+          this.orderType[0].num = count;
+          this.orderType[1].num = data['pend-confirm'];
+          this.orderType[2].num = data['pend-package'];
+          this.orderType[3].num = data['pend-choose-car'];
+          this.orderType[4].num = data['pend-shipment'];
+          this.orderType[5].num = data['pend-sign'];
+          this.orderType[6].num = data['complete'];
+          this.orderType[7].num = data['canceled'];
+          this.orderType[8].num = data['pend-check'];
+          this.orderType[9].num = data['suspend'];
         });
       },
       showPart (index) {
