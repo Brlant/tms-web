@@ -61,7 +61,8 @@
         </div>
         <div v-else-if="showPhoneCode">
           <h3 class="text-center">短信激活账号/重置密码</h3>
-          <el-form label-position="top" ref="resetForm" label-width="80px" :model="resetUser" :rules="resetUserRules"
+          <el-form key="el-form-reset" label-position="top" ref="resetForm" label-width="80px" :model="resetUser"
+                   :rules="resetUserRules"
                    @submit.prevent="resetPass" onsubmit="return false">
 
             <el-form-item label="密码" prop="password">
@@ -95,7 +96,8 @@
         </div>
         <div v-else>
           <h3 class="text-center">激活账号/忘记密码</h3>
-          <el-form label-position="top" ref="loginForm" label-width="80px" :model="user" :rules="rules"
+          <el-form key="el-form-login" label-position="top" ref="loginForm" label-width="80px" :model="user"
+                   :rules="rules"
                    @submit.prevent="done" onsubmit="return false">
             <el-form-item label="单位编号" prop="orgCode" v-if="user.type===1">
               <el-input v-model="user.orgCode"></el-input>
