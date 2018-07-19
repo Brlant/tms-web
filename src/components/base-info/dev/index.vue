@@ -518,6 +518,7 @@
           status: '',
           devNo: ''
         };
+        this.currentStatus = '';
         this.validityTimes = '';
         Object.assign(this.searchCondition, temp);
         Object.assign(this.detailFilter, this.searchCondition);
@@ -694,6 +695,7 @@
       showType: function (type) {
         this.currentItem = type;
         this.getDevDetailList(1);
+        this.resetSearchForm();
       },
       onSubmit: function (item) {
         if (this.action === 'add') {
