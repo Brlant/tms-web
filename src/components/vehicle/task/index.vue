@@ -207,7 +207,8 @@
     <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentEditPart" :formItem="form" @change="submit" @right-close="resetRightBox"/>
     </page-right>
-    <el-dialog title="地图派送" :visible.sync="isShowBigMap" width="100%" :fullscreen="true"
+    <el-dialog :title="'任务号: ' + mapBigFormItem.transportTaskNo" :visible.sync="isShowBigMap" width="100%"
+               :fullscreen="true"
                custom-class="custom-dialog-map">
       <task-map mapRef="bigTaskMap" :formItem="mapBigFormItem"
                 :mapStyle="{height: bodyHeight}"></task-map>
