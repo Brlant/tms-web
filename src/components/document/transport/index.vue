@@ -322,7 +322,7 @@
     <page-right :show="showBatchAutoIndex === 0" @right-close="resetRightBox" :css="{'width':'80%','padding':0}">
       <component :is="currentBatchAutoPart" :filters="condition" @right-close="resetRightBox" @change="autoSubmit"/>
     </page-right>
-    <el-dialog title="派送信息" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
+    <el-dialog :title="'运单号: ' + formItem.waybillNumber" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
                custom-class="custom-dialog-map">
       <map-path :formItem="formItem" :mapStyle="{height: bodyHeight}" vid="mapBigPath"
                 v-show="isShowMulBigMap"></map-path>
@@ -421,7 +421,7 @@
         isLoading: false,
         waybillIdList: [],
         condition: {},
-        formItem: null,
+        formItem: {},
         isShowMulBigMap: false
       };
     },
