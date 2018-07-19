@@ -32,20 +32,20 @@
           </el-button>
         </perm>
         <perm label="tms-waybill-verifyPass">
-          <el-button plain size="small" @click="autoConfirmWayBill" v-if="activeStatus===0||activeStatus==='0'">
+          <el-button plain size="small" @click="autoConfirmWayBill" v-if="filters.status==='-2'">
             <f-a class="icon-small" name="wave"></f-a>
             确认全部运单
           </el-button>
         </perm>
         <perm label="tms-waybill-confirm">
-          <el-button plain size="small" @click="batchConfirmWayBill" v-if="activeStatus===0||activeStatus==='0'">
+          <el-button plain size="small" @click="batchConfirmWayBill" v-if="filters.status==='-2'">
             <f-a class="icon-small" name="wave"></f-a>
             批量确认运单
           </el-button>
         </perm>
         <perm label="tms-task-add">
           <el-button plain size="small" @click="autoWayBillList"
-                     v-if="(activeStatus===2||activeStatus==='2')&&checkList.length">
+                     v-if="filters.status==='0'&&checkList.length">
             <f-a class="icon-small" name="wave"></f-a>
             自动排单
           </el-button>
@@ -54,7 +54,7 @@
           <el-button plain size
 
             ="small" @click="batchAutoWayBillList"
-                     v-if="(activeStatus===2||activeStatus==='2')&&!checkList.length">
+                     v-if="filters.status==='0'&&!checkList.length">
             <f-a class="icon-small" name="wave"></f-a>
             批量自动排单
           </el-button>
@@ -106,7 +106,7 @@
       <div class="flex-list-dom">
         <el-row class="order-list-header">
           <el-col :span="2">
-            <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
+            <el-checkbox @change="checkAll" v-model="isCheckAll" v-if="filters.status"></el-checkbox>
             运单号
           </el-col>
           <el-col :span="2">类型</el-col>
@@ -139,7 +139,7 @@
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="2" class="special-col R">
-              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)">
+              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)" v-if="filters.status">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
@@ -332,7 +332,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TmsWayBill } from '@/resources';
+  import {http, TmsWayBill} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';

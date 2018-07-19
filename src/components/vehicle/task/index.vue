@@ -154,6 +154,13 @@
                       </a>取消
                     </span>
                   </perm>
+                  <perm label="tms-task-car-task-edit" class="btn-line-block">
+                    <span @click.stop="editInfo(item)" v-if="item.status==='1'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-edit"></i>
+                      </a>编辑
+                    </span>
+                  </perm>
                 </div>
                 <div v-if="item.status==='0'">
                   <perm label="tms-task-car-task-confirm" class="opera-btn btn-line-block">
