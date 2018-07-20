@@ -274,7 +274,7 @@
         pageSets: [
           {name: '任务信息', key: 0},
           {name: '运单明细', key: 1},
-          {name: '派送地图', key: 2},
+          {name: '派送轨迹', key: 2},
           {name: '操作日志', key: 3}
         ],
         currentTab: {},
