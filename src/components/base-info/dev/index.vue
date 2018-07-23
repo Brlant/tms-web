@@ -128,8 +128,6 @@
         </div>
       </div>
       <div class="d-table-right">
-        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
-          <div class="scrollbar-content">
         <div class="content-right">
           <div class="form-header-part part-bg p-r-20">
             <div class="header">
@@ -232,7 +230,7 @@
           <div v-else-if="devDetailList.length===0">
             <div class="empty-info">暂无信息</div>
           </div>
-          <el-table v-else :data="devDetailList" class="header-list" border style="margin-right:-15px"
+          <el-table v-else :data="devDetailList" class="header-list" border style="margin-right:-15px;width: 100%;"
                     :header-row-class-name="'headerClass'" :maxHeight="tableHeight">
             <el-table-column prop="devNo" label="包装编号" min-width="150" :sortable="true"></el-table-column>
             <el-table-column prop="status" label="状态" min-width="80" :sortable="true">
@@ -278,8 +276,6 @@
                          :total="detailPager.count">
           </el-pagination>
         </div>
-        </div>
-        </el-scrollbar>
       </div>
     </div>
     <page-right :show="showRight" @right-close="resetRightBox" :css="{width:'600px'}">
@@ -393,13 +389,12 @@
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = (height - 10) + 'px';
+        height = (height - 17) + 'px';
         return height;
       },
       tableHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        height = height - 10 - 300;
-        return height;
+        return (height - 207);
       },
       equipmentType: function () {
         return this.$getDict('equipmentType');
