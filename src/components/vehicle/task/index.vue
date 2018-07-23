@@ -26,7 +26,7 @@
             导出出车任务
           </el-button>
         </perm>
-        <perm label="tms-task-car-task-export">
+        <perm label="tms-task-car-task-print">
           <el-button plain size="small" @click="printFile" :disabled="isLoading">
             <f-a class="icon-small" name="print"></f-a>
             打印出车任务
