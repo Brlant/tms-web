@@ -105,7 +105,7 @@
     <div class="order-list" style="margin-top: 20px">
       <div class="flex-list-dom">
         <el-row class="order-list-header">
-          <el-col :span="2">
+          <el-col :span="3">
             <el-checkbox @change="checkAll" v-model="isCheckAll" v-if="filters.status"></el-checkbox>
             运单号
           </el-col>
@@ -138,7 +138,7 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="2" class="special-col R">
+            <el-col :span="3" class="special-col R">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)" v-if="filters.status">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
