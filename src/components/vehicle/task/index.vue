@@ -146,7 +146,7 @@
             </el-col>
             <el-col :span="3" class="opera-btn">
               <div>
-                <div v-if="item.status==='1'">
+                <div v-if="item.status==='1'||item.status==='2'">
                   <perm label="tms-task-car-task-cancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelTask(item)" v-if="item.status==='1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
@@ -155,7 +155,7 @@
                     </span>
                   </perm>
                   <perm label="tms-task-car-task-edit" class="btn-line-block">
-                    <span @click.stop="editInfo(item)" v-if="item.status==='1'">
+                    <span @click.stop="editInfo(item)" v-if="item.status==='1'||item.status==='2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
