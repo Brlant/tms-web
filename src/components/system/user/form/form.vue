@@ -18,7 +18,7 @@
         <oms-input type="text" v-model="form.email" placeholder="请输入"></oms-input>
       </el-form-item>
       <el-form-item label="用户角色">
-        <el-select placeholder="请选择" v-model="form.list" multiple filterable="true">
+        <el-select placeholder="请选择" v-model="form.list" multiple filterable>
           <el-option :label="item.title" :value="item.id" :key="item.id" v-for="item in roleSelect"></el-option>
         </el-select>
       </el-form-item>
