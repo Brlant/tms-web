@@ -416,6 +416,10 @@
           // 清空列表
           this.taskIdList = [];
           this.checkList = [];
+          // 清空勾选
+          this.dataList.forEach(val => {
+            val.isChecked = false;
+          });
         }).catch(error => {
           this.isLoading = false;
           this.$store.commit('initPrint', {isPrinting: false});
@@ -448,6 +452,10 @@
           // 清空列表
           this.taskIdList = [];
           this.checkList = [];
+          // 清空勾选
+          this.dataList.forEach(val => {
+            val.isChecked = false;
+          });
         }).catch(error => {
           this.isLoading = false;
           this.$store.commit('initPrint', {

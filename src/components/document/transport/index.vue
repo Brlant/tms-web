@@ -489,6 +489,10 @@
             isPrinting: false,
             moduleId: '/document/transport'
           });
+          // 清空勾选
+          this.dataList.forEach(val => {
+            val.isChecked = false;
+          });
         }).catch(error => {
           this.isLoading = false;
           this.$store.commit('initPrint', {
@@ -521,6 +525,10 @@
           this.$store.commit('initPrint', {
             isPrinting: false,
             moduleId: '/document/transport'
+          });
+          // 清空勾选
+          this.dataList.forEach(val => {
+            val.isChecked = false;
           });
         }).catch(error => {
           this.isLoading = false;
