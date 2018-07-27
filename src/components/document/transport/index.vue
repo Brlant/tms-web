@@ -240,7 +240,8 @@
                 </div>
                 <div style="padding-top: 2px">
                   <perm label="tms-waybill-cancel" class="opera-btn">
-                    <span @click.stop="cancelWayBill(item)" v-if="item.status === '-2'||item.status === '-1'">
+                    <span @click.stop="cancelWayBill(item)"
+                          v-if="item.status === '-2'||item.status === '-1'||item.status === '0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
@@ -454,7 +455,7 @@
         deep: true
       }
     },
-    mounted() {
+    mounted () {
       this.getTmsWayBillPage(1);
       let id = this.$route.params.id;
       if (id !== 'list' && id !== ':id') {
@@ -665,7 +666,7 @@
           this.waybillIdList.splice(idIndex, 1);
         }
       },
-      checkAll() {
+      checkAll () {
         // 全选
         if (this.isCheckAll) {
           this.dataList.forEach(item => {
@@ -731,11 +732,11 @@
 
         });
       },
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.pager.pageSize = val;
         this.getTmsWayBillPage(1);
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         this.getTmsWayBillPage(val);
       },
       searchResult: function (search) {
@@ -843,12 +844,12 @@
           this.$router.push('/document/transport/' + item.id);
         });
       },
-      submit() {
+      submit () {
         this.checkList = [];
         this.checkListPara = [];
         this.getTmsWayBillPage(1);
       },
-      autoSubmit() {
+      autoSubmit () {
         this.checkList = [];
         this.checkListPara = [];
       }
