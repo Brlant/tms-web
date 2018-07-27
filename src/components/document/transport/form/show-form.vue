@@ -11,6 +11,7 @@
       left: $labelWidth;
     }
   }
+
   .part-hj-box {
     border: 1px solid #eee;
     border-radius: 10px;
@@ -19,7 +20,7 @@
   }
 
   .el-form-item {
-     margin-bottom: 0px;
+    margin-bottom: 0px;
   }
 </style>
 <template>
@@ -56,8 +57,10 @@
             <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime">{{form.updateTime|time}}</oms-col>
             <oms-col label="司机" :rowSpan="span" :value="form.driverName"/>
             <oms-col label="车牌号" :rowSpan="span" :value="form.carNo"/>
-            <oms-col label="启运时间" :rowSpan="span" :value="form.startTransportTime">{{form.startTransportTime|time}}</oms-col>
-            <oms-col label="送达时间" :rowSpan="span" :value="form.waybillCompleteTime">{{form.waybillCompleteTime|time}}</oms-col>
+            <oms-col label="启运时间" :rowSpan="span" :value="form.startTransportTime">{{form.startTransportTime|time}}
+            </oms-col>
+            <oms-col label="送达时间" :rowSpan="span" :value="form.waybillCompleteTime">{{form.waybillCompleteTime|time}}
+            </oms-col>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
@@ -172,10 +175,12 @@
             <el-table :data="form.incubatorDtoList" border style="width: 100%">
               <el-table-column prop="boxNo" label="保温箱编号" width="200">
                 <template slot-scope="scope">
-                  <el-tag :closable="form.status!=='3'&&isShow('tms-waybill-temperature-delete')"
-                          @close="deleteDevBox(scope.row)" :key="scope.row.boxNo">
-                    {{scope.row.boxNo}}
-                  </el-tag>
+                  <el-tooltip effect="dark" :content="formatTime(scope.row.createTime)" placement="right">
+                    <el-tag :closable="form.status!=='3'&&isShow('tms-waybill-temperature-delete')"
+                            @close="deleteDevBox(scope.row)" :key="scope.row.boxNo">
+                      {{scope.row.boxNo}}
+                    </el-tag>
+                  </el-tooltip>
                 </template>
               </el-table-column>
               <el-table-column prop="thermometerNoList" label="温度计列表">
@@ -324,7 +329,7 @@
       OmsCol,
       TwoColumn, MapPath, attachmentLists, OmsCostTime
     },
-    data() {
+    data () {
       return {
         span: 7,
         list: [],
@@ -352,7 +357,7 @@
       };
     },
     computed: {
-      pageSets() {
+      pageSets () {
         if (this.form.qualityInspection) {
           return {
             0: {name: '基本信息', key: 0},
@@ -402,6 +407,9 @@
       }
     },
     methods: {
+      formatTime (date) {
+        return date ? '绑定时间：' + this.$moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
+      },
       queryLog: function (id) {
         if (!id) return;
         this.loadingLog = true;
@@ -500,7 +508,7 @@
           });
         });
       },
-      formatStatusTitle(status, statusType) {
+      formatStatusTitle (status, statusType) {
         let title = '';
         Object.keys(statusType).forEach(k => {
           if (status === null) {
@@ -549,10 +557,10 @@
         TmsWayBill.update(this.form.id, {attachmentIdList: ids}).then(res => {
         });
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
-      close() {
+      close () {
         this.$emit('right-close');
       }
     }
