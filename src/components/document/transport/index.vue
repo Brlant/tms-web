@@ -283,12 +283,12 @@
         </div>
       </div>
       <el-row class="order-list-header" v-show="dataList.length && !loadingData">
-        <el-col :span="12" align="left">合计</el-col>
+        <el-col :span="13" align="left">合计</el-col>
         <el-col :span="1">{{totalCount.whole}}</el-col>
         <el-col :span="1">{{totalCount.buck}}</el-col>
         <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
         <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
-        <el-col :span="8"></el-col>
+        <el-col :span="7"></el-col>
       </el-row>
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
