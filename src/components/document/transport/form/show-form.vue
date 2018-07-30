@@ -212,7 +212,7 @@
             <el-form-item label="签收人:" v-show="form.signPerson">
               {{form.signPerson}}
             </el-form-item>
-            <el-form-item label="附件">
+            <el-form-item label="附件:">
               <oms-upload :fileList="attachmentList" @change="changeFiles"
                           :formData="{ objectId: form.id, objectType: 'waybill'}"></oms-upload>
             </el-form-item>
@@ -227,22 +227,30 @@
           <div class="content">
             <el-col :span="24">
               <div>
-                <oms-row label="中止原因" :span="4">
-                  <slot>{{form.suspendReason}}</slot>
+                <oms-row label="中止原因" :span="4" style="padding-bottom: 5px">
+                  <slot>
+                    <dict :dict-group="'waybillEndReason'" :dict-key="form.suspendReason"></dict>
+                  </slot>
                 </oms-row>
               </div>
             </el-col>
-            <oms-col label="评估结论" :rowSpan="8" :value="form.qualityFlag">
-              <el-tag :type="form.qualityFlag?'success':'danger'">
-                {{isQualityFlag(form.qualityFlag)}}
-              </el-tag>
-              {{form.qualityInspection}}
-            </oms-col>
             <el-col :span="24">
               <div>
-                <oms-row label="附件" :span="4">
+                <oms-row label="评估结论" :span="4" style="padding-bottom: 5px">
+                  <slot>
+                    <el-tag :type="form.qualityFlag?'success':'danger'">
+                      {{isQualityFlag(form.qualityFlag)}}
+                    </el-tag>
+                    {{form.qualityInspection}}
+                  </slot>
+                </oms-row>
+              </div>
+            </el-col>
+            <el-col :span="24">
+              <div>
+                <oms-row label="附件" :span="4" style="padding-bottom: 5px">
                   <attachment-lists :attachmentIdList="assessAttachmentIdList" :objectId="form.id"
-                                    :objectType="'waybill-check'" :permission="'show'" style="padding-bottom: 10px"/>
+                                    :objectType="'waybill-check'" :permission="'show'"/>
                 </oms-row>
               </div>
             </el-col>
