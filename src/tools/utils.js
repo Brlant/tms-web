@@ -18,7 +18,7 @@ export default {
     3: {'title': '待派车', status: '0', num: ''},
     4: {'title': '待启运', status: '1', num: ''},
     5: {'title': '待送达', status: '7', num: ''},
-    6: {'title': '待签收', status: '2', num: ''},
+    6: {'title': '待完成', status: '2', num: ''},
     7: {'title': '已完成', status: '3', num: ''},
     8: {'title': '已取消', status: '4', num: ''},
     9: {'title': '质量待评估', status: '5', num: ''},
