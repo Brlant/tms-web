@@ -333,7 +333,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {http, TmsWayBill} from '@/resources';
+  import { http, TmsWayBill } from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
@@ -466,7 +466,7 @@
     },
     methods: {
       showBigMap (formItem) {
-        this.formItem = null;
+        this.formItem = {};
         this.isShowMulBigMap = true;
         this.$nextTick(() => {
           setTimeout(() => {
