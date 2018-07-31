@@ -256,7 +256,7 @@
                   </perm>
                 </div>
                 <perm label="tms-waybill-sign" class="opera-btn">
-                    <span @click.stop="signWayBill(item)" v-if="item.status === '2'">
+                    <span @click.stop="signWayBill(item)" v-if="item.status === '2'||item.status==='7'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>签收
@@ -333,7 +333,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TmsWayBill } from '@/resources';
+  import {http, TmsWayBill} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
