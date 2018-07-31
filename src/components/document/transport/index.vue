@@ -78,7 +78,7 @@
     <el-row>
       <el-col :span="16">
         <div class="order-list-status " style="margin-bottom:20px">
-          <div class="status-item" v-show="key < 7"
+          <div class="status-item" v-show="key < 8"
                :class="{'active':key==activeStatus}"
                v-for="(item,key) in orderType"
                @click="changeStatus(item,key)">
@@ -90,7 +90,7 @@
       </el-col>
       <el-col :span="8">
         <div class="order-list-status  order-list-status-right" style="margin-bottom:20px">
-          <div class="status-item" v-show="key > 6"
+          <div class="status-item" v-show="key > 7"
                :class="{'active':key==activeStatus }"
                v-for="(item,key) in orderType"
                @click="changeStatus(item,key)">
