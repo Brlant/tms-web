@@ -1,4 +1,4 @@
-import { Address } from '@dtop/dtop-web-common';
+import {Address} from '@dtop/dtop-web-common';
 import moment from 'moment';
 
 export default {
@@ -17,11 +17,12 @@ export default {
     2: {'title': '待打包', status: '-1', num: ''},
     3: {'title': '待派车', status: '0', num: ''},
     4: {'title': '待启运', status: '1', num: ''},
-    5: {'title': '待签收', status: '2', num: ''},
-    6: {'title': '已完成', status: '3', num: ''},
-    7: {'title': '已取消', status: '4', num: ''},
-    8: {'title': '质量待评估', status: '5', num: ''},
-    9: {'title': '已中止', status: '6', num: ''}
+    5: {'title': '待送达', status: '7', num: ''},
+    6: {'title': '待签收', status: '2', num: ''},
+    7: {'title': '已完成', status: '3', num: ''},
+    8: {'title': '已取消', status: '4', num: ''},
+    9: {'title': '质量待评估', status: '5', num: ''},
+    10: {'title': '已中止', status: '6', num: ''}
   },
   carTaskType: {
     0: {'title': '待确认', status: '0', num: ''},
@@ -218,7 +219,7 @@ export default {
     fileLink.click();
     body.removeChild($a);
   },
-  printLocation(that, obj) {
+  printLocation (that, obj) {
     let url = 'https://print.sinopharm-bio.com:8015';
     let ary = JSON.parse(window.localStorage.getItem('localConfiguration')) || [];
     ary.forEach(i => {
@@ -244,7 +245,7 @@ export default {
       });
     });
   },
-  getPos(e) {//这是一个 获取鼠标位置的函数
+  getPos (e) {//这是一个 获取鼠标位置的函数
     let oEvent = e || event;
     return {
       x: oEvent.clientX + document.documentElement.scrollLeft || document.body.scrollLeft,
@@ -259,11 +260,11 @@ export default {
       }
     };
   },
-  formatTimeAry(times, index, str) {
+  formatTimeAry (times, index, str) {
     if (!times) return;
     return this.formatTime(times[index], str);
   },
-  formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
+  formatTime (time, str = 'YYYY-MM-DD HH:mm:ss') {
     return time ? moment(time).format(str) : '';
   }
 
