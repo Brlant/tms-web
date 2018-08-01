@@ -105,7 +105,7 @@
     <div class="order-list" style="margin-top: 20px">
       <div class="flex-list-dom">
         <el-row class="order-list-header">
-          <el-col :span="3">
+          <el-col :span="2">
             <el-checkbox @change="checkAll" v-model="isCheckAll" v-if="filters.status"></el-checkbox>
             运单号
           </el-col>
@@ -117,7 +117,7 @@
           <el-col :span="1">实际包件</el-col>
           <el-col :span="1">预估包件</el-col>
           <!--<el-col :span="2">预估包件</el-col>-->
-          <el-col :span="3">时间</el-col>
+          <el-col :span="4">时间</el-col>
           <el-col :span="1">状态</el-col>
           <el-col :span="3">操作</el-col>
         </el-row>
@@ -138,7 +138,7 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="3" class="special-col R">
+            <el-col :span="2" class="special-col R">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)" v-if="filters.status">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
@@ -200,7 +200,7 @@
             <!--{{item.preIncubatorCount}}-->
             <!--</div>-->
             <!--</el-col>-->
-            <el-col :span="3" class="R">
+            <el-col :span="4" class="R">
               <div v-show="item.deliveryTime&&!item.waybillCompleteTime">
                 <span>送达时限:</span>
                 {{item.deliveryTime|date}}
@@ -208,6 +208,10 @@
               <div v-show="item.startTransportTime">
                 <span>[始] </span>
                 {{item.startTransportTime|time}}
+              </div>
+              <div v-show="item.deliveryCompleteTime">
+                <span>[运单送达] </span>
+                {{item.deliveryCompleteTime|time}}
               </div>
               <div v-show="item.waybillCompleteTime">
                 <span>[终] </span>
@@ -283,12 +287,12 @@
         </div>
       </div>
       <el-row class="order-list-header" v-show="dataList.length && !loadingData">
-        <el-col :span="13" align="left">合计</el-col>
+        <el-col :span="12" align="left">合计</el-col>
         <el-col :span="1">{{totalCount.whole}}</el-col>
         <el-col :span="1">{{totalCount.buck}}</el-col>
         <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
         <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
-        <el-col :span="7"></el-col>
+        <el-col :span="8"></el-col>
       </el-row>
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
