@@ -11,6 +11,7 @@
       left: $labelWidth;
     }
   }
+
   .part-hj-box {
     border: 1px solid #eee;
     border-radius: 10px;
@@ -19,7 +20,7 @@
   }
 
   .el-form-item {
-     margin-bottom: 0px;
+    margin-bottom: 0px;
   }
 </style>
 <template>
@@ -183,8 +184,9 @@
               <div class="order-cost-part">
                 <i class="el-icon-time"></i> 订单消耗时间:
                 <oms-cost-time :fDate="form.createTime" :tDate="form.waybillCompleteTime"></oms-cost-time>
-                <el-tag v-if="form.waybillCompleteTime" type="success">已结束</el-tag>
-                <el-tag v-if="!form.waybillCompleteTime" type="success">进行中</el-tag>
+                <el-tag v-if="form.waybillCompleteTime&&form.status!=='5'" type="success">已结束</el-tag>
+                <el-tag v-if="!form.waybillCompleteTime&&form.status!=='5'" type="success">进行中</el-tag>
+                <el-tag v-if="form.status==='5'" type="danger">已取消</el-tag>
               </div>
               <Timeline>
                 <template v-for="(log,index) in orderLogList">
@@ -221,14 +223,14 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import { TmsLog, TmsOrder } from '@/resources';
+  import {TmsLog, TmsOrder} from '@/resources';
   import MapPath from '../../common/map-list';
   import utils from '@/tools/utils';
   import OmsCostTime from '@/components/common/timeCost.vue';
 
   export default {
     components: {TwoColumn, MapPath, OmsCostTime},
-    data() {
+    data () {
       return {
         span: 7,
         list: [],
@@ -303,7 +305,7 @@
           this.loadingLog = false;
         });
       },
-      formatStatusTitle(status, statusType) {
+      formatStatusTitle (status, statusType) {
         let title = '';
         Object.keys(statusType).forEach(k => {
           if (status === null) {
@@ -320,10 +322,10 @@
         });
         return title;
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
-      close() {
+      close () {
         this.$emit('right-close');
       }
     }

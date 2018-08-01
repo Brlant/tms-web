@@ -146,14 +146,14 @@
               <el-table-column prop="receiverName" label="发货单位" mix-width="190">
                 <template slot-scope=" scope">
                   <div class="f-14">
-                     {{scope.row.senderName}}
+                    {{scope.row.senderName}}
                   </div>
                 </template>
               </el-table-column>
               <el-table-column prop="receiverName" label="收货单位" mix-width="190">
                 <template slot-scope=" scope">
                   <div class="f-14">
-                     {{scope.row.receiverName}}
+                    {{scope.row.receiverName}}
                   </div>
                 </template>
               </el-table-column>
@@ -178,7 +178,8 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="" label="操作" width="80" v-if="form.status==='0'||form.status==='1'||form.status==='2'">
+              <el-table-column prop="" label="操作" width="80"
+                               v-if="form.status==='0'||form.status==='1'||form.status==='2'">
                 <template slot-scope=" scope">
                   <perm label="tms-waybill-edit" class="opera-btn btn-line-block f-12">
                     <span @click.stop="deleteDetail(scope.row)">
@@ -221,8 +222,9 @@
               <div class="order-cost-part">
                 <i class="el-icon-time"></i> 出车任务消耗时间:
                 <oms-cost-time :fDate="form.createTime" :tDate="form.taskEndTime"></oms-cost-time>
-                <el-tag v-if="form.taskEndTime" type="success">已结束</el-tag>
-                <el-tag v-if="!form.taskEndTime" type="success">进行中</el-tag>
+                <el-tag v-if="form.taskEndTime&&form.status!=='4'" type="success">已结束</el-tag>
+                <el-tag v-if="!form.taskEndTime&&form.status!=='4'" type="success">进行中</el-tag>
+                <el-tag v-if="form.status==='4'" type="danger">已取消</el-tag>
               </div>
               <Timeline>
                 <template v-for="(log,index) in orderLogList">
@@ -259,7 +261,7 @@
   </dialog-template>
 </template>
 <script>
-  import { TmsLog, TransportTask } from '@/resources';
+  import {TmsLog, TransportTask} from '@/resources';
   import TaskMap from './map-car-task';
   import utils from '@/tools/utils';
   import OmsCostTime from '@/components/common/timeCost.vue';
@@ -363,7 +365,7 @@
           this.loadingLog = false;
         });
       },
-      formatStatusTitle(status, statusType) {
+      formatStatusTitle (status, statusType) {
         let title = '';
         Object.keys(statusType).forEach(k => {
           if (status === null) {

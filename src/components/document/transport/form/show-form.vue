@@ -285,8 +285,12 @@
               <div class="order-cost-part">
                 <i class="el-icon-time"></i> 运单消耗时间:
                 <oms-cost-time :fDate="form.createTime" :tDate="form.waybillCompleteTime"></oms-cost-time>
-                <el-tag v-if="form.waybillCompleteTime" type="success">已结束</el-tag>
-                <el-tag v-if="!form.waybillCompleteTime" type="success">进行中</el-tag>
+                <el-tag v-if="form.waybillCompleteTime&&form.status!=='4'&&form.status!=='6'" type="success">已结束
+                </el-tag>
+                <el-tag v-if="!form.waybillCompleteTime&&form.status!=='4'&&form.status!=='6'" type="success">进行中
+                </el-tag>
+                <el-tag v-if="form.status==='4'&&form.status!=='6'" type="danger">已取消</el-tag>
+                <el-tag v-if="form.status==='6'&&form.status!=='4'" type="warning">已中止</el-tag>
               </div>
               <Timeline>
                 <template v-for="(log,index) in orderLogList">
