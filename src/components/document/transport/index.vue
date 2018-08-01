@@ -281,6 +281,22 @@
                     </span>
                 </perm>
               </div>
+              <div>
+                <!--<perm label="tms-waybill-sign" class="opera-btn">-->
+                <span @click.stop="deliveryWayBill(item)" v-if="item.status === '2'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-basic"></i>
+                      </a>运单送达
+                    </span>
+                <!--</perm>-->
+                <!--<perm label="tms-waybill-sign" class="opera-btn">-->
+                <span @click.stop="deliverDate(item)" v-if="item.status === '7'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-edit"></i>
+                      </a>编辑送达时间
+                    </span>
+                <!--</perm>-->
+              </div>
             </el-col>
           </el-row>
           <div class="order-list-item-bg"></div>
@@ -312,6 +328,9 @@
     <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentSignPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
+    <page-right :show="showDeliverIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentDeliverPart" :formItem="form.id" @right-close="resetRightBox" @change="submit"/>
+    </page-right>
     <page-right :show="showAssessmentIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentAssessmentPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
@@ -341,6 +360,7 @@
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import signForm from './form/sign-form';
+  import deliverForm from './form/deliver-form';
   import untieForm from './form/untie-form';
   import assessmentForm from './form/assessment-form';
   import StatusMixin from '@/mixins/statusMixin';
@@ -363,6 +383,7 @@
         showIndex: -1,
         showInfoIndex: -1,
         showSignIndex: -1,
+        showDeliverIndex: -1,
         showAssessmentIndex: -1,
         showConfirmIndex: -1,
         showAutoIndex: -1,
@@ -371,6 +392,7 @@
         currentPart: null,
         currentInfoPart: null,
         currentSignPart: null,
+        currentDeliverPart: null,
         currentConfirmPart: null,
         currentAutoPart: null,
         currentUntiePart: null,
@@ -384,6 +406,9 @@
         },
         dialogSignComponents: {
           0: signForm
+        },
+        dialogDeliverComponents: {
+          0: deliverForm
         },
         dialogAssessmentComponents: {
           0: assessmentForm
@@ -661,6 +686,29 @@
 
         });
       },
+      deliveryWayBill: function (item) {
+        this.$confirm('确认运单"' + item.waybillNumber + '"已送达?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TmsWayBill.deliveryWayBill(item.id).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '已成功送达运单"' + item.waybillNumber + '"'
+            });
+            this.getTmsWayBillPage(1);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.data.msg || '运单送达失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       checkItem: function (item) {
         // 单选
         item.isChecked = !item.isChecked;
@@ -703,6 +751,13 @@
       signWayBill: function (item) {
         this.showSignIndex = 0;
         this.currentSignPart = this.dialogSignComponents[0];
+        this.$nextTick(() => {
+          this.form = JSON.parse(JSON.stringify(item));
+        });
+      },
+      deliverDate: function (item) {
+        this.showDeliverIndex = 0;
+        this.currentDeliverPart = this.dialogDeliverComponents[0];
         this.$nextTick(() => {
           this.form = JSON.parse(JSON.stringify(item));
         });
@@ -769,6 +824,7 @@
         this.showInfoIndex = -1;
         this.shoWayBillPart = false;
         this.showSignIndex = -1;
+        this.showDeliverIndex = -1;
         this.showAssessmentIndex = -1;
         this.showConfirmIndex = -1;
         this.showAutoIndex = -1;
@@ -813,8 +869,8 @@
           this.orderType[2].num = data['pend-package'];
           this.orderType[3].num = data['pend-choose-car'];
           this.orderType[4].num = data['pend-shipment'];
-          this.orderType[5].num = data['pend-delivery'];
-          this.orderType[6].num = data['pend-sign'];
+          this.orderType[5].num = data['pend-sign'];
+          this.orderType[6].num = data['pend-delivery'];
           this.orderType[7].num = data['complete'];
           this.orderType[8].num = data['canceled'];
           this.orderType[9].num = data['pend-check'];

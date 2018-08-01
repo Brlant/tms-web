@@ -1,4 +1,4 @@
-import { Notification } from 'element-ui/lib/notification';
+import {Notification} from 'element-ui/lib/notification';
 import axios from 'axios';
 import Vue from 'vue';
 
@@ -115,6 +115,12 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   },
   confirmWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/confirm', {});
+  },
+  deliveryWayBill: (id) => {
+    return http.put('/tms-waybill/' + id + '/delivery', {});
+  },
+  deliverDate: (id, obj) => {
+    return http.put('/tms-waybill/' + id + '/delivery-time', obj);
   },
   packageWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/pack', {});
