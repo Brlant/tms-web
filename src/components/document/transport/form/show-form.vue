@@ -146,7 +146,7 @@
               {{pageSets[5].name}}</h3>
           </div>
           <div class="content">
-            <el-table :data="form.goodsList" border style="width: 100%">
+            <el-table class="border-black" :data="form.goodsList" border style="width: 100%">
               <el-table-column prop="goodsName" label="货品名称" width="200">
               </el-table-column>
               <el-table-column prop="weight" label="货品重量(kg)">
@@ -171,10 +171,15 @@
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[6].key === currentTab.key}">
-              {{pageSets[6].name}}</h3>
+              {{pageSets[6].name}}
+              <span @click="show3dDataPart" class="des-btn">
+               <a href="#" class="btn-circle" @click.prevent="">
+                 <i class="el-icon-t-detail"></i></a>查看3D建模结果
+              </span>
+            </h3>
           </div>
           <div class="content">
-            <el-table :data="form.incubatorDtoList" border style="width: 100%">
+            <el-table class="border-black" :data="form.incubatorDtoList" border style="width: 100%">
               <el-table-column prop="boxNo" label="保温箱编号" width="200">
                 <template slot-scope="scope">
                   <el-tooltip effect="dark" :content="formatTime(scope.row.createTime)" placement="right">
@@ -202,6 +207,7 @@
                 </template>
               </el-table-column>
             </el-table>
+            <show3d-data ref="modelingData" :form="form"></show3d-data>
           </div>
         </div>
         <div class="form-header-part">
@@ -329,19 +335,20 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {OmsAttachment, TmsLog, TmsPack, TmsWayBill} from '@/resources';
+  import { OmsAttachment, TmsLog, TmsPack, TmsWayBill } from '@/resources';
   import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
   import OmsCol from '@dtop/dtop-web-common/packages/col';
   import utils from '@/tools/utils';
   import Perm from '@/components/common/perm';
   import OmsCostTime from '@/components/common/timeCost.vue';
+  import Show3dData from './show-3d-data';
 
   export default {
     components: {
       Perm,
       OmsCol,
-      TwoColumn, MapPath, attachmentLists, OmsCostTime
+      TwoColumn, MapPath, attachmentLists, OmsCostTime, Show3dData
     },
     data () {
       return {
@@ -576,6 +583,10 @@
       },
       close () {
         this.$emit('right-close');
+      },
+      // 显示3D数据
+      show3dDataPart () {
+        this.$refs.modelingData.open();
       }
     }
   };
