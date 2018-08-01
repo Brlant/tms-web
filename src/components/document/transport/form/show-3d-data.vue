@@ -16,13 +16,13 @@
     <div class="form-header-part">
       <div class="header">
         <div class="sign f-dib"></div>
-        <h3 class="tit f-dib">
+        <h3 class="tit f-dib index-tit" :class="{active: pageSet.key === currentTab.key}">
           预装箱结果
-          <span @click="open" class="des-btn" v-show="!show">
+        </h3>
+        <span @click="open" class="des-btn" v-show="!show">
                <a href="#" class="btn-circle" @click.prevent="">
                  <i class="el-icon-zoom-in"></i></a>查看
           </span>
-        </h3>
       </div>
       <div class="content">
         <el-table v-show="show" :data="list" border class="border-black" v-loading="loading">
@@ -44,7 +44,7 @@
 </template>
 <script>
   export default {
-    props: ['form'],
+    props: ['form', 'pageSet', 'currentTab'],
     data () {
       return {
         show: false,

@@ -34,8 +34,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
-              {{pageSets[0].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(0).key === currentTab.key}">
+              {{getPageSet(0).name}}</h3>
           </div>
           <div class="content">
             <oms-col label="运单号" :rowSpan="span" :value="form.waybillNumber"/>
@@ -69,8 +69,8 @@
         <div class="form-header-part ">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
-              {{pageSets[1].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(1).key === currentTab.key}">
+              {{getPageSet(1).name}}</h3>
           </div>
           <div class="content">
             <oms-col label="货主" :rowSpan="span" :value="form.orgName"/>
@@ -84,8 +84,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
-              {{pageSets[2].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(2).key === currentTab.key}">
+              {{getPageSet(2).name}}</h3>
           </div>
           <div class="content">
             <oms-col label="收货联系人" :rowSpan="span" :value="form.receiverContact"/>
@@ -98,8 +98,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">
-              {{pageSets[3].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(3).key === currentTab.key}">
+              {{getPageSet(3).name}}</h3>
           </div>
           <div class="content">
             <oms-col label="整装箱数" :rowSpan="span" :value="form.wholeBoxCount" isShow="true"/>
@@ -127,8 +127,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">
-              {{pageSets[4].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(4).key === currentTab.key}">
+              {{getPageSet(4).name}}</h3>
           </div>
           <div class="content">
             <oms-col label="提货时间" :rowSpan="span" :value="form.pickUpTime">{{form.pickUpTime|date}}</oms-col>
@@ -142,8 +142,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[5].key === currentTab.key}">
-              {{pageSets[5].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(5).key === currentTab.key}">
+              {{getPageSet(5).name}}</h3>
           </div>
           <div class="content">
             <el-table class="border-black" :data="form.goodsList" border style="width: 100%">
@@ -170,8 +170,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[6].key === currentTab.key}">
-              {{pageSets[6].name}}
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(6).key === currentTab.key}">
+              {{getPageSet(6).name}}
             </h3>
           </div>
           <div class="content">
@@ -205,12 +205,12 @@
             </el-table>
           </div>
         </div>
-        <show3d-data ref="modelingData" :form="form"></show3d-data>
+        <show3d-data ref="modelingData" :pageSet="getPageSet(11)" :form="form" :currentTab="currentTab"></show3d-data>
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[7].key === currentTab.key}">
-              {{pageSets[7].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(7).key === currentTab.key}">
+              {{getPageSet(7).name}}</h3>
           </div>
           <div class="content">
             <el-form-item label="签收人:" v-show="form.signPerson">
@@ -225,8 +225,8 @@
         <div class="form-header-part" v-if="form.status==='6'&&form.qualityInspection">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[8].key === currentTab.key}">
-              {{pageSets[8].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(8).key === currentTab.key}">
+              {{getPageSet(8).name}}</h3>
           </div>
           <div class="content">
             <el-col :span="24">
@@ -264,8 +264,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[9].key === currentTab.key}">
-              {{pageSets[9].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(9).key === currentTab.key}">
+              {{getPageSet(9).name}}</h3>
             <span @click="showBigMap(formItem)" class="des-btn">
                <a href="#" class="btn-circle" @click.prevent="">
                  <i class="el-icon-zoom-in"></i></a>查看大图
@@ -278,8 +278,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[10].key === currentTab.key}">
-              {{pageSets[10].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: getPageSet(10).key === currentTab.key}">
+              {{getPageSet(10).name}}</h3>
           </div>
           <div class="content">
             <div v-if="loadingLog">
@@ -375,34 +375,23 @@
     },
     computed: {
       pageSets () {
+        let ary = [
+          {name: '基本信息', key: 0},
+          {name: '发货信息', key: 1},
+          {name: '收货信息', key: 2},
+          {name: '货品信息', key: 3},
+          {name: '其他信息', key: 4},
+          {name: '货品列表', key: 5},
+          {name: '保温箱列表', key: 6},
+          {name: '预装箱结果', key: 11},
+          {name: '签收信息', key: 7},
+          {name: '派送信息', key: 9},
+          {name: '操作日志', key: 10}
+        ];
         if (this.form.qualityInspection) {
-          return {
-            0: {name: '基本信息', key: 0},
-            1: {name: '发货信息', key: 1},
-            2: {name: '收货信息', key: 2},
-            3: {name: '货品信息', key: 3},
-            4: {name: '其他信息', key: 4},
-            5: {name: '货品列表', key: 5},
-            6: {name: '保温箱列表', key: 6},
-            7: {name: '签收信息', key: 7},
-            8: {name: '质量评估', key: 8},
-            9: {name: '派送信息', key: 9},
-            10: {name: '操作日志', key: 10}
-          };
-        } else {
-          return {
-            0: {name: '基本信息', key: 0},
-            1: {name: '发货信息', key: 1},
-            2: {name: '收货信息', key: 2},
-            3: {name: '货品信息', key: 3},
-            4: {name: '其他信息', key: 4},
-            5: {name: '货品列表', key: 5},
-            6: {name: '保温箱列表', key: 6},
-            7: {name: '签收信息', key: 7},
-            9: {name: '派送信息', key: 9},
-            10: {name: '操作日志', key: 10}
-          };
+          ary.splice(8, 0, {name: '质量评估', key: 8});
         }
+        return ary;
       }
     },
     props: ['formItem', 'showBigMap'],
@@ -424,6 +413,9 @@
       }
     },
     methods: {
+      getPageSet (key) {
+        return this.pageSets.filter(f => f.key === key)[0];
+      },
       formatTime (date) {
         return date ? '绑定时间：' + this.$moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
       },
