@@ -172,10 +172,6 @@
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[6].key === currentTab.key}">
               {{pageSets[6].name}}
-              <span @click="show3dDataPart" class="des-btn">
-               <a href="#" class="btn-circle" @click.prevent="">
-                 <i class="el-icon-t-detail"></i></a>查看3D建模结果
-              </span>
             </h3>
           </div>
           <div class="content">
@@ -207,9 +203,9 @@
                 </template>
               </el-table-column>
             </el-table>
-            <show3d-data ref="modelingData" :form="form"></show3d-data>
           </div>
         </div>
+        <show3d-data ref="modelingData" :form="form"></show3d-data>
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
@@ -583,10 +579,6 @@
       },
       close () {
         this.$emit('right-close');
-      },
-      // 显示3D数据
-      show3dDataPart () {
-        this.$refs.modelingData.open();
       }
     }
   };
