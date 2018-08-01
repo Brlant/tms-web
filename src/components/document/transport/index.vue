@@ -260,7 +260,7 @@
                   </perm>
                 </div>
                 <perm label="tms-waybill-sign" class="opera-btn">
-                    <span @click.stop="signWayBill(item)" v-if="item.status === '2'">
+                    <span @click.stop="signWayBill(item)" v-if="item.status === '7'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>签收
@@ -274,7 +274,7 @@
                     </span>
                 </perm>
                 <perm label="tms-waybill-suspend" class="opera-btn">
-                    <span @click.stop="untieWayBill(item)" v-if="item.status === '2'">
+                    <span @click.stop="untieWayBill(item)" v-if="item.status === '7'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
                       </a>中止
@@ -813,8 +813,8 @@
           this.orderType[2].num = data['pend-package'];
           this.orderType[3].num = data['pend-choose-car'];
           this.orderType[4].num = data['pend-shipment'];
-          this.orderType[5].num = data['pend-sign'];
-          this.orderType[6].num = data['pend-delivery'];
+          this.orderType[5].num = data['pend-delivery'];
+          this.orderType[6].num = data['pend-sign'];
           this.orderType[7].num = data['complete'];
           this.orderType[8].num = data['canceled'];
           this.orderType[9].num = data['pend-check'];
