@@ -809,8 +809,8 @@
           this.orderType[2].num = data['pend-package'];
           this.orderType[3].num = data['pend-choose-car'];
           this.orderType[4].num = data['pend-shipment'];
-          this.orderType[5].num = data['pend-delivery'];
-          this.orderType[6].num = data['pend-sign'];
+          this.orderType[5].num = data['pend-sign'];
+          this.orderType[6].num = data['pend-delivery'];
           this.orderType[7].num = data['complete'];
           this.orderType[8].num = data['canceled'];
           this.orderType[9].num = data['pend-check'];
