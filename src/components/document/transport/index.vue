@@ -206,15 +206,15 @@
                 {{item.deliveryTime|date}}
               </div>
               <div v-show="item.startTransportTime">
-                <span>[始] </span>
+                <span>[启运] </span>
                 {{item.startTransportTime|time}}
               </div>
               <div v-show="item.deliveryCompleteTime">
-                <span>[运单送达] </span>
+                <span>[送达] </span>
                 {{item.deliveryCompleteTime|time}}
               </div>
               <div v-show="item.waybillCompleteTime">
-                <span>[终] </span>
+                <span>[结束] </span>
                 {{item.waybillCompleteTime|time}}
               </div>
             </el-col>
