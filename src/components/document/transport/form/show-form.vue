@@ -148,6 +148,13 @@
           <div class="content">
             <el-table class="border-black" :data="form.goodsList" border style="width: 100%">
               <el-table-column prop="goodsName" label="货品名称" width="200">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark"
+                              :content="formatGoodsPackage(scope.row)"
+                              placement="right">
+                    <span>{{scope.row.goodsName}}</span>
+                  </el-tooltip>
+                </template>
               </el-table-column>
               <el-table-column prop="weight" label="货品重量(kg)">
                 <template slot-scope="scope">
@@ -331,7 +338,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import { OmsAttachment, TmsLog, TmsPack, TmsWayBill } from '@/resources';
+  import {OmsAttachment, TmsLog, TmsPack, TmsWayBill} from '@/resources';
   import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
   import OmsCol from '@dtop/dtop-web-common/packages/col';
@@ -413,6 +420,11 @@
       }
     },
     methods: {
+      formatGoodsPackage: function (item) {
+        if (item) {
+          return '包装长度：' + item.goodsLength + ' 厘米；' + '包装宽度：' + item.goodsWidth + ' 厘米；' + '包装高度：' + item.goodsHeight + ' 厘米 ';
+        }
+      },
       getPageSet (key) {
         return this.pageSets.filter(f => f.key === key)[0];
       },
