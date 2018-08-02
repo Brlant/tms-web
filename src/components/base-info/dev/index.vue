@@ -394,7 +394,7 @@
       },
       tableHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height - 247);
+        return (height - 267);
       },
       equipmentType: function () {
         return this.$getDict('equipmentType');
