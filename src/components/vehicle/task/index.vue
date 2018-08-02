@@ -161,6 +161,13 @@
                       </a>编辑
                     </span>
                   </perm>
+                  <perm label="tms-task-car-task-edit" class="btn-line-block">
+                    <span @click.stop="startTransport(item)" v-if="item.status==='1'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-start"></i>
+                      </a>启用
+                    </span>
+                  </perm>
                 </div>
                 <div v-if="item.status==='0'">
                   <perm label="tms-task-car-task-confirm" class="opera-btn btn-line-block">
@@ -325,6 +332,29 @@
       }
     },
     methods: {
+      startTransport: function (item) {
+        this.$confirm('确认启运任务"' + item.transportTaskNo + '"?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TransportTask.startTransport(item.id).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '启运任务"' + item.transportTaskNo + '成功"'
+            });
+            this.getTransportTaskPage(1);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.data.msg || '启运任务失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
         return time ? moment(time).format(str) : '';
       },
