@@ -147,6 +147,7 @@
           </div>
           <div class="content">
             <el-table class="border-black" :data="form.goodsList" border style="width: 100%">
+              <el-table-column type="index" label="序号" width="50"/>
               <el-table-column prop="goodsName" label="货品名称" width="200">
               </el-table-column>
               <el-table-column prop="weight" label="货品重量(kg)">
@@ -176,6 +177,7 @@
           </div>
           <div class="content">
             <el-table class="border-black" :data="form.incubatorDtoList" border style="width: 100%">
+              <el-table-column type="index" label="序号" width="50"/>
               <el-table-column prop="boxNo" label="保温箱编号" width="200">
                 <template slot-scope="scope">
                   <el-tooltip effect="dark" :content="formatTime(scope.row.createTime)" placement="right">
@@ -222,7 +224,7 @@
             </el-form-item>
           </div>
         </div>
-        <div class="form-header-part" v-if="form.status==='6'&&form.qualityInspection">
+        <div class="form-header-part" v-if="form.status==='6'&&form.qualityInspection && getPageSet(8)">
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: getPageSet(8).key === currentTab.key}">

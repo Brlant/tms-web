@@ -26,7 +26,7 @@
       </div>
       <div class="content">
         <el-table v-show="show" :data="list" border class="border-black" v-loading="loading">
-          <el-table-column type="index" label="箱号" width="50"/>
+          <el-table-column type="index" label="序号" width="50"/>
           <el-table-column label="货品">
             <template slot-scope="scope">
               <ul class="show-list">
