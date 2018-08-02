@@ -424,7 +424,7 @@
     methods: {
       formatGoodsPackage: function (item) {
         if (item) {
-          return '包装长度：' + item.goodsLength + ' 厘米；' + '包装宽度：' + item.goodsWidth + ' 厘米；' + '包装高度：' + item.goodsHeight + ' 厘米 ';
+          return '包装：' + item.goodsLength + 'cm' + ' x ' + item.goodsWidth + 'cm' + ' x ' + item.goodsHeight + 'cm';
         }
       },
       getPageSet (key) {
