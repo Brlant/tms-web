@@ -67,7 +67,7 @@
 </style>
 <template>
   <div>
-    <div class="d-table">
+    <div class="d-table-flex">
       <div class="d-table-left">
         <div>
           <h2 class="header">
@@ -296,7 +296,7 @@
 
 </template>
 <script>
-  import {Dev, DevDetail, DevStore} from '@/resources';
+  import { Dev, DevDetail, DevStore } from '@/resources';
   import devForm from './form/dev.vue';
   import devDetailForm from './form/dev-detail.vue';
   import devStoreForm from './form/dev-store.vue';
@@ -394,7 +394,7 @@
       },
       tableHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height - 207);
+        return (height - 247);
       },
       equipmentType: function () {
         return this.$getDict('equipmentType');
