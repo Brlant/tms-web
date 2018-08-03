@@ -153,7 +153,7 @@
 
   export default {
     components: {TwoColumn},
-    data() {
+    data () {
       return {
         loadingData: true,
         isCheckAll: false,
@@ -239,7 +239,7 @@
           });
         }
       },
-      formatPrice(item, pop) {// 格式化单价，保留两位小数
+      formatPrice (item, pop) {// 格式化单价，保留两位小数
         item[pop] = utils.autoformatDecimalPoint(item[pop] + '');
       },
       resetCarList: function () {
@@ -252,7 +252,7 @@
           }
         });
       },
-      checkAll() {
+      checkAll () {
         // 全选
         if (this.isCheckAll) {
           this.carList.forEach(item => {
@@ -269,7 +269,7 @@
           this.checkCarList = [];
         }
       },
-      rowClick(item) {
+      rowClick (item) {
         item.isChecked = !item.isChecked;
         // this.setChecked(item);
         this.changeCheckStatus(item);
@@ -287,7 +287,7 @@
           this.carList.push(item);
         }
       },
-      changeCheckStatus(item) {
+      changeCheckStatus (item) {
         let index = this.checkCarList.indexOf(item);
         if (item.isChecked) {
           if (index === -1) {
@@ -406,10 +406,10 @@
           this.activeId = index;
         }
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
-      close() {
+      close () {
         this.$emit('right-close');
       }
     }

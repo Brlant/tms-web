@@ -1,17 +1,16 @@
 <template>
-    <transition name="scale" mode="out-in" appear>
-      <router-view></router-view>
-    </transition>
+  <transition name="scale" mode="out-in" appear>
+    <router-view></router-view>
+  </transition>
 </template>
 
 <script>
-  import { routes } from '../../routers';
-  import { Access } from '@/resources';
+  import {routes} from '../../routers';
+  import {Access} from '@/resources';
 
   export default {
     data: function () {
-      return {
-      };
+      return {};
     },
     computed: {
       activeMould: function () {

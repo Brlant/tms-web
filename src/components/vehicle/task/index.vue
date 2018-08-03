@@ -238,7 +238,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TransportTask } from '@/resources';
+  import {http, TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
@@ -355,7 +355,7 @@
 
         });
       },
-      formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
+      formatTime (time, str = 'YYYY-MM-DD HH:mm:ss') {
         return time ? moment(time).format(str) : '';
       },
       isOverTime: function (time) {
@@ -426,7 +426,7 @@
           }, 300);
         });
       },
-      printFile() {
+      printFile () {
         if (!this.taskIdList.length) {
           this.$notify.warning({
             duration: 2000,

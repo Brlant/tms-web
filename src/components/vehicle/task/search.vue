@@ -9,20 +9,22 @@
         <el-row>
           <el-col :span="8">
             <oms-form-row label="任务号" :span="5">
-              <oms-input v-model="searchCondition.transportTaskNo" placeholder="请输入任务编码" @keyup.native.enter="search"></oms-input>
+              <oms-input v-model="searchCondition.transportTaskNo" placeholder="请输入任务编码"
+                         @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
           <!--<el-col :span="8">-->
-            <!--<oms-form-row label="任务类型" :span="5">-->
-              <!--<el-select placeholder="请选择车型" v-model="searchCondition.type">-->
-                <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
-                           <!--v-for="item in deliveryTaskTypeList"></el-option>-->
-              <!--</el-select>-->
-            <!--</oms-form-row>-->
+          <!--<oms-form-row label="任务类型" :span="5">-->
+          <!--<el-select placeholder="请选择车型" v-model="searchCondition.type">-->
+          <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
+          <!--v-for="item in deliveryTaskTypeList"></el-option>-->
+          <!--</el-select>-->
+          <!--</oms-form-row>-->
           <!--</el-col>-->
           <el-col :span="8">
             <oms-form-row label="车牌号" :span="5">
-              <oms-input v-model="searchCondition.carPlateNumber" placeholder="请输入车牌号" @keyup.native.enter="search"></oms-input>
+              <oms-input v-model="searchCondition.carPlateNumber" placeholder="请输入车牌号"
+                         @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
           <el-col :span="8">
@@ -63,12 +65,12 @@
       }
     },
     computed: {
-      deliveryTaskTypeList() {
+      deliveryTaskTypeList () {
         return this.$getDict('deliveryTaskType');
       }
     },
     methods: {
-      reset() {
+      reset () {
         this.searchCondition = {
           transportTaskNo: '',
           type: '',

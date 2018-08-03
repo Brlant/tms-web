@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-  import { AMapManager } from 'vue-amap';
+  import {AMapManager} from 'vue-amap';
   import iconFont from '@/../static/fonts/iconfont';
   import MapMixin from '@/mixins/mapMixin';
 

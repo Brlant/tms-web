@@ -113,7 +113,7 @@
   import AppFooter from './layout/app.footer.vue';
   import utils from '../tools/utils';
   import attachmentDialog from './common/attachment/attachment.dialog.vue';
-  import { Auth } from '@/resources';
+  import {Auth} from '@/resources';
   import printDialog from './common/print.loading.vue';
 
   export default {
@@ -131,12 +131,12 @@
         return height + 'px';
       }
     },
-    beforeRouteEnter(to, form, next) {
+    beforeRouteEnter (to, form, next) {
       next(vm => {
         vm.toRoute = to;
       });
     },
-    beforeRouteUpdate(to, from, next) {
+    beforeRouteUpdate (to, from, next) {
       utils.removeClass(document.getElementsByTagName('body')[0], 'overflow-hidden');
       this.toRoute = to;
       next();

@@ -227,7 +227,7 @@
         orgTitle: ''
       };
     },
-    mounted() {
+    mounted () {
       this.getOrgPage(1);
       this.setMenuTitle(this.$route.meta.type);
     },
@@ -248,7 +248,7 @@
       }
     },
     computed: {
-      kindsMenu() {
+      kindsMenu () {
         let typeList = this.$getDict('orgRelationType');
         let kindsMenu = [{title: '全部', key: ''}];
         if (typeList) {
@@ -260,11 +260,11 @@
       }
     },
     methods: {
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.pager.pageSize = val;
         this.getOrgPage(1);
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         this.getOrgPage(val);
       },
       changeFinds: function (val) {
@@ -358,7 +358,7 @@
           this.form = res.data.orgDto;
         });
       },
-      setMenuTitle(type) {// 设置表格的标题
+      setMenuTitle (type) {// 设置表格的标题
         if (type === 0) {
           this.menuTitle = '货主/厂商管理';
           this.orgTitle = '货主';
@@ -420,9 +420,9 @@
         this.filters.deleteFlag = item.deleteFlag;
         this.filters.otherAuditStatus = item.otherAuditStatus;
       },
-      onSubmit() {
-          this.getOrgPage(1);
-          this.showRight = false;
+      onSubmit () {
+        this.getOrgPage(1);
+        this.showRight = false;
       }
     }
   };

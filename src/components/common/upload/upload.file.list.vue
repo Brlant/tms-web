@@ -66,7 +66,7 @@
     props: {
       files: {
         type: Array,
-        default() {
+        default () {
           return [];
         }
       },
@@ -78,10 +78,10 @@
       listType: String
     },
     methods: {
-      parsePercentage(val) {
+      parsePercentage (val) {
         return parseInt(val, 10);
       },
-      handleClick(file) {
+      handleClick (file) {
         this.handlePreview && this.handlePreview(file);
       }
     }

@@ -7,6 +7,7 @@
       left: 0;
     }
   }
+
   .info-part {
     .el-form-item {
       margin-bottom: 0;
@@ -239,7 +240,7 @@
       };
     },
     computed: {
-      deliveryTaskTypeList() {
+      deliveryTaskTypeList () {
         return this.$getDict('deliveryTaskType');
       }
     },
@@ -272,7 +273,7 @@
       }
     },
     methods: {
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
       remove: function (item) {
@@ -389,7 +390,7 @@
           });
         }
       },
-      save(formName) {
+      save (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             // 处理理货员列表

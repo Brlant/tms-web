@@ -5,7 +5,7 @@ import {Access} from '@/resources.js';
  * @param vm
  * @param property
  */
-export function getRoleMenus(vm, property) {
+export function getRoleMenus (vm, property) {
   let menu = vm.$store.state.allMenuList;
   if (menu && menu.length) {
     vm[property] = menu;

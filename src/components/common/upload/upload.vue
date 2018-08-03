@@ -62,7 +62,7 @@
       }
     },
 
-    data() {
+    data () {
       return {
         fileLists: this.fileList,
         dialogImageUrl: '',
@@ -94,10 +94,10 @@
         this.$emit('change', fileList);
         this.fileLists = fileList;
       },
-      submitUpload() {
+      submitUpload () {
         this.$refs.upload.submit();
       },
-      handleRemove(file, fileList) {
+      handleRemove (file, fileList) {
         // 将附件从列表中移除
         let index = fileList.indexOf(file);
         fileList.splice(index, 0);
@@ -116,10 +116,10 @@
         this.$emit('change', fileList);
         this.fileLists = fileList;
       },
-      handlePreview(file) {
+      handlePreview (file) {
         this.$store.commit('changeAttachment', {currentId: file.attachmentId, attachmentList: this.fileLists});
       },
-      beforeAvatarUpload(file) {
+      beforeAvatarUpload (file) {
         const isLt10M = file.size / 1024 / 1024 < 10;
         if (!isLt10M) {
           this.$notify.error({
@@ -142,7 +142,7 @@
         }
         this.uploadingFiles.push(file);
       },
-      success(response, file, fileList) {
+      success (response, file, fileList) {
         this.uploadingFiles = this.uploadingFiles.filter(item => item.uid !== file.uid);
         if (response) {
           this.$notify.success({
@@ -156,13 +156,13 @@
           });
         }
       },
-      error(err) {
+      error (err) {
         this.$notify.error({
           duration: 2000,
           message: '上传附件失败' + err
         });
       },
-      showProgress(event, file, fileList) {
+      showProgress (event, file, fileList) {
         let index = -1;
         for (let i = 0, len = this.uploadingFiles.length; i < len; i++) {
           if (file.uid === this.uploadingFiles[i].uid) {

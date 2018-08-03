@@ -12,7 +12,7 @@
 
     componentName: 'ElForm',
 
-    provide() {
+    provide () {
       return {
         elForm: this
       };
@@ -37,16 +37,16 @@
       size: String
     },
     watch: {
-      rules() {
+      rules () {
         this.validate();
       }
     },
-    data() {
+    data () {
       return {
         fields: []
       };
     },
-    created() {
+    created () {
       this.$on('el.form.addField', (field) => {
         if (field) {
           this.fields.push(field);
@@ -60,7 +60,7 @@
       });
     },
     methods: {
-      resetFields() {
+      resetFields () {
         if (!this.model) {
           process.env.NODE_ENV !== 'production' &&
           console.warn('[Element Warn][Form]model is required for resetFields to work.');
@@ -70,12 +70,12 @@
           field.resetField();
         });
       },
-      clearValidate() {
+      clearValidate () {
         this.fields.forEach(field => {
           field.clearValidate();
         });
       },
-      validate(callback) {
+      validate (callback) {
         if (!this.model) {
           console.warn('[Element Warn][Form]model is required for validate to work!');
           return;
@@ -85,7 +85,7 @@
         // if no callback, return promise
         if (typeof callback !== 'function' && window.Promise) {
           promise = new window.Promise((resolve, reject) => {
-            callback = function(valid) {
+            callback = function (valid) {
               valid ? resolve(valid) : reject(valid);
             };
           });
@@ -119,9 +119,11 @@
           return promise;
         }
       },
-      validateField(prop, cb) {
+      validateField (prop, cb) {
         let field = this.fields.filter(field => field.prop === prop)[0];
-        if (!field) { throw new Error('must call validateField with valid prop string!'); }
+        if (!field) {
+          throw new Error('must call validateField with valid prop string!');
+        }
 
         field.validate('', cb);
       }

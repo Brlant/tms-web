@@ -195,7 +195,7 @@
 
   export default {
     components: {TwoColumn},
-    data() {
+    data () {
       return {
         rules: {
           'carId': [
@@ -233,7 +233,7 @@
       };
     },
     computed: {
-      deliveryTaskTypeList() {
+      deliveryTaskTypeList () {
         return this.$getDict('deliveryTaskType');
       }
     },
@@ -276,7 +276,7 @@
       }
     },
     methods: {
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
       remove: function (item) {
@@ -396,7 +396,7 @@
           });
         }
       },
-      save(formName) {
+      save (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.doing = true;

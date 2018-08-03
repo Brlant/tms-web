@@ -81,7 +81,7 @@
       SearchPart
     },
     mixins: [StatusMixin],
-    data() {
+    data () {
       return {
         loadingData: false,
         activeStatus: 0,
@@ -112,7 +112,7 @@
         deep: true
       }
     },
-    mounted() {
+    mounted () {
       this.getTransportTaskPage(1);
     },
     methods: {
@@ -142,11 +142,11 @@
         }
         return title;
       },
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.pager.pageSize = val;
         this.getTransportTaskPage(1);
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         this.getTransportTaskPage(val);
       },
       searchResult: function (search) {

@@ -65,9 +65,30 @@ import Transfer from 'element-ui/lib/transfer';
 import locale from 'element-ui/lib/locale';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 import {
-  DesBtn, Dict, FA, Forbid, FormRow, goodsSelect, goodsSwitch, InputSingle, LoadingBottom, Nl2br, orgGoodsSelect,
-  orgSelect, PageRight, Remove, statusList, TimeLine, TimeLineItem, TinyCol, TinyInput, TinyLoading, TinyRow,
-  TotalCount, TwoColumn, Scrollbar
+  DesBtn,
+  Dict,
+  FA,
+  Forbid,
+  FormRow,
+  goodsSelect,
+  goodsSwitch,
+  InputSingle,
+  LoadingBottom,
+  Nl2br,
+  orgGoodsSelect,
+  orgSelect,
+  PageRight,
+  Remove,
+  Scrollbar,
+  statusList,
+  TimeLine,
+  TimeLineItem,
+  TinyCol,
+  TinyInput,
+  TinyLoading,
+  TinyRow,
+  TotalCount,
+  TwoColumn
 } from '@dtop/dtop-web-common';
 
 import upload from '../components/common/upload/upload.vue';

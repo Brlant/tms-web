@@ -233,7 +233,7 @@
 
   export default {
     components: {TwoColumn, MapPath},
-    data() {
+    data () {
       return {
         attachmentList: [],
         span: 7,
@@ -331,10 +331,10 @@
           });
         }
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
-      close() {
+      close () {
         this.$emit('right-close');
       }
     }

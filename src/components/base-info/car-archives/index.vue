@@ -87,11 +87,11 @@
       <div class="d-table-right">
         <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
           <div class="scrollbar-content">
-          <div v-if="!data.carDto.id" class="empty-info">
-            暂无信息
-          </div>
-          <div v-else>
-            <h2 class="clearfix">
+            <div v-if="!data.carDto.id" class="empty-info">
+              暂无信息
+            </div>
+            <div v-else>
+              <h2 class="clearfix">
                 <span class="pull-right">
                   <el-button-group>
                     <perm label="car-blacklist-add">
@@ -117,174 +117,176 @@
                     <!--</perm> -->
                     </el-button-group>
                 </span>
-            </h2>
-            <div class="page-main-body min-row">
-              <el-row>
-                <el-col :span="24" class="title-spacing">
-                  [ 主档信息 ]
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="12">
-                  <goods-row label="车牌号" :span="8">
-                    {{ data.carDto.plateNumber}}
-                  </goods-row>
-                  <goods-row label="车辆归属公司" :span="8">
-                    {{ data.carDto.ascriptionCompanyName}}
-                  </goods-row>
-                  <goods-row label="车辆默认司机" :span="8">
-                    {{ data.carDto.defaultDriverName}}
-                  </goods-row>
-                  <goods-row label="车型" :span="8">
-                    <dict :dict-group="'carType'" :dict-key="formatStatus( data.carDto.type)"></dict>
-                  </goods-row>
-                  <goods-row label="车辆核定载人数" :span="8">
-                    {{ data.carDto.authorizedNumber}} <span v-if="data.carDto.authorizedNumber">人</span>
-                  </goods-row>
-                  <goods-row label="每公里运费" :span="8">
-                    <span v-if="data.carDto.perFreight">¥</span> {{ data.carDto.perFreight| formatMoney}}
-                  </goods-row>
-                </el-col>
-                <el-col :span="12">
-                  <goods-row label="车辆承重" :span="8">
-                    {{ data.carDto.loadBearing}} <span v-if="data.carDto.loadBearing">千克</span>
-                  </goods-row>
-                  <goods-row label="车厢长度" :span="8">
-                    {{ data.carDto.carriageLength}} <span v-if="data.carDto.carriageLength">米</span>
-                  </goods-row>
-                  <goods-row label="车厢宽度" :span="8">
-                    {{ data.carDto.carriageWidth}} <span v-if="data.carDto.carriageWidth">米</span>
-                  </goods-row>
-                  <goods-row label="车厢高度" :span="8">
-                    {{ data.carDto.carriageHeight}} <span v-if="data.carDto.carriageHeight">米</span>
-                  </goods-row>
-                  <goods-row label="车厢容积" :span="8">
-                    {{ data.carDto.volume}} <span v-if="data.carDto.volume">立方米</span>
-                  </goods-row>
-                  <goods-row label="起步运费" :span="8">
-                    <span v-if="data.carDto.freight">¥</span>{{ data.carDto.freight| formatMoney}}
-                  </goods-row>
-                  <goods-row label="运输范围" :span="8">
+              </h2>
+              <div class="page-main-body min-row">
+                <el-row>
+                  <el-col :span="24" class="title-spacing">
+                    [ 主档信息 ]
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <goods-row label="车牌号" :span="8">
+                      {{ data.carDto.plateNumber}}
+                    </goods-row>
+                    <goods-row label="车辆归属公司" :span="8">
+                      {{ data.carDto.ascriptionCompanyName}}
+                    </goods-row>
+                    <goods-row label="车辆默认司机" :span="8">
+                      {{ data.carDto.defaultDriverName}}
+                    </goods-row>
+                    <goods-row label="车型" :span="8">
+                      <dict :dict-group="'carType'" :dict-key="formatStatus( data.carDto.type)"></dict>
+                    </goods-row>
+                    <goods-row label="车辆核定载人数" :span="8">
+                      {{ data.carDto.authorizedNumber}} <span v-if="data.carDto.authorizedNumber">人</span>
+                    </goods-row>
+                    <goods-row label="每公里运费" :span="8">
+                      <span v-if="data.carDto.perFreight">¥</span> {{ data.carDto.perFreight| formatMoney}}
+                    </goods-row>
+                  </el-col>
+                  <el-col :span="12">
+                    <goods-row label="车辆承重" :span="8">
+                      {{ data.carDto.loadBearing}} <span v-if="data.carDto.loadBearing">千克</span>
+                    </goods-row>
+                    <goods-row label="车厢长度" :span="8">
+                      {{ data.carDto.carriageLength}} <span v-if="data.carDto.carriageLength">米</span>
+                    </goods-row>
+                    <goods-row label="车厢宽度" :span="8">
+                      {{ data.carDto.carriageWidth}} <span v-if="data.carDto.carriageWidth">米</span>
+                    </goods-row>
+                    <goods-row label="车厢高度" :span="8">
+                      {{ data.carDto.carriageHeight}} <span v-if="data.carDto.carriageHeight">米</span>
+                    </goods-row>
+                    <goods-row label="车厢容积" :span="8">
+                      {{ data.carDto.volume}} <span v-if="data.carDto.volume">立方米</span>
+                    </goods-row>
+                    <goods-row label="起步运费" :span="8">
+                      <span v-if="data.carDto.freight">¥</span>{{ data.carDto.freight| formatMoney}}
+                    </goods-row>
+                    <goods-row label="运输范围" :span="8">
                    <span v-for="(type,index) in data.carDto.scopeList">
-                    <dict :dict-group="'transportationCondition'" :dict-key="type"></dict><span v-if="(data.carDto.scopeList.length-1)!==index">/</span>
+                    <dict :dict-group="'transportationCondition'" :dict-key="type"></dict><span
+                     v-if="(data.carDto.scopeList.length-1)!==index">/</span>
                   </span>
-                  </goods-row>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="24" class="title-spacing">
-                  [ 行驶证信息 ]
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="12">
-                  <goods-row label="车辆品牌" :span="8">
-                    {{ data.carDetailDto.brand}}
-                  </goods-row>
-                  <goods-row label="车辆识别代码" :span="8">
-                    {{ data.carDetailDto.identificationNumber}}
-                  </goods-row>
-                  <goods-row label="发证日期" :span="8">
-                    {{ data.carDetailDto.issuingDate|date}}
-                  </goods-row>
-                  <goods-row label="强制报废日" :span="8">
-                    {{ data.carDetailDto.forciblyDiscardedDay|date}}
-                  </goods-row>
-                </el-col>
-                <el-col :span="12">
-                  <goods-row label="车辆发动机号" :span="8">
-                    {{ data.carDetailDto.engineNumber}}
-                  </goods-row>
-                  <goods-row label="车辆注册日期" :span="8">
-                    {{ data.carDetailDto.createDate|date}}
-                  </goods-row>
-                  <goods-row label="检验有效期" :span="8">
-                    {{ data.carDetailDto.checkValidityDate|date}}
-                  </goods-row>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="24" class="title-spacing">
-                  [ 保险信息 ]
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="12">
-                  <goods-row label="保险公司" :span="8">
-                    {{ data.carDetailDto.insuranceCompany}}
-                  </goods-row>
-                  <goods-row label="交强险保单号" :span="8">
-                    {{ data.carDetailDto.ctaliNumber}}
-                  </goods-row>
-                  <goods-row label="交强险截止日期" :span="8">
-                    {{ data.carDetailDto.ctaliEndDate|date}}
-                  </goods-row>
-                </el-col>
-                <el-col :span="12">
-                  <goods-row label="第三责任险截止日期" :span="8">
-                    {{ data.carDetailDto.thirdPartyInsuranceEndDate|date}}
-                  </goods-row>
-                  <goods-row label="第三责任险保单号" :span="8">
-                    {{ data.carDetailDto.thirdPartyInsuranceNumber}}
-                  </goods-row>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="24" class="title-spacing">
-                  [ 运输黑名单列表 ]
-                  <div class="pull-right">
+                    </goods-row>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24" class="title-spacing">
+                    [ 行驶证信息 ]
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <goods-row label="车辆品牌" :span="8">
+                      {{ data.carDetailDto.brand}}
+                    </goods-row>
+                    <goods-row label="车辆识别代码" :span="8">
+                      {{ data.carDetailDto.identificationNumber}}
+                    </goods-row>
+                    <goods-row label="发证日期" :span="8">
+                      {{ data.carDetailDto.issuingDate|date}}
+                    </goods-row>
+                    <goods-row label="强制报废日" :span="8">
+                      {{ data.carDetailDto.forciblyDiscardedDay|date}}
+                    </goods-row>
+                  </el-col>
+                  <el-col :span="12">
+                    <goods-row label="车辆发动机号" :span="8">
+                      {{ data.carDetailDto.engineNumber}}
+                    </goods-row>
+                    <goods-row label="车辆注册日期" :span="8">
+                      {{ data.carDetailDto.createDate|date}}
+                    </goods-row>
+                    <goods-row label="检验有效期" :span="8">
+                      {{ data.carDetailDto.checkValidityDate|date}}
+                    </goods-row>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24" class="title-spacing">
+                    [ 保险信息 ]
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <goods-row label="保险公司" :span="8">
+                      {{ data.carDetailDto.insuranceCompany}}
+                    </goods-row>
+                    <goods-row label="交强险保单号" :span="8">
+                      {{ data.carDetailDto.ctaliNumber}}
+                    </goods-row>
+                    <goods-row label="交强险截止日期" :span="8">
+                      {{ data.carDetailDto.ctaliEndDate|date}}
+                    </goods-row>
+                  </el-col>
+                  <el-col :span="12">
+                    <goods-row label="第三责任险截止日期" :span="8">
+                      {{ data.carDetailDto.thirdPartyInsuranceEndDate|date}}
+                    </goods-row>
+                    <goods-row label="第三责任险保单号" :span="8">
+                      {{ data.carDetailDto.thirdPartyInsuranceNumber}}
+                    </goods-row>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24" class="title-spacing">
+                    [ 运输黑名单列表 ]
+                    <div class="pull-right">
                     <span class="btn-search-toggle open" v-show="showSearch">
                       <single-input v-model="keyTxt" placeholder="请输入关键字搜索"
                                     :showFocus="showSearch"></single-input>
                       <i class="el-icon-t-search" @click.stop="showSearch=(!showSearch)"></i>
                     </span>
-                    <a href="#" class="btn-circle" @click.stop.prevent="showSearch=(!showSearch)" v-show="!showSearch">
-                      <i class="el-icon-t-search"></i>
-                    </a>
+                      <a href="#" class="btn-circle" @click.stop.prevent="showSearch=(!showSearch)"
+                         v-show="!showSearch">
+                        <i class="el-icon-t-search"></i>
+                      </a>
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <div v-if="blacklist.length === 0" class="empty-info" style="padding-left: 20px">
+                    暂无信息
                   </div>
-                </el-col>
-              </el-row>
-              <el-row>
-                <div v-if="blacklist.length === 0" class="empty-info" style="padding-left: 20px">
-                  暂无信息
-                </div>
-                <div v-else>
-                  <table class="table table-hover">
-                    <thead>
-                    <tr>
-                      <th width="50%">单位名称</th>
-                      <th width="30%"></th>
-                      <th width="20%">操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="row in blacklist">
-                      <td width="50%">
-                        {{row.orgName}}
-                      </td>
-                      <td width="30%">
-                      </td>
-                      <td class="list-op" width="20%">
-                        <perm label="car-blacklist-delete">
-                          <a href="#" @click.stop.prevent="deleteOrg(row)"><i class="el-icon-t-delete"></i>删除</a>
-                        </perm>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                  <div class="text-center" v-show="blacklist.length">
-                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                                   :current-page="orgPager.currentPage"
-                                   :page-sizes="[20,50,100]" :page-size="20"
-                                   layout="total, sizes, prev, pager, next, jumper"
-                                   :total="orgPager.count">
-                    </el-pagination>
+                  <div v-else>
+                    <table class="table table-hover">
+                      <thead>
+                      <tr>
+                        <th width="50%">单位名称</th>
+                        <th width="30%"></th>
+                        <th width="20%">操作</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr v-for="row in blacklist">
+                        <td width="50%">
+                          {{row.orgName}}
+                        </td>
+                        <td width="30%">
+                        </td>
+                        <td class="list-op" width="20%">
+                          <perm label="car-blacklist-delete">
+                            <a href="#" @click.stop.prevent="deleteOrg(row)"><i class="el-icon-t-delete"></i>删除</a>
+                          </perm>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    <div class="text-center" v-show="blacklist.length">
+                      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                                     :current-page="orgPager.currentPage"
+                                     :page-sizes="[20,50,100]" :page-size="20"
+                                     layout="total, sizes, prev, pager, next, jumper"
+                                     :total="orgPager.count">
+                      </el-pagination>
+                    </div>
                   </div>
-                </div>
-              </el-row>
+                </el-row>
+              </div>
             </div>
           </div>
-        </div>
         </el-scrollbar>
       </div>
     </div>
@@ -389,7 +391,7 @@
         return value === 1 ? '是' : '否';
       }
     },
-    mounted() {
+    mounted () {
       this.$emit('loaded');
       this.getPageList(1);
     },
@@ -468,18 +470,18 @@
 
         });
       },
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.orgPager.pageSize = val;
         this.getBlackList(this.currentItem.carDto.id, 1);
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         this.getBlackList(this.currentItem.carDto.id, val);
       },
       formatStatus: function (value) {
         if (!value) return '';
         return value.toString();
       },
-      scrollLoadingData(event) {
+      scrollLoadingData (event) {
         this.$scrollLoadingData(event);
       },
       getPageList: function (pageNo, isContinue = false) {

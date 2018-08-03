@@ -10,7 +10,7 @@
 
     props: ['label'],
 
-    data() {
+    data () {
       return {};
     },
     computed: {

@@ -116,16 +116,16 @@
       }
     },
     methods: {
-      formatPurchasePrice() {// 格式化单价，保留两位小数
+      formatPurchasePrice () {// 格式化单价，保留两位小数
         this.form.purchasePrice = utils.autoformatDecimalPoint(this.form.purchasePrice);
       },
-      formatRentPrice() {// 格式化单价，保留两位小数
+      formatRentPrice () {// 格式化单价，保留两位小数
         this.form.rentPrice = utils.autoformatDecimalPoint(this.form.rentPrice);
       },
-      formatSinglePrice() {// 格式化单价，保留两位小数
+      formatSinglePrice () {// 格式化单价，保留两位小数
         this.form.singlePrice = utils.autoformatDecimalPoint(this.form.singlePrice);
       },
-      formatSalePrice() {// 格式化单价，保留两位小数
+      formatSalePrice () {// 格式化单价，保留两位小数
         this.form.salePrice = utils.autoformatDecimalPoint(this.form.salePrice);
       },
       onSubmit: function (formName) {

@@ -139,7 +139,7 @@
       }
     },
     methods: {
-      filterDepartment(query) { // 查询厂商
+      filterDepartment (query) { // 查询厂商
         let params = {
           pageNo: 1,
           pageSize: 20,

@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 export function init (Vue) {
 
   Vue.filter('date', function (dateTime) {

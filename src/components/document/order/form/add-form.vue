@@ -30,7 +30,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">{{pageSets[0].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
+              {{pageSets[0].name}}</h3>
           </div>
           <div class="content">
             <two-column>
@@ -60,10 +61,11 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">{{pageSets[1].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
+              {{pageSets[1].name}}</h3>
           </div>
           <div class="content">
-            <el-form-item  label="货主">
+            <el-form-item label="货主">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索货主" :remote-method="filterCustomer"
                          :clearable="true"
                          v-model="form.orgId" popperClass="good-selects">
@@ -112,25 +114,26 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">{{pageSets[2].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
+              {{pageSets[2].name}}</h3>
           </div>
           <div class="content">
             <el-form-item label="收货单位" prop="receiverId">
-            <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索收货单位" :remote-method="filterReceiverOrg"
-                       :clearable="true"
-                       v-model="form.receiverId" popperClass="good-selects">
-              <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
-                <div style="overflow: hidden">
-                  <span class="pull-left" style="clear: right">{{org.name}}</span>
-                </div>
-                <div style="overflow: hidden">
+              <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索收货单位" :remote-method="filterReceiverOrg"
+                         :clearable="true"
+                         v-model="form.receiverId" popperClass="good-selects">
+                <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
+                  <div style="overflow: hidden">
+                    <span class="pull-left" style="clear: right">{{org.name}}</span>
+                  </div>
+                  <div style="overflow: hidden">
                     <span class="select-other-info pull-left">
                       <span>系统代码:</span>{{org.manufacturerCode}}
                     </span>
-                </div>
-              </el-option>
-            </el-select>
-          </el-form-item>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
             <two-column>
               <el-form-item slot="left" label="收货联系人">
                 <oms-input v-model="form.receiverContact" placeholder="请输入收货联系人"></oms-input>
@@ -148,7 +151,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">{{pageSets[3].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">
+              {{pageSets[3].name}}</h3>
           </div>
           <div class="content">
             <two-column>
@@ -162,10 +166,10 @@
               </el-form-item>
             </two-column>
             <!--<two-column>-->
-              <!--<el-form-item slot="left" label="包件数" prop="incubatorCount">-->
-              <!--<oms-input type="number" :min="0" v-model="form.incubatorCount" placeholder="请输入包件数"-->
-              <!--@blur="setIncubatorCount(form.incubatorCount)"></oms-input>-->
-              <!--</el-form-item>-->
+            <!--<el-form-item slot="left" label="包件数" prop="incubatorCount">-->
+            <!--<oms-input type="number" :min="0" v-model="form.incubatorCount" placeholder="请输入包件数"-->
+            <!--@blur="setIncubatorCount(form.incubatorCount)"></oms-input>-->
+            <!--</el-form-item>-->
             <!--</two-column>-->
             <two-column>
               <el-form-item slot="left" label="重量" prop="goodsWeight">
@@ -246,12 +250,12 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item slot="right" label="送达时限">
-              <el-date-picker
-                v-model="form.deliveryTime"
-                type="date"
-                placeholder="选择送达时限" format="yyyy-MM-dd" value-format="timestamp">
-              </el-date-picker>
-            </el-form-item>
+                <el-date-picker
+                  v-model="form.deliveryTime"
+                  type="date"
+                  placeholder="选择送达时限" format="yyyy-MM-dd" value-format="timestamp">
+                </el-date-picker>
+              </el-form-item>
             </two-column>
             <el-form-item label="始发地">
               <oms-input v-model="form.provenance" placeholder="请输入始发地"></oms-input>
@@ -334,13 +338,13 @@
       };
     },
     computed: {
-      shipmentWayList() {
+      shipmentWayList () {
         return this.$getDict('transportationCondition');
       },
-      typeList() {
+      typeList () {
         return this.$getDict('bizType');
       },
-      serviceTypeList() {
+      serviceTypeList () {
         return this.$getDict('serviceType');
       },
       showTitle: function () {
@@ -419,7 +423,7 @@
       selectTab (item) {
         this.currentTab = item;
       },
-      save(formName) {
+      save (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             // 处理货品列表

@@ -32,7 +32,7 @@
 <script>
   import AsyncValidator from 'async-validator';
   import emitter from 'element-ui/lib/mixins/emitter';
-  import { noop, getPropByPath } from 'element-ui/lib/utils/util';
+  import {getPropByPath, noop} from 'element-ui/lib/utils/util';
 
   export default {
     name: 'ElFormItem',
@@ -41,7 +41,7 @@
 
     mixins: [emitter],
 
-    provide() {
+    provide () {
       return {
         elFormItem: this
       };
@@ -72,19 +72,19 @@
       size: String
     },
     watch: {
-      error(value) {
+      error (value) {
         this.validateMessage = value;
         this.validateState = value ? 'error' : '';
       },
-      validateStatus(value) {
+      validateStatus (value) {
         this.validateState = value;
       }
     },
     computed: {
-      labelFor() {
+      labelFor () {
         return this.for || this.prop;
       },
-      labelStyle() {
+      labelStyle () {
         var ret = {};
         if (this.form.labelPosition === 'top') return ret;
         var labelWidth = this.labelWidth || this.form.labelWidth;
@@ -93,7 +93,7 @@
         }
         return ret;
       },
-      contentStyle() {
+      contentStyle () {
         var ret = {};
         const label = this.label;
         if (this.form.labelPosition === 'top' || this.form.inline) return ret;
@@ -104,7 +104,7 @@
         }
         return ret;
       },
-      form() {
+      form () {
         let parent = this.$parent;
         let parentName = parent.$options.componentName;
         while (parentName !== 'ElForm') {
@@ -118,9 +118,11 @@
       },
       fieldValue: {
         cache: false,
-        get() {
+        get () {
           var model = this.form.model;
-          if (!model || !this.prop) { return; }
+          if (!model || !this.prop) {
+            return;
+          }
 
           var path = this.prop;
           if (path.indexOf(':') !== -1) {
@@ -130,7 +132,7 @@
           return getPropByPath(model, path, true).v;
         }
       },
-      isRequired() {
+      isRequired () {
         let rules = this.getRules();
         let isRequired = false;
 
@@ -145,17 +147,17 @@
         }
         return isRequired;
       },
-      _formSize() {
+      _formSize () {
         return this.elForm.size;
       },
-      elFormItemSize() {
+      elFormItemSize () {
         return this.size || this._formSize;
       },
-      sizeClass() {
+      sizeClass () {
         return (this.$ELEMENT || {}).size || this.elFormItemSize;
       }
     },
-    data() {
+    data () {
       return {
         validateState: '',
         validateMessage: '',
@@ -165,7 +167,7 @@
       };
     },
     methods: {
-      validate(trigger, callback = noop) {
+      validate (trigger, callback = noop) {
         this.validateDisabled = false;
         var rules = this.getFilteredRule(trigger);
         if ((!rules || rules.length === 0) && this.required === undefined && !this._props.hasOwnProperty('required')) {
@@ -188,19 +190,19 @@
 
         model[this.prop] = this.fieldValue;
 
-        validator.validate(model, { firstFields: true }, (errors, fields) => {
+        validator.validate(model, {firstFields: true}, (errors, fields) => {
           this.validateState = !errors ? 'success' : 'error';
           this.validateMessage = errors ? errors[0].message : '';
 
           callback(this.validateMessage);
         });
       },
-      clearValidate() {
+      clearValidate () {
         this.validateState = '';
         this.validateMessage = '';
         this.validateDisabled = false;
       },
-      resetField() {
+      resetField () {
         this.validateState = '';
         this.validateMessage = '';
 
@@ -221,26 +223,26 @@
           prop.o[prop.k] = this.initialValue;
         }
       },
-      getRules() {
+      getRules () {
         var formRules = this.form.rules;
         var selfRules = this.rules;
-        var requiredRule = this.required !== undefined ? { required: !!this.required } : [];
+        var requiredRule = this.required !== undefined ? {required: !!this.required} : [];
 
         formRules = formRules ? formRules[this.prop] : [];
 
         return [].concat(selfRules || formRules || []).concat(requiredRule);
       },
-      getFilteredRule(trigger) {
+      getFilteredRule (trigger) {
         var rules = this.getRules();
 
         return rules.filter(rule => {
           return !rule.trigger || rule.trigger.indexOf(trigger) !== -1;
         });
       },
-      onFieldBlur() {
+      onFieldBlur () {
         this.validate('blur');
       },
-      onFieldChange() {
+      onFieldChange () {
         if (this.validateDisabled) {
           this.validateDisabled = false;
           return;
@@ -249,7 +251,7 @@
         this.validate('change');
       }
     },
-    mounted() {
+    mounted () {
       if (this.prop) {
         this.dispatch('OmsElForm', 'el.form.addField', [this]);
 
@@ -269,7 +271,7 @@
         }
       }
     },
-    beforeDestroy() {
+    beforeDestroy () {
       this.dispatch('OmsElForm', 'el.form.removeField', [this]);
     }
   };

@@ -189,7 +189,7 @@
 
   export default {
     components: {TwoColumn, MapPath},
-    data() {
+    data () {
       return {
         span: 7,
         dataList: [],
@@ -276,7 +276,7 @@
           });
         }
       },
-      close() {
+      close () {
         this.$emit('right-close');
       }
     }

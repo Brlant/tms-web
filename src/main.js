@@ -9,7 +9,7 @@ import './assets/css/basic.css';
 import '../static/fonts/iconfont.css';
 import Vuex from 'vuex';
 import store from './store';
-import { init } from './tools/init';
+import {init} from './tools/init';
 import VueAMap from 'vue-amap';
 
 init(Vue);

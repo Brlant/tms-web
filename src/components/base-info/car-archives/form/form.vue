@@ -115,7 +115,8 @@
             </two-column>
             <el-form-item label="运输范围">
               <el-select placeholder="请选择运输范围" v-model="form.carDto.scopeList" multiple>
-                <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in transportScope"></el-option>
+                <el-option :label="item.label" :value="item.key" :key="item.key"
+                           v-for="item in transportScope"></el-option>
               </el-select>
             </el-form-item>
           </div>
@@ -316,10 +317,10 @@
         }
         return title;
       },
-      carTypeList() {
+      carTypeList () {
         return this.$getDict('carType');
       },
-      transportScope() {
+      transportScope () {
         return this.$getDict('transportationCondition');
       }
     },
@@ -401,11 +402,11 @@
       }
     },
     methods: {
-      formatPrice() {// 格式化单价，保留两位小数
+      formatPrice () {// 格式化单价，保留两位小数
         this.form.carDto.perFreight = utils.autoformatDecimalPoint(this.form.carDto.perFreight);
         this.form.carDto.freight = utils.autoformatDecimalPoint(this.form.carDto.freight);
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
       calculateVolume: function (item) {

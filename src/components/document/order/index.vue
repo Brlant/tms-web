@@ -198,7 +198,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { TmsOrder } from '@/resources';
+  import {TmsOrder} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import splitForm from './form/split-order.vue';
@@ -290,7 +290,7 @@
         deep: true
       }
     },
-    mounted() {
+    mounted () {
       this.getTmsOrderPage(1);
       let id = this.$route.params.id;
       if (id !== 'list' && id !== ':id') {
@@ -366,11 +366,11 @@
           this.form.goodsList = item.goodsList;
         });
       },
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.pager.pageSize = val;
         this.getTmsOrderPage(1);
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         this.getTmsOrderPage(val);
       },
       createWayBill: function () {
@@ -400,7 +400,7 @@
           this.checkList.splice(index, 1);
         }
       },
-      checkAll() {
+      checkAll () {
         // 全选
         if (this.isCheckAll) {
           this.dataList.forEach(item => {
@@ -532,7 +532,7 @@
           this.$router.push('/document/order/' + item.id);
         });
       },
-      submit() {
+      submit () {
         this.checkList = [];
         this.checkListPara = [];
         this.getTmsOrderPage(1);

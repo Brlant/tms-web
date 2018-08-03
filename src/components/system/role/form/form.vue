@@ -32,20 +32,24 @@
     text-align: center;
     padding: 15px;
   }
+
   .check-all {
     margin-left: 24px;
   }
+
   .filter-input.el-input {
     padding-right: 40px;
     margin-bottom: 10px;
     margin-left: 22px;
     width: 67.5%;
   }
+
   .role-title {
     margin: 10px 0 10px 10px;
   }
+
   .el-tree {
-    width:70%;
+    width: 70%;
   }
 </style>
 <template>
@@ -78,8 +82,8 @@
         </el-form-item>
         <h4 class="clearfix role-title">配置角色权限</h4>
         <el-input class="filter-input"
-          placeholder="输入关键字进行过滤"
-          v-model="filterText">
+                  placeholder="输入关键字进行过滤"
+                  v-model="filterText">
         </el-input>
         <div class="check-all">
           <el-checkbox label="全选" v-model="checkAllRoles"
@@ -152,13 +156,13 @@
       };
     },
     computed: {
-      checkedIdList() {
+      checkedIdList () {
         let menuParentIds = this.$store.state.menuParentIds;
         return this.form.checkedIdList && this.form.checkedIdList.filter(f => !menuParentIds.includes(f)) || [];
       }
     },
     watch: {
-      filterText(val) {
+      filterText (val) {
         this.$refs.tree.filter(val);
       },
       formItem: function (val) {
@@ -180,12 +184,12 @@
           this.$refs['roleform'].resetFields();
         }
       },
-      checkedIdList(val) {
+      checkedIdList (val) {
         this.$refs.tree.setCheckedKeys(val);
       }
     },
     methods: {
-      filterNode(value, data) {
+      filterNode (value, data) {
         if (!value) return true;
         return data.label.indexOf(value) !== -1;
       },

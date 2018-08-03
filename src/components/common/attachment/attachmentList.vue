@@ -27,10 +27,10 @@
   </ul>
 </template>
 <script>
-  import { OmsAttachment } from '@/resources';
+  import {OmsAttachment} from '@/resources';
 
   export default {
-    data() {
+    data () {
       return {
         object: {
           objectId: this.objectId,
@@ -63,11 +63,11 @@
           this.attachmentList = res.data;
         });
       },
-      handlePreview(file) {
+      handlePreview (file) {
         this.$store.commit('changeAttachment', {currentId: file.attachmentId, attachmentList: this.attachmentList});
       }
     },
-    mounted() {
+    mounted () {
       this.getFileList();
     }
   };

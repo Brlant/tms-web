@@ -50,7 +50,7 @@ const mutations = {
   initPermList (state, data) {
     state.allMenuList = data;
   },
-  setBodyHeight(state, data) {
+  setBodyHeight (state, data) {
     state.bodyHeight = data.height;
     state.windowSize = data.window;
   },

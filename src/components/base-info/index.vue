@@ -5,13 +5,12 @@
 </template>
 
 <script>
-  import { routes } from '../../routers';
-  import { Access } from '@/resources';
+  import {routes} from '../../routers';
+  import {Access} from '@/resources';
 
   export default {
     data: function () {
-      return {
-      };
+      return {};
     },
     computed: {
       activeMould: function () {

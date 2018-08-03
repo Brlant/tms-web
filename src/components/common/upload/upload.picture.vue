@@ -58,7 +58,7 @@
     components: {
       OmsElUpload
     },
-    data() {
+    data () {
       return {
         imageUrl: this.photoUrl,
         uploadData: {},
@@ -75,7 +75,7 @@
       }
     },
     methods: {
-      handleRemove(file) {
+      handleRemove (file) {
         OmsAttachment.delete(file.attachmentId).then(() => {
           this.$notify.success({
             duration: 2000,
@@ -92,14 +92,14 @@
       changePhoto: function (photo) {
         this.$emit('change', photo.response);
       },
-      handleAvatarSuccess(file) {
+      handleAvatarSuccess (file) {
         this.imageUrl = file.url;
         this.$notify.success({
           duration: 2000,
           message: '上传图片成功'
         });
       },
-      beforeAvatarUpload(file) {
+      beforeAvatarUpload (file) {
         const isLt10M = file.size / 1024 / 1024 < 10;
         if (!isLt10M) {
           this.$notify.error({
@@ -109,7 +109,7 @@
           return false;
         }
       },
-      error(err) {
+      error (err) {
         this.$notify.error({
           duration: 2000,
           message: '上传附件失败' + err
