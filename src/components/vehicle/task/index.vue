@@ -165,7 +165,7 @@
                     <span @click.stop="startTransport(item)" v-if="item.status==='1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-start"></i>
-                      </a>启用
+                      </a>启运
                     </span>
                   </perm>
                 </div>
