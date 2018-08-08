@@ -128,7 +128,7 @@
             }).then(() => {
               let tempForm = {
                 flag: this.form.qualityFlag === null ? false : this.form.qualityFlag,
-                remark: this.form.qualityInspection,
+                qualityInspection: this.form.qualityInspection,
                 attachmentIdList: this.form.attachmentIdList
               };
               TmsWayBill.assessmentTmsWayBill(this.form.id, tempForm).then(res => {
