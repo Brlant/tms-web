@@ -390,7 +390,7 @@
     },
     methods: {
       showIncubatorCount: function (item) {
-        if (item.status === '-1') {
+        if (!item.packFlag) {
           return item.preIncubatorCount;
         }
         return item.incubatorCount;
