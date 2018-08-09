@@ -445,7 +445,8 @@
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          packFlag: ''
         },
         isCheckAll: false,
         checkList: [],
@@ -654,7 +655,8 @@
               senderId: '',
               receiverId: '',
               startTime: '',
-              endTime: ''
+              endTime: '',
+              packFlag: ''
             };
             this.getTmsWayBillPage(1);
           }).catch(error => {

@@ -63,15 +63,23 @@
               </el-date-picker>
             </oms-form-row>
           </el-col>
+          <el-col :span="4">
+            <oms-form-row label="状态" :span="6">
+              <el-radio-group v-model="searchCondition.packFlag" size="small">
+                <el-radio-button label="true">已打包</el-radio-button>
+                <el-radio-button label="false">未打包</el-radio-button>
+              </el-radio-group>
+            </oms-form-row>
+          </el-col>
           <div v-show="showSearch">
-            <el-col :span="8">
+            <el-col :span="6">
               <oms-form-row label="运单类型" :span="6">
                 <el-select v-model="searchCondition.waybillType" placeholder="订单类型" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-option>
                 </el-select>
               </oms-form-row>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <oms-form-row label="发运方式" :span="6">
                 <el-select v-model="searchCondition.shipmentWay" placeholder="请选择发运方式" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
@@ -109,7 +117,8 @@
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          packFlag: ''
         },
         showSearch: false,
         list: [],
@@ -132,6 +141,9 @@
     },
     watch: {
       'searchCondition.waybillNumber': function () {
+        this.search();
+      },
+      'searchCondition.packFlag': function () {
         this.search();
       },
       'searchCondition.tmsOrderNumber': function () {
@@ -170,7 +182,8 @@
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          packFlag: ''
         };
         this.deliveryDate = '';
         this.$emit('search', this.searchCondition);
