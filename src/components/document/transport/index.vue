@@ -438,6 +438,7 @@
         filters: {
           status: null,
           waybillNumber: '',
+          tmsOrderNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
@@ -646,6 +647,7 @@
             this.filters = {
               status: '0',
               waybillNumber: '',
+              tmsOrderNumber: '',
               waybillType: '',
               shipmentWay: '',
               serviceType: '',
