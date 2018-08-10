@@ -199,7 +199,7 @@
               </el-form-item>
             </two-column>
             <el-form-item label="货品名称">
-              <oms-input v-model="form.goodsTotalName" placeholder="如果填写货品清淡，货品名称会根据货品清单自动生成。"></oms-input>
+              <oms-input v-model="form.goodsTotalName" placeholder="如果填写货品清单，货品名称会根据货品清单自动生成。"></oms-input>
             </el-form-item>
           </div>
           <div class="hr mb-10"></div>
