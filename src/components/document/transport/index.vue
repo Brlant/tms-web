@@ -138,10 +138,15 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="2" class="special-col R">
+            <el-col :span="2" class="special-col R" v-if="filters.status">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)" v-if="filters.status">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
+              <div>
+                {{item.waybillNumber}}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R" v-if="!filters.status">
               <div>
                 {{item.waybillNumber}}
               </div>
