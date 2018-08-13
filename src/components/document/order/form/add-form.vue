@@ -55,6 +55,22 @@
                 </el-select>
               </el-form-item>
             </two-column>
+            <two-column>
+              <el-form-item slot="left" label="提货时间">
+                <el-date-picker
+                  v-model="form.pickUpTime"
+                  type="date"
+                  placeholder="选择提货时间" format="yyyy-MM-dd" value-format="timestamp">
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item slot="right" label="送达时限">
+                <el-date-picker
+                  v-model="form.deliveryTime"
+                  type="date"
+                  placeholder="选择送达时限" format="yyyy-MM-dd" value-format="timestamp">
+                </el-date-picker>
+              </el-form-item>
+            </two-column>
           </div>
           <div class="hr mb-10"></div>
         </div>
@@ -241,22 +257,6 @@
               {{pageSets[5].name}}</h3>
           </div>
           <div class="content">
-            <two-column>
-              <el-form-item slot="left" label="提货时间">
-                <el-date-picker
-                  v-model="form.pickUpTime"
-                  type="date"
-                  placeholder="选择提货时间" format="yyyy-MM-dd" value-format="timestamp">
-                </el-date-picker>
-              </el-form-item>
-              <el-form-item slot="right" label="送达时限">
-                <el-date-picker
-                  v-model="form.deliveryTime"
-                  type="date"
-                  placeholder="选择送达时限" format="yyyy-MM-dd" value-format="timestamp">
-                </el-date-picker>
-              </el-form-item>
-            </two-column>
             <el-form-item label="始发地">
               <oms-input v-model="form.provenance" placeholder="请输入始发地"></oms-input>
             </el-form-item>
