@@ -187,11 +187,12 @@
               <el-table-column type="index" label="序号" width="50"/>
               <el-table-column prop="boxNo" label="保温箱编号" width="200">
                 <template slot-scope="scope">
-                  <el-tooltip effect="dark" :content="formatTime(scope.row.createTime)" placement="right">
-                    <el-tag :closable="form.status!=='3'&&isShow('tms-waybill-temperature-delete')"
-                            @close="deleteDevBox(scope.row)" :key="scope.row.boxNo">
-                      {{scope.row.boxNo}}
-                    </el-tag>
+                  <el-tooltip effect="dark" class="item" :content="formatTime(scope.row.createTime)" placement="right">
+                    <span>
+                       <el-tag :closable="form.status!=='3'&&isShow('tms-waybill-temperature-delete')"
+                               @close="deleteDevBox(scope.row)" :key="scope.row.boxNo">{{scope.row.boxNo}}
+                       </el-tag>
+                    </span>
                   </el-tooltip>
                 </template>
               </el-table-column>
@@ -431,6 +432,7 @@
         return this.pageSets.filter(f => f.key === key)[0];
       },
       formatTime (date) {
+        console.log(date);
         return date ? '绑定时间：' + this.$moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
       },
       queryLog: function (id) {
