@@ -122,10 +122,19 @@
               </div>
             </el-col>
             <el-col :span="3" class="opera-btn">
-              <div>
+              <div v-if="activeStatus==='1'">
+                <perm label="tms-order-edit" class="btn-line-block">
+                    <span @click.stop="edit(item)" v-if="activeStatus==='1'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-edit"></i>
+                      </a>编辑
+                    </span>
+                </perm>
+              </div>
+              <div v-else="activeStatus!=='1'">
                 <div>
                   <perm label="tms-order-edit" class="btn-line-block">
-                    <span @click.stop="edit(item)" v-if="activeStatus==='0'||activeStatus==='1'">
+                    <span @click.stop="edit(item)" v-if="activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
