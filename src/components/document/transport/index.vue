@@ -226,6 +226,8 @@
             <el-col :span="2" class="R">
               <div>
                 {{formatStatusTitle(item.status, orderType)}}
+              </div>
+              <div>
                 <el-tag v-if="!item.packFlag" type="warning">未打包</el-tag>
                 <el-tag v-if="item.packFlag" type="success">已打包</el-tag>
               </div>
