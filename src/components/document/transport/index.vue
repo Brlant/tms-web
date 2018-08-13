@@ -110,7 +110,7 @@
             运单号
           </el-col>
           <el-col :span="2">类型</el-col>
-          <el-col :span="4">发货单位</el-col>
+          <el-col :span="3">发货单位</el-col>
           <el-col :span="4">收货单位</el-col>
           <el-col :span="1">整件</el-col>
           <el-col :span="1">散件</el-col>
@@ -118,7 +118,7 @@
           <el-col :span="1">预估包件</el-col>
           <!--<el-col :span="2">预估包件</el-col>-->
           <el-col :span="4">时间</el-col>
-          <el-col :span="1">状态</el-col>
+          <el-col :span="2">状态</el-col>
           <el-col :span="3">操作</el-col>
         </el-row>
       </div>
@@ -154,7 +154,7 @@
                 <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
               </div>
             </el-col>
-            <el-col :span="4" class="R">
+            <el-col :span="3" class="R">
               <div>
                 {{item.senderName}}
               </div>
@@ -218,7 +218,7 @@
                 {{item.waybillCompleteTime|time}}
               </div>
             </el-col>
-            <el-col :span="1" class="R">
+            <el-col :span="2" class="R">
               <div>
                 {{formatStatusTitle(item.status, orderType)}}
                 <el-tag v-if="!item.packFlag" type="warning">未打包</el-tag>
@@ -305,12 +305,12 @@
         </div>
       </div>
       <el-row class="order-list-header" v-show="dataList.length && !loadingData">
-        <el-col :span="12" align="left">合计</el-col>
+        <el-col :span="11" align="left">合计</el-col>
         <el-col :span="1">{{totalCount.whole}}</el-col>
         <el-col :span="1">{{totalCount.buck}}</el-col>
         <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
         <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
-        <el-col :span="8"></el-col>
+        <el-col :span="9"></el-col>
       </el-row>
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
