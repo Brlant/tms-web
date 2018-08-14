@@ -59,9 +59,9 @@
             <oms-col label="车牌号" :rowSpan="span" :value="form.carNo"/>
             <oms-col label="启运时间" :rowSpan="span" :value="form.startTransportTime">{{form.startTransportTime|time}}
             </oms-col>
-            <oms-col label="运单送达" :rowSpan="span" :value="form.deliveryCompleteTime">{{form.deliveryCompleteTime|time}}
+            <oms-col label="送达时间" :rowSpan="span" :value="form.deliveryCompleteTime">{{form.deliveryCompleteTime|time}}
             </oms-col>
-            <oms-col label="送达时间" :rowSpan="span" :value="form.waybillCompleteTime">{{form.waybillCompleteTime|time}}
+            <oms-col label="结束时间" :rowSpan="span" :value="form.waybillCompleteTime">{{form.waybillCompleteTime|time}}
             </oms-col>
           </div>
           <div class="hr mb-10 clearfix"></div>
