@@ -285,7 +285,13 @@
           transportTaskNo: '',
           type: '',
           carPlateNumber: '',
-          waybillNo: ''
+          waybillNo: '',
+          createStartTime: '',
+          createEndTime: '',
+          sStartTime: '',
+          sEndTime: '',
+          eStartTime: '',
+          eEndTime: ''
         },
         isCheckAll: false,
         checkList: [],

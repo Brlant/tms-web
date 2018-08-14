@@ -34,6 +34,26 @@
             </oms-form-row>
           </el-col>
           <div v-show="showSearch">
+            <el-row>
+              <el-col :span="8">
+                <oms-form-row label="创建时间" :span="5" :required="true">
+                  <el-date-picker v-model="createTimes" type="datetimerange" :default-time="['00:00:00', '23:59:59']"
+                                  placeholder="请选择创建时间" @change="search"/>
+                </oms-form-row>
+              </el-col>
+              <el-col :span="8">
+                <oms-form-row label="开始时间" :span="5" :required="true">
+                  <el-date-picker v-model="startTimes" type="datetimerange" :default-time="['00:00:00', '23:59:59']"
+                                  placeholder="请选择开始时间" @change="search"/>
+                </oms-form-row>
+              </el-col>
+              <el-col :span="8">
+                <oms-form-row label="结束时间" :span="5" :required="true">
+                  <el-date-picker v-model="endTimes" type="datetimerange" :default-time="['00:00:00', '23:59:59']"
+                                  placeholder="请选择结束时间" @change="search"/>
+                </oms-form-row>
+              </el-col>
+            </el-row>
           </div>
         </el-row>
       </el-form>
@@ -50,13 +70,22 @@
           transportTaskNo: '',
           type: '',
           carPlateNumber: '',
-          waybillNo: ''
+          waybillNo: '',
+          createStartTime: '',
+          createEndTime: '',
+          sStartTime: '',
+          sEndTime: '',
+          eStartTime: '',
+          eEndTime: ''
         },
         showSearch: false,
         list: [],
         times: [],
         senderOrgList: [],
-        receiverOrgList: []
+        receiverOrgList: [],
+        createTimes: [],
+        startTimes: [],
+        endTimes: []
       };
     },
     watch: {
@@ -70,16 +99,35 @@
       }
     },
     methods: {
+      formatTimeAry (times, index) {
+        if (!times) return;
+        return this.formatTime(times[index]);
+      },
+      formatTime (time, str = 'YYYY-MM-DD HH:mm:ss') {
+        return time ? this.$moment(time).format(str) : '';
+      },
       reset () {
         this.searchCondition = {
           transportTaskNo: '',
           type: '',
           carPlateNumber: '',
-          waybillNo: ''
+          waybillNo: '',
+          createStartTime: '',
+          createEndTime: '',
+          sStartTime: '',
+          sEndTime: '',
+          eStartTime: '',
+          eEndTime: ''
         };
         this.$emit('search', this.searchCondition);
       },
       search () {
+        this.searchCondition.createStartTime = this.formatTimeAry(this.createTimes, 0);
+        this.searchCondition.createEndTime = this.formatTimeAry(this.createTimes, 1);
+        this.searchCondition.sStartTime = this.formatTimeAry(this.startTimes, 0);
+        this.searchCondition.sEndTime = this.formatTimeAry(this.startTimes, 1);
+        this.searchCondition.eStartTime = this.formatTimeAry(this.endTimes, 0);
+        this.searchCondition.eEndTime = this.formatTimeAry(this.endTimes, 1);
         this.$emit('search', this.searchCondition);
       },
       isShow (val) {
