@@ -131,7 +131,7 @@
                     </span>
                 </perm>
               </div>
-              <div v-else="activeStatus!=='1'">
+              <div v-if="activeStatus!=='1'">
                 <div>
                   <perm label="tms-order-edit" class="btn-line-block">
                     <span @click.stop="edit(item)" v-if="activeStatus==='0'">
@@ -224,7 +224,7 @@
     data () {
       return {
         loadingData: false,
-        activeStatus: 0,
+        activeStatus: '0',
         orderType: utils.orderType,
         dataList: [],
         showIndex: -1,
