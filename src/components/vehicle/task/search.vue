@@ -119,6 +119,9 @@
           eStartTime: '',
           eEndTime: ''
         };
+        this.createTimes = [];
+        this.startTimes = [];
+        this.endTimes = [];
         this.$emit('search', this.searchCondition);
       },
       search () {
