@@ -110,7 +110,7 @@
             运单号
           </el-col>
           <el-col :span="2">类型</el-col>
-          <el-col :span="3">发货单位</el-col>
+          <el-col :span="4">发货单位</el-col>
           <el-col :span="4">收货单位</el-col>
           <el-col :span="1">整件</el-col>
           <el-col :span="1">散件</el-col>
@@ -159,7 +159,7 @@
                 <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
               </div>
             </el-col>
-            <el-col :span="3" class="R">
+            <el-col :span="4" class="R">
               <div>
                 {{item.senderName}}
               </div>
@@ -310,15 +310,33 @@
           </el-row>
           <div class="order-list-item-bg"></div>
         </div>
+        <div class="order-list-item"
+             :class="[formatRowClass(dataList?dataList[0].status:'', orderType)]">
+          <el-row>
+            <el-col :span="2"></el-col>
+            <el-col :span="2"></el-col>
+            <el-col :span="4"></el-col>
+            <el-col :span="4">合计</el-col>
+            <el-col :span="1">{{totalCount.whole}}</el-col>
+            <el-col :span="1">{{totalCount.buck}}</el-col>
+            <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
+            <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
+            <!--<el-col :span="2">预估包件</el-col>-->
+            <el-col :span="4"></el-col>
+            <el-col :span="2"></el-col>
+            <el-col :span="3"></el-col>
+          </el-row>
+          <div class="order-list-item-bg"></div>
+        </div>
       </div>
-      <el-row class="order-list-header" v-show="dataList.length && !loadingData">
-        <el-col :span="11" align="left">合计</el-col>
-        <el-col :span="1">{{totalCount.whole}}</el-col>
-        <el-col :span="1">{{totalCount.buck}}</el-col>
-        <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
-        <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
-        <el-col :span="9"></el-col>
-      </el-row>
+      <!--<el-row class="order-list-header" v-show="dataList.length && !loadingData">-->
+      <!--<el-col :span="11" align="left">合计</el-col>-->
+      <!--<el-col :span="1">{{totalCount.whole}}</el-col>-->
+      <!--<el-col :span="1">{{totalCount.buck}}</el-col>-->
+      <!--<el-col :span="1">{{totalCount.incubatorCount}}</el-col>-->
+      <!--<el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>-->
+      <!--<el-col :span="9"></el-col>-->
+      <!--</el-row>-->
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
