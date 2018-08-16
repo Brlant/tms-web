@@ -163,7 +163,6 @@
         });
       },
       open () {
-        console.log('111');
         this.show = true;
         this.queryList();
       },
