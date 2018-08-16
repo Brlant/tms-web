@@ -103,8 +103,8 @@
             }, '起', 'orange');
             this.drawPoint({
               position: point[point.length - 1],
-              label: ''
-            }, '终', 'orange');
+              label: this.formItem.status > 2 ? '' : '当前位置'
+            }, this.formItem.status > 2 ? '终' : ' ', 'blue');
           }
           // 轨迹
           this.drawPath(point);
@@ -131,7 +131,7 @@
             position: i.position,
             label: {
               content: `<div class="babel__container"><div class="bg"></div><div class="title">${i.label}</div><div>${i.label}</div></div>`,
-              offset: new window.AMap.Pixel(36, 10)
+              offset: new window.AMap.Pixel(30, 10)
             }
           });
         });
