@@ -138,9 +138,11 @@
             <el-table :data="form.waybillList" border style="width: 100%">
               <el-table-column prop="waybillNumber" label="运单号" width="140">
                 <template slot-scope=" scope">
-                  <span class="f-14">
+                  <el-tooltip class="item" effect="dark" :content="getPackFlag(scope.row.packFlag)" placement="right">
+                     <span class="f-14">
                      {{scope.row.waybillNumber}}
-                  </span>
+                      </span>
+                  </el-tooltip>
                 </template>
               </el-table-column>
               <el-table-column prop="receiverName" label="发货单位" mix-width="190">
@@ -330,6 +332,12 @@
       }
     },
     methods: {
+      getPackFlag: function (val) {
+        if (val) {
+          return '已包';
+        }
+        return '未包';
+      },
       setCurPosition () {
         if (this.formItem.status !== '2') {
           this.curPosition = null;
