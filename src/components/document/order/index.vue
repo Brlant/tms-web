@@ -169,13 +169,20 @@
           </el-row>
           <div class="order-list-item-bg"></div>
         </div>
+        <div class="order-list-item">
+          <el-row>
+            <el-col :span="3"></el-col>
+            <el-col :span="2"></el-col>
+            <el-col :span="5"></el-col>
+            <el-col :span="5">合计</el-col>
+            <el-col :span="1">{{totalCount.whole}}</el-col>
+            <el-col :span="1">{{totalCount.buck}}</el-col>
+            <el-col :span="2"></el-col>
+            <el-col :span="2"></el-col>
+            <el-col :span="3"></el-col>
+          </el-row>
+        </div>
       </div>
-      <el-row class="order-list-header" v-show="dataList.length && !loadingData">
-        <el-col :span="15" align="left">合计</el-col>
-        <el-col :span="1">{{totalCount.whole}}</el-col>
-        <el-col :span="1">{{totalCount.buck}}</el-col>
-        <el-col :span="7"></el-col>
-      </el-row>
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"

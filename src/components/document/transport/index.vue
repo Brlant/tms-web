@@ -325,7 +325,6 @@
             <el-col :span="2"></el-col>
             <el-col :span="3"></el-col>
           </el-row>
-          <div class="order-list-item-bg"></div>
         </div>
       </div>
       <!--<el-row class="order-list-header" v-show="dataList.length && !loadingData">-->
