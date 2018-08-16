@@ -9,7 +9,8 @@
         <el-row>
           <el-col :span="4">
             <oms-form-row label="订单号" :span="8">
-              <oms-input v-model="searchCondition.orderNo" placeholder="请输入运单号" @keyup.native.enter="search"></oms-input>
+              <oms-input v-model="searchCondition.orderNo" placeholder="请输入运单号"
+                         @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
           <el-col :span="6">
@@ -71,12 +72,12 @@
               </oms-form-row>
             </el-col>
             <!--<el-col :span="6">-->
-              <!--<oms-form-row label="服务方式" :span="6">-->
-                <!--<el-select v-model="searchCondition.serviceType" placeholder="请选择服务方式" :clearable="true">-->
-                  <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
-                             <!--v-for="item in serviceTypeList"></el-option>-->
-                <!--</el-select>-->
-              <!--</oms-form-row>-->
+            <!--<oms-form-row label="服务方式" :span="6">-->
+            <!--<el-select v-model="searchCondition.serviceType" placeholder="请选择服务方式" :clearable="true">-->
+            <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
+            <!--v-for="item in serviceTypeList"></el-option>-->
+            <!--</el-select>-->
+            <!--</oms-form-row>-->
             <!--</el-col>-->
           </div>
         </el-row>
@@ -110,13 +111,13 @@
       };
     },
     computed: {
-      typeList() {
+      typeList () {
         return this.$getDict('bizType');
       },
-      shipmentWayList() {
+      shipmentWayList () {
         return this.$getDict('transportationCondition');
       },
-      serviceTypeList() {
+      serviceTypeList () {
         return this.$getDict('serviceType');
       }
     },
@@ -144,7 +145,7 @@
       }
     },
     methods: {
-      reset() {
+      reset () {
         this.searchCondition = {
           orderNo: '',
           waybillType: '',

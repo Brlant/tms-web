@@ -84,7 +84,7 @@
   import {BaseInfo, TmsOrder} from '@/resources';
 
   export default {
-    data() {
+    data () {
       return {
         list: [],
         times: [],
@@ -120,10 +120,10 @@
           this.splitList.push({name: '运单' + count, value: count});
         }
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
-      save(formName) {
+      save (formName) {
         // 判断拆分数量
         if (this.splitCount === '') {
           this.$notify.warning({

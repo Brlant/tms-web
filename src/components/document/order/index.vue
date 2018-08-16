@@ -122,17 +122,26 @@
               </div>
             </el-col>
             <el-col :span="3" class="opera-btn">
-              <div>
+              <div v-if="activeStatus==='1'">
+                <perm label="tms-order-edit" class="btn-line-block">
+                    <span @click.stop="edit(item)" v-if="activeStatus==='1'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-edit"></i>
+                      </a>编辑
+                    </span>
+                </perm>
+              </div>
+              <div v-if="activeStatus!=='1'">
                 <div>
                   <perm label="tms-order-edit" class="btn-line-block">
-                    <span @click.stop="edit(item)" v-if="activeStatus===0||activeStatus==='0'">
+                    <span @click.stop="edit(item)" v-if="activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
                   </perm>
                   <perm label="tms-order-delete" class="btn-line-block">
-                    <span @click.stop="deleteOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
+                    <span @click.stop="deleteOrder(item)" v-if="activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
                       </a>删除
@@ -141,14 +150,14 @@
                 </div>
                 <div style="padding-top: 2px">
                   <perm label="tms-order-cancel" class="opera-btn btn-line-block">
-                    <span @click.stop="cancelOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
+                    <span @click.stop="cancelOrder(item)" v-if="activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
                     </span>
                   </perm>
                   <perm label="tms-order-dismantling" class="opera-btn btn-line-block">
-                    <span @click.stop="splitOrder(item)" v-if="activeStatus===0||activeStatus==='0'">
+                    <span @click.stop="splitOrder(item)" v-if="activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-basic"></i>
                       </a>拆分订单
@@ -198,7 +207,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { TmsOrder } from '@/resources';
+  import {TmsOrder} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import splitForm from './form/split-order.vue';
@@ -215,7 +224,7 @@
     data () {
       return {
         loadingData: false,
-        activeStatus: 0,
+        activeStatus: '0',
         orderType: utils.orderType,
         dataList: [],
         showIndex: -1,
@@ -290,7 +299,7 @@
         deep: true
       }
     },
-    mounted() {
+    mounted () {
       this.getTmsOrderPage(1);
       let id = this.$route.params.id;
       if (id !== 'list' && id !== ':id') {
@@ -366,11 +375,11 @@
           this.form.goodsList = item.goodsList;
         });
       },
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.pager.pageSize = val;
         this.getTmsOrderPage(1);
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         this.getTmsOrderPage(val);
       },
       createWayBill: function () {
@@ -400,7 +409,7 @@
           this.checkList.splice(index, 1);
         }
       },
-      checkAll() {
+      checkAll () {
         // 全选
         if (this.isCheckAll) {
           this.dataList.forEach(item => {
@@ -532,7 +541,7 @@
           this.$router.push('/document/order/' + item.id);
         });
       },
-      submit() {
+      submit () {
         this.checkList = [];
         this.checkListPara = [];
         this.getTmsOrderPage(1);

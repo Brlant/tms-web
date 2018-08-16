@@ -28,7 +28,7 @@ const CONTEXT_STYLE = [
   'box-sizing'
 ];
 
-function calculateNodeStyling(node) {
+function calculateNodeStyling (node) {
   const style = window.getComputedStyle(node);
 
   const boxSizing = style.getPropertyValue('box-sizing');
@@ -50,9 +50,9 @@ function calculateNodeStyling(node) {
   return {contextStyle, paddingSize, borderSize, boxSizing};
 }
 
-export default function calcTextareaHeight(targetNode,
-                                           minRows = null,
-                                           maxRows = null) {
+export default function calcTextareaHeight (targetNode,
+                                            minRows = null,
+                                            maxRows = null) {
   if (!hiddenTextarea) {
     hiddenTextarea = document.createElement('textarea');
     document.body.appendChild(hiddenTextarea);

@@ -118,7 +118,7 @@
           <el-col :span="1">预估包件</el-col>
           <!--<el-col :span="2">预估包件</el-col>-->
           <el-col :span="4">时间</el-col>
-          <el-col :span="1">状态</el-col>
+          <el-col :span="2">状态</el-col>
           <el-col :span="3">操作</el-col>
         </el-row>
       </div>
@@ -138,10 +138,15 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="2" class="special-col R">
+            <el-col :span="2" class="special-col R" v-if="filters.status">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)" v-if="filters.status">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
+              <div>
+                {{item.waybillNumber}}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R" v-if="!filters.status">
               <div>
                 {{item.waybillNumber}}
               </div>
@@ -218,9 +223,13 @@
                 {{item.waybillCompleteTime|time}}
               </div>
             </el-col>
-            <el-col :span="1" class="R">
+            <el-col :span="2" class="R">
               <div>
                 {{formatStatusTitle(item.status, orderType)}}
+              </div>
+              <div>
+                <el-tag v-if="!item.packFlag" type="warning">未打包</el-tag>
+                <el-tag v-if="item.packFlag" type="success">已打包</el-tag>
               </div>
             </el-col>
             <el-col :span="3" class="opera-btn">
@@ -301,15 +310,33 @@
           </el-row>
           <div class="order-list-item-bg"></div>
         </div>
+        <div class="order-list-item"
+             :class="[formatRowClass(dataList?dataList[0].status:'', orderType)]">
+          <el-row>
+            <el-col :span="2"></el-col>
+            <el-col :span="2"></el-col>
+            <el-col :span="4"></el-col>
+            <el-col :span="4">合计</el-col>
+            <el-col :span="1">{{totalCount.whole}}</el-col>
+            <el-col :span="1">{{totalCount.buck}}</el-col>
+            <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
+            <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
+            <!--<el-col :span="2">预估包件</el-col>-->
+            <el-col :span="4"></el-col>
+            <el-col :span="2"></el-col>
+            <el-col :span="3"></el-col>
+          </el-row>
+          <div class="order-list-item-bg"></div>
+        </div>
       </div>
-      <el-row class="order-list-header" v-show="dataList.length && !loadingData">
-        <el-col :span="12" align="left">合计</el-col>
-        <el-col :span="1">{{totalCount.whole}}</el-col>
-        <el-col :span="1">{{totalCount.buck}}</el-col>
-        <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
-        <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
-        <el-col :span="8"></el-col>
-      </el-row>
+      <!--<el-row class="order-list-header" v-show="dataList.length && !loadingData">-->
+      <!--<el-col :span="11" align="left">合计</el-col>-->
+      <!--<el-col :span="1">{{totalCount.whole}}</el-col>-->
+      <!--<el-col :span="1">{{totalCount.buck}}</el-col>-->
+      <!--<el-col :span="1">{{totalCount.incubatorCount}}</el-col>-->
+      <!--<el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>-->
+      <!--<el-col :span="9"></el-col>-->
+      <!--</el-row>-->
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -436,13 +463,15 @@
         filters: {
           status: null,
           waybillNumber: '',
+          tmsOrderNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          packFlag: ''
         },
         isCheckAll: false,
         checkList: [],
@@ -644,13 +673,15 @@
             this.filters = {
               status: '0',
               waybillNumber: '',
+              tmsOrderNumber: '',
               waybillType: '',
               shipmentWay: '',
               serviceType: '',
               senderId: '',
               receiverId: '',
               startTime: '',
-              endTime: ''
+              endTime: '',
+              packFlag: ''
             };
             this.getTmsWayBillPage(1);
           }).catch(error => {

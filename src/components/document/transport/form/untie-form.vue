@@ -42,7 +42,7 @@
   import {BaseInfo, OmsAttachment, TmsWayBill} from '@/resources';
 
   export default {
-    data() {
+    data () {
       return {
         list: [],
         times: [],
@@ -66,7 +66,7 @@
       };
     },
     computed: {
-      waybillEndReasonList() {
+      waybillEndReasonList () {
         return this.$getDict('waybillEndReason');
       }
     },
@@ -82,10 +82,10 @@
       doClose: function () {
         this.$emit('right-close');
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
-      save(formName) {
+      save (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.doing = true;

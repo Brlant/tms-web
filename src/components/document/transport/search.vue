@@ -9,10 +9,17 @@
         <el-row>
           <el-col :span="4">
             <oms-form-row label="运单号" :span="8">
-              <oms-input v-model="searchCondition.waybillNumber" placeholder="请输入运单号" @keyup.native.enter="search"></oms-input>
+              <oms-input v-model="searchCondition.waybillNumber" placeholder="请输入运单号"
+                         @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="4">
+            <oms-form-row label="订单号" :span="8">
+              <oms-input v-model="searchCondition.tmsOrderNumber" placeholder="请输入订单号"
+                         @keyup.native.enter="search"></oms-input>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="8">
             <oms-form-row label="发货单位" :span="6">
               <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterSenderOrg"
                          :clearable="true"
@@ -30,7 +37,7 @@
               </el-select>
             </oms-form-row>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="8">
             <oms-form-row label="收货单位" :span="6">
               <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterReceiverOrg"
                          :clearable="true"
@@ -48,15 +55,25 @@
               </el-select>
             </oms-form-row>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <oms-form-row label="送达时限" :span="4">
               <el-date-picker v-model="deliveryDate" type="daterange" placeholder="请选择">
               </el-date-picker>
             </oms-form-row>
           </el-col>
+          <el-col :span="4">
+            <oms-form-row label="状态" :span="6">
+              <el-radio-group v-model="searchCondition.packFlag" size="small">
+                <el-radio-button label="true">已打包</el-radio-button>
+                <el-radio-button label="false">未打包</el-radio-button>
+              </el-radio-group>
+            </oms-form-row>
+          </el-col>
           <div v-show="showSearch">
-            <el-col :span="4">
-              <oms-form-row label="运单类型" :span="8">
+            <el-col :span="6">
+              <oms-form-row label="运单类型" :span="6">
                 <el-select v-model="searchCondition.waybillType" placeholder="订单类型" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-option>
                 </el-select>
@@ -71,12 +88,12 @@
               </oms-form-row>
             </el-col>
             <!--<el-col :span="6">-->
-              <!--<oms-form-row label="服务方式" :span="6">-->
-                <!--<el-select v-model="searchCondition.serviceType" placeholder="请选择服务方式" :clearable="true">-->
-                  <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
-                             <!--v-for="item in serviceTypeList"></el-option>-->
-                <!--</el-select>-->
-              <!--</oms-form-row>-->
+            <!--<oms-form-row label="服务方式" :span="6">-->
+            <!--<el-select v-model="searchCondition.serviceType" placeholder="请选择服务方式" :clearable="true">-->
+            <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
+            <!--v-for="item in serviceTypeList"></el-option>-->
+            <!--</el-select>-->
+            <!--</oms-form-row>-->
             <!--</el-col>-->
           </div>
         </el-row>
@@ -93,13 +110,15 @@
       return {
         searchCondition: {
           waybillNumber: '',
+          tmsOrderNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          packFlag: ''
         },
         showSearch: false,
         list: [],
@@ -110,17 +129,26 @@
       };
     },
     computed: {
-      typeList() {
+      typeList () {
         return this.$getDict('bizType');
       },
-      shipmentWayList() {
+      shipmentWayList () {
         return this.$getDict('transportationCondition');
       },
-      serviceTypeList() {
+      serviceTypeList () {
         return this.$getDict('serviceType');
       }
     },
     watch: {
+      'searchCondition.waybillNumber': function () {
+        this.search();
+      },
+      'searchCondition.packFlag': function () {
+        this.search();
+      },
+      'searchCondition.tmsOrderNumber': function () {
+        this.search();
+      },
       'searchCondition.senderId': function () {
         this.search();
       },
@@ -144,16 +172,18 @@
       }
     },
     methods: {
-      reset() {
+      reset () {
         this.searchCondition = {
           waybillNumber: '',
+          tmsOrderNumber: '',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          packFlag: ''
         };
         this.deliveryDate = '';
         this.$emit('search', this.searchCondition);

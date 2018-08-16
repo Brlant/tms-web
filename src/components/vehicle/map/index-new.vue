@@ -272,7 +272,7 @@
   import SearchPart from './search';
   import Icon from '@/assets/img/marker.png';
   import IconActive from '@/assets/img/marker_active.png';
-  import { TransportTask } from '@/resources';
+  import {TransportTask} from '@/resources';
   import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
   import batchAutoForm from '@/components/document/transport/form/auto-form';
@@ -390,7 +390,7 @@
     },
     methods: {
       showIncubatorCount: function (item) {
-        if (item.status === '-1') {
+        if (!item.packFlag) {
           return item.preIncubatorCount;
         }
         return item.incubatorCount;

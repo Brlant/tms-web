@@ -42,7 +42,7 @@
   import {BaseInfo, OmsAttachment, TmsWayBill} from '@/resources';
 
   export default {
-    data() {
+    data () {
       return {
         list: [],
         times: [],
@@ -66,23 +66,23 @@
       };
     },
     computed: {
-      shipmentWayList() {
+      shipmentWayList () {
         return this.$getDict('shipmentWayType');
       },
-      typeList() {
+      typeList () {
         return this.$getDict('transportationCondition');
       },
-      serviceTypeList() {
+      serviceTypeList () {
         return this.$getDict('serviceType');
       }
     },
     props: ['formItem', 'action'],
     watch: {
       formItem: function (val) {
-          if (val.id) {
-            this.form = val;
-            this.getFileList();
-          }
+        if (val.id) {
+          this.form = val;
+          this.getFileList();
+        }
       }
     },
     methods: {
@@ -104,10 +104,10 @@
           this.form.attachmentIdList = ids;
         });
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
-      save(formName) {
+      save (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.doing = true;

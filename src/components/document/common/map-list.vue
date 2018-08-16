@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-  import { AMapManager } from 'vue-amap';
+  import {AMapManager} from 'vue-amap';
   import MapMixin from '@/mixins/mapMixin';
 
   export default {

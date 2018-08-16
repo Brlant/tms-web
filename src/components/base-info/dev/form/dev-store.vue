@@ -40,8 +40,8 @@
   </el-form>
 </template>
 <script>
-  import {DevStore, DevDetail} from '@/resources';
-//  import utils from '../../../tools/utils';
+  import {DevDetail, DevStore} from '@/resources';
+  //  import utils from '../../../tools/utils';
 
   export default {
     data: function () {
@@ -60,7 +60,7 @@
         devDetailList: []
       };
     },
-    mounted() {
+    mounted () {
       this.type = [
         {'label': '入库', 'key': '0'},
         {'label': '出库', 'key': '1'},

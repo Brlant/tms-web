@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-  import { AMapManager } from 'vue-amap';
+  import {AMapManager} from 'vue-amap';
   import CarImg from '@/assets/img/car.png';
   import MapMixin from '@/mixins/mapMixin';
 

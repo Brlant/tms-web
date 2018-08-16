@@ -34,8 +34,8 @@
       font-weight: bold;
       font-size: 14px;
       &.active {
-        border-color:$activeColor;
-        color:$activeColor;
+        border-color: $activeColor;
+        color: $activeColor;
       }
     }
   }
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-  import { http } from '@/resources';
+  import {http} from '@/resources';
 
   export default {
     name: 'resetpwd',

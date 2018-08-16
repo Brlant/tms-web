@@ -139,7 +139,8 @@
                 <el-col :span="6">
                   <oms-row label="名称" :span="5" v-show="currentItem.name">{{currentItem.name }}</oms-row>
                   <oms-row label="型号" :span="5" v-show="currentItem.model">{{ currentItem.model}}</oms-row>
-                  <oms-row label="规格" :span="5" v-show="currentItem.specification">{{currentItem.specification }}</oms-row>
+                  <oms-row label="规格" :span="5" v-show="currentItem.specification">{{currentItem.specification }}
+                  </oms-row>
                 </el-col>
                 <el-col :span="6">
                   <oms-row label="类型" v-show="currentItem.type">
@@ -151,16 +152,18 @@
                   </oms-row>
                 </el-col>
                 <el-col :span="6">
-                  <oms-row label="体积" :span="5" v-show="currentItem.volume">{{currentItem.volume }} <span>m³</span></oms-row>
-                  <oms-row label="重量" :span="5" v-show="currentItem.weight">{{currentItem.weight }} <span>kg</span></oms-row>
-                  <oms-row label="租赁计费价格"  v-show="currentItem.singlePrice"><span
+                  <oms-row label="体积" :span="5" v-show="currentItem.volume">{{currentItem.volume }} <span>m³</span>
+                  </oms-row>
+                  <oms-row label="重量" :span="5" v-show="currentItem.weight">{{currentItem.weight }} <span>kg</span>
+                  </oms-row>
+                  <oms-row label="租赁计费价格" v-show="currentItem.singlePrice"><span
                     v-show="currentItem.singlePrice">¥</span>{{currentItem.singlePrice}}
                   </oms-row>
                 </el-col>
                 <el-col :span="6">
                   <oms-row label="库存数" :span="5" v-show="currentItem.count">{{ currentItem.count}}</oms-row>
                   <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
-                  <oms-row label="采购价格"  v-show="currentItem.purchasePrice"><span
+                  <oms-row label="采购价格" v-show="currentItem.purchasePrice"><span
                     v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice}}
                   </oms-row>
                   <oms-row label="销售价格" v-show="currentItem.salePrice">
@@ -203,7 +206,8 @@
                   <el-col :span="10">
                     <oms-form-row label="状态" :span="3">
                       <el-radio-group v-model="currentStatus" size="small" @change="changeStatus">
-                        <el-radio-button :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-radio-button>
+                        <el-radio-button :label="item.label" :value="item.key" :key="item.key"
+                                         v-for="item in typeList"></el-radio-button>
                       </el-radio-group>
                     </oms-form-row>
                   </el-col>
@@ -296,7 +300,7 @@
 
 </template>
 <script>
-  import { Dev, DevDetail, DevStore } from '@/resources';
+  import {Dev, DevDetail, DevStore} from '@/resources';
   import devForm from './form/dev.vue';
   import devDetailForm from './form/dev-detail.vue';
   import devStoreForm from './form/dev-store.vue';
@@ -382,7 +386,7 @@
         currentStatus: ''
       };
     },
-    mounted() {
+    mounted () {
       this.$emit('loaded');
       this.getPageList(1);
     },
@@ -414,7 +418,7 @@
       'typeTxt': function () {
         this.getPageList(1);
       },
-      index() {
+      index () {
         this.loadingData = true;
         this.showTypeList = [];
       },
@@ -495,7 +499,7 @@
           });
         });
       },
-      scrollLoadingData(event) {
+      scrollLoadingData (event) {
         this.$scrollLoadingData(event);
       },
       searchInOrder: function () {// 搜索
@@ -518,11 +522,11 @@
         Object.assign(this.searchCondition, temp);
         Object.assign(this.detailFilter, this.searchCondition);
       },
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.detailPager.pageSize = val;
         this.getDevDetailList(1);
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         this.getDevDetailList(val);
       },
       getStoreDetailList: function (pageNo) {

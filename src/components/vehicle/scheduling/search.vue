@@ -27,7 +27,7 @@
             <oms-form-row label="创建时间" :span="4">
               <el-date-picker v-model="createdTime" :default-time="['00:00:00', '23:59:59']" type="datetimerange"
                               placeholder="请选择">
-                </el-date-picker>
+              </el-date-picker>
             </oms-form-row>
           </el-col>
           <el-col :span="10">
@@ -74,7 +74,7 @@
       }
     },
     computed: {
-      deliveryTaskTypeList() {
+      deliveryTaskTypeList () {
         return this.$getDict('deliveryTaskType');
       }
     },
@@ -91,7 +91,7 @@
           this.userList = res.data.list;
         });
       },
-      reset() {
+      reset () {
         this.searchCondition = {
           createdBy: '',
           createStartTime: '',
@@ -103,17 +103,17 @@
         this.expectedTime = '';
         this.$emit('search', this.searchCondition);
       },
-      search() {
+      search () {
         this.searchCondition.createStartTime = utils.formatTimeAry(this.createdTime, 0, 'YYYY-MM-DD HH:mm:ss');
         this.searchCondition.createEndTime = utils.formatTimeAry(this.createdTime, 1, 'YYYY-MM-DD HH:mm:ss');
         this.searchCondition.completeStartTime = utils.formatTimeAry(this.expectedTime, 0, 'YYYY-MM-DD HH:mm:ss');
         this.searchCondition.completeEndTime = utils.formatTimeAry(this.expectedTime, 1, 'YYYY-MM-DD HH:mm:ss');
         this.$emit('search', this.searchCondition);
       },
-      formatTime(date) {
+      formatTime (date) {
         return date ? this.$moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
       },
-      isShow(val) {
+      isShow (val) {
         this.showSearch = val;
       }
     }

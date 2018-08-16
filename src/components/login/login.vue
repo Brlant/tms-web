@@ -45,7 +45,7 @@
           <el-form-item label="用户名" prop="username">
             <oms-input v-model="user.username" placeholder="手机号/邮箱/用户名"></oms-input>
           </el-form-item>
-          <el-form-item label="密码" style="position:relative" prop="password" >
+          <el-form-item label="密码" style="position:relative" prop="password">
             <oms-input v-model="user.password" type="password" placeholder="请输入密码"></oms-input>
             <router-link style="position: absolute;top:-35px;right:0;" to="/forget">激活账号/忘记密码?</router-link>
           </el-form-item>

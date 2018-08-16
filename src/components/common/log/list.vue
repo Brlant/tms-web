@@ -121,7 +121,7 @@
 
   export default {
 //    components: {detail},
-    data() {
+    data () {
       return {
         loadingData: true,
         showSearch: true,
@@ -145,7 +145,7 @@
         userList: []
       };
     },
-    mounted() {
+    mounted () {
       this.getLogPager(1);
     },
     computed: {},
@@ -176,11 +176,11 @@
           this.userList = res.data.list;
         });
       },
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.pager.pageSize = val;
         this.getLogPager(1);
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         this.getLogPager(val);
       },
       filterCustomer: function (query) {// 过滤客户
@@ -201,12 +201,12 @@
           this.loadingData = false;
         });
       },
-      showDetail(item) {
+      showDetail (item) {
         this.currentItemId = item.id;
         this.currentItem = item;
         this.showDetailPart = true;
       },
-      resetRightBox() {
+      resetRightBox () {
         this.showDetailPart = false;
       },
       searchInOrder: function () {// 搜索
@@ -225,7 +225,7 @@
         Object.assign(this.filters, this.searchWord);
         this.getLogPager(1);
       },
-      formatTime(date) {
+      formatTime (date) {
         return date ? this.$moment(date).format('YYYY-MM-DD') : '';
       }
     }

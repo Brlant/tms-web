@@ -81,7 +81,7 @@
       }
     },
 
-    data() {
+    data () {
       return {};
     },
     methods: {}

@@ -10,7 +10,7 @@
 </style>
 <template>
   <div class="print-dialog" v-if="print.isPrinting" v-loading="print.isPrinting"
-        :element-loading-text="print.text"></div>
+       :element-loading-text="print.text"></div>
 </template>
 <script>
   export default {

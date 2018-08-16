@@ -67,7 +67,7 @@
       search () {
         this.$emit('search');
       },
-      reset() {
+      reset () {
         this.$emit('reset');
       }
     }

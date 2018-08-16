@@ -35,8 +35,8 @@
       font-weight: bold;
       font-size: 14px;
       &.active {
-        border-color:$activeColor;
-        color:$activeColor;
+        border-color: $activeColor;
+        color: $activeColor;
       }
     }
   }
@@ -133,7 +133,7 @@
 </template>
 
 <script>
-  import {User, http} from '@/resources';
+  import {http, User} from '@/resources';
 
   const timeInterval = 60;
   let phoneReg = /^1[0-9]{10}$/;
@@ -201,7 +201,7 @@
       };
     },
     methods: {
-      done() {
+      done () {
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
             this.loading = true;

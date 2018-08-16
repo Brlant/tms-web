@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import {OmsAttachment, http} from '@/resources';
+  import {http, OmsAttachment} from '@/resources';
   import UploadList from './upload.file.list.vue';
   import OmsElUpload from './upload/src/index.vue';
 
@@ -67,7 +67,7 @@
       }
     },
 
-    data() {
+    data () {
       return {
         fileLists: this.fileList,
         object: {
@@ -112,10 +112,10 @@
         this.$emit('change', fileList);
         this.fileLists = fileList;
       },
-      submitUpload() {
+      submitUpload () {
         this.$refs.upload.submit();
       },
-      handleRemove(file) {
+      handleRemove (file) {
         OmsAttachment.delete(file.attachmentId).then(() => {
           this.$notify.success({
             duration: 2000,
@@ -129,13 +129,13 @@
           });
         });
       },
-      handlePreview(file) {
+      handlePreview (file) {
         this.$store.commit('changeAttachment', {currentId: file.attachmentId, attachmentList: this.fileLists});
       },
-      beforeAvatarUpload(file) {
+      beforeAvatarUpload (file) {
         this.uploadingFiles.push(file);
       },
-      success(response, file, fileList) {
+      success (response, file, fileList) {
         this.uploadingFiles = this.uploadingFiles.filter(item => item.uid !== file.uid);
         if (response) {
           this.$notify.success({
@@ -150,13 +150,13 @@
           });
         }
       },
-      error(err) {
+      error (err) {
         this.$notify.error({
           duration: 2000,
           message: '上传附件失败' + err
         });
       },
-      showProgress(event, file, fileList) {
+      showProgress (event, file, fileList) {
         let index = -1;
         for (let i = 0, len = this.uploadingFiles.length; i < len; i++) {
           if (file.uid === this.uploadingFiles[i].uid) {

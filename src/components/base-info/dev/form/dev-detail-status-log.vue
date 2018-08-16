@@ -61,7 +61,7 @@
         devTypeStatus: ''
       };
     },
-    mounted() {
+    mounted () {
     },
     computed: {},
     props: ['formItem', 'devType'],
@@ -78,11 +78,11 @@
       }
     },
     methods: {
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.storePager.pageSize = val;
         this.getLogList(1);
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         this.getLogList(val);
       },
       getLogList: function (pageNo) {

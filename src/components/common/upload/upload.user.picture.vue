@@ -50,7 +50,7 @@
       OmsElUpload
     },
     name: 'omsPhotoUpload',
-    data() {
+    data () {
       return {
         imageUrl: this.photoUrl,
         uploadData: {},
@@ -72,7 +72,7 @@
       }
     },
     methods: {
-      handleRemove(file) {
+      handleRemove (file) {
         OmsAttachment.delete(file.attachmentId).then(() => {
           this.$notify.success({
             duration: 2000,
@@ -89,11 +89,11 @@
       changePhoto: function (photo) {
         this.$emit('change', photo.response);
       },
-      handleAvatarSuccess(file) {
+      handleAvatarSuccess (file) {
         this.imageUrl = file.url;
         this.changPhoto(file);
       },
-      beforeAvatarUpload(file) {
+      beforeAvatarUpload (file) {
         const isLt10M = file.size / 1024 / 1024 < 10;
         if (!isLt10M) {
           this.$notify.error({
@@ -103,7 +103,7 @@
           return false;
         }
       },
-      error(err) {
+      error (err) {
         this.$notify.error({
           duration: 2000,
           message: '更换头像失败' + err

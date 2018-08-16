@@ -31,8 +31,8 @@
           <el-switch active-text="合格" inactive-text="不合格" active-color="#13ce66" inactive-color="#ff4949"
                      v-model="form.qualityFlag"></el-switch>
         </el-form-item>
-        <el-form-item label="评估结论" prop="remark">
-          <oms-input v-model="form.remark" type="textarea" placeholder="请输入评估结论"></oms-input>
+        <el-form-item label="评估结论" prop="qualityInspection">
+          <oms-input v-model="form.qualityInspection" type="textarea" placeholder="请输入评估结论"></oms-input>
         </el-form-item>
         <el-form-item label="附件">
           <oms-upload :fileList="attachmentList" @change="changeFiles"
@@ -46,7 +46,7 @@
   import {BaseInfo, OmsAttachment, TmsWayBill} from '@/resources';
 
   export default {
-    data() {
+    data () {
       return {
         list: [],
         times: [],
@@ -55,11 +55,11 @@
         form: {
           id: '',
           attachmentIdList: [],
-          remark: ''
+          qualityInspection: ''
         },
         doing: false,
         rules: {
-          remark: [
+          qualityInspection: [
             {required: true, message: '请输入评估结论', trigger: 'blur'}
           ],
           qualityFlag: [
@@ -73,13 +73,13 @@
       };
     },
     computed: {
-      shipmentWayList() {
+      shipmentWayList () {
         return this.$getDict('shipmentWayType');
       },
-      typeList() {
+      typeList () {
         return this.$getDict('transportationCondition');
       },
-      serviceTypeList() {
+      serviceTypeList () {
         return this.$getDict('serviceType');
       }
     },
@@ -114,10 +114,10 @@
           this.form.attachmentIdList = ids;
         });
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
-      save(formName) {
+      save (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.doing = true;
@@ -128,7 +128,7 @@
             }).then(() => {
               let tempForm = {
                 flag: this.form.qualityFlag === null ? false : this.form.qualityFlag,
-                remark: this.form.remark,
+                qualityInspection: this.form.qualityInspection,
                 attachmentIdList: this.form.attachmentIdList
               };
               TmsWayBill.assessmentTmsWayBill(this.form.id, tempForm).then(res => {

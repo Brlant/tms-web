@@ -30,7 +30,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">{{pageSets[0].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
+              {{pageSets[0].name}}</h3>
           </div>
           <div class="content">
             <two-column>
@@ -38,7 +39,7 @@
                 <oms-input v-model="form.waybillNumber" placeholder="请输入运单号"></oms-input>
               </el-form-item>
               <!--<el-form-item slot="right" label="委托单号">-->
-                <!--<oms-input v-model="form.tmsOrderNumber" placeholder="请输入"></oms-input>-->
+              <!--<oms-input v-model="form.tmsOrderNumber" placeholder="请输入"></oms-input>-->
               <!--</el-form-item>-->
             </two-column>
             <two-column>
@@ -55,12 +56,12 @@
               </el-form-item>
             </two-column>
             <!--<two-column>-->
-              <!--<el-form-item slot="left" label="服务方式">-->
-                <!--<el-select v-model="form.serviceType" placeholder="请选择服务方式" :clearable="true">-->
-                  <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
-                             <!--v-for="item in serviceTypeList"></el-option>-->
-                <!--</el-select>-->
-              <!--</el-form-item>-->
+            <!--<el-form-item slot="left" label="服务方式">-->
+            <!--<el-select v-model="form.serviceType" placeholder="请选择服务方式" :clearable="true">-->
+            <!--<el-option :label="item.label" :value="item.key" :key="item.key"-->
+            <!--v-for="item in serviceTypeList"></el-option>-->
+            <!--</el-select>-->
+            <!--</el-form-item>-->
             <!--</two-column>-->
           </div>
           <div class="hr mb-10"></div>
@@ -68,10 +69,11 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">{{pageSets[1].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
+              {{pageSets[1].name}}</h3>
           </div>
           <div class="content">
-            <el-form-item  label="货主">
+            <el-form-item label="货主">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索货主" :remote-method="filterCustomer"
                          :clearable="true"
                          v-model="form.orgId" popperClass="good-selects">
@@ -120,7 +122,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">{{pageSets[2].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
+              {{pageSets[2].name}}</h3>
           </div>
           <div class="content">
             <el-form-item label="收货单位" prop="receiverId">
@@ -156,7 +159,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">{{pageSets[3].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">
+              {{pageSets[3].name}}</h3>
           </div>
           <div class="content">
             <two-column>
@@ -195,7 +199,7 @@
               </el-form-item>
             </two-column>
             <el-form-item label="货品名称">
-              <oms-input v-model="form.goodsTotalName" placeholder="如果填写货品清淡，货品名称会根据货品清单自动生成。"></oms-input>
+              <oms-input v-model="form.goodsTotalName" placeholder="如果填写货品清单，货品名称会根据货品清单自动生成。"></oms-input>
             </el-form-item>
           </div>
           <div class="hr mb-10"></div>
@@ -342,13 +346,13 @@
       };
     },
     computed: {
-      shipmentWayList() {
+      shipmentWayList () {
         return this.$getDict('transportationCondition');
       },
-      typeList() {
+      typeList () {
         return this.$getDict('bizType');
       },
-      serviceTypeList() {
+      serviceTypeList () {
         return this.$getDict('serviceType');
       },
       showTitle: function () {
@@ -445,7 +449,7 @@
       selectTab (item) {
         this.currentTab = item;
       },
-      save(formName) {
+      save (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             // 处理货品列表

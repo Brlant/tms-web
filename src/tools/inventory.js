@@ -1,4 +1,4 @@
-import { BaseInfo, Inventory, InWork, LogisticsCenter, Store } from '@/resources';
+import {BaseInfo, Inventory, InWork, LogisticsCenter, Store} from '@/resources';
 
 export default {
   filterLogisticsCenter (query) { // 查物流中心

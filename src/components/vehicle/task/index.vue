@@ -165,7 +165,7 @@
                     <span @click.stop="startTransport(item)" v-if="item.status==='1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-start"></i>
-                      </a>启用
+                      </a>启运
                     </span>
                   </perm>
                 </div>
@@ -238,7 +238,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TransportTask } from '@/resources';
+  import {http, TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
@@ -285,7 +285,13 @@
           transportTaskNo: '',
           type: '',
           carPlateNumber: '',
-          waybillNo: ''
+          waybillNo: '',
+          createStartTime: '',
+          createEndTime: '',
+          sStartTime: '',
+          sEndTime: '',
+          eStartTime: '',
+          eEndTime: ''
         },
         isCheckAll: false,
         checkList: [],
@@ -355,7 +361,7 @@
 
         });
       },
-      formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
+      formatTime (time, str = 'YYYY-MM-DD HH:mm:ss') {
         return time ? moment(time).format(str) : '';
       },
       isOverTime: function (time) {
@@ -426,7 +432,7 @@
           }, 300);
         });
       },
-      printFile() {
+      printFile () {
         if (!this.taskIdList.length) {
           this.$notify.warning({
             duration: 2000,

@@ -1,8 +1,8 @@
 <style lang="scss" scoped=''>
   @import "../../assets/scss/mixins";
 
- $menuHoverColor:$activeColor;
- $menuHoverBg: #f1f1f1;
+  $menuHoverColor: $activeColor;
+  $menuHoverBg: #f1f1f1;
   .main-header {
     background: #fff;
     position: fixed;
@@ -90,28 +90,28 @@
               font-size: 14px;
               color: #333;
               &:hover {
-                color:$menuHoverColor
+                color: $menuHoverColor
               }
             }
           }
 
           &.active, &:hover {
             > span {
-              border-color:$menuHoverColor;
+              border-color: $menuHoverColor;
             }
             a {
-              color:$menuHoverColor
+              color: $menuHoverColor
             }
           }
           &.hover {
             > span {
-              background:$menuHoverBg;
+              background: $menuHoverBg;
             }
             .top-sub-menu {
               transform: translateY(0);
               box-shadow: 0 3px 3px hsla(0, 0%, 0%, 0.22)
             }
-            background:$menuHoverBg;
+            background: $menuHoverBg;
 
           }
           .top-sub-menu {
@@ -125,13 +125,13 @@
             right: 0;
             top: 0;
             transform: translateY(-100%);
-            background:$menuHoverBg;
+            background: $menuHoverBg;
 
             .top-sub-item {
               line-height: 35px;
               cursor: pointer;
               &:hover {
-                background:$activeColor;
+                background: $activeColor;
                 color: #fff;
               }
             }
@@ -197,7 +197,7 @@
       margin: 10px 0;
     }
     a {
-      color:$activeColor;
+      color: $activeColor;
       font-size: 12px;
     }
   }
@@ -216,9 +216,9 @@
             </div>
             <div>
               <div class="main-title">TMS运输管理</div>
-              <el-tooltip  effect="dark" :content="logisticsCentreName" placement="bottom">
+              <el-tooltip effect="dark" :content="logisticsCentreName" placement="bottom">
                 <div class="sub-title">
-                  {{ logisticsCentreName.length > 10 ? logisticsCentreName.slice(0, 10)  : logisticsCentreName }}
+                  {{ logisticsCentreName.length > 10 ? logisticsCentreName.slice(0, 10) : logisticsCentreName }}
                 </div>
               </el-tooltip>
             </div>
@@ -295,7 +295,7 @@
   export default {
     components: {omsUploadPicture},
     props: ['toRoute'],
-    data() {
+    data () {
       return {
         activeId: this.toRoute.meta && this.toRoute.meta.moduleId,
         logo_pic: logo_pic,
@@ -351,7 +351,7 @@
       goTo: function (item) {
         this.$router.push({path: item.path});
       },
-      checkSubMenu(item) {
+      checkSubMenu (item) {
         this.hoverItem = {};
         this.goTo(item);
       },
@@ -380,7 +380,7 @@
           }
         }
       },
-      selectSubmenu(item) {
+      selectSubmenu (item) {
         return item.path === this.$route.path ||
           item.meta.subModulePath === this.$route.path ||
           (item.meta.subMenuId && item.meta.subMenuId === this.$route.path.split('/')[2]);

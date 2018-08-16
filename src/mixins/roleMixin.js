@@ -1,11 +1,11 @@
 import {Access} from '@/resources';
 
 export default {
-  mounted() {
+  mounted () {
 
   },
   methods: {
-    getRoleMenus(noCache = false) {
+    getRoleMenus (noCache = false) {
       return new Promise((resolve, reject) => {
         let menu = this.$store.state.allMenuList;
         if (noCache === false && menu && menu.length) {

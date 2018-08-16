@@ -154,7 +154,7 @@
   import utils from '@/tools/utils';
 
   export default {
-    data() {
+    data () {
       return {
         dialogVisible: false,
         Attachment: {},
@@ -197,7 +197,7 @@
       dialogVisibleStatus: function () {
         return this.$store.state.attachmentDialog.open;
       },
-      style() {
+      style () {
         let arr = [];
         arr.push('transform: rotate(' + this.currentZ + 'deg) scale(' + this.scale + ')');
         arr.push('top:' + this.moveOpt.imgPos.y + 'px');
@@ -293,7 +293,7 @@
       changeZ: function (type) {
         this.currentZ = (this.currentZ + type * 90) % 360;
       },
-      changeScale(scale) {
+      changeScale (scale) {
         this.scale = this.scale * scale;
       },
       stop: function () {
@@ -337,7 +337,7 @@
         this.attachmentId = this.attachmentList[targetIndex].attachmentId;
         this.getAttachment();
       },
-      startMove(e) {
+      startMove (e) {
         let self = this;
         let oEvent = e || event;
         this.moveOpt.dpos = utils.getPos(oEvent);
@@ -357,7 +357,7 @@
 
         self.moveOpt.moving = true;
       },
-      listenMove(isRemove = false) {
+      listenMove (isRemove = false) {
 
         setTimeout(() => {
           let self = this;

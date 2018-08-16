@@ -22,7 +22,7 @@
   export default {
     name: 'OmsCostTime',
     props: ['fDate', 'tDate'],
-    data() {
+    data () {
       return {
         d: '',
         h: '',

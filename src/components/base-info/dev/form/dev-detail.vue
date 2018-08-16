@@ -17,7 +17,7 @@
       <oms-input type="text" v-model="form.devNo" placeholder="请输入包装序列号"></oms-input>
     </el-form-item>
     <!--<el-form-item label="包装主键">-->
-      <!--<oms-input type="text" v-model="form.devId" :disabled="true"></oms-input>-->
+    <!--<oms-input type="text" v-model="form.devId" :disabled="true"></oms-input>-->
     <!--</el-form-item>-->
     <el-form-item label="包装状态" prop="status">
       <el-select placeholder="请选择包装状态" v-model="form.status">
@@ -70,7 +70,8 @@
         devTypeStatus: ''
       };
     },
-    mounted() {},
+    mounted () {
+    },
     computed: {
       showTitle: function () {
         let title = '新增';

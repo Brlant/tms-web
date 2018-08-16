@@ -188,7 +188,7 @@
         currentItem: {}
       };
     },
-    mounted() {
+    mounted () {
       this.getGoodsAreaPage(1);
       this.showAllType(1);
     },
@@ -241,10 +241,10 @@
           this.pager.count = res.data.count;
         });
       },
-      scrollLoadingData(event) {
+      scrollLoadingData (event) {
         this.$scrollLoadingData(event);
       },
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         if (this.showAll) {
           this.showAllType(1);
         } else if (!this.showAll && this.currentItem.id) {
@@ -252,7 +252,7 @@
           this.showType(this.currentItem, 1);
         }
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         if (this.showAll) {
           this.showAllType(val);
         } else if (!this.showAll && this.currentItem.id) {

@@ -40,7 +40,7 @@
         }
         return title;
       },
-      transportScope() {
+      transportScope () {
         return this.$getDict('transportationCondition');
       }
     },

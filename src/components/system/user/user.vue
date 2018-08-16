@@ -65,7 +65,7 @@
       </div>
       <div class="d-table-right">
         <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
-          <div class="scrollbar-content" >
+          <div class="scrollbar-content">
             <div>
               <div class="order-list-status">
                 <div class="status-item" :class="{'active':item.status==filters.status}"
@@ -146,7 +146,8 @@
               <div class="text-center" v-show="dataRows.length">
                 <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                                :current-page="pager.currentPage"
-                               :page-sizes="[20,50,100]" :page-size="20" layout="total, sizes, prev, pager, next, jumper"
+                               :page-sizes="[20,50,100]" :page-size="20"
+                               layout="total, sizes, prev, pager, next, jumper"
                                :total="pager.count">
                 </el-pagination>
               </div>
@@ -287,10 +288,10 @@
           this.orgType[2].num = data['disable'];
         });
       },
-      scrollLoadingData(event) {
+      scrollLoadingData (event) {
         this.$scrollLoadingData(event);
       },
-      handleSizeChange(val) {
+      handleSizeChange (val) {
         this.pager.pageSize = val;
         if (this.showAll) {
           this.showAllType(1);
@@ -298,7 +299,7 @@
           this.showType(this.currentItem, 1);
         }
       },
-      handleCurrentChange(val) {
+      handleCurrentChange (val) {
         if (this.showAll) {
           this.showAllType(val);
         } else if (!this.showAll && this.currentItem.id) {
