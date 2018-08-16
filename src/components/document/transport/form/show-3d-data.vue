@@ -28,7 +28,7 @@
         <h3 class="tit f-dib index-tit" :class="{active: pageSet.key === currentTab.key}">
           预装箱结果
         </h3>
-        <span @click="open" class="des-btn" v-show="!show">
+        <span @click="open" class="des-btn">
                <a href="#" class="btn-circle" @click.prevent="">
                  <i class="el-icon-zoom-in"></i></a>查看
         </span>
@@ -69,7 +69,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
-                  <el-button type="primary" @click="onSubmit('boxSizeForm')" :disabled="doing">保存</el-button>
+                  <el-button type="primary" @click="onSubmit('boxSizeForm')" :disabled="doing">重新计算</el-button>
                 </el-col>
               </el-row>
             </el-row>
@@ -152,9 +152,7 @@
           this.list = res.data;
           this.show = true;
           this.loading = false;
-          this.loading = false;
           this.doing = false;
-          this.showAddFlag = !this.showAddFlag;
           // 保存长宽高
           window.localStorage.setItem(this.saveKey, JSON.stringify(sizeForm));
         }).catch(error => {
@@ -165,6 +163,7 @@
         });
       },
       open () {
+        console.log('111');
         this.show = true;
         this.queryList();
       },
@@ -172,7 +171,6 @@
         this.show = false;
       },
       queryList () {
-        if (this.list.length) return;
         this.loading = true;
         this.$http.get(`/tms-waybill/${this.form.id}/pre-pack`).then(res => {
           this.list = res.data;
