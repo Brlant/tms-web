@@ -310,7 +310,7 @@
           </el-row>
           <div class="order-list-item-bg"></div>
         </div>
-        <div class="order-list-item">
+        <div class="order-list-header">
           <el-row>
             <el-col :span="2"></el-col>
             <el-col :span="2"></el-col>
