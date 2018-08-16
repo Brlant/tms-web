@@ -310,8 +310,7 @@
           </el-row>
           <div class="order-list-item-bg"></div>
         </div>
-        <div class="order-list-item"
-             :class="[formatRowClass(dataList?dataList[0].status:'', orderType)]">
+        <div class="order-list-item">
           <el-row>
             <el-col :span="2"></el-col>
             <el-col :span="2"></el-col>
