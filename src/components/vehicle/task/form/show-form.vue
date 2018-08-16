@@ -138,11 +138,11 @@
             <el-table :data="form.waybillList" border style="width: 100%">
               <el-table-column prop="waybillNumber" label="运单号" width="140">
                 <template slot-scope=" scope">
-                  <el-tooltip class="item" effect="dark" :content="getPackFlag(scope.row.packFlag)" placement="right">
                      <span class="f-14">
                      {{scope.row.waybillNumber}}
+                       <el-tag v-if="scope.row.packFlag" type="success">已包</el-tag>
+                        <el-tag v-if="!scope.row.packFlag" type="warning">未包</el-tag>
                       </span>
-                  </el-tooltip>
                 </template>
               </el-table-column>
               <el-table-column prop="receiverName" label="发货单位" mix-width="190">
