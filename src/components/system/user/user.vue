@@ -45,11 +45,20 @@
                 </li>
                 <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
                     :class="{'active':item.id==currentItem.id}">
-                  <perm label="tms-department-edit">
-                    <a href="#" @click.stop.prevent="editDepartment(item)" class="hover-show pull-right">
-                      <i class="el-icon-t-edit"></i>
-                    </a>
-                  </perm>
+                  <span class="hover-show">
+                    <perm label="tms-department-edit">
+                      <a href="#" @click.stop.prevent="editDepartment(item)"
+                         class="pull-right">
+                        <i class="el-icon-t-edit"></i>
+                      </a>
+                    </perm>
+                    <perm label="tms-department-delete">
+                      <a href="#" @click.stop.prevent="deleteDepartment(item)"
+                         class="pull-right">
+                        <i class="el-icon-t-delete"></i>
+                      </a>
+                    </perm>
+                  </span>
                   {{item.name}}
                 </li>
               </ul>
@@ -251,6 +260,28 @@
       }
     },
     methods: {
+      deleteDepartment: function (item) {
+        this.$confirm(`删除部门"${item.name}"会一并清空部门下的成员，确认删除？`, '', {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.delete('/oms/department/' + item.id, {}).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '删除部门"' + item.name + '"成功'
+            });
+            this.getDepartmentPage();
+            this.showAllType(1);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response.data && error.response.data.msg || '删除部门"' + item.name + '"失败'
+            });
+          });
+        });
+      },
       showAllType: function (pageNo) {
         this.currentItem = {};
         let data = Object.assign({}, this.filters, {
