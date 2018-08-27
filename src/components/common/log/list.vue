@@ -210,10 +210,9 @@
         this.showDetailPart = false;
       },
       searchInOrder: function () {// 搜索
-        this.searchWord.startTime = this.formatTime(this.expectedTime[0]);
-        this.searchWord.endTime = this.formatTime(this.expectedTime[1]);
+        this.searchWord.startTime = this.formatTime(this.expectedTime[0]) + ' ' + '00：00：00';
+        this.searchWord.endTime = this.formatTime(this.expectedTime[1]) + ' ' + '23：59：59';
         Object.assign(this.filters, this.searchWord);
-        this.getLogPager(1);
       },
       resetSearchForm: function () {// 重置表单
         this.searchWord = {
