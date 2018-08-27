@@ -222,7 +222,6 @@
         };
         this.expectedTime = '';
         Object.assign(this.filters, this.searchWord);
-        this.getLogPager(1);
       },
       formatTime (date) {
         return date ? this.$moment(date).format('YYYY-MM-DD') : '';
