@@ -127,7 +127,8 @@
             <div class="text-center" v-show="dataRows.length">
               <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                              :current-page="pager.currentPage"
-                             :page-sizes="[20,50,100]" :page-size="20" layout="total, sizes, prev, pager, next, jumper"
+                             :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
+                             layout="total, sizes, prev, pager, next, jumper"
                              :total="pager.count">
               </el-pagination>
             </div>
@@ -213,7 +214,7 @@
         pager: {
           currentPage: 1,
           count: 0,
-          pageSize: 20
+          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10
         },
         orgStatus: [
           {'title': '待审核', 'num': '', 'type': 1, deleteFlag: false, 'orgAuditStatus': 0, 'otherAuditStatus': null},
@@ -262,6 +263,7 @@
     methods: {
       handleSizeChange (val) {
         this.pager.pageSize = val;
+        window.localStorage.setItem('currentPageSize', val);
         this.getOrgPage(1);
       },
       handleCurrentChange (val) {

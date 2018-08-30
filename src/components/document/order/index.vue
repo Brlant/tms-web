@@ -183,7 +183,8 @@
     <div class="text-center" v-show="dataList.length && !loadingData">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                      :current-page="pager.currentPage"
-                     :page-sizes="[20,50,100]" :page-size="20" layout="total, sizes, prev, pager, next, jumper"
+                     :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
+                     layout="total, sizes, prev, pager, next, jumper"
                      :total="pager.count">
       </el-pagination>
     </div>
@@ -251,7 +252,7 @@
         pager: {
           currentPage: 1,
           count: 0,
-          pageSize: 20,
+          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
           totalPage: 1
         },
         action: '',
@@ -380,6 +381,7 @@
       },
       handleSizeChange (val) {
         this.pager.pageSize = val;
+        window.localStorage.setItem('currentPageSize', val);
         this.getTmsOrderPage(1);
       },
       handleCurrentChange (val) {

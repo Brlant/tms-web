@@ -104,7 +104,8 @@
       <div class="text-center" v-show="(logList.length || pager.currentPage !== 1) && !loadingData">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                        :current-page="pager.currentPage"
-                       :page-sizes="[10,20,100]" :page-size="10" layout="sizes, prev, pager, next, jumper"
+                       :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
+                       layout="sizes, prev, pager, next, jumper"
                        :total="pager.count">
         </el-pagination>
       </div>
@@ -139,7 +140,7 @@
         pager: {
           currentPage: 1,
           count: 0,
-          pageSize: 10
+          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10
         },
         expectedTime: '',
         userList: []
@@ -178,6 +179,7 @@
       },
       handleSizeChange (val) {
         this.pager.pageSize = val;
+        window.localStorage.setItem('currentPageSize', val);
         this.getLogPager(1);
       },
       handleCurrentChange (val) {

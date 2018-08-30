@@ -275,7 +275,7 @@
         <div class="text-center clearfix" v-if="devDetailList.length">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                          :current-page="detailPager.currentPage"
-                         :page-sizes="[20,50,100]" :page-size="20"
+                         :page-sizes="[10,20,50,100]" :page-size="detailPager.pageSize"
                          layout="total, sizes, prev, pager, next, jumper"
                          :total="detailPager.count">
           </el-pagination>
@@ -360,7 +360,7 @@
         detailPager: {
           currentPage: 1,
           count: 0,
-          pageSize: 20,
+          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
           totalPage: 1
         },
         storePager: {
@@ -524,6 +524,7 @@
       },
       handleSizeChange (val) {
         this.detailPager.pageSize = val;
+        window.localStorage.setItem('currentPageSize', val);
         this.getDevDetailList(1);
       },
       handleCurrentChange (val) {

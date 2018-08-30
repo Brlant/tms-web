@@ -36,7 +36,7 @@
       <div class="text-center clearfix" v-if="logList.length">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                        :current-page="storePager.currentPage"
-                       :page-sizes="[20,50,100]" :page-size="20"
+                       :page-sizes="[10,20,50,100]" :page-size="storePager.pageSize"
                        layout="total, sizes, prev, pager, next, jumper"
                        :total="storePager.count">
         </el-pagination>
@@ -55,7 +55,7 @@
         storePager: {
           currentPage: 1,
           count: 0,
-          pageSize: 20,
+          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
           totalPage: 1
         },
         devTypeStatus: ''
@@ -80,6 +80,7 @@
     methods: {
       handleSizeChange (val) {
         this.storePager.pageSize = val;
+        window.localStorage.setItem('currentPageSize', val);
         this.getLogList(1);
       },
       handleCurrentChange (val) {

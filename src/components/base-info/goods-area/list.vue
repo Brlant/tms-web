@@ -115,7 +115,7 @@
               <div class="text-center" v-show="dataRows.length">
                 <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                                :current-page="pager.currentPage"
-                               :page-sizes="[20,50,100]" :page-size="20"
+                               :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
                                layout="total, sizes, prev, pager, next, jumper"
                                :total="pager.count">
                 </el-pagination>
@@ -176,7 +176,7 @@
         pager: {
           currentPage: 1,
           count: 0,
-          pageSize: 20
+          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10
         },
         showTypeList: [],
         goodsAreaPage: {
@@ -245,6 +245,7 @@
         this.$scrollLoadingData(event);
       },
       handleSizeChange (val) {
+        window.localStorage.setItem('currentPageSize', val);
         if (this.showAll) {
           this.showAllType(1);
         } else if (!this.showAll && this.currentItem.id) {
