@@ -71,9 +71,9 @@
               {{form.carVolume}} <span v-if="form.carLoadBearing">立方米</span>
             </oms-col>
             <oms-col label="创建人" :rowSpan="span" :value="form.creatorName" isShow="true"/>
-            <oms-col label="创建时间" :rowSpan="span" :value="form.createTime" isShow="true">
-              {{form.createTime|time}}
-            </oms-col>
+            <!--<oms-col label="创建时间" :rowSpan="span" :value="form.createTime" isShow="true">-->
+            <!--{{form.createTime|time}}-->
+            <!--</oms-col>-->
             <oms-col label="修改人" :rowSpan="span" :value="form.updateName" isShow="true"/>
             <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime" isShow="true">
               {{form.updateTime|time}}
