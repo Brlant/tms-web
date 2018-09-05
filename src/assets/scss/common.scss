@@ -197,3 +197,11 @@ $borderColor: rgba(82, 82, 82, 0.23);
 
   }
 }
+
+.attachment-name {
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}

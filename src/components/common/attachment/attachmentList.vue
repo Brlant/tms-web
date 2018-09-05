@@ -18,14 +18,6 @@
     align-items: center;
     justify-content: space-between;
   }
-
-  .attachment-name {
-    max-width: 160px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: inline-block;
-  }
 </style>
 <template>
   <div>
