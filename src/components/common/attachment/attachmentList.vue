@@ -32,7 +32,11 @@
     <ul class="show-list">
       <li class="list-item list_flex" v-for="attachment in attachmentList" @click="handlePreview(attachment)">
         <div class="attachment-name">
-          {{attachment.attachmentFileName}}
+          <el-tooltip effect="dark" :content="attachment.attachmentFileName" placement="top">
+            <span>
+                {{attachment.attachmentFileName}}
+            </span>
+          </el-tooltip>
         </div>
         <div>
           <perm :label="perm">
