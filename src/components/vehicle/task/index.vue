@@ -619,6 +619,7 @@
         // 清空勾选列表
         this.checkList = [];
         this.checkListPara = [];
+        this.taskIdList = [];
         TransportTask.query(param).then(res => {
           res.data.list.forEach(val => {
             val.isChecked = false;
