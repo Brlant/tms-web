@@ -192,7 +192,7 @@
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentPart" :action="action" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
-    <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+    <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{'width':'1200px','padding':0}">
       <component :is="currentInfoPart" :showBigMap="showBigMap" :formItem="form" @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="shoWayBillPart" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">

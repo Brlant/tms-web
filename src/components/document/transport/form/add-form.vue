@@ -215,6 +215,49 @@
               <el-form-item label="货品名称">
                 <oms-input v-model="hj.goodsName" placeholder="请输入货品名称"></oms-input>
               </el-form-item>
+              <el-form-item label="货主货品名称">
+                <oms-input v-model="hj.orgGoodsName" placeholder="请输入货主货品名称"></oms-input>
+              </el-form-item>
+              <el-form-item label="批号">
+                <oms-input v-model="hj.batchNumber" placeholder="请输入批号"></oms-input>
+              </el-form-item>
+              <two-column>
+                <el-form-item slot="left" label="单价">
+                  <oms-input v-model="hj.goodsUnitPrice" placeholder="请输入单价" type="number" :min="0"></oms-input>
+                </el-form-item>
+                <el-form-item slot="right" label="数量">
+                  <oms-input v-model="hj.goodsCount" type="number" :min="0" placeholder="请输入数量"></oms-input>
+                </el-form-item>
+              </two-column>
+              <el-form-item label="生产厂商">
+                <oms-input v-model="hj.goodsFactory" placeholder="请输入生产厂商"></oms-input>
+              </el-form-item>
+              <el-form-item label="供货厂商">
+                <oms-input v-model="hj.supplyManufacturers" placeholder="请输入供货厂商"></oms-input>
+              </el-form-item>
+              <two-column>
+                <el-form-item slot="left" label="整件长">
+                  <oms-input type="number" :min="0" v-model="hj.goodsLength" placeholder="请输入整件长">
+                    <template slot="append">cm</template>
+                  </oms-input>
+                </el-form-item>
+                <el-form-item slot="right" label="整件宽">
+                  <oms-input type="number" :min="0" v-model="hj.goodsWidth" placeholder="请输入整件宽">
+                    <template slot="append">cm</template>
+                  </oms-input>
+                </el-form-item>
+              </two-column>
+              <two-column>
+                <el-form-item slot="left" label="整件高">
+                  <oms-input type="number" :min="0" v-model="hj.goodsHeight" placeholder="请输入整件高">
+                    <template slot="append">cm</template>
+                  </oms-input>
+                </el-form-item>
+                <el-form-item slot="right" label="整装箱数">
+                  <oms-input type="number" :min="0" v-model="hj.wholeBoxCount" placeholder="请输入整装箱数">
+                  </oms-input>
+                </el-form-item>
+              </two-column>
               <two-column>
                 <el-form-item slot="left" label="货品重量">
                   <oms-input type="number" :min="0" v-model="hj.weight" placeholder="请输入货品重量">
@@ -306,7 +349,17 @@
               specifications: '',
               weight: '',
               volume: '',
-              code: ''
+              code: '',
+              orgGoodsName: '',
+              batchNumber: '',
+              goodsUnitPrice: '',
+              goodsCount: '',
+              goodsFactory: '',
+              supplyManufacturers: '',
+              goodsLength: '',
+              goodsWidth: '',
+              goodsHeight: '',
+              wholeBoxCount: ''
             }
           ]
         },

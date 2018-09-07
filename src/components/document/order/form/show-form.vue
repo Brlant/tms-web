@@ -140,24 +140,66 @@
               {{pageSets[5].name}}</h3>
           </div>
           <div class="content">
-            <el-table :data="form.goodsList" border style="width: 100%">
-              <el-table-column prop="goodsName" label="货品名称" width="200">
-              </el-table-column>
-              <el-table-column prop="weight" label="货品重量(kg)">
+            <el-table class="border-black" :data="form.goodsList" border style="width: 100%">
+              <el-table-column type="index" label="序号" width="50"/>
+              <el-table-column prop="goodsName" label="货品" width="260">
                 <template slot-scope="scope">
-                  {{scope.row.weight}}
-                </template>
-              </el-table-column>
-              <el-table-column prop="volume" label="货品体积(m³)">
-                <template slot-scope="scope">
-                  {{scope.row.volume}}
+                  <div>
+                    <el-tooltip class="item" effect="dark" content="货主货品名称" placement="right">
+                      <span style="font-size: 12px;color:#999">{{scope.row.orgGoodsName}}</span>
+                    </el-tooltip>
+                  </div>
+                  <div>
+                    <el-tooltip class="item" effect="dark" :content="formatGoodsPackage(scope.row)" placement="right">
+                      <span style="font-size: 14px;line-height: 20px">平台货品名称：{{ scope.row.goodsName }}</span>
+                    </el-tooltip>
+                  </div>
+                  <div>
+                    <span v-if="scope.row.goodsFactory">生产厂商: {{ scope.row.goodsFactory }}</span>
+                  </div>
+                  <div>
+                    <span v-if="scope.row.supplyManufacturers">供货厂商: {{ scope.row.supplyManufacturers }}</span>
+                  </div>
+                  <div v-if="scope.row.batchNumber">
+                    批号: {{scope.row.batchNumber}}
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column prop="specifications" label="货品规格">
               </el-table-column>
+              <el-table-column prop="goodsUnitPrice" label="单价(元)">
+                <template slot-scope="scope">
+                  {{scope.row.goodsUnitPrice|formatMoney}}
+                </template>
+              </el-table-column>
+              <el-table-column prop="goodsCount" label="数量">
+                <template slot-scope="scope">
+                  {{scope.row.goodsCount}}
+                </template>
+              </el-table-column>
+              <el-table-column prop="total" label="金额">
+                <template slot-scope="scope">
+                  {{scope.row.goodsUnitPrice&&scope.row.goodsUnitPrice? scope.row.goodsUnitPrice*
+                  scope.row.goodsCount:''| formatMoney}}
+                </template>
+              </el-table-column>
+              <el-table-column prop="weight" label="kg">
+                <template slot-scope="scope">
+                  {{scope.row.weight}}
+                </template>
+              </el-table-column>
+              <el-table-column prop="volume" label="m³">
+                <template slot-scope="scope">
+                  {{scope.row.volume}}
+                </template>
+              </el-table-column>
               <el-table-column prop="code" label="追溯码">
               </el-table-column>
             </el-table>
+            <div class="text-center">
+              <span class="pull-right"><span style="font-weight:600;">合计: ¥  {{ totalMoney | formatMoney}}</span>
+              </span>
+            </div>
           </div>
         </div>
         <div class="form-header-part">
@@ -274,6 +316,16 @@
             this.queryLog(val.id);
           });
         }
+      },
+      totalMoney: function () {
+        let totalMoney = 0.00;
+        if (!this.form.goodsList.length) return totalMoney;
+        this.form.goodsList.forEach(item => {
+          if (item.goodsUnitPrice && item.goodsCount) {
+            totalMoney += item.goodsUnitPrice * item.goodsCount;
+          }
+        });
+        return totalMoney;
       }
     },
     methods: {
