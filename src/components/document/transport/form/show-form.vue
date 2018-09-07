@@ -604,7 +604,6 @@
         return this.pageSets.filter(f => f.key === key)[0];
       },
       formatTime (date) {
-        console.log(date);
         return date ? '绑定时间：' + this.$moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
       },
       queryLog: function (id) {
