@@ -511,6 +511,12 @@
         if (val.id) {
           TmsWayBill.getOneTmsWayBill(val.id).then(res => {
             this.form = res.data;
+            this.detailForm = {
+              incubator: '',
+              thermometerList: [],
+              waybillId: ''
+            };
+            this.showAddFlag = false;
             this.attachmentList = [];
             this.getFileList();
             // 查询日志信息
