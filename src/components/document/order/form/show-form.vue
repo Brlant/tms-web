@@ -147,7 +147,7 @@
                   <div>
                     <el-tooltip class="item" effect="dark" content="货主货品名称" placement="right">
                       <span
-                        style="font-size: 12px;color:#999">{{scope.row.orgGoodsName}}{{ scope.row.goodsName }}</span>
+                        style="font-size: 12px;color:#999">{{scope.row.orgGoodsName}}</span>
                     </el-tooltip>
                   </div>
                   <div>
