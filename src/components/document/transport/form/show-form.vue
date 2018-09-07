@@ -42,7 +42,7 @@
             <oms-col label="运单状态" :rowSpan="span" :value="form.status">
               {{formatStatusTitle(form.status, orderType)}}
             </oms-col>
-            <oms-col label="来源订单号" :rowSpan="span" :value="form.orderNoList">
+            <oms-col label="来源订单号" :rowSpan="span" :value="form.orderNoList" class="R">
                  <span v-for="order in form.orderNoList">{{order}}<span
                    v-if="form.orderNoList.indexOf(order)!==form.orderNoList.length-1">,</span></span>
             </oms-col>
