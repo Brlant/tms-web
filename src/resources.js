@@ -139,6 +139,22 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   }
 });
 
+// dev设备对象
+export const TempDev = resource('/ccsDevice', http, {
+  queryStateNum: (params) => {
+    return http.get('/ccsDevice/countDeviceGroup', {params});
+  },
+  queryTempData (params) {
+    return http.get('/ccsDevice/gainDeviceReportDatas', {params});
+  },
+  queryALLTempByLike (params) {
+    return http.get('/ccsDevice/queryDevListFuzzy', {params});
+  },
+  exportDevInfo (params) {
+    return http.get('/ccsDevice/export-dev', {params});
+  }
+});
+
 // transport-task 对象
 export const TransportTask = resource('/transport-task', http, {
   queryAutoTaskList: (params) => {

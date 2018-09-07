@@ -216,6 +216,53 @@
             <h3 class="tit f-dib index-tit" :class="{active: getPageSet(6).key === currentTab.key}">
               {{getPageSet(6).name}}
             </h3>
+            <perm label="tms-waybill-pack">
+              <span @click="showAdd" class="btn-circle"><i
+                class="el-icon-t-plus"></i> </span>
+            </perm>
+          </div>
+          <div>
+            <el-form ref="detailForm" :model="detailForm" class="clearfix" label-width="100px" v-show="showAddFlag">
+              <el-row>
+                <el-col :span="20">
+                  <el-form-item label="保温箱" style="margin-top: 20px;margin-bottom: 20px">
+                    <el-select filterable remote placeholder="请输入保温箱名称/编号/编码查询保温箱" :remote-method="queryBoxList"
+                               :clearable="true" @click.native="queryBoxList('')"
+                               v-model="detailForm.incubator" popperClass="good-selects">
+                      <el-option :value="box.devNo" :key="box.devNo" :label="box.devNo"
+                                 v-for="box in boxList">
+                        <div style="overflow: hidden">
+                          <span class="pull-left" style="clear: right">{{box.devNo}}-{{box.devName}}</span>
+                        </div>
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="温度计" style="margin-top: 20px;margin-bottom: 20px">
+                    <el-select filterable remote placeholder="请输入温度计名称/编号/编码查询温度计" :remote-method="queryDevList"
+                               :clearable="true" @click.native="queryDevList('')"
+                               v-model="detailForm.thermometerList" popperClass="good-selects" multiple="">
+                      <el-option :value="ccsDev.devCode" :key="ccsDev.devCode" :label="ccsDev.devName"
+                                 v-for="ccsDev in ccsDevList">
+                        <div style="overflow: hidden">
+                          <span class="pull-left" style="clear: right">{{ccsDev.devName}}</span>
+                        </div>
+                        <div style="overflow: hidden">
+                          <span class="select-other-info pull-left">
+                            <span v-show="ccsDev.devCode">设备编码:</span>{{ccsDev.devCode}}
+                          </span>
+                          <span class="select-other-info pull-left" style="margin-left: 10px">
+                            <span v-show="ccsDev.devNo">设备编号:</span>{{ccsDev.devNo}}
+                          </span>
+                        </div>
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4" style="margin-top: 20px;margin-bottom: 20px;padding-left: 40px">
+                  <el-button type="primary" @click="onSubmit('detailForm')" :disabled="doing">保存</el-button>
+                </el-col>
+              </el-row>
+            </el-form>
           </div>
           <div class="content">
             <el-table class="border-black" :data="form.incubatorDtoList" border style="width: 100%">
@@ -376,7 +423,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {OmsAttachment, TmsLog, TmsPack, TmsWayBill} from '@/resources';
+  import {OmsAttachment, TempDev, TmsLog, TmsPack, TmsWayBill} from '@/resources';
   import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
   import OmsCol from '@dtop/dtop-web-common/packages/col';
@@ -415,7 +462,16 @@
         attachmentList: [],
         attachmentIdList: [],
         assessAttachmentIdList: [],
-        assessAttachmentList: []
+        assessAttachmentList: [],
+        showAddFlag: false,
+        detailForm: {
+          incubator: '',
+          thermometerList: [],
+          waybillId: ''
+        },
+        ccsDevList: [],
+        boxList: [],
+        doing: false
       };
     },
     computed: {
@@ -468,6 +524,71 @@
       }
     },
     methods: {
+      onSubmit: function () {
+        if (!this.detailForm.thermometerList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请选择需要添加的温度计'
+          });
+          return;
+        }
+        if (!this.detailForm.incubator) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请选择需要添加的保温箱'
+          });
+          return;
+        }
+        this.detailForm.waybillId = this.form.id;
+        this.doing = true;
+        this.$http.post('tms-pack/waybill', this.detailForm).then(res => {
+          this.doing = false;
+          this.showAddFlag = !this.showAddFlag;
+          this.$notify.success({
+            duration: 2000,
+            message: '新增保温箱成功'
+          });
+          // 刷新页面信息
+          TmsWayBill.getOneTmsWayBill(this.form.id).then(res => {
+            this.form = res.data;
+            this.attachmentList = [];
+            this.getFileList();
+            if (this.form.status === '6') {
+              this.assessAttachmentList = [];
+              this.getAssessFileList();
+            }
+          });
+        }).catch(error => {
+          this.$notify.error({
+            duration: 2000,
+            message: error.response && error.response.data && error.response.data.msg || '新增保温箱失败'
+          });
+          this.doing = false;
+        });
+      },
+      queryBoxList: function (query) {
+        let params = {
+          keyWord: query,
+          pageNo: 1,
+          pageSize: 20
+        };
+        this.$http.get('/dev-detail/free-dev', {params}).then(res => {
+          this.boxList = res.data.list;
+        });
+      },
+      queryDevList: function (query) {
+        let param = {
+          keyWord: query,
+          pageNo: 1,
+          pageSize: 20
+        };
+        TempDev.query(param).then(res => {
+          this.ccsDevList = res.data.currentList;
+        });
+      },
+      showAdd: function () {
+        this.showAddFlag = !this.showAddFlag;
+      },
       formatGoodsPackage: function (item) {
         if (item) {
           return '包装：' + item.goodsLength + 'cm' + ' x ' + item.goodsWidth + 'cm' + ' x ' + item.goodsHeight + 'cm';
