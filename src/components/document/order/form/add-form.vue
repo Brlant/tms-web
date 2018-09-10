@@ -223,9 +223,6 @@
               <el-form-item label="货品名称">
                 <oms-input v-model="hj.goodsName" placeholder="请输入货品名称"></oms-input>
               </el-form-item>
-              <el-form-item label="货主货品名称">
-                <oms-input v-model="hj.orgGoodsName" placeholder="请输入货主货品名称"></oms-input>
-              </el-form-item>
               <el-form-item label="批号">
                 <oms-input v-model="hj.batchNumber" placeholder="请输入批号"></oms-input>
               </el-form-item>
@@ -342,7 +339,6 @@
               weight: '',
               volume: '',
               code: '',
-              orgGoodsName: '',
               batchNumber: '',
               goodsUnitPrice: '',
               goodsCount: '',

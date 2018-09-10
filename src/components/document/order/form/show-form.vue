@@ -145,14 +145,8 @@
               <el-table-column prop="goodsName" label="货品" width="398">
                 <template slot-scope="scope">
                   <div>
-                    <el-tooltip class="item" effect="dark" content="货主货品名称" placement="right">
-                      <span
-                        style="font-size: 12px;color:#999">{{scope.row.orgGoodsName}}</span>
-                    </el-tooltip>
-                  </div>
-                  <div>
                     <el-tooltip class="item" effect="dark" :content="formatGoodsPackage(scope.row)" placement="right">
-                      <span style="font-size: 14px;line-height: 20px">平台货品名称：{{ scope.row.goodsName }}</span>
+                      <span style="font-size: 14px;line-height: 20px">{{ scope.row.goodsName }}</span>
                     </el-tooltip>
                   </div>
                   <div>
