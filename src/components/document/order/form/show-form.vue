@@ -161,46 +161,30 @@
                   <div>
                     <span v-if="scope.row.supplyManufacturers">供货厂商: {{ scope.row.supplyManufacturers }}</span>
                   </div>
-                  <div v-if="scope.row.batchNumber">
-                    批号: {{scope.row.batchNumber}}
-                  </div>
                 </template>
+              </el-table-column>
+              <el-table-column prop="batchNumber" label="批号" width="100">
               </el-table-column>
               <el-table-column prop="specifications" label="货品规格" width="100">
-              </el-table-column>
-              <el-table-column prop="goodsUnitPrice" label="单价(元)" width="60">
-                <template slot-scope="scope">
-                  {{scope.row.goodsUnitPrice|formatMoney}}
-                </template>
               </el-table-column>
               <el-table-column prop="goodsCount" label="数量" width="60">
                 <template slot-scope="scope">
                   {{scope.row.goodsCount}}
                 </template>
               </el-table-column>
-              <el-table-column prop="total" label="金额" width="60">
+              <el-table-column prop="weight" label="重量/体积" width="120">
                 <template slot-scope="scope">
-                  {{scope.row.goodsUnitPrice&&scope.row.goodsUnitPrice? scope.row.goodsUnitPrice*
-                  scope.row.goodsCount:''| formatMoney}}
+                  <div>
+                    {{scope.row.weight}} kg
+                  </div>
+                  <div>
+                    {{scope.row.volume}} m³
+                  </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="weight" label="kg" width="60">
-                <template slot-scope="scope">
-                  {{scope.row.weight}}
-                </template>
-              </el-table-column>
-              <el-table-column prop="volume" label="m³" width="60">
-                <template slot-scope="scope">
-                  {{scope.row.volume}}
-                </template>
-              </el-table-column>
-              <el-table-column prop="code" label="追溯码" width="100">
+              <el-table-column prop="code" label="追溯码" width="120">
               </el-table-column>
             </el-table>
-            <div class="text-center">
-              <span class="pull-right"><span style="font-weight:600;">合计: ¥  {{ totalMoney | formatMoney}}</span>
-              </span>
-            </div>
           </div>
         </div>
         <div class="form-header-part">
@@ -317,16 +301,6 @@
             this.queryLog(val.id);
           });
         }
-      },
-      totalMoney: function () {
-        let totalMoney = 0.00;
-        if (!this.form.goodsList.length) return totalMoney;
-        this.form.goodsList.forEach(item => {
-          if (item.goodsUnitPrice && item.goodsCount) {
-            totalMoney += item.goodsUnitPrice * item.goodsCount;
-          }
-        });
-        return totalMoney;
       }
     },
     methods: {
