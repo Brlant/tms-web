@@ -224,7 +224,7 @@
           <div>
             <el-form ref="detailForm" :model="detailForm" class="clearfix" label-width="100px" v-show="showAddFlag">
               <el-row>
-                <el-col :span="20">
+                <el-col :span="10">
                   <el-form-item label="保温箱" style="margin-top: 20px;margin-bottom: 20px">
                     <el-select filterable remote placeholder="请输入保温箱名称/编号/编码查询保温箱" :remote-method="queryBoxList"
                                :clearable="true" @click.native="queryBoxList('')"
@@ -237,6 +237,8 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
+                </el-col>
+                <el-col :span="10">
                   <el-form-item label="温度计" style="margin-top: 20px;margin-bottom: 20px">
                     <el-select filterable remote placeholder="请输入温度计名称/编号/编码查询温度计" :remote-method="queryDevList"
                                :clearable="true" @click.native="queryDevList('')"
@@ -531,17 +533,17 @@
     },
     methods: {
       onSubmit: function () {
-        if (!this.detailForm.thermometerList.length) {
-          this.$notify.warning({
-            duration: 2000,
-            message: '请选择需要添加的温度计'
-          });
-          return;
-        }
         if (!this.detailForm.incubator) {
           this.$notify.warning({
             duration: 2000,
             message: '请选择需要添加的保温箱'
+          });
+          return;
+        }
+        if (!this.detailForm.thermometerList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请选择需要添加的温度计'
           });
           return;
         }
@@ -583,12 +585,12 @@
         });
       },
       queryDevList: function (query) {
-        let param = {
+        let params = {
           keyWord: query,
           pageNo: 1,
           pageSize: 20
         };
-        TempDev.query(param).then(res => {
+        this.$http.get('/tms-pack/dev', {params}).then(res => {
           this.ccsDevList = res.data.currentList;
         });
       },
