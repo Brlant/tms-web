@@ -330,6 +330,11 @@
       }
     },
     methods: {
+      formatGoodsPackage: function (item) {
+        if (item) {
+          return '包装：' + item.goodsLength + 'cm' + ' x ' + item.goodsWidth + 'cm' + ' x ' + item.goodsHeight + 'cm';
+        }
+      },
       queryLog: function (id) {
         if (!id) return;
         this.loadingLog = true;
