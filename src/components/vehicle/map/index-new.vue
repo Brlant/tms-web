@@ -450,6 +450,7 @@
               i.isHasSearchText = true;
             });
             this.dataRows = this.dataRows.concat(res.data.list);
+            this.changeAddress(this.dataRows);
             this.addOverlays(res.data.list, true);
           } else {
             res.data.list.forEach(i => {
@@ -458,10 +459,23 @@
             });
             this.dataRows = [];
             this.dataRows = res.data.list;
+            this.changeAddress(this.dataRows);
             this.addOverlays(this.dataRows, false);
           }
           this.pager.totalPage = res.data.totalPage;
         });
+      },
+      changeAddress (dataRows) {
+        if (dataRows) {
+          for (let i = 0; i < dataRows.length; i++) {
+            // 如果是销售退货，收货单位和收货地址取发货信息
+            let data = dataRows[i];
+            if (data.waybillType === '1-1') {
+              data.receiverName = data.senderName;
+              data.receiverAddress = data.senderAddress;
+            }
+          }
+        }
       },
       scrollLoadingData (event) {
         this.$scrollLoadingData(event);
