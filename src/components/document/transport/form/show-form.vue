@@ -74,10 +74,13 @@
           </div>
           <div class="content">
             <oms-col label="货主" :rowSpan="span" :value="form.orgName"/>
-            <oms-col label="发货单位" :rowSpan="span" :value="form.senderName"/>
-            <oms-col label="发货地址" :rowSpan="span" :value="form.senderAddress"/>
-            <oms-col label="发货联系人" :rowSpan="span" :value="form.senderContact"/>
-            <oms-col label="电话" :rowSpan="span" :value="form.senderContactPhone"/>
+            <oms-col label="发货单位" :rowSpan="span" :value="form.waybillType==='1-1'?form.receiverName:form.senderName"/>
+            <oms-col label="发货地址" :rowSpan="span"
+                     :value="form.waybillType==='1-1'?form.receiverAddress:form.senderAddress"/>
+            <oms-col label="发货联系人" :rowSpan="span"
+                     :value="form.waybillType==='1-1'?form.receiverContact:form.senderContact"/>
+            <oms-col label="电话" :rowSpan="span"
+                     :value="form.waybillType==='1-1'?form.receiverContractPhone:form.senderContactPhone"/>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
@@ -88,10 +91,13 @@
               {{getPageSet(2).name}}</h3>
           </div>
           <div class="content">
-            <oms-col label="收货联系人" :rowSpan="span" :value="form.receiverContact"/>
-            <oms-col label="电话" :rowSpan="span" :value="form.receiverContractPhone"/>
-            <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName"/>
-            <oms-col label="收货地址" :rowSpan="span" :value="form.receiverAddress"/>
+            <oms-col label="收货联系人" :rowSpan="span"
+                     :value="form.waybillType==='1-1'?form.senderContact:form.receiverContact"/>
+            <oms-col label="电话" :rowSpan="span"
+                     :value="form.waybillType==='1-1'?form.senderContactPhone:form.receiverContractPhone"/>
+            <oms-col label="收货单位" :rowSpan="span" :value="form.waybillType==='1-1'?form.senderName:form.receiverName"/>
+            <oms-col label="收货地址" :rowSpan="span"
+                     :value="form.waybillType==='1-1'?form.senderAddress:form.receiverAddress"/>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
