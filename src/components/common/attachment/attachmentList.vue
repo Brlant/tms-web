@@ -156,7 +156,9 @@
               title: '成功',
               message: '已成功删除附件' + attachment.attachmentFileName + '"'
             });
-            this.$emit('delete-change', this.attachmentList);
+            // 将附件从附件列表中删除
+            let index = this.attachmentList.indexOf(attachment);
+            this.attachmentList.splice(index, 1);
           }).catch(() => {
             this.$notify.error({
               duration: 2000,
