@@ -75,7 +75,7 @@
         </el-col>
       </el-row>
       <div v-else="" class="order-list-body flex-list-dom">
-        <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
+        <div class="order-list-item" v-for="item in dataList" @click="checkItem(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="4" class="special-col R">
@@ -146,7 +146,19 @@
             </el-col>
             <el-col :span="3" class="opera-btn">
               <div>
+                <div>
+                  <span @click.stop="showInfo(item)" v-if="item.status==='3'||item.status==='4'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-search"></i>
+                      </a>查看
+                    </span>
+                </div>
                 <div v-if="item.status==='1'||item.status==='2'">
+                  <span @click.stop="showInfo(item)" v-if="item.status==='1'||item.status==='2'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-search"></i>
+                      </a>查看
+                    </span>
                   <perm label="tms-task-car-task-cancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelTask(item)" v-if="item.status==='1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
@@ -177,6 +189,11 @@
                       </a>确认派送
                     </span>
                   </perm>
+                  <span @click.stop="showInfo(item)" v-if="item.status==='0'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-search"></i>
+                      </a>查看
+                    </span>
                 </div>
                 <div style="padding-top: 2px" v-if="item.status==='0'">
                   <perm label="tms-task-car-task-edit" class="btn-line-block">
