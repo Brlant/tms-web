@@ -219,9 +219,9 @@
         roleText: '',
         currentItem: {},
         orgType: {
-          0: {'title': '所有', 'num': 8, 'usableStatus': null},
-          1: {'title': '正常', 'num': 6, 'usableStatus': 1},
-          2: {'title': '停用', 'num': 2, 'usableStatus': 0}
+          0: {'title': '所有', 'num': '', 'usableStatus': null},
+          1: {'title': '正常', 'num': '', 'usableStatus': 1},
+          2: {'title': '停用', 'num': '', 'usableStatus': 0}
         },
         filters: {
           usableStatus: 1,
@@ -243,10 +243,10 @@
         height = (height - 110) + 'px';
         return height;
       },
-      user () {
+      user() {
         return this.$store.state.user;
       },
-      checkedMenuList () {
+      checkedMenuList() {
         let checkedMenuList = JSON.parse(JSON.stringify(this.menuList));
         let perms = this.resData.permissionList;
         if (!checkedMenuList || !perms) return [];
@@ -254,7 +254,7 @@
         return checkedMenuList;
       }
     },
-    mounted () {
+    mounted() {
       this.getPageList(1);
       this.getMenuList();
     },
@@ -265,7 +265,7 @@
         },
         deep: true
       },
-      user () {
+      user() {
         this.getMenuList(false);
       }
     },
@@ -273,7 +273,7 @@
       getMore: function () {
         this.getPageList(this.pager.currentPage + 1, true);
       },
-      scrollLoadingData (event) {
+      scrollLoadingData(event) {
         this.$scrollLoadingData(event);
       },
       getMenuList: function (cache = true) {
