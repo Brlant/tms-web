@@ -75,6 +75,7 @@
 <script>
   import {Auth, LogisticsCenter} from '@/resources';
   import AppFooter from '../layout/app.footer.vue';
+  import {Base64} from 'js-base64';
 
   export default {
     name: 'login',
@@ -109,7 +110,8 @@
           if (valid) {
             this.btnString = '登陆中..';
             this.loading = true;
-            Auth.login(this.user).then(response => {
+            let user = Object.assign({}, this.user, {password: Base64.encode(this.user.password)});
+            Auth.login(user).then(response => {
               let userId = window.localStorage.getItem('userId');
               this.$store.commit('initUser', response.data);
               this.$nextTick(function () {
