@@ -110,8 +110,8 @@
           if (valid) {
             this.btnString = '登陆中..';
             this.loading = true;
-            let user = Object.assign({}, this.user, {password: Base64.encode(this.user.password)});
-            Auth.login(user).then(response => {
+            // let user = Object.assign({}, this.user, {password: Base64.encode(this.user.password)});
+            Auth.login(this.user).then(response => {
               let userId = window.localStorage.getItem('userId');
               this.$store.commit('initUser', response.data);
               this.$nextTick(function () {
