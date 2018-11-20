@@ -195,7 +195,7 @@
 
   export default {
     components: {TwoColumn},
-    data () {
+    data() {
       return {
         rules: {
           'carId': [
@@ -233,7 +233,7 @@
       };
     },
     computed: {
-      deliveryTaskTypeList () {
+      deliveryTaskTypeList() {
         return this.$getDict('deliveryTaskType');
       }
     },
@@ -261,6 +261,7 @@
           TransportTask.getOneTransportTask(val.id).then(res => {
             this.form = res.data;
             this.filterUser(this.form.driverName);
+            this.filterHead(this.form.headName);
             this.getCarList(this.form.carPlateNumber);
             this.filterTaskCarriers(this.form.taskCarriersName);
             if (this.form.tallyClerkDtoList.length !== 0) {
@@ -276,7 +277,7 @@
       }
     },
     methods: {
-      selectTab (item) {
+      selectTab(item) {
         this.currentTab = item;
       },
       remove: function (item) {
@@ -324,7 +325,11 @@
           status: 1
         });
         User.query(data).then(res => {
-          this.headList = res.data.list;
+          if (res.data.list.length === 0) {
+            this.headList.push({id: this.form.head, name: this.form.headName});
+          } else {
+            this.headList = res.data.list;
+          }
         });
       },
       filterUser: function (query) {
@@ -336,7 +341,11 @@
           status: 1
         });
         User.query(data).then(res => {
-          this.userList = res.data.list;
+          if (res.data.list.length === 0) {
+            this.userList.push({id: this.form.driveId, name: this.form.driverName});
+          } else {
+            this.userList = res.data.list;
+          }
         });
       },
       filterTallyClerk: function (query) {
@@ -390,13 +399,12 @@
             if (val.id === id) {
               this.form.driveId = val.id;
               this.form.driverPhone = val.phone;
-              console.log(val.name);
               this.form.driverName = val.name;
             }
           });
         }
       },
-      save (formName) {
+      save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.doing = true;
