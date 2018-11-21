@@ -13,11 +13,13 @@
     text-align: center;
     line-height: 80px;
     font-size: 40px;
+
     img {
       margin-right: 10px;
       vertical-align: middle;
       margin-top: -20px;
     }
+
     color: #189aca
   }
 
@@ -75,7 +77,7 @@
 <script>
   import {Auth, LogisticsCenter} from '@/resources';
   import AppFooter from '../layout/app.footer.vue';
-  import {Base64} from 'js-base64';
+  import {base64} from '@dtop/dtop-web-common';
 
   export default {
     name: 'login',
@@ -105,13 +107,13 @@
       });
     },
     methods: {
-      done () {
+      done() {
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
             this.btnString = '登陆中..';
             this.loading = true;
-            // let user = Object.assign({}, this.user, {password: Base64.encode(this.user.password)});
-            Auth.login(this.user).then(response => {
+            let user = Object.assign({}, this.user, {encryptionPsw: base64(this.user.password)});
+            Auth.login(user).then(response => {
               let userId = window.localStorage.getItem('userId');
               this.$store.commit('initUser', response.data);
               this.$nextTick(function () {
@@ -167,13 +169,13 @@
       x.scale(pr, pr);
       x.globalAlpha = 0.6;
 
-      function i () {
+      function i() {
         x.clearRect(0, 0, w, h);
         q = [{x: 0, y: h * 0.7 + f}, {x: 0, y: h * 0.7 - f}];
         while (q[1].x < w + f) d(q[0], q[1]);
       }
 
-      function d (i, j) {
+      function d(i, j) {
         var k, n;
         x.beginPath();
         x.moveTo(i.x, i.y);
@@ -189,7 +191,7 @@
         q[1] = {x: k, y: n};
       }
 
-      function y (p) {
+      function y(p) {
         var t = p + (z() * 2 - 1.1) * f;
         return (t > h || t < 0) ? y(p) : t;
       }
