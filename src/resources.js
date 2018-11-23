@@ -110,6 +110,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   cancelWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/cancel', {});
   },
+  shipmentWayBill: (id) => {
+    return http.put('/tms-waybill/' + id + '/shipment', {});
+  },
   untieWayBill: (id, obj) => {
     return http.put('/tms-waybill/' + id + '/suspend', obj);
   },

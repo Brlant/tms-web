@@ -2,6 +2,7 @@
   .special-col {
     padding-left: 20px;
     position: relative;
+
     .el-checkbox {
       position: absolute;
       left: 0;
@@ -289,6 +290,13 @@
                       </a>中止
                     </span>
                 </perm>
+                <perm label="tms-waybill-shipment" class="opera-btn">
+                    <span @click.stop="shipmentWayBill(item)" v-if="item.status === '1'&&item.waybillType==='1-1'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-start"></i>
+                      </a>启运销退运单
+                    </span>
+                </perm>
               </div>
               <div>
                 <!--<perm label="tms-waybill-sign" class="opera-btn">-->
@@ -400,7 +408,7 @@
       SearchPart, addForm, MapPath
     },
     mixins: [StatusMixin],
-    data () {
+    data() {
       return {
         loadingData: false,
         activeStatus: 0,
@@ -488,7 +496,7 @@
         let height = parseInt(this.$store.state.bodyHeight, 10);
         return (height + 136) + 'px';
       },
-      totalCount () {
+      totalCount() {
         let total = {
           whole: 0,
           buck: 0,
@@ -512,7 +520,7 @@
         deep: true
       }
     },
-    mounted () {
+    mounted() {
       this.getTmsWayBillPage(1);
       let id = this.$route.params.id;
       if (id !== 'list' && id !== ':id') {
@@ -522,7 +530,7 @@
       }
     },
     methods: {
-      showBigMap (formItem) {
+      showBigMap(formItem) {
         this.formItem = {};
         this.isShowMulBigMap = true;
         this.$nextTick(() => {
@@ -756,7 +764,7 @@
           this.waybillIdList.splice(idIndex, 1);
         }
       },
-      checkAll () {
+      checkAll() {
         // 全选
         if (this.isCheckAll) {
           this.dataList.forEach(item => {
@@ -806,6 +814,29 @@
           this.form = JSON.parse(JSON.stringify(item));
         });
       },
+      shipmentWayBill: function (item) {
+        this.$confirm('确认启运销退运单"' + item.waybillNumber + '"?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          TmsWayBill.shipmentWayBill(item.id).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '已成功启运销退运单"' + item.waybillNumber + '"'
+            });
+            this.getTmsWayBillPage(1);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.data.msg || '启运销退运单失败'
+            });
+          });
+        }).catch(() => {
+
+        });
+      },
       cancelWayBill: function (item) {
         this.$confirm('确认取消运单"' + item.waybillNumber + '"?', '', {
           confirmButtonText: '确定',
@@ -829,18 +860,18 @@
 
         });
       },
-      handleSizeChange (val) {
+      handleSizeChange(val) {
         this.pager.pageSize = val;
         window.localStorage.setItem('currentPageSize', val);
         this.getTmsWayBillPage(1);
       },
-      handleCurrentChange (val) {
+      handleCurrentChange(val) {
         this.getTmsWayBillPage(val);
       },
       searchResult: function (search) {
         Object.assign(this.filters, search);
       },
-      checkStatus (item, key) {
+      checkStatus(item, key) {
         this.filters.status = item.status;
         this.activeStatus = key;
         this.checkList = [];
@@ -850,7 +881,7 @@
         this.activeStatus = key;
         this.filters.status = item.status;
       },
-      resetRightBox () {
+      resetRightBox() {
         this.showIndex = -1;
         this.showInfoIndex = -1;
         this.shoWayBillPart = false;
@@ -908,7 +939,7 @@
           this.orderType[10].num = data['suspend'];
         });
       },
-      showPart (index) {
+      showPart(index) {
         this.action = 'add';
         this.showIndex = index;
         this.currentPart = this.dialogComponents[index];
@@ -944,12 +975,12 @@
           this.$router.push('/document/transport/' + item.id);
         });
       },
-      submit () {
+      submit() {
         this.checkList = [];
         this.checkListPara = [];
         this.getTmsWayBillPage(1);
       },
-      autoSubmit () {
+      autoSubmit() {
         this.checkList = [];
         this.checkListPara = [];
       }
