@@ -247,7 +247,7 @@
           <div class="top-user">
             <el-dropdown trigger="click">
               <div class="el-dropdown-link top-right-item">
-                <img v-if="user.userIcon" :src="user.userIcon+'?image&action=resize:w_50,h_50,m_2'">
+                <compressed-img v-if="user.userIcon" :src="user.userIcon+'?image&action=resize:w_50,h_50,m_2'"/>
                 <img v-else src="/static/img/userpic.png"> {{user.userName}}
                 <i class="el-icon-caret-bottom"></i>
               </div>
@@ -255,7 +255,7 @@
                 <div class="menu-user">
                   <div class="menu-user-part">
                     <div>
-                      <oms-upload-picture :photoUrl="user.userIcon+'?image&action=resize:w_50,h_50,m_2'"
+                      <oms-upload-picture :photoUrl="user.userIcon"
                                           class="user-img"></oms-upload-picture>
                     </div>
                     <div>

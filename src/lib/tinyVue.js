@@ -65,6 +65,7 @@ import Transfer from 'element-ui/lib/transfer';
 import locale from 'element-ui/lib/locale';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 import {
+  compressedImg,
   DesBtn,
   Dict,
   FA,
@@ -187,7 +188,8 @@ const tinyVue = [
   DesBtn,
   DialogTemplate,
   SearchTemplate,
-  Scrollbar
+  Scrollbar,
+  compressedImg
 ];
 
 const install = function (Vue, opts = {}) {

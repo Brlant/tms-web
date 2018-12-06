@@ -1,6 +1,7 @@
 <style lang="scss">
   .attachment-dialog {
     user-select: none;
+
     .el-dialog {
       width: 100%;
       transform: none;
@@ -11,11 +12,13 @@
       box-shadow: none;
       margin-bottom: 0;
     }
+
     .el-dialog__header {
       padding: 10px 20px;
       position: relative;
       z-index: 200;
       background: #fff;
+
       .el-dialog__headerbtn {
         display: block;
         position: absolute;
@@ -33,6 +36,7 @@
       left: 0;
       right: 0;
       padding: 0;
+
       .dialog-image-rap {
         position: absolute;
         left: 0;
@@ -41,6 +45,7 @@
         top: 0;
         overflow: hidden;
         text-align: center;
+
         > div {
           position: absolute;
           left: 0;
@@ -51,6 +56,7 @@
           display: flex;
           align-items: center;
         }
+
         img {
           max-width: 95vw;
           max-height: 95vh;
@@ -58,11 +64,13 @@
           cursor: move;
         }
       }
+
       .img-tools {
         position: absolute;
         bottom: 35px;
         right: 35px;
       }
+
       .img-button {
         position: absolute;
         width: 300px;
@@ -71,23 +79,28 @@
         left: 50%;
         margin-left: -100px;
       }
+
       .attachment-doc-body {
         height: 100%;
       }
     }
+
     .attachment-dialog-head {
       display: flex;
       justify-content: space-between;
       margin-right: 25px;
+
       a {
         font-size: 16px;
         display: inline-block;
         margin-left: 8px;
         cursor: pointer;
         color: #999;
+
         &:hover {
           color: #333
         }
+
         user-select: none;
       }
     }
@@ -109,8 +122,7 @@
       <div @click.stop="closeDialog" style="height:100%;width:100%;">
         <div v-if="type=='image'" class="dialog-image-rap">
           <div id="dialog-image-rap" :style="style">
-            <img :src="fileUrl+'?image&action=resize:h_'+(windowSize.height-50)+',m_0'" alt=''
-            >
+            <img :src="fileUrl" alt=''>
           </div>
         </div>
         <div v-if="groupLen>1" class="img-button">
@@ -154,7 +166,7 @@
   import utils from '@/tools/utils';
 
   export default {
-    data () {
+    data() {
       return {
         dialogVisible: false,
         Attachment: {},
@@ -197,7 +209,7 @@
       dialogVisibleStatus: function () {
         return this.$store.state.attachmentDialog.open;
       },
-      style () {
+      style() {
         let arr = [];
         arr.push('transform: rotate(' + this.currentZ + 'deg) scale(' + this.scale + ')');
         arr.push('top:' + this.moveOpt.imgPos.y + 'px');
@@ -274,6 +286,8 @@
         let images = ['jpg', 'png', 'gif', 'jpeg'];
         let docs = ['txt', 'doc', 'docx', 'pdf', 'xls', 'xlsx', 'ppt', 'pptx'];
         if (url) {
+          // 去除签名
+          url = url.split('?')[0];
           type = url.substring(url.lastIndexOf('.'));
         }
         if (type) {
@@ -293,7 +307,7 @@
       changeZ: function (type) {
         this.currentZ = (this.currentZ + type * 90) % 360;
       },
-      changeScale (scale) {
+      changeScale(scale) {
         this.scale = this.scale * scale;
       },
       stop: function () {
@@ -337,7 +351,7 @@
         this.attachmentId = this.attachmentList[targetIndex].attachmentId;
         this.getAttachment();
       },
-      startMove (e) {
+      startMove(e) {
         let self = this;
         let oEvent = e || event;
         this.moveOpt.dpos = utils.getPos(oEvent);
@@ -357,7 +371,7 @@
 
         self.moveOpt.moving = true;
       },
-      listenMove (isRemove = false) {
+      listenMove(isRemove = false) {
 
         setTimeout(() => {
           let self = this;
