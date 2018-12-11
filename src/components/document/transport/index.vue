@@ -401,7 +401,7 @@
   import confirmForm from './form/confirm-form';
   import autoForm from './form/auto-form';
   import batchAutoForm from './form/batch-auto-form';
-  import MapPath from '../common/map-path';
+  import MapPath from './form/map-path';
 
   export default {
     components: {
