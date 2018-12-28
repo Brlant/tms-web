@@ -100,6 +100,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="logRemarks" label="日志内容" :sortable="true"></el-table-column>
+        <el-table-column prop="ip" label="IP" :sortable="true" width="150"></el-table-column>
       </el-table>
       <div class="text-center" v-show="(logList.length || pager.currentPage !== 1) && !loadingData">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
