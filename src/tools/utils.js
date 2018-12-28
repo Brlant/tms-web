@@ -52,14 +52,16 @@ export default {
     let _address = '';
     this.address.forEach(p => {
       if (province === p.value) {
+        _address += p.label;
         if (!p.children) return;
         p.children.forEach(c => {
           if (!c.children) return;
           if (city === c.value) {
+            _address += ('/' + c.label);
             if (!c.children) return;
             c.children.forEach(r => {
               if (region === r.value) {
-                _address += p.label + '/' + c.label + '/' + r.label;
+                _address += ('/' + r.label);
               }
               return false;
             });
