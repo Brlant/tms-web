@@ -65,7 +65,9 @@
       this.$nextTick(function () {
         let param = {
           usableStatus: 1,
-          objectId: 'tms-system'
+          objectId: 'tms-system',
+          pageNo: 1,
+          pageSize: 100
         };
         let self = this;
         Access.query(param).then(res => {
@@ -151,7 +153,9 @@
       },
       getRoleSelect: function () {
         let param = {
-          objectId: 'tms-system'
+          objectId: 'tms-system',
+          pageNo: 1,
+          pageSize: 100
         };
         let self = this;
         Access.query(param).then(res => {
