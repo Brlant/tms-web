@@ -94,19 +94,19 @@
       }
     },
     computed: {
-      deliveryTaskTypeList () {
+      deliveryTaskTypeList() {
         return this.$getDict('deliveryTaskType');
       }
     },
     methods: {
-      formatTimeAry (times, index) {
+      formatTimeAry(times, index) {
         if (!times) return;
         return this.formatTime(times[index]);
       },
-      formatTime (time, str = 'YYYY-MM-DD HH:mm:ss') {
+      formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
         return time ? this.$moment(time).format(str) : '';
       },
-      reset () {
+      reset() {
         this.searchCondition = {
           transportTaskNo: '',
           type: '',
@@ -124,16 +124,16 @@
         this.endTimes = [];
         this.$emit('search', this.searchCondition);
       },
-      search () {
-        this.searchCondition.createStartTime = this.formatTimeAry(this.createTimes, 0);
-        this.searchCondition.createEndTime = this.formatTimeAry(this.createTimes, 1);
-        this.searchCondition.sStartTime = this.formatTimeAry(this.startTimes, 0);
-        this.searchCondition.sEndTime = this.formatTimeAry(this.startTimes, 1);
-        this.searchCondition.eStartTime = this.formatTimeAry(this.endTimes, 0);
-        this.searchCondition.eEndTime = this.formatTimeAry(this.endTimes, 1);
+      search() {
+        this.searchCondition.createStartTime = this.$formatAryTime(this.createTimes, 0, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.createEndTime = this.$formatAryTime(this.createTimes, 1, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.sStartTime = this.$formatAryTime(this.startTimes, 0, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.sEndTime = this.$formatAryTime(this.startTimes, 1, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.eStartTime = this.$formatAryTime(this.endTimes, 0, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.eEndTime = this.$formatAryTime(this.endTimes, 1, 'YYYY-MM-DD HH:mm:ss');
         this.$emit('search', this.searchCondition);
       },
-      isShow (val) {
+      isShow(val) {
         this.showSearch = val;
       }
     }
