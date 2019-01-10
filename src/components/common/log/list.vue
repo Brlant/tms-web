@@ -222,8 +222,8 @@
         this.showDetailPart = false;
       },
       searchInOrder: function () {// 搜索
-        this.searchWord.startTime = this.$formatAryTime(this.expectedTime, 0, 'YYYY-MM-DD') + ' ' + '00:00:00';
-        this.searchWord.endTime = this.$formatAryTime(this.expectedTime, 0, 'YYYY-MM-DD') + ' ' + '23:59:59';
+        this.searchWord.startTime = this.formatTimeToRangeByFormat(this.$formatAryTime(this.expectedTime, 0));
+        this.searchWord.endTime = this.formatTimeToRangeByFormat(this.$formatAryTime(this.expectedTime, 1), 1);
         Object.assign(this.filters, this.searchWord);
       },
       resetSearchForm: function () {// 重置表单
@@ -235,6 +235,12 @@
         };
         this.expectedTime = '';
         Object.assign(this.filters, this.searchWord);
+      },
+      formatTimeToRangeByFormat(time, type) {
+        if (!time) return '';
+        let str = ' 23:59:59';
+        let date = this.$moment(time).format('YYYY-MM-DD');
+        return this.$moment(date + (type === 1 ? str : '')).format('YYYY-MM-DD HH:mm:ss');
       },
       formatTime(date) {
         return date ? this.$moment(date).format('YYYY-MM-DD') : '';
