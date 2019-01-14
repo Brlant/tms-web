@@ -92,3 +92,7 @@ Vue.prototype.$scrollLoadingData = function (event) {
     }
   }
 };
+
+Vue.prototype.$formatAryTime = function (ary, index, str = 'YYYY-MM-DD HH:mm:ss') {
+  return Array.isArray(ary) && ary[index] ? this.$moment(ary[index]).format(str) : '';
+};

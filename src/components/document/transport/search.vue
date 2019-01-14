@@ -189,8 +189,8 @@
         this.$emit('search', this.searchCondition);
       },
       search () {
-        this.searchCondition.startTime = utils.formatTimeAry(this.deliveryDate, 0, 'YYYY-MM-DD');
-        this.searchCondition.endTime = utils.formatTimeAry(this.deliveryDate, 1, 'YYYY-MM-DD');
+        this.searchCondition.startTime = this.$formatAryTime(this.deliveryDate, 0, 'YYYY-MM-DD');
+        this.searchCondition.endTime = this.$formatAryTime(this.deliveryDate, 1, 'YYYY-MM-DD');
         this.$emit('search', this.searchCondition);
       },
       isShow (val) {

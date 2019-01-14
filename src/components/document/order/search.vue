@@ -87,7 +87,6 @@
 </template>
 <script>
   import {BaseInfo} from '@/resources';
-  import utils from '@/tools/utils';
 
   export default {
     data: function () {
@@ -111,13 +110,13 @@
       };
     },
     computed: {
-      typeList () {
+      typeList() {
         return this.$getDict('bizType');
       },
-      shipmentWayList () {
+      shipmentWayList() {
         return this.$getDict('transportationCondition');
       },
-      serviceTypeList () {
+      serviceTypeList() {
         return this.$getDict('serviceType');
       }
     },
@@ -145,7 +144,7 @@
       }
     },
     methods: {
-      reset () {
+      reset() {
         this.searchCondition = {
           orderNo: '',
           waybillType: '',
@@ -159,12 +158,12 @@
         this.deliveryDate = '';
         this.$emit('search', this.searchCondition);
       },
-      search () {
-        this.searchCondition.startTime = utils.formatTimeAry(this.deliveryDate, 0, 'YYYY-MM-DD');
-        this.searchCondition.endTime = utils.formatTimeAry(this.deliveryDate, 1, 'YYYY-MM-DD');
+      search() {
+        this.searchCondition.startTime = this.$formatAryTime(this.deliveryDate, 0, 'YYYY-MM-DD');
+        this.searchCondition.endTime = this.$formatAryTime(this.deliveryDate, 1, 'YYYY-MM-DD');
         this.$emit('search', this.searchCondition);
       },
-      isShow (val) {
+      isShow(val) {
         this.showSearch = val;
       },
       filterSenderOrg: function (query) {// 过滤发货单位

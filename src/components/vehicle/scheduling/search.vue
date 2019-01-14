@@ -46,7 +46,6 @@
 </template>
 <script>
   import {User} from '@/resources';
-  import utils from '@/tools/utils';
 
   export default {
     data: function () {
@@ -74,7 +73,7 @@
       }
     },
     computed: {
-      deliveryTaskTypeList () {
+      deliveryTaskTypeList() {
         return this.$getDict('deliveryTaskType');
       }
     },
@@ -91,7 +90,7 @@
           this.userList = res.data.list;
         });
       },
-      reset () {
+      reset() {
         this.searchCondition = {
           createdBy: '',
           createStartTime: '',
@@ -103,17 +102,17 @@
         this.expectedTime = '';
         this.$emit('search', this.searchCondition);
       },
-      search () {
-        this.searchCondition.createStartTime = utils.formatTimeAry(this.createdTime, 0, 'YYYY-MM-DD HH:mm:ss');
-        this.searchCondition.createEndTime = utils.formatTimeAry(this.createdTime, 1, 'YYYY-MM-DD HH:mm:ss');
-        this.searchCondition.completeStartTime = utils.formatTimeAry(this.expectedTime, 0, 'YYYY-MM-DD HH:mm:ss');
-        this.searchCondition.completeEndTime = utils.formatTimeAry(this.expectedTime, 1, 'YYYY-MM-DD HH:mm:ss');
+      search() {
+        this.searchCondition.createStartTime = this.$formatAryTime(this.createdTime, 0, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.createEndTime = this.$formatAryTime(this.createdTime, 1, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.completeStartTime = this.$formatAryTime(this.expectedTime, 0, 'YYYY-MM-DD HH:mm:ss');
+        this.searchCondition.completeEndTime = this.$formatAryTime(this.expectedTime, 1, 'YYYY-MM-DD HH:mm:ss');
         this.$emit('search', this.searchCondition);
       },
-      formatTime (date) {
+      formatTime(date) {
         return date ? this.$moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
       },
-      isShow (val) {
+      isShow(val) {
         this.showSearch = val;
       }
     }

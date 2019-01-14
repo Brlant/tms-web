@@ -37,27 +37,33 @@
 
   .form-header-part {
     padding: 0 10px;
+
     &.part-bg {
       background: #eee;
       padding-bottom: 10px;
     }
+
     .header {
       line-height: 30px;
       height: 30px;
       display: flex;
       align-items: center;
+
       .sign {
         width: 4px;
         background: $activeColor;
         height: 100%;
       }
+
       .tit {
         margin: 0 0 0 10px;
+
         &.active {
           color: $activeColor
         }
       }
     }
+
     .content-sp {
       overflow: hidden;
       font-size: 14px;
@@ -386,7 +392,7 @@
         currentStatus: ''
       };
     },
-    mounted () {
+    mounted() {
       this.$emit('loaded');
       this.getPageList(1);
     },
@@ -418,7 +424,7 @@
       'typeTxt': function () {
         this.getPageList(1);
       },
-      index () {
+      index() {
         this.loadingData = true;
         this.showTypeList = [];
       },
@@ -499,12 +505,12 @@
           });
         });
       },
-      scrollLoadingData (event) {
+      scrollLoadingData(event) {
         this.$scrollLoadingData(event);
       },
       searchInOrder: function () {// 搜索
-        this.searchCondition.validityStartDate = this.formatTime(this.validityTimes[0]);
-        this.searchCondition.validityEndDate = this.formatTime(this.validityTimes[1]);
+        this.searchCondition.validityStartDate = this.$formatAryTime(this.validityTimes, 0, 'YYYY-MM-DD');
+        this.searchCondition.validityEndDate = this.$formatAryTime(this.validityTimes, 1, 'YYYY-MM-DD');
         Object.assign(this.detailFilter, this.searchCondition);
       },
       formatTime: function (date) {
@@ -522,12 +528,12 @@
         Object.assign(this.searchCondition, temp);
         Object.assign(this.detailFilter, this.searchCondition);
       },
-      handleSizeChange (val) {
+      handleSizeChange(val) {
         this.detailPager.pageSize = val;
         window.localStorage.setItem('currentPageSize', val);
         this.getDevDetailList(1);
       },
-      handleCurrentChange (val) {
+      handleCurrentChange(val) {
         this.getDevDetailList(val);
       },
       getStoreDetailList: function (pageNo) {

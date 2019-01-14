@@ -51,7 +51,7 @@
               <oms-form-row label="日志操作人" :span="5">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
                            :clearable="true"
-                           v-model="searchWord.logOperatorId" popperClass="good-selects">
+                           v-model="searchWord.operatorId" popperClass="good-selects">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
                     <div style="overflow: hidden">
                       <span class="pull-left" style="clear: right">{{user.name}}</span>
@@ -74,6 +74,13 @@
                 </el-col>
               </oms-form-row>
             </el-col>
+            <el-col :span="10">
+              <oms-form-row label="日志操作类型" :span="5">
+                <el-col :span="24">
+                  <oms-input type="text" v-model="searchWord.actionType" placeholder="请输入日志操作类型"></oms-input>
+                </el-col>
+              </oms-form-row>
+            </el-col>
             <el-col :span="4">
               <oms-form-row label="" :span="2">
                 <el-button type="primary" native-type="submit" @click="searchInOrder">查询</el-button>
@@ -85,7 +92,7 @@
       </div>
 
       <el-table :data="logList" border @row-click="showDetail" class="clearfix" :header-row-class-name="'headerClass'"
-                ref="orderDetail">
+                ref="orderDetail" :v-loading="loadingData">
         <el-table-column prop="operationTime" label="日志操作时间" :sortable="true"
                          width="200">
           <template slot-scope="scope">
@@ -123,20 +130,22 @@
 
   export default {
 //    components: {detail},
-    data () {
+    data() {
       return {
         loadingData: true,
         showSearch: true,
         logList: [],
         filters: {
-          logOperatorId: '',
+          operatorId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          actionType: ''
         },
         searchWord: {
-          logOperatorId: '',
+          operatorId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          actionType: ''
         },
         pager: {
           currentPage: 1,
@@ -147,7 +156,7 @@
         userList: []
       };
     },
-    mounted () {
+    mounted() {
       this.getLogPager(1);
     },
     computed: {},
@@ -178,12 +187,12 @@
           this.userList = res.data.list;
         });
       },
-      handleSizeChange (val) {
+      handleSizeChange(val) {
         this.pager.pageSize = val;
         window.localStorage.setItem('currentPageSize', val);
         this.getLogPager(1);
       },
-      handleCurrentChange (val) {
+      handleCurrentChange(val) {
         this.getLogPager(val);
       },
       filterCustomer: function (query) {// 过滤客户
@@ -204,29 +213,36 @@
           this.loadingData = false;
         });
       },
-      showDetail (item) {
+      showDetail(item) {
         this.currentItemId = item.id;
         this.currentItem = item;
         this.showDetailPart = true;
       },
-      resetRightBox () {
+      resetRightBox() {
         this.showDetailPart = false;
       },
       searchInOrder: function () {// 搜索
-        this.searchWord.startTime = this.formatTime(this.expectedTime[0]) + ' ' + '00:00:00';
-        this.searchWord.endTime = this.formatTime(this.expectedTime[1]) + ' ' + '23:59:59';
+        this.searchWord.startTime = this.formatTimeToRangeByFormat(this.$formatAryTime(this.expectedTime, 0));
+        this.searchWord.endTime = this.formatTimeToRangeByFormat(this.$formatAryTime(this.expectedTime, 1), 1);
         Object.assign(this.filters, this.searchWord);
       },
       resetSearchForm: function () {// 重置表单
         this.searchWord = {
-          logOperatorId: '',
+          operatorId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          actionType: ''
         };
         this.expectedTime = '';
         Object.assign(this.filters, this.searchWord);
       },
-      formatTime (date) {
+      formatTimeToRangeByFormat(time, type) {
+        if (!time) return '';
+        let str = ' 23:59:59';
+        let date = this.$moment(time).format('YYYY-MM-DD');
+        return this.$moment(date + (type === 1 ? str : '')).format('YYYY-MM-DD HH:mm:ss');
+      },
+      formatTime(date) {
         return date ? this.$moment(date).format('YYYY-MM-DD') : '';
       }
     }
