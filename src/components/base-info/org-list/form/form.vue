@@ -585,6 +585,13 @@
                 message: '新增"' + this.orgTitle + self.form.name + '"成功'
               });
               self.$emit('change', Object.assign({}, self.form));
+            }).catch(error => {
+              this.doing = false;
+              this.$notify.error({
+                duration: 2000,
+                name: '失败',
+                message: error.response.data && error.response.data.msg || '新增失败'
+              });
             });
           } else {
             let plates = self.form.plateList.filter(f => f.orgPlateNumber).map(m => {
@@ -602,6 +609,7 @@
               });
               self.$emit('change', Object.assign({}, self.form));
             })).catch(error => {
+              this.doing = false;
               this.$notify.error({
                 duration: 2000,
                 name: '失败',

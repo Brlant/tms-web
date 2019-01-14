@@ -438,6 +438,10 @@
             });
             this.getBlackList(this.currentItem.carDto.id, this.orgPager.currentPage);
           }).catch(error => {
+            this.$store.commit('initPrint', {
+              isPrinting: false,
+              moduleId: '/baseInfo/car-archives'
+            });
             this.$notify.error({
               duration: 2000,
               message: error.response && error.response.data && error.response.data.msg || '删除车辆' + this.currentItem.carDto.plateNumber + '的运输黑名单失败'
