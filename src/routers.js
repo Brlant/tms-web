@@ -135,7 +135,8 @@ export const routes = [
   {path: '/500', component: resolve => require(['./components/error/error_500.vue'], resolve)},
   {path: '/login', component: resolve => require(['./components/login/login.vue'], resolve)},
   {path: '/forget', component: resolve => require(['./components/login/forget.vue'], resolve)},
-  {path: '/code/:id', component: resolve => require(['./components/login/resetpwd.vue'], resolve)}
+  {path: '/code/:id', component: resolve => require(['./components/login/resetpwd.vue'], resolve)},
+  {path: '*', redirect: '/'}
 ];
 
 //  不需要鉴权的路径
