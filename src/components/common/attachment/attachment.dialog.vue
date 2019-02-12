@@ -113,8 +113,7 @@
              :class="{'docview':type=='doc','img-view':type=='image'}" top="0" ondragstart="return false">
     <div slot="title" class="attachment-dialog-head">
       <div>{{Attachment.attachmentFileName}}</div>
-      <a class="download-link" :href="Attachment.attachmentStoragePath" @click.stop=""
-         :download="Attachment.attachmentFileName">
+      <a class="download-link" @click.stop="$downloadFile(Attachment)">
         <i class="el-icon-t-download"></i> 下载
       </a>
     </div>
