@@ -121,7 +121,7 @@
       <div @click.stop="closeDialog" style="height:100%;width:100%;">
         <div v-if="type=='image'" class="dialog-image-rap">
           <div id="dialog-image-rap" :style="style">
-            <img :src="fileUrl" alt=''>
+            <compressed-img :src="fileUrl"/>
           </div>
         </div>
         <div v-if="groupLen>1" class="img-button">
@@ -200,7 +200,8 @@
         return this.$store.state.attachmentDialog.attachmentList.length;
       },
       fileUrl: function () {
-        return this.Attachment.attachmentStoragePath;
+        let compress = `?image&action=resize:h_${this.$store.state.windowSize.height - 42}`;
+        return this.Attachment.attachmentStoragePath + compress;
       },
       docViewUrl: function () {
         return 'https://doc-view.sinopharm-bio.com/view/url?url=' + encodeURIComponent(this.Attachment.attachmentStoragePath);
