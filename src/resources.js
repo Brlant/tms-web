@@ -3,7 +3,7 @@ import axios from 'axios';
 import Vue from 'vue';
 
 export const http = axios.create({
-  baseURL: process.env.NODE_API,
+  baseURL: process.env.VUE_APP_API,
   timeout: 30000,
   withCredentials: true
 });

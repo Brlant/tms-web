@@ -144,7 +144,7 @@
       },
       getCode: function () {
         this.showCode = true;
-        this.codeUrl = process.env.NODE_API + '/foundation/CAPTCHA?' + Math.random();
+        this.codeUrl = process.env.VUE_APP_API + '/foundation/CAPTCHA?' + Math.random();
       }
     },
     mounted: function () {
