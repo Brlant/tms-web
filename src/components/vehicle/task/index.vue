@@ -20,6 +20,12 @@
             批量取消
           </el-button>
         </perm>
+        <perm label="tms-task-prepare-export">
+          <el-button plain size="small" @click="exportPreFile" :disabled="isLoading" v-if="activeStatus==='0'">
+            <f-a class="icon-small" name="print"></f-a>
+            导出预派车
+          </el-button>
+        </perm>
         <perm label="tms-task-car-task-export">
           <el-button plain size="small" @click="exportFile" :disabled="isLoading">
             <f-a class="icon-small" name="print"></f-a>
@@ -256,7 +262,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {http, TransportTask} from '@/resources';
+  import { http, TransportTask } from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
@@ -273,7 +279,7 @@
       MapMultiple
     },
     mixins: [StatusMixin],
-    data () {
+    data() {
       return {
         isLoading: false,
         loadingData: false,
@@ -328,7 +334,7 @@
         let height = parseInt(this.$store.state.bodyHeight, 10);
         return (height + 146) + 'px';
       },
-      totalCount () {
+      totalCount() {
         let total = {
           incubatorCount: 0
         };
@@ -346,7 +352,7 @@
         deep: true
       }
     },
-    mounted () {
+    mounted() {
       this.getTransportTaskPage(1);
       let id = this.$route.params.id;
       if (id !== 'list' && id !== ':id') {
@@ -379,7 +385,7 @@
 
         });
       },
-      formatTime (time, str = 'YYYY-MM-DD HH:mm:ss') {
+      formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
         return time ? moment(time).format(str) : '';
       },
       isOverTime: function (time) {
@@ -422,7 +428,7 @@
 
         });
       },
-      showMultipleMap () {
+      showMultipleMap() {
         if (!this.taskIdList.length) {
           this.$notify.warning({
             duration: 2000,
@@ -441,7 +447,7 @@
         });
         this.isShowMulBigMap = true;
       },
-      showBigMap (formItem) {
+      showBigMap(formItem) {
         this.mapBigFormItem = {};
         this.isShowBigMap = true;
         this.$nextTick(() => {
@@ -450,7 +456,7 @@
           }, 300);
         });
       },
-      printFile () {
+      printFile() {
         if (!this.taskIdList.length) {
           this.$notify.warning({
             duration: 2000,
@@ -479,6 +485,45 @@
           this.$store.commit('initPrint', {isPrinting: false});
           this.$notify.error({
             message: error.response.data && error.response.data.msg || '打印标签失败'
+          });
+        });
+      },
+      exportPreFile() {
+        if (!this.taskIdList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选需要导出的出车任务'
+          });
+          return;
+        }
+        this.isLoading = true;
+        this.$store.commit('initPrint', {
+          isPrinting: true,
+          moduleId: '/vehicle/delivery/task'
+        });
+        let params = Object.assign({}, {taskList: this.taskIdList});
+        http.post('transport-task/export/confirm-task', params).then(res => {
+          utils.download(res.data.url, '预派车任务表');
+          this.isLoading = false;
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: '/vehicle/delivery/task'
+          });
+          // 清空列表
+          this.taskIdList = [];
+          this.checkList = [];
+          // 清空勾选
+          this.dataList.forEach(val => {
+            val.isChecked = false;
+          });
+        }).catch(error => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: '/vehicle/delivery/task'
+          });
+          this.$notify.error({
+            message: error.response.data && error.response.data.msg || '导出失败'
           });
         });
       },
@@ -521,7 +566,7 @@
           });
         });
       },
-      checkAll () {
+      checkAll() {
         // 全选
         if (this.isCheckAll) {
           this.dataList.forEach(item => {
@@ -583,12 +628,12 @@
 
         });
       },
-      handleSizeChange (val) {
+      handleSizeChange(val) {
         this.pager.pageSize = val;
         window.localStorage.setItem('currentPageSize', val);
         this.getTransportTaskPage(1);
       },
-      handleCurrentChange (val) {
+      handleCurrentChange(val) {
         this.getTransportTaskPage(val);
       },
       confirmTask: function (item) {
@@ -617,11 +662,11 @@
       searchResult: function (search) {
         Object.assign(this.filters, search);
       },
-      checkStatus (item, key) {
+      checkStatus(item, key) {
         this.filters.status = item.status;
         this.activeStatus = key;
       },
-      resetRightBox () {
+      resetRightBox() {
         this.showIndex = -1;
         this.showEditIndex = -1;
         this.$router.push('/vehicle/delivery/task/list');
@@ -678,7 +723,7 @@
           this.form = JSON.parse(JSON.stringify(item));
         });
       },
-      submit () {
+      submit() {
         this.checkList = [];
         this.checkListPara = [];
         this.getTransportTaskPage(1);
