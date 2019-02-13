@@ -21,7 +21,7 @@
           </el-button>
         </perm>
         <perm label="tms-task-prepare-export">
-          <el-button plain size="small" @click="exportPreFile" :disabled="isLoading" v-if="activeStatus==='0'">
+          <el-button plain size="small" @click="exportPreFile" :disabled="isLoading" v-if="activeStatus===0||activeStatus==='0'">
             <f-a class="icon-small" name="print"></f-a>
             导出预派车
           </el-button>
