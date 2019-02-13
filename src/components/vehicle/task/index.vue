@@ -15,13 +15,13 @@
     <search-part @search="searchResult">
       <template slot="btn">
         <perm label="tms-task-car-task-cancel">
-          <el-button plain size="small" @click="batchCancel" v-if="activeStatus===0||activeStatus==='0'">
+          <el-button plain size="small" @click="batchCancel" v-if="activeStatus==='0'">
             <f-a class="icon-small" name="forbidden"></f-a>
             批量取消
           </el-button>
         </perm>
         <perm label="tms-task-prepare-export">
-          <el-button plain size="small" @click="exportPreFile" :disabled="isLoading" v-if="activeStatus===0||activeStatus==='0'">
+          <el-button plain size="small" @click="exportPreFile" :disabled="isLoading" v-if="activeStatus==='0'">
             <f-a class="icon-small" name="print"></f-a>
             导出预派车
           </el-button>
@@ -283,7 +283,7 @@
       return {
         isLoading: false,
         loadingData: false,
-        activeStatus: 0,
+        activeStatus: '0',
         orderType: utils.carTaskType,
         dataList: [],
         showIndex: -1,
