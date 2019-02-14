@@ -78,7 +78,7 @@
           </div>
           <el-form-item slot="left" label="负责人" prop="head">
             <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterHead"
-                       :clearable="true" @click.native.once="filterHead('')"
+                       :clearable="true" @click.native.once="filterHead('')" @change="setHeadNameInfo(form.head)"
                        v-model="form.head" popperClass="good-selects">
               <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in headList">
                 <div style="overflow: hidden">
@@ -389,6 +389,16 @@
           this.carList.forEach(val => {
             if (val.carDto.id === id) {
               this.carInfo = val.carDto;
+            }
+          });
+        }
+      },
+      setHeadNameInfo: function (id) {
+        if (id) {
+          this.headList.forEach(val => {
+            if (val.id === id) {
+              this.form.head = val.id;
+              this.form.headName = val.name;
             }
           });
         }
