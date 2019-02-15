@@ -23,7 +23,13 @@
         <perm label="tms-task-prepare-export">
           <el-button plain size="small" @click="exportPreFile" :disabled="isLoading" v-if="activeStatus==='0'">
             <f-a class="icon-small" name="print"></f-a>
-            导出预派车
+            导出预派车任务
+          </el-button>
+        </perm>
+        <perm label="tms-task-prepare-print">
+          <el-button plain size="small" @click="printPreFile" :disabled="isLoading" v-if="activeStatus==='0'">
+            <f-a class="icon-small" name="print"></f-a>
+            打印预派车任务
           </el-button>
         </perm>
         <perm label="tms-task-car-task-export">
@@ -454,6 +460,38 @@
           setTimeout(() => {
             this.mapBigFormItem = formItem;
           }, 300);
+        });
+      },
+      printPreFile() {
+        if (!this.taskIdList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选需要打印的出车任务'
+          });
+          return;
+        }
+        let obj = {
+          taskList: this.taskIdList
+        };
+        this.isLoading = true;
+        this.$store.commit('initPrint', {isPrinting: true});
+        http.post('transport-task/export/confirm-task', obj).then(res => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {isPrinting: false});
+          utils.printLocation(this, {'type': 'transport_pre_task', 'path': res.data.url});
+          // 清空列表
+          this.taskIdList = [];
+          this.checkList = [];
+          // 清空勾选
+          this.dataList.forEach(val => {
+            val.isChecked = false;
+          });
+        }).catch(error => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {isPrinting: false});
+          this.$notify.error({
+            message: error.response.data && error.response.data.msg || '打印预派车任务失败'
+          });
         });
       },
       printFile() {
