@@ -4,9 +4,11 @@
   .d-table {
     margin-top: 0;
     margin-bottom: 0;
+
     .d-table-left {
       width: 450px;
     }
+
     .d-table-right {
       border: 1px;
       padding: 0;
@@ -45,7 +47,9 @@
     > input {
       width: 180px;
     }
+
     background: #ffffff;
+
     &.open:hover {
       background: #ffffff;
     }
@@ -93,18 +97,22 @@
     background: #fff;
     border-right: 1px solid #eee;
     cursor: pointer;
+
     .el-icon-t-zoom-point {
       font-size: 30px;
       color: $activeColor;
       transform: rotate(180deg);
     }
+
     &.on {
       .el-icon-t-zoom-point {
         transform: rotate(0);
       }
     }
+
     &:hover {
       background: $activeColor;
+
       .el-icon-t-zoom-point {
         color: #fff;
       }
@@ -122,6 +130,7 @@
       font-size: 16px;
       font-weight: 500;
       cursor: pointer;
+
       &.on {
         border-bottom: 4px solid $activeColor;
       }
@@ -225,8 +234,8 @@
                         {{item.waybillNumber}}
                       </div>
                     </td>
-                    <td width="24%" class="R">{{item.receiverName}}</td>
-                    <td width="24%" class="R">{{item.receiverAddress}}</td>
+                    <td width="24%" class="R">{{item.waybillType==='1-1'?item.senderName:item.receiverName}}</td>
+                    <td width="24%" class="R">{{item.waybillType==='1-1'?item.senderAddress:item.receiverAddress}}</td>
                   </tr>
                   </tbody>
                 </table>
@@ -337,11 +346,11 @@
         let height = parseInt(this.$store.state.bodyHeight, 10);
         return (height - 190);
       },
-      checkList () {
+      checkList() {
         return this.dataRows.filter(f => f.isChecked);
       }
     },
-    mounted () {
+    mounted() {
       this.getWayBillOrderList(1);
       this.initMapTools();
     },
@@ -376,7 +385,7 @@
           this.formatWeight();
         }
       },
-      typeTxt (val) {
+      typeTxt(val) {
         this.dataRows.forEach(i => {
           if (!val) {
             i.isHasSearchText = true;
@@ -395,7 +404,7 @@
         }
         return item.incubatorCount;
       },
-      initMapTools () {
+      initMapTools() {
         let time = setTimeout(this.initMapTools, 100);
         let deliveryMap = this.$refs.deliveryMap;
         if (!deliveryMap) return;
@@ -417,11 +426,11 @@
       getMore: function () {
         this.getWayBillOrderList(this.pager.currentPage + 1, true);
       },
-      formatVolume () {// 保留两位小数
+      formatVolume() {// 保留两位小数
         if (!this.totalVolume) return 0;
         this.totalVolume = utils.autoformatDecimalPoint(this.totalVolume.toString());
       },
-      formatWeight () {// 保留两位小数
+      formatWeight() {// 保留两位小数
         if (!this.totalWeight) return 0;
         this.totalWeight = utils.autoformatDecimalPoint(this.totalWeight.toString());
       },
@@ -465,7 +474,7 @@
           this.pager.totalPage = res.data.totalPage;
         });
       },
-      changeAddress (dataRows) {
+      changeAddress(dataRows) {
         if (dataRows) {
           for (let i = 0; i < dataRows.length; i++) {
             // 如果是销售退货，收货单位和收货地址取发货信息
@@ -477,26 +486,26 @@
           }
         }
       },
-      scrollLoadingData (event) {
+      scrollLoadingData(event) {
         this.$scrollLoadingData(event);
       },
-      rowClick (item) {
+      rowClick(item) {
         item.isChecked = !item.isChecked;
         this.$nextTick(() => {
           this.setMarkerByRow(item);
         });
       },
-      setMarkerByRow (item) {
+      setMarkerByRow(item) {
         // 判断 其他选中的运单有没有此收货单位
         this.$nextTick(() => {
           const isOtherSameUnit = this.checkList.some(s => s.receiverAddress === item.receiverAddress);
           this.setMarkerStyle(item, isOtherSameUnit);
         });
       },
-      resetRightBox () {
+      resetRightBox() {
         this.showIndex = -1;
       },
-      showPart (index, str = '请选择需要生成派送任务的运单') { // 请勾选需要自动排单的运单
+      showPart(index, str = '请选择需要生成派送任务的运单') { // 请勾选需要自动排单的运单
         let {checkList, $notify, dialogComponents} = this;
         if (!checkList.length) {
           $notify.warning({
@@ -511,7 +520,7 @@
           this.orderIdList = index === 0 ? checkList.map(m => m.id) : checkList.slice();
         });
       },
-      searchResult (search) {
+      searchResult(search) {
         // 清空勾选的运单列表
         this.orderIdList = [];
         this.totalIncubatorCount = 0;
@@ -523,7 +532,7 @@
         Object.assign(this.filters, search);
       },
       // 得到经纬度
-      getLgtAndLat (query, callBack) {
+      getLgtAndLat(query, callBack) {
         const AMap = window.AMap;
         const myGeo = new AMap.Geocoder();
         myGeo.getLocation(query, function (status, result) {
@@ -533,7 +542,7 @@
         });
       },
       // 添加点
-      addOverlays (list, isContinue) {
+      addOverlays(list, isContinue) {
         // 清空覆盖物
         if (!isContinue || list.length === 0) {
           this.markers = [];
@@ -555,14 +564,14 @@
         });
       },
       //生产15位随机数
-      guid () {
-        function s4 () {
+      guid() {
+        function s4() {
           return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         }
 
         return (s4() + '-' + s4() + '-' + s4());
       },
-      addMarker (d, row, isHas = false) {
+      addMarker(d, row, isHas = false) {
         // 判断点是否已经存在
         let marker = {};
         let isExist = this.markers.some(s => {
@@ -611,7 +620,7 @@
         this.bindMarkerLabelEvent(row);
       },
       // 绑定点的标签的事件
-      bindMarkerLabelEvent (row) {
+      bindMarkerLabelEvent(row) {
         let ele_ary = this.$el.getElementsByClassName(`index_${row._marker.markerId}`);
         if (!ele_ary.length) {
           // 若得不到dom对象, 延时100ms, 再次查找
@@ -633,7 +642,7 @@
           this.setMarkerStyle(row, row.isChecked);
         });
       },
-      clickMarker (row) {
+      clickMarker(row) {
         row.isChecked = !row.isChecked;
         // 选中同一收货地址的所有运单
         this.dataRows.forEach(i => {
@@ -641,30 +650,30 @@
         });
         this.setMarkerStyle(row, row.isChecked);
       },
-      setMarkerStyle (row, isChecked) {
+      setMarkerStyle(row, isChecked) {
         let rowCheck = typeof isChecked === 'boolean' ? isChecked : row.isChecked;
         row._marker.icon = rowCheck ? IconActive : Icon;
         this.setLabelBorderColor(row, rowCheck);
       },
-      setLabelBorderColor (row, isChecked) {
+      setLabelBorderColor(row, isChecked) {
         let label = row._marker._label;
         if (!label) return;
         const classList = label.parentNode.classList;
         isChecked ? classList.add('active') : classList.remove('active');
       },
       // 地图加载完成, 初始化工具
-      initTools () {
+      initTools() {
         console.log(1);
       },
       // 开启绘制区域
-      drawArea () {
+      drawArea() {
         this.isDrawArea = true;
         this.mouseTool.polygon({
           strokeColor: '#f00'
         });
       },
       // 重新绘制区域
-      redrawArea () {
+      redrawArea() {
         this.mouseTool.close(true);
         this.mouseTool.polygon({
           strokeColor: '#f00'
@@ -672,7 +681,7 @@
         this.editorArea && this.editorArea.close();
       },
       // 取消绘制
-      closeDrawArea () {
+      closeDrawArea() {
         this.mouseTool.close(true);
         this.isDrawArea = false;
         this.curArea = null;
@@ -680,7 +689,7 @@
         this.editorArea = null;
       },
       // 确认区域
-      confirmArea () {
+      confirmArea() {
         // 循环设置所有运单选中状态
         this.dataRows.forEach(i => {
           if (i.isChecked) return;
@@ -692,7 +701,7 @@
         this.closeDrawArea();
       },
       // 是否显示点的标签
-      switchShowLabel (val) {
+      switchShowLabel(val) {
         let elements = this.$el.querySelectorAll('.babel__container');
         [...elements].forEach(i => {
           i.style.display = val ? 'block' : 'none';
