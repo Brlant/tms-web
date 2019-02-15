@@ -549,17 +549,35 @@
         }
         list.forEach(i => {
           if (i.receiverAddressDimension && i.receiverAddressLongitude) {
-            this.addMarker({
-              lng: i.receiverAddressLongitude,
-              lat: i.receiverAddressDimension
-            }, i, true);
+            if (i.waybillType === '1-1') {
+              if (i.senderAddressDimension && i.senderAddressLongitude) {
+                this.addMarker({
+                  lng: i.senderAddressLongitude,
+                  lat: i.senderAddressDimension
+                }, i, true);
+              }
+            } else {
+              this.addMarker({
+                lng: i.receiverAddressLongitude,
+                lat: i.receiverAddressDimension
+              }, i, true);
+            }
           } else {
-            this.getLgtAndLat(i.receiverAddress, result => {
-              let geoCodes = result.geocodes;
-              geoCodes.forEach(g => {
-                this.addMarker(g, i);
+            if (i.waybillType === '1-1') {
+              this.getLgtAndLat(i.senderAddress, result => {
+                let geoCodes = result.geocodes;
+                geoCodes.forEach(g => {
+                  this.addMarker(g, i);
+                });
               });
-            });
+            } else {
+              this.getLgtAndLat(i.receiverAddress, result => {
+                let geoCodes = result.geocodes;
+                geoCodes.forEach(g => {
+                  this.addMarker(g, i);
+                });
+              });
+            }
           }
         });
       },
