@@ -75,7 +75,7 @@
 </template>
 
 <script>
-  import {Auth, LogisticsCenter} from '@/resources';
+  import {Auth} from '@/resources';
   import AppFooter from '../layout/app.footer.vue';
   import {base64} from '@dtop/dtop-web-common';
 
@@ -130,7 +130,7 @@
             }, error => {
               let data = error.response.data;
               this.$notify.error({
-                message: data.msg
+                message: data.msg || '无法登陆'
               });
               if (data.code === 101 || data.code === 100) {
                 this.getCode();
