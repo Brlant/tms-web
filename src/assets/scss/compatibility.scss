@@ -82,6 +82,18 @@
       font-size: 12px;
     }
   }
+
+  .el-button {
+    position: relative;
+
+    &:hover {
+      z-index: 1;
+    }
+
+    &:focus, &:active {
+      z-index: 1;
+    }
+  }
 }
 
 .preloader {
