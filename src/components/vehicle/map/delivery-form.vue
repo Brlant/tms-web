@@ -201,6 +201,7 @@
 </template>
 <script>
   import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
+  import utils from '@/tools/utils';
 
   export default {
     data () {
@@ -223,6 +224,7 @@
         form: {
           driveId: '',
           driverPhone: '',
+          head: '',
           orderIdList: [],
           clerkDtoList: [{userId: '', userPhone: ''}]
         },
@@ -251,28 +253,55 @@
           this.form = {
             driveId: '',
             driverPhone: '',
+            head: '',
             orderIdList: [],
             clerkDtoList: [{userId: '', userPhone: ''}]
           };
           this.carInfo = {};
           this.form.orderIdList = val;
+          this.setDefaultDriver();
         },
         deep: true
-      },
-      carInfo: function (val) {
-        if (val) {
-          this.form.carPlateNumber = val.plateNumber;
-          if (val.defaultDriver) {
-            this.filterUser(val.defaultDriverName);
-            this.filterHead(val.headName);
-            this.form.driveId = val.defaultDriver;
-          } else {
-            this.form.driveId = '';
-          }
-        }
       }
+      // carInfo: function (val) {
+      //   if (val) {
+      //     this.form.carPlateNumber = val.plateNumber;
+      //     if (val.defaultDriver) {
+      //       this.filterUser(val.defaultDriverName);
+      //       this.filterHead(val.headName);
+      //       this.form.driveId = val.defaultDriver;
+      //     } else {
+      //       this.form.driveId = '';
+      //     }
+      //   }
+      // }
     },
     methods: {
+      setDefaultDriver: function () {
+        let conditon = {
+          pageNo: 1,
+          pageSize: 1,
+          status: 3
+        };
+        let statusCount = utils.carTaskType;
+        if (statusCount['2'].num > 0) {
+          conditon.status = 2;
+        }
+        if (statusCount['1'].num > 0) {
+          conditon.status = 1;
+        }
+        if (statusCount['0'].num > 0) {
+          conditon.status = 0;
+        }
+        let params = JSON.parse(JSON.stringify(conditon));
+        this.$http.get('/transport-task', {params}).then((res) => {
+          this.form.driveId = res.data.list[0].driveId;
+          this.form.driverPhone = res.data.list[0].driverPhone;
+          this.form.head = res.data.list[0].head;
+          this.filterUser(res.data.list[0].driverName);
+          this.filterHead(res.data.list[0].headName);
+        });
+      },
       selectTab (item) {
         this.currentTab = item;
       },
