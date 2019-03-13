@@ -109,7 +109,7 @@
           <div class="content">
             <div class="part-hj-box" v-for="hj in form.clerkDtoList">
               <two-column>
-                <el-form-item slot="left" label="理货员">
+                <el-form-item slot="left" label="外勤客服">
                   <el-select filterable remote placeholder="请输入名称/拼音搜索" :remote-method="filterTallyClerk"
                              @click.native.once="filterTallyClerk('')"
                              :clearable="true"
@@ -125,12 +125,12 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item slot="right" label="理货员电话">
-                  <oms-input v-model="hj.userPhone" placeholder="请输入理货员电话"></oms-input>
+                <el-form-item slot="right" label="外勤客服电话">
+                  <oms-input v-model="hj.userPhone" placeholder="请输入外勤客服电话"></oms-input>
                 </el-form-item>
               </two-column>
               <el-form-item label-width="120px">
-                <el-button @click.prevent="remove(hj)" :plain="true" type="danger">删除理货员</el-button>
+                <el-button @click.prevent="remove(hj)" :plain="true" type="danger">删除外勤客服</el-button>
               </el-form-item>
             </div>
           </div>
@@ -235,7 +235,7 @@
         orgList: [],
         pageSets: [
           {name: '车辆选择', key: 0},
-          {name: '理货员信息', key: 1},
+          {name: '外勤客服信息', key: 1},
           {name: '派送信息', key: 2}
         ],
         currentTab: {}
