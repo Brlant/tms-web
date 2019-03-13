@@ -11,13 +11,12 @@
     <li
       v-for="(file, index) in files"
       :class="['el-upload-list__item', 'is-' + file.status]"
-      :key="index"
+      :key="file.uid"
       v-if="file.status === 'uploading'">
       <img
         class="el-upload-list__item-thumbnail"
         v-if="file.status !== 'uploading' && ['picture-card', 'picture'].indexOf(listType) > -1"
-        :src="file.url" alt=""
-      >
+        :src="file.url" alt="">
       <a class="el-upload-list__item-name" @click="handleClick(file)">
         <i class="el-icon-document"></i>{{file.name}}
       </a>
