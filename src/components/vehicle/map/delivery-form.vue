@@ -109,7 +109,7 @@
           <div class="content">
             <div class="part-hj-box" v-for="hj in form.clerkDtoList">
               <two-column>
-                <el-form-item slot="left" label="理货员">
+                <el-form-item slot="left" label="外勤客服">
                   <el-select filterable remote placeholder="请输入名称/拼音搜索" :remote-method="filterTallyClerk"
                              @click.native.once="filterTallyClerk('')"
                              :clearable="true"
@@ -125,12 +125,12 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item slot="right" label="理货员电话">
-                  <oms-input v-model="hj.userPhone" placeholder="请输入理货员电话"></oms-input>
+                <el-form-item slot="right" label="外勤客服电话">
+                  <oms-input v-model="hj.userPhone" placeholder="请输入外勤客服电话"></oms-input>
                 </el-form-item>
               </two-column>
               <el-form-item label-width="120px">
-                <el-button @click.prevent="remove(hj)" :plain="true" type="danger">删除理货员</el-button>
+                <el-button @click.prevent="remove(hj)" :plain="true" type="danger">删除外勤客服</el-button>
               </el-form-item>
             </div>
           </div>
@@ -201,6 +201,7 @@
 </template>
 <script>
   import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
+  import utils from '@/tools/utils';
 
   export default {
     data () {
@@ -223,6 +224,7 @@
         form: {
           driveId: '',
           driverPhone: '',
+          head: '',
           orderIdList: [],
           clerkDtoList: [{userId: '', userPhone: ''}]
         },
@@ -233,7 +235,7 @@
         orgList: [],
         pageSets: [
           {name: '车辆选择', key: 0},
-          {name: '理货员信息', key: 1},
+          {name: '外勤客服信息', key: 1},
           {name: '派送信息', key: 2}
         ],
         currentTab: {}
@@ -251,28 +253,55 @@
           this.form = {
             driveId: '',
             driverPhone: '',
+            head: '',
             orderIdList: [],
             clerkDtoList: [{userId: '', userPhone: ''}]
           };
           this.carInfo = {};
           this.form.orderIdList = val;
+          this.setDefaultDriver();
         },
         deep: true
-      },
-      carInfo: function (val) {
-        if (val) {
-          this.form.carPlateNumber = val.plateNumber;
-          if (val.defaultDriver) {
-            this.filterUser(val.defaultDriverName);
-            this.filterHead(val.headName);
-            this.form.driveId = val.defaultDriver;
-          } else {
-            this.form.driveId = '';
-          }
-        }
       }
+      // carInfo: function (val) {
+      //   if (val) {
+      //     this.form.carPlateNumber = val.plateNumber;
+      //     if (val.defaultDriver) {
+      //       this.filterUser(val.defaultDriverName);
+      //       this.filterHead(val.headName);
+      //       this.form.driveId = val.defaultDriver;
+      //     } else {
+      //       this.form.driveId = '';
+      //     }
+      //   }
+      // }
     },
     methods: {
+      setDefaultDriver: function () {
+        let conditon = {
+          pageNo: 1,
+          pageSize: 1,
+          status: 3
+        };
+        let statusCount = utils.carTaskType;
+        if (statusCount['2'].num > 0) {
+          conditon.status = 2;
+        }
+        if (statusCount['1'].num > 0) {
+          conditon.status = 1;
+        }
+        if (statusCount['0'].num > 0) {
+          conditon.status = 0;
+        }
+        let params = JSON.parse(JSON.stringify(conditon));
+        this.$http.get('/transport-task', {params}).then((res) => {
+          this.form.driveId = res.data.list[0].driveId;
+          this.form.driverPhone = res.data.list[0].driverPhone;
+          this.form.head = res.data.list[0].head;
+          this.filterUser(res.data.list[0].driverName);
+          this.filterHead(res.data.list[0].headName);
+        });
+      },
       selectTab (item) {
         this.currentTab = item;
       },
