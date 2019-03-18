@@ -121,7 +121,7 @@
       <div @click.stop="closeDialog" style="height:100%;width:100%;">
         <div v-if="type=='image'" class="dialog-image-rap">
           <div id="dialog-image-rap" :style="style">
-            <compressed-img :src="fileUrl"/>
+            <compressed-img :src="fileUrl" id="dialog-image" @click.native.stop=""/>
           </div>
         </div>
         <div v-if="groupLen>1" class="img-button">
@@ -375,7 +375,7 @@
 
         setTimeout(() => {
           let self = this;
-          let dom = document.getElementById('dialog-image-rap');
+          let dom = document.getElementById('dialog-image');
           if (!dom) return;
           dom.onmousedown = null;
 
