@@ -4,10 +4,12 @@
     .content-left {
       width: $labelWidth;
     }
+
     .content-right {
       > h3 {
         left: $labelWidth;
       }
+
       left: $labelWidth;
     }
   }
@@ -89,7 +91,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="发货单位">
+            <el-form-item label="发货单位" prop="senderId">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索发货单位" :remote-method="filterSenderOrg"
                          :clearable="true"
                          v-model="form.senderId" popperClass="good-selects">
@@ -326,7 +328,7 @@
 
   export default {
     components: {TwoColumn},
-    data () {
+    data() {
       return {
         list: [],
         times: [],
@@ -370,6 +372,9 @@
           receiverId: [
             {required: true, message: '请选择收货单位', trigger: 'change'}
           ],
+          senderId: [
+            {required: true, message: '请选择发货单位', trigger: 'change'}
+          ],
           receiverAddress: [
             {required: true, message: '请输入收货地址', trigger: 'blur'}
           ],
@@ -395,13 +400,13 @@
       };
     },
     computed: {
-      shipmentWayList () {
+      shipmentWayList() {
         return this.$getDict('transportationCondition');
       },
-      typeList () {
+      typeList() {
         return this.$getDict('bizType');
       },
-      serviceTypeList () {
+      serviceTypeList() {
         return this.$getDict('serviceType');
       },
       showTitle: function () {
@@ -495,10 +500,10 @@
           this.receiverOrgList = res.data.list;
         });
       },
-      selectTab (item) {
+      selectTab(item) {
         this.currentTab = item;
       },
-      save (formName) {
+      save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             // 处理货品列表
