@@ -4,10 +4,12 @@
     .content-left {
       width: $labelWidth;
     }
+
     .content-right {
       > h3 {
         left: $labelWidth;
       }
+
       left: $labelWidth;
     }
   }
@@ -418,7 +420,7 @@
       OmsCol,
       TwoColumn, MapPath, attachmentLists, OmsCostTime, Show3dData
     },
-    data () {
+    data() {
       return {
         span: 7,
         list: [],
@@ -455,7 +457,7 @@
       };
     },
     computed: {
-      pageSets () {
+      pageSets() {
         let ary = [
           {name: '基本信息', key: 0},
           {name: '发货信息', key: 1},
@@ -501,17 +503,10 @@
     },
     methods: {
       onSubmit: function () {
-        if (!this.detailForm.incubator) {
+        if (!this.detailForm.incubator && !this.detailForm.thermometerList.length) {
           this.$notify.warning({
             duration: 2000,
-            message: '请选择需要添加的保温箱'
-          });
-          return;
-        }
-        if (!this.detailForm.thermometerList.length) {
-          this.$notify.warning({
-            duration: 2000,
-            message: '请选择需要添加的温度计'
+            message: '请选择保温箱或者温度计静香绑定'
           });
           return;
         }
@@ -570,10 +565,10 @@
           return '包装：' + item.goodsLength + 'cm' + ' x ' + item.goodsWidth + 'cm' + ' x ' + item.goodsHeight + 'cm';
         }
       },
-      getPageSet (key) {
+      getPageSet(key) {
         return this.pageSets.filter(f => f.key === key)[0];
       },
-      formatTime (date) {
+      formatTime(date) {
         return date ? '绑定时间：' + this.$moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
       },
       queryLog: function (id) {
@@ -674,7 +669,7 @@
           });
         });
       },
-      formatStatusTitle (status, statusType) {
+      formatStatusTitle(status, statusType) {
         let title = '';
         Object.keys(statusType).forEach(k => {
           if (status === null) {
@@ -723,10 +718,10 @@
         TmsWayBill.update(this.form.id, {attachmentIdList: ids}).then(res => {
         });
       },
-      selectTab (item) {
+      selectTab(item) {
         this.currentTab = item;
       },
-      close () {
+      close() {
         this.$emit('right-close');
       }
     }
