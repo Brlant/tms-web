@@ -20,12 +20,12 @@
             批量取消
           </el-button>
         </perm>
-        <perm label="tms-task-prepare-export">
-          <el-button plain size="small" @click="exportPreFile" :disabled="isLoading" v-if="activeStatus==='0'">
-            <f-a class="icon-small" name="print"></f-a>
-            导出预派车任务
-          </el-button>
-        </perm>
+        <!--<perm label="tms-task-prepare-export">-->
+          <!--<el-button plain size="small" @click="exportPreFile" :disabled="isLoading" v-if="activeStatus==='0'">-->
+            <!--<f-a class="icon-small" name="print"></f-a>-->
+            <!--导出预派车任务-->
+          <!--</el-button>-->
+        <!--</perm>-->
         <perm label="tms-task-prepare-print">
           <el-button plain size="small" @click="printPreFile" :disabled="isLoading" v-if="activeStatus==='0'">
             <f-a class="icon-small" name="print"></f-a>
@@ -478,7 +478,6 @@
         http.post('transport-task/export/confirm-task', obj).then(res => {
           this.isLoading = false;
           this.$store.commit('initPrint', {isPrinting: false});
-          utils.printLocation(this, {'type': 'transport_pre_task', 'path': res.data.url});
           // 清空列表
           this.taskIdList = [];
           this.checkList = [];
