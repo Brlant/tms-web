@@ -116,7 +116,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item slot="right" label="外勤客服电话">
-                  <oms-input v-model="hj.userPhone" placeholder="请输入理货员电话"></oms-input>
+                  <oms-input v-model="hj.userPhone" placeholder="请输入外勤客服电话"></oms-input>
                 </el-form-item>
               </two-column>
               <el-form-item label-width="120px">
@@ -418,7 +418,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.doing = true;
-            // 处理理货员列表
+            // 处理外勤客服列表
             if (this.form.tallyClerkDtoList) {
               let list = [];
               this.form.tallyClerkDtoList.forEach(val => {
