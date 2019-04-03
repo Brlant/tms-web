@@ -8,7 +8,9 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 const UglifyJsparallelPlugin = require('webpack-uglify-parallel');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const os = require('os');
 
 var env = config.build.env
@@ -24,7 +26,8 @@ var webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js'),
+    sourceMapFilename: utils.assetsPath('map/[id].[chunkhash:8].js.map')
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -37,14 +40,26 @@ var webpackConfig = merge(baseWebpackConfig, {
     //   },
     //   sourceMap: true
     // }),
-    new UglifyJsparallelPlugin({
-      workers: os.cpus().length,
-      mangle: true,
-      compressor: {
-        warnings: false,
-        drop_console: true,
-        drop_debugger: true
-      }
+    // new UglifyJsparallelPlugin({
+    //   workers: os.cpus().length,
+    //   mangle: true,
+    //   compressor: {
+    //     warnings: false,
+    //     drop_console: true,
+    //     drop_debugger: true
+    //   }
+    // }),
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        ie8: false,
+        ecma: 8,
+        mangle: true,
+        output: { comments: false },
+        compress: { warnings: false }
+      },
+      sourceMap: true,
+      cache: false,
+      parallel: os.cpus().length * 2
     }),
     // extract css into its own file
     new ExtractTextPlugin({
@@ -108,6 +123,13 @@ var webpackConfig = merge(baseWebpackConfig, {
         count >= 2    // 当一个模块被重复引用2次或以上的时候单独打包起来。
       )
     }),
+    new SentryWebpackPlugin({
+      release: 'tms@1.0.0',
+      include: './dist/static/map',
+      ignoreFile: '.sentrycliignore',
+      ignore: ['node_modules'],
+      configFile: 'sentry.properties'
+    })
   ]
 })
 

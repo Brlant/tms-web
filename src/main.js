@@ -4,7 +4,8 @@ import tinyVue from './lib/tinyVue';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import '@/assets/scss/index.scss';
-
+import Raven from 'raven-js';
+import RavenVue from 'raven-js/plugins/vue';
 import './assets/css/basic.css';
 import '../static/fonts/iconfont.css';
 import Vuex from 'vuex';
@@ -24,6 +25,16 @@ VueAMap.initAMapApiLoader({
   v: '1.4.6',
   uiVersion: '1.0'
 });
+
+if (process.env.NODE_ENV === 'production') {
+  // 日志工具
+  Raven
+    .config('https://62f56ceea555483fab3d6238ff4a80d0@f-log.cdcerp.net/3', {
+      serverName: 'tms'
+    })
+    .addPlugin(RavenVue, Vue)
+    .install();
+}
 
 new Vue({
   template: '<router-view id="app"></router-view>',
