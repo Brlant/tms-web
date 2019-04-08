@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === 'production') {
         //   return false;
         // }
         let filterArray = ['Request failed with status code 401', 'Request failed with status code 502'];
-        if (date.exception.values && filterArray.indexOf(date.exception.values[0].value) > -1) {
+        if (date && date.hasOwnProperty('exception') && date.exception.hasOwnProperty('values') && filterArray.indexOf(date.exception.values[0].value) > -1) {
           return false;
         }
         return date;
