@@ -27,6 +27,7 @@ http.interceptors.response.use(response => {
         window.localStorage.removeItem(noticeTipKey);
       }
     });
+    return Promise.reject(error);
   }
   if (response.status === 401) { //  Unauthorized, redirect to login
     let lastUrl = window.localStorage.getItem('lastUrl');
