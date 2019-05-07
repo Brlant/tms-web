@@ -31,7 +31,7 @@ Vue.use(VueRouter);
 export const routes = [
   {
     path: '/',
-    component: require('./components/index.vue'),
+    component: () => import('./components/index.vue'),
     children: [
       {
         path: '/vehicle',
@@ -79,28 +79,28 @@ export const routes = [
       },
       {
         path: '/baseInfo',
-        component: resolve => require(['./components/base-info/index.vue'], resolve),
+        component: () => import('./components/base-info/index.vue'),
         meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'basic', perm: 'tms-base-info'},
         children: [
           {
             path: '/baseInfo/org-list',
-            component: resolve => require(['./components/base-info/org-list/list.vue'], resolve),
+            component: () => import('./components/base-info/org-list/list.vue'),
             meta: {moduleId: 'baseInfo', title: '业务单位', perm: 'tms-business-unit-query'}
           },
           {
             path: '/baseInfo/car-archives',
-            component: resolve => require(['./components/base-info/car-archives/index.vue'], resolve),
+            component: () => import('./components/base-info/car-archives/index.vue'),
             meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'tms-car-archives-watch'}
           },
           {
             path: '/baseInfo/packaging-consumables',
-            component: resolve => require(['./components/base-info/dev/index.vue'], resolve),
+            component: () => import('./components/base-info/dev/index.vue'),
             meta: {moduleId: 'baseInfo', title: '包装耗材', perm: 'tms-car-archives-watch'},
             children: []
           },
           {
             path: '/baseInfo/goods-area',
-            component: resolve => require(['./components/base-info/goods-area/list.vue'], resolve),
+            component: () => import('./components/base-info/goods-area/list.vue'),
             meta: {moduleId: 'baseInfo', title: '集货区管理', perm: 'tms-goods-area-query'},
             children: []
           }
@@ -131,11 +131,11 @@ export const routes = [
     ]
   },
   {path: '/resetpsw', component: () => import('./components/login/resetpsw.vue')},
-  {path: '/404', component: resolve => require(['./components/error/error_404.vue'], resolve)},
-  {path: '/500', component: resolve => require(['./components/error/error_500.vue'], resolve)},
-  {path: '/login', component: resolve => require(['./components/login/login.vue'], resolve)},
-  {path: '/forget', component: resolve => require(['./components/login/forget.vue'], resolve)},
-  {path: '/code/:id', component: resolve => require(['./components/login/resetpwd.vue'], resolve)},
+  {path: '/404', component: () => import('./components/error/error_404.vue')},
+  {path: '/500', component: () => import('./components/error/error_500.vue')},
+  {path: '/login', component: () => import('./components/login/login.vue')},
+  {path: '/forget', component: () => import('./components/login/forget.vue')},
+  {path: '/code/:id', component: () => import('./components/login/resetpwd.vue')},
   {path: '*', redirect: '/'}
 ];
 
