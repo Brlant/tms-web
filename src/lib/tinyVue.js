@@ -225,4 +225,4 @@ if (typeof window !== 'undefined' && window.Vue) {
   install(window.Vue);
 }
 
-module.exports = Object.assign(tinyVue, {install});
+export default Object.assign(tinyVue, {install});
