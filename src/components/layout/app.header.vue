@@ -265,7 +265,7 @@
                   </div>
                   <div class="last-login">上次登录时间:{{user.userLastLoginTime | time}}</div>
                   <div class="text-right">
-                    <router-link to="/resetpsw">重置密码</router-link>
+                    <router-link style="float: left; margin-top: 2px;" to="/resetpsw">重置密码</router-link>
                     <a href="#" @click.stop.prevent="logout">退出</a>
                   </div>
                 </div>
