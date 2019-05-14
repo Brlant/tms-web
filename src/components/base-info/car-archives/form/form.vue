@@ -1,4 +1,4 @@
-<style lang="less" scoped>
+<style lang="scss" scoped>
   .good-selects {
     .el-select-dropdown__item {
       height: auto;

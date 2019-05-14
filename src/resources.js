@@ -3,7 +3,7 @@ import axios from 'axios';
 import Vue from 'vue';
 
 export const http = axios.create({
-  baseURL: process.env.NODE_API,
+  baseURL: process.env.VUE_APP_API,
   timeout: 30000,
   withCredentials: true
 });
@@ -27,6 +27,7 @@ http.interceptors.response.use(response => {
         window.localStorage.removeItem(noticeTipKey);
       }
     });
+    return Promise.reject(error);
   }
   if (response.status === 401) { //  Unauthorized, redirect to login
     let lastUrl = window.localStorage.getItem('lastUrl');
