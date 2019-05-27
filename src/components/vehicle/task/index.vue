@@ -68,7 +68,7 @@
         <el-col :span="2">任务状态</el-col>
         <el-col :span="2">负责人</el-col>
         <el-col :span="3">车牌号/司机</el-col>
-        <el-col :span="2">件数</el-col>
+        <el-col :span="2">包件数</el-col>
         <el-col :span="2">载重(kg)</el-col>
         <el-col :span="2">容积(m³)</el-col>
         <el-col :span="4">时间</el-col>
@@ -268,7 +268,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TransportTask } from '@/resources';
+  import {http, TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
