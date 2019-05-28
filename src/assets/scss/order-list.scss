@@ -3,7 +3,9 @@
 
   .order-list-header {
     background: $tableHeaderColor;
-    line-height: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
     padding: 0 5px 0 15px;
     margin: 10px 0 5px 0;
     &.mt-10 {

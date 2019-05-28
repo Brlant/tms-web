@@ -64,6 +64,7 @@
                <oms-col :label="'外勤客服'+tallyClerk.index+'电话'" :rowSpan="span" :value="tallyClerk.userPhone"/>
             </span>
             <oms-col label="包件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>
+            <oms-col label="整散件总数" :rowSpan="span" :value="form.totalCount" isShow="true"/>
             <oms-col label="载重" :rowSpan="span" :value="form.carLoadBearing" isShow="true">
               {{form.carLoadBearing}} <span v-if="form.carLoadBearing">千克</span>
             </oms-col>
@@ -317,6 +318,7 @@
         if (val.id) {
           TransportTask.getOneTransportTask(val.id).then(res => {
             this.form = res.data;
+            this.form.totalCount = val.totalCount;
             // 设置当前车辆的经纬度
             this.setCurPosition();
             // 查询日志信息
