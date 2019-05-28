@@ -12,6 +12,7 @@ import Vuex from 'vuex';
 import store from './store';
 import {init} from './tools/init';
 import VueAMap from 'vue-amap';
+import App from './components/App';
 
 init(Vue);
 Vue.use(require('vue-moment'), {moment});
@@ -49,9 +50,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 new Vue({
-  template: '<router-view id="app"></router-view>',
   router,
-  store
+  store,
+  render: h => h(App)
 }).$mount('#app');
 
 Vue.filter('formatMoney', function (val) {
