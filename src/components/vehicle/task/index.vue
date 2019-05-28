@@ -68,9 +68,9 @@
         <el-col :span="2">任务状态</el-col>
         <el-col :span="2">负责人</el-col>
         <el-col :span="3">车牌号/司机</el-col>
-        <el-col :span="2">包件数</el-col>
-        <el-col :span="2">载重(kg)</el-col>
-        <el-col :span="2">容积(m³)</el-col>
+        <el-col :span="1">包件数</el-col>
+        <el-col :span="2">整散件总数</el-col>
+        <el-col :span="3">载重/容积</el-col>
         <el-col :span="4">时间</el-col>
         <el-col :span="3">操作</el-col>
       </el-row>
@@ -127,20 +127,19 @@
                 {{item.driverName}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="1" class="R">
               <div>
                 {{item.incubatorCount}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{item.carLoadBearing}}
+                {{item.totalCount}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
-              <div>
-                {{item.carVolume}}
-              </div>
+            <el-col :span="3" class="R">
+              <div>{{item.carLoadBearing}} kg</div>
+              <div>{{item.carVolume}} m³</div>
             </el-col>
             <el-col :span="4" class="R">
               <div>
