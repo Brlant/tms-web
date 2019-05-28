@@ -63,7 +63,7 @@
                <oms-col :label="'外勤客服'+tallyClerk.index+''" :rowSpan="span" :value="tallyClerk.userName"/>
                <oms-col :label="'外勤客服'+tallyClerk.index+'电话'" :rowSpan="span" :value="tallyClerk.userPhone"/>
             </span>
-            <oms-col label="件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>
+            <oms-col label="包件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>
             <oms-col label="载重" :rowSpan="span" :value="form.carLoadBearing" isShow="true">
               {{form.carLoadBearing}} <span v-if="form.carLoadBearing">千克</span>
             </oms-col>
