@@ -318,22 +318,20 @@
           </el-row>
           <div class="order-list-item-bg"></div>
         </div>
-        <div class="order-list-header">
-          <el-row>
-            <el-col :span="2"></el-col>
-            <el-col :span="2"></el-col>
-            <el-col :span="4"></el-col>
-            <el-col :span="4">合计</el-col>
-            <el-col :span="1">{{totalCount.whole}}</el-col>
-            <el-col :span="1">{{totalCount.buck}}</el-col>
-            <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
-            <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
-            <!--<el-col :span="2">预估包件</el-col>-->
-            <el-col :span="4"></el-col>
-            <el-col :span="2"></el-col>
-            <el-col :span="3"></el-col>
-          </el-row>
-        </div>
+        <el-row class="order-list-header">
+          <el-col :span="2"></el-col>
+          <el-col :span="2"></el-col>
+          <el-col :span="4"></el-col>
+          <el-col :span="4">合计</el-col>
+          <el-col :span="1">{{totalCount.whole}}</el-col>
+          <el-col :span="1">{{totalCount.buck}}</el-col>
+          <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
+          <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
+          <!--<el-col :span="2">预估包件</el-col>-->
+          <el-col :span="4"></el-col>
+          <el-col :span="2"></el-col>
+          <el-col :span="3"></el-col>
+        </el-row>
       </div>
       <!--<el-row class="order-list-header" v-show="dataList.length && !loadingData">-->
       <!--<el-col :span="11" align="left">合计</el-col>-->
