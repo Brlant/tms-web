@@ -230,7 +230,8 @@
       </div>
       <el-row class="order-list-header" v-show="dataList.length && !loadingData">
         <el-col :span="11" align="left">合计</el-col>
-        <el-col :span="2">{{totalCount.incubatorCount}}</el-col>
+        <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
+        <el-col :span="1">{{totalCount.totalCount}}</el-col>
         <el-col :span="11"></el-col>
       </el-row>
     </div>
@@ -341,10 +342,12 @@
       },
       totalCount() {
         let total = {
-          incubatorCount: 0
+          incubatorCount: 0,
+          totalCount: 0
         };
         this.dataList.forEach(i => {
           total.incubatorCount += i.incubatorCount;
+          total.totalCount += i.totalCount;
         });
         return total;
       }
