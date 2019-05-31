@@ -300,7 +300,7 @@
         if (value === '') {
           callback(new Error('请输入手机号码'));
         } else {
-          let re = /^1[34578]\d{9}$/;
+          let re = /^1[345789]\d{9}$/;
           if (!re.test(value)) {
             callback(new Error('请输入正确的手机号码'));
           }
