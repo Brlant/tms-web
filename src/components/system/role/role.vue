@@ -18,6 +18,7 @@
       line-height: 24px;
       font-weight: normal;
     }
+
     ul {
       margin: 10px 0;
 
@@ -30,6 +31,7 @@
         font-size: 12px;
       }
     }
+
     .group-list {
 
       border: 1px solid #eee;
@@ -54,6 +56,15 @@
                                        v-if="item.usableStatus==filters.usableStatus"></i>{{item.title}}<span
             class="status-num">{{item.num}}</span></div>
         </div>
+        <span class="btn-group-right">
+          <perm label="tms-access-platfrom-permission-export">
+           <span @click.stop.prevent="exportRoleInfo">
+               <a href="#" class="btn-circle" @click.prevent=""
+                  style="margin-right: 5px"><i
+                 class="el-icon-t-print"></i> </a>导出角色权限信息
+            </span>
+          </perm>
+        </span>
       </div>
       <div class=" d-table">
         <div class="d-table-left">
@@ -196,6 +207,7 @@
   import {Access} from '@/resources';
   import roleForm from './form/form.vue';
   import roleMixin from '@/mixins/roleMixin';
+  import utils from '@/tools/utils';
 
   export default {
     components: {roleForm},
@@ -270,6 +282,36 @@
       }
     },
     methods: {
+      exportRoleInfo() {
+        this.$store.commit('initPrint', {
+          isPrinting: true,
+          moduleId: this.$route.path,
+          text: '拼命导出中'
+        });
+        let params = {
+          objectId: 'tms-system', type: 0
+        };
+        this.$http.get('/access/statement/permission/export', {params}).then(res => {
+          utils.download(res.data.path);
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: this.$route.path,
+            text: '拼命导出中'
+          });
+        }).catch(error => {
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: this.$route.path,
+            text: '拼命导出中'
+          });
+          this.$notify({
+            duration: 2000,
+            title: '无法打印',
+            message: error.response.data.msg,
+            type: 'error'
+          });
+        });
+      },
       getMore: function () {
         this.getPageList(this.pager.currentPage + 1, true);
       },
