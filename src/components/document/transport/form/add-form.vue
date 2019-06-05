@@ -136,7 +136,7 @@
                   <div style="overflow: hidden">
                     <span class="pull-left" style="clear: right">{{org.name}}</span>
                   </div>
-                  <div style="overflow: hidden">到
+                  <div style="overflow: hidden">
                     <span class="select-other-info pull-left">
                       <span>系统代码:</span>{{org.manufacturerCode}}
                     </span>
