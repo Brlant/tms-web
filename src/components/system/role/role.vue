@@ -306,7 +306,7 @@
           });
           this.$notify({
             duration: 2000,
-            title: '无法打印',
+            title: '导出失败',
             message: error.response.data.msg,
             type: 'error'
           });
