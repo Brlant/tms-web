@@ -254,7 +254,7 @@
     <el-dialog :title="'任务号: ' + mapBigFormItem.transportTaskNo" :visible.sync="isShowBigMap" width="100%"
                :fullscreen="true"
                custom-class="custom-dialog-map">
-      <task-map mapRef="bigTaskMap" :formItem="mapBigFormItem"
+      <task-map mapRef="bigTaskMap" :formItem="mapBigFormItem" vid="mapTaskBigPath"
                 :mapStyle="{height: bodyHeight}"></task-map>
     </el-dialog>
     <el-dialog title="地图派送" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"

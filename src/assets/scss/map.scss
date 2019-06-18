@@ -94,3 +94,36 @@ $lbg: rgba(0, 0, 0, 0.5);
   }
 }
 
+#bigTaskMap {
+  .amap-marker-label {
+    background: transparent;
+    border-color: transparent;
+
+    .marker-title {
+      color: #fff;
+      background: $lbg;
+      padding: 4px;
+      border-radius: 4px;
+
+      .title {
+        margin-left: 15px;
+      }
+    }
+
+
+    .babel__container {
+      &.is-big {
+        .bg {
+          background: #fff;
+          opacity: 0.6;
+        }
+
+        &:hover {
+          .bg {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+}
