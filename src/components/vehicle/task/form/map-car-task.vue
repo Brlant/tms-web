@@ -53,7 +53,9 @@
     data: function () {
       return {
         center: [121.5273285, 31.21515044],
-        pathSimplifierIns: null
+        pathSimplifierIns: null,
+        isShowTemp: true,
+        timers: []
       };
     },
     computed: {
@@ -78,23 +80,22 @@
       }
     },
     watch: {
-      markers (val) {
-        if (!val.length || !this.$refs.taskMap) return;
-        let map = this.$refs.taskMap.$$getInstance();
-        if (!map) return;
-        // 添加工具
-        this.addMapTools(map);
-        map.clearMap();
-        val.forEach((i, index) => {
-          // 画点
-          this.drawPoint(i, index);
-        });
-      },
       formItem (val) {
+        this.timers.forEach(i => {
+          window.clearTimeout(i);
+        });
+        this.clearMap();
         this.pathSimplifierIns && this.pathSimplifierIns.setData([]);
         if (!val.id) return;
         this.$http.get(`/track-transportation/task/${val.id}`).then(res => {
           let point = res.data.map(m => [m.longitude, m.latitude]);
+          const pointDetails = res.data.filter(f => f.longitude && f.latitude).map((m, index) => {
+            return {
+              lnglat: [m.longitude, m.latitude],
+              time: this.$moment(m.collectionTime).format('YYYY-MM-DD HH:mm:ss'),
+              m
+            };
+          });
           // 起点
           if (point.length) {
             this.drawPoint({
@@ -106,16 +107,34 @@
               label: this.formItem.status > 2 ? '' : '当前位置'
             }, this.formItem.status > 2 ? '终' : ' ', 'blue');
           }
+          let map = this.$refs.taskMap.$$getInstance();
+          if (!map) return;
+          this.clearMap();
+          // 添加工具
+          this.addMapTools(map);
+          this.markers.forEach((i, index) => {
+            // 画点
+            this.drawPoint(i, index);
+          });
           // 轨迹
           this.drawPath(point);
+          // 画点
+          this.drawPathPoint(pointDetails);
         });
       }
     },
     methods: {
+      clearMap() {
+        let map = this.$refs.taskMap.$$getInstance();
+        if (!map || !window.AMapUI) {
+          setTimeout(() => this.clearMap());
+        }
+        map && map.clearMap();
+      },
       // 画点
       drawPoint (i, index, iconStyle = 'green') {
         let map = this.$refs.taskMap.$$getInstance();
-        if (!map) {
+        if (!map || !window.AMapUI) {
           setTimeout(() => this.drawPoint(map, i, index), 200);
         }
         window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
@@ -129,10 +148,11 @@
             map: map,
             showPositionPoint: false, //显示定位点
             position: i.position,
-            label: {
-              content: `<div class="babel__container"><div class="bg"></div><div class="title">${i.label}</div><div>${i.label}</div></div>`,
+            label: i.label ? {
+              content: `<div class="babel__container is-big"><div class="bg"></div><div class="title">${i.label}</div>
+<div>${i.label}</div></div>`,
               offset: new window.AMap.Pixel(30, 10)
-            }
+            } : null
           });
         });
       },
@@ -140,7 +160,7 @@
       drawPath (points) {
         if (!points.length) return;
         let map = this.$refs.taskMap.$$getInstance();
-        if (!map) {
+        if (!map || !window.AMapUI) {
           setTimeout(() => this.drawPath(points), 200);
         }
         window.AMapUI.loadUI(['misc/PathSimplifier'], PathSimplifier => {
@@ -152,6 +172,11 @@
             },
             getHoverTitle () {
               return '';
+            },
+            renderOptions: {
+              hoverTitleStyle: {
+                classNames: 'marker-hover-title'
+              }
             }
           });
           this.pathSimplifierIns = pathSimplifierIns;
@@ -161,6 +186,69 @@
           }]);
           pathSimplifierIns.setSelectedPathIndex(0);
         });
+      },
+      drawPathPoint(points, isNotFirst) {
+        if (this.mapRef === 'taskMap') return;
+        if (!points.length) return;
+        let prePoints = [];
+        let nextPoints = [];
+        const limit = 10;
+        prePoints = points.slice(0, points.length > limit ? limit : points.length);
+        nextPoints = points.length > limit ? points.slice(limit) : [];
+        const makers = prePoints.map(m => m);
+        makers.forEach((i, index) => {
+          this.createSvgMarker(i, false);
+        });
+        this.timers.push(setTimeout(() => {
+          this.drawPathPoint(nextPoints, true);
+        }, 50));
+      },
+      createSvgMarker(i) {
+        let map = this.$refs.taskMap.$$getInstance();
+        if (!map || !window.AMapUI) {
+          setTimeout(() => this.createSvgMarker(i), 200);
+        }
+        window.AMapUI.loadUI(['overlay/SvgMarker'], SvgMarker => {
+          //创建一个shape实例，比如水滴状
+          const shape = new SvgMarker.Shape.Circle({
+            radius: 5, //高度
+            fillColor: 'orange', //填充色
+            strokeWidth: 1, //描边宽度
+            strokeColor: '#666' //描边颜色
+          });
+          //利用该shape构建SvgMarker
+          const marker = new SvgMarker(
+            //第一个参数传入shape实例
+            shape,
+            //第二个参数为SimpleMarker的构造参数（iconStyle除外）
+            {
+              // showPositionPoint: true, //显示定位点
+              map: map,
+              position: i.lnglat,
+              label: this.isShowTemp ? {
+                content: this.formatLabel(i),
+                offset: new window.AMap.Pixel(16, -12)
+              } : null
+            }
+          );
+        });
+      },
+      formatTempLevel(temp) {
+        if (temp === '无数据') return '';
+        temp = parseFloat(temp);
+        if (temp > 8 || temp < 2) return 'data_error';
+        if (temp < 4) return 'data_0';
+        else if (temp < 6) return 'data_1';
+        else return 'data_2';
+      },
+      formatLabel(i) {
+        let time = this.$moment(i.m.positioningTime).format('YYYY-MM-DD HH:mm:ss');
+        let speed = i.m.speed && (i.m.speed * 3.6).toFixed(1) || '';
+        let speedTitle = speed ? `<span class="title">车速:${speed} km/h</span>` : '';
+        return `<div class="marker-title">
+              <span>${time}</span>
+              ${speedTitle}
+          </div>`;
       }
     }
   };
