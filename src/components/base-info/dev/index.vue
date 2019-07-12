@@ -167,7 +167,7 @@
                   </oms-row>
                 </el-col>
                 <el-col :span="6">
-                  <oms-row label="库存数" :span="5" v-show="currentItem.count">{{ currentItem.count}}</oms-row>
+                  <oms-row label="库存数" v-show="currentItem.count">{{ currentItem.count}}</oms-row>
                   <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
                   <oms-row label="采购价格" v-show="currentItem.purchasePrice"><span
                     v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice}}

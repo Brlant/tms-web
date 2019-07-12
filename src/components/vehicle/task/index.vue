@@ -68,9 +68,9 @@
         <el-col :span="2">任务状态</el-col>
         <el-col :span="2">负责人</el-col>
         <el-col :span="3">车牌号/司机</el-col>
-        <el-col :span="2">件数</el-col>
-        <el-col :span="2">载重(kg)</el-col>
-        <el-col :span="2">容积(m³)</el-col>
+        <el-col :span="1">包件数</el-col>
+        <el-col :span="2">整散件总数</el-col>
+        <el-col :span="3">载重/容积</el-col>
         <el-col :span="4">时间</el-col>
         <el-col :span="3">操作</el-col>
       </el-row>
@@ -127,20 +127,19 @@
                 {{item.driverName}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
+            <el-col :span="1" class="R">
               <div>
                 {{item.incubatorCount}}
               </div>
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{item.carLoadBearing}}
+                {{item.totalCount}}
               </div>
             </el-col>
-            <el-col :span="2" class="R">
-              <div>
-                {{item.carVolume}}
-              </div>
+            <el-col :span="3" class="R">
+              <div>{{item.carLoadBearing}} kg</div>
+              <div>{{item.carVolume}} m³</div>
             </el-col>
             <el-col :span="4" class="R">
               <div>
@@ -231,7 +230,8 @@
       </div>
       <el-row class="order-list-header" v-show="dataList.length && !loadingData">
         <el-col :span="11" align="left">合计</el-col>
-        <el-col :span="2">{{totalCount.incubatorCount}}</el-col>
+        <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
+        <el-col :span="1">{{totalCount.totalCount}}</el-col>
         <el-col :span="11"></el-col>
       </el-row>
     </div>
@@ -254,7 +254,7 @@
     <el-dialog :title="'任务号: ' + mapBigFormItem.transportTaskNo" :visible.sync="isShowBigMap" width="100%"
                :fullscreen="true"
                custom-class="custom-dialog-map">
-      <task-map mapRef="bigTaskMap" :formItem="mapBigFormItem"
+      <task-map mapRef="bigTaskMap" :formItem="mapBigFormItem" vid="mapTaskBigPath"
                 :mapStyle="{height: bodyHeight}"></task-map>
     </el-dialog>
     <el-dialog title="地图派送" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
@@ -268,7 +268,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import { http, TransportTask } from '@/resources';
+  import {http, TransportTask} from '@/resources';
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
@@ -342,10 +342,12 @@
       },
       totalCount() {
         let total = {
-          incubatorCount: 0
+          incubatorCount: 0,
+          totalCount: 0
         };
         this.dataList.forEach(i => {
           total.incubatorCount += i.incubatorCount;
+          total.totalCount += i.totalCount;
         });
         return total;
       }

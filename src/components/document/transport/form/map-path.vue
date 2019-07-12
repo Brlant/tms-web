@@ -68,11 +68,15 @@
         pathSimplifierIns: null,
         isHasPath: false,
         points: false,
-        isShowTemp: true
+        isShowTemp: true,
+        timers: []
       };
     },
     watch: {
       formItem(val) {
+        this.timers.forEach(i => {
+          window.clearTimeout(i);
+        });
         this.points = [];
         this.amapManager._map && this.amapManager._map.clearMap();
         this.pathSimplifierIns && this.pathSimplifierIns.setData([]);
@@ -183,9 +187,9 @@
         makers.forEach((i, index) => {
           this.createSvgMarker(i, false);
         });
-        setTimeout(() => {
+        this.timers.push(setTimeout(() => {
           this.drawPoint(nextPoints, true);
-        }, 50);
+        }, 50));
       },
       createSimpleMarker(i, iconIndex) {
         window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {

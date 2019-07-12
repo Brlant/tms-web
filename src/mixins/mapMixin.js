@@ -12,10 +12,10 @@ export default {
     },
     addMapTools (amapManager) {
       const map = amapManager || this.amapManager._map;
-      if (!map) {
+      if (!map || !window.AMapUI) {
         return setTimeout(this.addMapTools, 200);
       }
-      window.AMapUI.loadUI(['control/BasicControl'], function (BasicControl) {
+      window.AMapUI && window.AMapUI.loadUI(['control/BasicControl'], function (BasicControl) {
         //缩放控件
         map.addControl(new BasicControl.Zoom({
           position: 'rb', //left top，左上角
