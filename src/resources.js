@@ -9,7 +9,30 @@ export const http = axios.create({
 });
 
 http.interceptors.response.use(response => {
-  return response;
+  if (response.data.code) {
+    switch (response.data.code) {
+      case 200 :
+        return response.data;
+      case 401:
+        window.location.href = '#/login';
+        return response;
+      case 403:
+        Notification.error({
+          message: '您没有权限请求信息，请联系管理员。',
+          onClose: function () {
+            window.localStorage.removeItem('noticeError');
+          }
+        });
+        return response;
+      case 400:
+        Notification.error({
+          message: response.data.msg
+        });
+        return response;
+    }
+  } else {
+    return response;
+  }
 }, error => {
   let noticeTipKey = 'noticeError';
   let notice = window.localStorage.getItem(noticeTipKey);
