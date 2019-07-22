@@ -167,7 +167,7 @@
                   </oms-row>
                 </el-col>
                 <el-col :span="6">
-                  <oms-row label="库存数" v-show="currentItem.count">{{ currentItem.count}}</oms-row>
+                  <!--<oms-row label="库存数" v-show="currentItem.count">{{ currentItem.count}}</oms-row>-->
                   <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
                   <oms-row label="采购价格" v-show="currentItem.purchasePrice"><span
                     v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice}}
@@ -212,8 +212,9 @@
                   <el-col :span="10">
                     <oms-form-row label="状态" :span="3">
                       <el-radio-group v-model="currentStatus" size="small" @change="changeStatus">
-                        <el-radio-button :label="item.label" :value="item.key" :key="item.key"
-                                         v-for="item in typeList"></el-radio-button>
+                        <el-radio-button :key="item.statusKey" :label="item.statusType + item.count"
+                                         :value="item.statusKey"
+                                         v-for="item in devDetailCount"></el-radio-button>
                       </el-radio-group>
                     </oms-form-row>
                   </el-col>
@@ -389,7 +390,8 @@
         },
         validityTimes: '',
         isLoading: false,
-        currentStatus: ''
+        currentStatus: '',
+        devDetailCount: []
       };
     },
     mounted() {
@@ -466,15 +468,6 @@
           });
         }).catch(() => {
         });
-      },
-      changeStatus: function (val) {
-        let value = '';
-        this.typeList.forEach(item => {
-          if (item.label === val) {
-            value = item.key;
-          }
-        });
-        this.searchCondition.status = value;
       },
       exportFile: function () {
         this.isLoading = true;
@@ -590,6 +583,7 @@
             this.currentItem = Object.assign({}, {'id': ''}, res.data.list[0]);
             // this.$store.commit('initDev', this.currentItem);
             this.getDevDetailList(1);
+            this.getDevDetailStatusCount(this.currentItem);
           }
           this.pager.totalPage = res.data.totalPage;
           this.$store.commit('initBottomLoading', false);
@@ -702,6 +696,7 @@
         this.currentItem = type;
         this.getDevDetailList(1);
         this.resetSearchForm();
+        this.getDevDetailStatusCount(this.currentItem);
       },
       onSubmit: function (item) {
         if (this.action === 'add') {
@@ -713,14 +708,33 @@
         }
         this.getDevDetailList(1);
         // this.getStoreDetailList(1);
+        this.getDevDetailStatusCount(this.currentItem);
       },
       detailSubmit: function (item) {
         this.status = parseInt(item.status, 10);
         this.getDevDetailList(1);
+        this.getDevDetailStatusCount(this.currentItem);
       },
       orderSubmit: function (item) {
         this.storeStatus = item.type;
         this.getStoreDetailList(1);
+        this.getDevDetailStatusCount(this.currentItem);
+      },
+      getDevDetailStatusCount(item) {
+        DevDetail.devDetailStatusCount(item.id, item.type + 'Status').then(res => {
+          this.devDetailCount = res.data;
+        });
+      },
+      changeStatus(val) {
+        let value = '';
+        this.devDetailCount.forEach(item => {
+          let label = item.statusType + item.count;
+          if (label === val) {
+            value = item.statusKey;
+          }
+        });
+        this.searchCondition.status = value;
+        this.detailFilter.status = value;
       }
     }
   };
