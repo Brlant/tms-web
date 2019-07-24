@@ -350,6 +350,9 @@ export const DevDetail = resource('/dev-detail', http, {
     return http.get(`/dev-detail/status/count`, {
       params: {devId: devId, dictGroupName: dictGroupName}
     });
+  },
+  batchUpdateDevDetailStatus: params => {
+    return http.put(`/dev-detail/batch/status`, params);
   }
 });
 
