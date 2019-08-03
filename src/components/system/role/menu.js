@@ -447,12 +447,12 @@ export default [{
   }],
   'leaf': false
 }, {
-  'id': 'tms-system-config',
+  'id': 'system-config',
   'parentId': null,
   'label': '系统设置',
   'sort': 4,
   'children': [{
-    'id': 'tms-user-role-manager',
+    'id': 'access-role-manager',
     'parentId': 'tms-system-config',
     'label': '角色管理',
     'sort': 2,
@@ -464,7 +464,7 @@ export default [{
       'children': null,
       'leaf': true
     }, {
-      'id': 'tms-access-role-edit',
+      'id': 'access-role-edit',
       'parentId': 'tms-user-role-manager',
       'label': '编辑角色',
       'sort': null,
@@ -485,14 +485,14 @@ export default [{
       'children': null,
       'leaf': true
     }, {
-      'id': 'tms-access-role-watch',
+      'id': 'access-role-watch',
       'parentId': 'tms-user-role-manager',
       'label': '查看角色',
       'sort': null,
       'children': null,
       'leaf': true
     }, {
-      'id': 'tms-access-role-add',
+      'id': 'access-role-add',
       'parentId': 'tms-user-role-manager',
       'label': '新增角色',
       'sort': null,
