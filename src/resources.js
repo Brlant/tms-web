@@ -1,6 +1,7 @@
 import {Notification} from 'element-ui/lib/notification';
 import axios from 'axios';
 import Vue from 'vue';
+import qs from 'qs';
 
 export const http = axios.create({
   baseURL: process.env.VUE_APP_API,
@@ -13,6 +14,16 @@ function isNewReturnType(data) {
   if (keys.length !== 3) return false;
   return ['code', 'data', 'msg'].every(e => keys.includes(e));
 }
+
+// 添加请求拦截器
+http.interceptors.request.use(function (config) {
+  if (config.method === 'get') {
+    config.paramsSerializer = params => {
+      return qs.stringify(params, {indices: false});
+    };
+  }
+  return config;
+});
 
 http.interceptors.response.use(response => {
   if (isNewReturnType(response.data)) {
@@ -176,13 +187,13 @@ export const TempDev = resource('/ccsDevice', http, {
   queryStateNum: (params) => {
     return http.get('/ccsDevice/countDeviceGroup', {params});
   },
-  queryTempData (params) {
+  queryTempData(params) {
     return http.get('/ccsDevice/gainDeviceReportDatas', {params});
   },
-  queryALLTempByLike (params) {
+  queryALLTempByLike(params) {
     return http.get('/ccsDevice/queryDevListFuzzy', {params});
   },
-  exportDevInfo (params) {
+  exportDevInfo(params) {
     return http.get('/ccsDevice/export-dev', {params});
   }
 });
@@ -229,7 +240,7 @@ export const TransportTask = resource('/transport-task', http, {
 
 // 货主车牌信息
 export const plateNumber = resource('/org-plate', http, {
-  batchAddPlateNumber (obj) {
+  batchAddPlateNumber(obj) {
     return http.post('/org-plate/batch', obj);
   }
 });
@@ -409,7 +420,7 @@ export const Auth = {
   logout: () => {
     return http.get('/logout');
   },
-  isLogin () {
+  isLogin() {
     try {
       return User.current();
     } catch (e) {
@@ -578,7 +589,7 @@ export const BaseInfo = resource('/orgs', http, {
  * @param actions custom actions
  * @returns the resource object
  */
-function resource (path, http, actions) {
+function resource(path, http, actions) {
   let obj = {
     get: id => http.get(path + '/' + id),
     save: obj => http.post(path, obj),
