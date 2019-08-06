@@ -97,7 +97,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="发货单位">
+            <el-form-item label="发货单位" prop="senderId">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索发货单位" :remote-method="filterSenderOrg"
                          :clearable="true"
                          v-model="form.senderId" popperClass="good-selects">
@@ -358,6 +358,9 @@
           ],
           shipmentWay: [
             {required: true, message: '请选择发运方式', trigger: 'change'}
+          ],
+          senderId: [
+            {required: true, message: '请选择发货单位', trigger: 'change'}
           ],
           receiverId: [
             {required: true, message: '请选择收货单位', trigger: 'change'}
