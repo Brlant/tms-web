@@ -349,7 +349,7 @@
         devDetail: 'devIsSerialNumber',
         order: 'in',
         devIsSerialNumber: 'normal',
-        status: '0',
+        status: '',
         storeStatus: '0',
         showRight: false,
         showDetailRight: false,
@@ -713,6 +713,7 @@
         });
       },
       showType: function (type) {
+        this.currentStatus = '';
         this.currentItem = type;
         this.getDevDetailList(1);
         this.resetSearchForm();
@@ -805,6 +806,11 @@
             message: res.data && res.data.msg || '批量修改状态成功'
           });
           this.resetStatusChange();
+          let pattern = new RegExp('[0-9]+');
+          let num = this.currentStatus.match(pattern);
+          let temp = this.currentStatus.substring(0, this.currentStatus.indexOf('' + num));
+          this.currentStatus = temp + (this.detailPager.count - devDetailIds.length);
+          console.info(this.currentStatus);
         }).catch(error => {
           this.$notify({
             type: 'error',
