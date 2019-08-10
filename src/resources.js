@@ -345,6 +345,14 @@ export const DevDetail = resource('/dev-detail', http, {
   },
   getLogPageByDevDetailId: (devDetailId, params) => {
     return http.get(`/dev-detail/${devDetailId}/page`, {params});
+  },
+  devDetailStatusCount: (devId, dictGroupName) => {
+    return http.get(`/dev-detail/status/count`, {
+      params: {devId: devId, dictGroupName: dictGroupName}
+    });
+  },
+  batchUpdateDevDetailStatus: params => {
+    return http.put(`/dev-detail/batch/status`, params);
   }
 });
 

@@ -167,7 +167,7 @@
                   </oms-row>
                 </el-col>
                 <el-col :span="6">
-                  <oms-row label="库存数" v-show="currentItem.count">{{ currentItem.count}}</oms-row>
+                  <!--<oms-row label="库存数" v-show="currentItem.count">{{ currentItem.count}}</oms-row>-->
                   <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
                   <oms-row label="采购价格" v-show="currentItem.purchasePrice"><span
                     v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice}}
@@ -191,6 +191,7 @@
                 <el-button-group>
                   <el-button :plain="true" native-type="submit" @click="searchInOrder">查询</el-button>
                   <el-button native-type="reset" @click="resetSearchForm">重置</el-button>
+                  <el-button @click="batchUpdateStatus" native-type="reset">批量修改状态</el-button>
                   <el-button :plain="true" @click="exportFile" :disabled="isLoading">
                     导出Excel
                   </el-button>
@@ -199,6 +200,20 @@
                   </perm>
                 </el-button-group>
               </el-col>
+              <el-dialog
+                :visible.sync="centerDialogVisible"
+                title="请选择需要改成的状态:"
+                width="30%">
+                <el-radio-group v-model="radioStatus">
+                  <template v-for="item of typeList">
+                    <el-radio :label="item.key">{{item.label}}</el-radio>
+                  </template>
+                </el-radio-group>
+                <span class="dialog-footer" slot="footer">
+              <el-button @click="centerDialogVisible = false">取 消</el-button>
+              <el-button @click="submitStatusChange" type="primary">确 定</el-button>
+            </span>
+              </el-dialog>
             </el-row>
             <div class="content">
               <el-form class="advanced-query-form clearfix" style="padding-top: 10px" onsubmit="return false">
@@ -212,8 +227,9 @@
                   <el-col :span="10">
                     <oms-form-row label="状态" :span="3">
                       <el-radio-group v-model="currentStatus" size="small" @change="changeStatus">
-                        <el-radio-button :label="item.label" :value="item.key" :key="item.key"
-                                         v-for="item in typeList"></el-radio-button>
+                        <el-radio-button :key="item.statusKey" :label="item.statusType + item.count"
+                                         :value="item.statusKey"
+                                         v-for="item in devDetailCount"></el-radio-button>
                       </el-radio-group>
                     </oms-form-row>
                   </el-col>
@@ -241,7 +257,9 @@
             <div class="empty-info">暂无信息</div>
           </div>
           <el-table v-else :data="devDetailList" class="header-list" border style="margin-right:-15px;width: 100%;"
-                    :header-row-class-name="'headerClass'" :maxHeight="tableHeight">
+                    :header-row-class-name="'headerClass'" :maxHeight="tableHeight"
+                    @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="devNo" label="包装编号" min-width="150" :sortable="true"></el-table-column>
             <el-table-column prop="status" label="状态" min-width="80" :sortable="true">
               <template slot-scope="scope">
@@ -325,12 +343,13 @@
       return {
         loadingData: true,
         loadingDetailData: true,
+        centerDialogVisible: false,
         devDetailList: [],
         storeDetailList: [],
         devDetail: 'devIsSerialNumber',
         order: 'in',
         devIsSerialNumber: 'normal',
-        status: '0',
+        status: '',
         storeStatus: '0',
         showRight: false,
         showDetailRight: false,
@@ -389,7 +408,10 @@
         },
         validityTimes: '',
         isLoading: false,
-        currentStatus: ''
+        currentStatus: '',
+        devDetailCount: [],
+        radioStatus: '',
+        multipleSelection: []
       };
     },
     mounted() {
@@ -466,15 +488,6 @@
           });
         }).catch(() => {
         });
-      },
-      changeStatus: function (val) {
-        let value = '';
-        this.typeList.forEach(item => {
-          if (item.label === val) {
-            value = item.key;
-          }
-        });
-        this.searchCondition.status = value;
       },
       exportFile: function () {
         this.isLoading = true;
@@ -590,6 +603,7 @@
             this.currentItem = Object.assign({}, {'id': ''}, res.data.list[0]);
             // this.$store.commit('initDev', this.currentItem);
             this.getDevDetailList(1);
+            this.getDevDetailStatusCount(this.currentItem);
           }
           this.pager.totalPage = res.data.totalPage;
           this.$store.commit('initBottomLoading', false);
@@ -699,9 +713,11 @@
         });
       },
       showType: function (type) {
+        this.currentStatus = '';
         this.currentItem = type;
         this.getDevDetailList(1);
         this.resetSearchForm();
+        this.getDevDetailStatusCount(this.currentItem);
       },
       onSubmit: function (item) {
         if (this.action === 'add') {
@@ -713,14 +729,103 @@
         }
         this.getDevDetailList(1);
         // this.getStoreDetailList(1);
+        this.getDevDetailStatusCount(this.currentItem);
       },
       detailSubmit: function (item) {
         this.status = parseInt(item.status, 10);
         this.getDevDetailList(1);
+        this.getDevDetailStatusCount(this.currentItem);
       },
       orderSubmit: function (item) {
         this.storeStatus = item.type;
         this.getStoreDetailList(1);
+        this.getDevDetailStatusCount(this.currentItem);
+      },
+      getDevDetailStatusCount(item) {
+        DevDetail.devDetailStatusCount(item.id, item.type + 'Status').then(res => {
+          this.devDetailCount = res.data;
+        });
+      },
+      changeStatus(val) {
+        let value = '';
+        this.devDetailCount.forEach(item => {
+          let label = item.statusType + item.count;
+          if (label === val) {
+            value = item.statusKey;
+          }
+        });
+        this.searchCondition.status = value;
+        this.detailFilter.status = value;
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      batchUpdateStatus() {
+        if (this.multipleSelection.length === 0) {
+          this.$notify({
+            title: '提示',
+            message: '请选择需要更改状态的设备',
+            type: 'info'
+          });
+          return;
+        }
+        this.centerDialogVisible = true;
+      },
+      submitStatusChange() {
+        if (!this.radioStatus) {
+          this.$notify({
+            title: '提示',
+            message: '请先选择状态',
+            type: 'info'
+          });
+          return;
+        }
+        let devDetailIds = [];
+        this.multipleSelection.forEach(value => {
+          if (value.status !== this.radioStatus) {
+            devDetailIds.push(value.id);
+          }
+        });
+        if (devDetailIds.length === 0) {
+          this.$notify({
+            title: '提示',
+            message: '设备状态一致',
+            type: 'info'
+          });
+          return;
+        }
+        let formDate = Object.assign({}, {
+          codeList: devDetailIds,
+          newStatus: this.radioStatus,
+          oldStatus: this.multipleSelection[0].status
+        });
+        DevDetail.batchUpdateDevDetailStatus(formDate).then(res => {
+          this.$notify({
+            type: 'success',
+            title: '成功',
+            message: res.data && res.data.msg || '批量修改状态成功'
+          });
+          this.resetStatusChange();
+          let pattern = new RegExp('[0-9]+');
+          let num = this.currentStatus.match(pattern);
+          let temp = this.currentStatus.substring(0, this.currentStatus.indexOf('' + num));
+          this.currentStatus = temp + (this.detailPager.count - devDetailIds.length);
+          console.info(this.currentStatus);
+        }).catch(error => {
+          this.$notify({
+            type: 'error',
+            title: '错误',
+            message: error.response.data && error.response.data.msg || '批量修改状态失败'
+          });
+          this.resetStatusChange();
+        });
+      },
+      resetStatusChange() {
+        this.radioStatus = '';
+        this.multipleSelection = [];
+        this.centerDialogVisible = false;
+        this.getDevDetailList(1);
+        this.getDevDetailStatusCount(this.currentItem);
       }
     }
   };
