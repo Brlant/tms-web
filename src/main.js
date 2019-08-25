@@ -23,14 +23,14 @@ Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
   key: 'b551e033d09a45de75ebbc1170025c20',
   plugin: ['AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.Geocoder', 'AMap.MouseTool', 'AMap.PolyEditor'],
-  v: '1.4.6',
+  v: '1.4.13',
   uiVersion: '1.0'
 });
 
 if (process.env.NODE_ENV === 'production') {
   // 日志工具
   Raven
-    .config('https://62f56ceea555483fab3d6238ff4a80d0@f-log.cdcerp.net/3', {
+    .config('https://62f56ceea555483fab3d6238ff4a80d0@sinopharm-bio.com/3', {
       serverName: 'tms',
       // debug: true,
       shouldSendCallback: (date) => { // 过滤错误日志
