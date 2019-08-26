@@ -250,7 +250,7 @@
           </el-scrollbar>
         </div>
         <div class="d-table-right">
-          <el-amap vid="aMap" ref="deliveryMap" :plugin="plugins" :zoom="10" :center="center"
+          <el-amap :plugin="plugins" :zoom="10" ref="deliveryMap" vid="aMap"
                    :style="'height:'+ (bodyHeight + 90)  + 'px'">
             <el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"
                             :label="marker.label" :icon="marker.icon" :animation="marker.animation"
@@ -462,6 +462,7 @@
             this.changeAddress(this.dataRows);
             this.addOverlays(res.data.list, true);
           } else {
+            this.setCenter(res.data.list);
             res.data.list.forEach(i => {
               i.isChecked = false;
               i.isHasSearchText = true;
@@ -473,6 +474,26 @@
           }
           this.pager.totalPage = res.data.totalPage;
         });
+      },
+      setCenter(list) {
+        if (!list.length) return;
+        let item = list[0];
+        if (!item.receiverAddressDimension && !item.receiverAddressLongitude) return;
+        let deliveryMap = this.$refs.deliveryMap;
+        if (!deliveryMap) {
+          setTimeout(() => {
+            this.setCenter(list);
+          }, 200);
+          return;
+        }
+        let map = deliveryMap.$$getInstance();
+        if (!map) {
+          setTimeout(() => {
+            this.setCenter(list);
+          }, 200);
+          return;
+        }
+        this.center = map.setCenter([item.receiverAddressLongitude, item.receiverAddressDimension]);
       },
       changeAddress(dataRows) {
         if (dataRows) {
