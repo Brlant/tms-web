@@ -24,7 +24,7 @@
 <template>
   <div>
     <div class="map-part">
-      <el-amap ref="taskMap" v-show="waybillList.length" :vid="mapRef" :zoom="10" :center="center"
+      <el-amap :vid="mapRef" :zoom="10" ref="taskMap" v-show="waybillList.length"
                :style="mapStyle">
         <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
         <!--:label="marker.label"></el-amap-marker>-->
@@ -75,7 +75,6 @@
     },
     data: function () {
       return {
-        center: [121.5273285, 31.21515044],
         isShowPath: false,
         totalMarkers: [],
         pathSimplifierIns: null,

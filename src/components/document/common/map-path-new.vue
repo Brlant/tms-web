@@ -37,7 +37,9 @@
         this.$http(`/track-transportation/waybill/${this.formItem.id}/latest`).then(res => {
           if (res.data.longitude && res.data.latitude) {
             this.points = [res.data.longitude, res.data.latitude];
-            this.drawPath(this.points);
+            this.$nextTick(() => {
+              this.drawPath(this.points);
+            });
           }
         });
       },

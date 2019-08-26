@@ -10,7 +10,7 @@
     <div class="vehicleMap">
       <div v-show="!points.length" class="empty-info mini">暂无车辆信息</div>
       <el-amap v-show="points.length" ref="pathMap" vid="vehicleMap" :amap-manager="amapManager"
-               :zoom="10" :center="center" class="map-path" :style="mapStyle">
+               :style="mapStyle" :zoom="10" class="map-path">
       </el-amap>
     </div>
   </div>
@@ -23,7 +23,6 @@
   export default {
     data () {
       return {
-        center: [121.5273285, 31.21515044],
         amapManager: new AMapManager(),
         pathSimplifierIns: null,
         points: [],
