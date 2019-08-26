@@ -493,7 +493,7 @@
           }, 200);
           return;
         }
-        this.center = map.setCenter([item.receiverAddressLongitude, item.receiverAddressDimension]);
+        map.setCenter([item.receiverAddressLongitude, item.receiverAddressDimension]);
       },
       changeAddress(dataRows) {
         if (dataRows) {

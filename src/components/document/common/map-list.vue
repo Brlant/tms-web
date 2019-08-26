@@ -16,7 +16,7 @@
       </h2>
       <el-amap :ref="`pathMap${index}`" :vid="activeNo ? `pathMap${index}activeNo`
       :`pathMap${index}`" :amap-manager="item.amapManager"
-               :zoom="10" :center="item.center" class="map-path" :style="mapStyle">
+               :style="mapStyle" :zoom="10" class="map-path">
       </el-amap>
     </div>
   </div>
@@ -60,7 +60,6 @@
           this.waybills = res.data.map(m => {
             return {
               waybillNo: m.waybillNo,
-              center: [121.5273285, 31.21515044],
               amapManager: new AMapManager(),
               points: m.list && m.list.filter(f => f.longitude && f.latitude).map(m => {
                 return {
