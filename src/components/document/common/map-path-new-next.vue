@@ -8,7 +8,7 @@
   <div>
     <div v-show="!points.length" class="empty-info mini">暂无轨迹信息</div>
     <el-amap v-show="points.length" ref="pathMap" vid="pathMap" :amap-manager="amapManager"
-             :zoom="10" class="map-path">
+             :zoom="10" :center="center" class="map-path">
     </el-amap>
   </div>
 </template>
