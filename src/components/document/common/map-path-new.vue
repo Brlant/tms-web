@@ -8,7 +8,7 @@
   <div>
     <div v-if="!points.length" class="empty-info mini">暂无派送信息</div>
     <el-amap v-else ref="pathMap" vid="pathMap" :amap-manager="amapManager"
-             :zoom="10" :center="center" class="map-path">
+             :zoom="10" class="map-path">
     </el-amap>
   </div>
 </template>
