@@ -8,7 +8,7 @@
   <div>
     <div v-if="!points.length" class="empty-info mini">暂无派送信息</div>
     <el-amap v-else ref="pathMap" vid="pathMap" :amap-manager="amapManager"
-             :zoom="10" :center="center" class="map-path">
+             :zoom="10" class="map-path">
     </el-amap>
   </div>
 </template>
@@ -19,7 +19,6 @@
     props: ['formItem'],
     data () {
       return {
-        center: [121.5273285, 31.21515044],
         amapManager: new AMapManager(),
         pathSimplifierIns: null,
         points: []
@@ -38,7 +37,9 @@
         this.$http(`/track-transportation/waybill/${this.formItem.id}/latest`).then(res => {
           if (res.data.longitude && res.data.latitude) {
             this.points = [res.data.longitude, res.data.latitude];
-            this.drawPath(this.points);
+            this.$nextTick(() => {
+              this.drawPath(this.points);
+            });
           }
         });
       },
@@ -67,7 +68,7 @@
         //     }
         //   });
         // });
-        this.center = points;
+        this.amapManager._map.setCenter(points);
         window.AMapUI.loadUI(['overlay/SvgMarker'], SvgMarker => {
           const marker1 = new SvgMarker(
             new SvgMarker.Shape.IconFont({
@@ -92,7 +93,7 @@
           if (!geoCodes.length) return;
           window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
             let position = [geoCodes[0].location.getLng(), geoCodes[0].location.getLat()];
-            this.center = [(points[0] + position[0]) / 2, (points[1] + position[1]) / 2];
+            this.amapManager._map.setCenter([(points[0] + position[0]) / 2, (points[1] + position[1]) / 2]);
             const m = new SimpleMarker({
               //前景文字
               iconLabel: '终',

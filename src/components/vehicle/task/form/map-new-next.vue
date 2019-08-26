@@ -15,8 +15,7 @@
 <template>
   <div>
     <div class="map-part">
-      <el-amap ref="taskMap" v-show="waybillList.length" :vid="mapRef" :zoom="10" :center="center"
-               :style="mapStyle">
+      <el-amap :style="mapStyle" :vid="mapRef" :zoom="10" ref="taskMap" v-show="waybillList.length">
         <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
         <!--:label="marker.label"></el-amap-marker>-->
       </el-amap>
@@ -54,7 +53,6 @@
     mixins: [MapMixin],
     data: function () {
       return {
-        center: [121.5273285, 31.21515044],
         isShowPath: false,
         pathSimplifierIns: null
       };

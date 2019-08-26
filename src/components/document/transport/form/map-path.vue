@@ -19,7 +19,7 @@
     <div v-show="!isHasPath" class="empty-info mini">暂无轨迹信息</div>
     <div v-show="isHasPath" style="position: relative">
       <el-amap ref="pathMap" :vid="vid" :amap-manager="amapManager"
-               :zoom="10" :center="center" class="map-path" :style="mapStyle">
+               :style="mapStyle" :zoom="10" class="map-path">
       </el-amap>
       <!--<el-checkbox v-show="vid!=='waybillMap'" class="map-btn" size="mini" v-model="isShowTemp" label="1" border>温度-->
       <!--</el-checkbox>-->
@@ -63,7 +63,6 @@
     mixins: [MapMixin],
     data() {
       return {
-        center: [121.5273285, 31.21515044],
         amapManager: new AMapManager(),
         pathSimplifierIns: null,
         isHasPath: false,

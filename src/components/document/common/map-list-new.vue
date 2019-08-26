@@ -10,7 +10,7 @@
     <div v-else v-for="(item, index) in waybills" :key="index">
       <h2>运单号:{{item.waybillNo}}</h2>
       <el-amap :ref="`pathMap${index}`" :vid="`pathMap${index}`" :amap-manager="item.amapManager"
-               :zoom="10" :center="item.center" class="map-path">
+               :zoom="10" class="map-path">
       </el-amap>
     </div>
   </div>
@@ -38,7 +38,6 @@
           this.waybills = res.data.map(m => {
             return {
               waybillNo: m.waybillNo,
-              center: [121.5273285, 31.21515044],
               amapManager: new AMapManager(),
               points: [m.longitude, m.latitude]
             };
@@ -75,7 +74,7 @@
         //     }
         //   });
         // });
-        this.center = i.points;
+        i.amapManager._map.setCenter(i.points);
         window.AMapUI.loadUI(['overlay/SvgMarker'], SvgMarker => {
           const marker1 = new SvgMarker(
             new SvgMarker.Shape.IconFont({
@@ -100,7 +99,7 @@
           if (!geoCodes.length) return;
           window.AMapUI.loadUI(['overlay/SimpleMarker'], SimpleMarker => {
             let position = [geoCodes[0].location.getLng(), geoCodes[0].location.getLat()];
-            this.center = [(i.points[0] + position[0]) / 2, (i.points[1] + position[1]) / 2];
+            i.amapManager._map.setCenter([(i.points[0] + position[0]) / 2, (i.points[1] + position[1]) / 2]);
             const m = new SimpleMarker({
               //前景文字
               iconLabel: '终',
