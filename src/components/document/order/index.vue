@@ -17,7 +17,7 @@
         <perm label="tms-order-generate">
           <el-button plain size="small" @click="createWayBill" v-if="activeStatus===0||activeStatus==='0'">
             <f-a class="icon-small" name="wave"></f-a>
-            生成运单
+            批量生成运单
           </el-button>
         </perm>
         <perm label="tms-order-generate">
