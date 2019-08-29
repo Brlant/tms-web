@@ -539,7 +539,7 @@
               TmsWayBill.update(this.form.id, this.form).then(res => {
                 this.$notify.success({
                   name: '成功',
-                  message: '修改运单"' + this.form.orderNo + '"成功'
+                  message: '修改运单成功'
                 });
                 this.doing = false;
                 this.$emit('change', res.data);
