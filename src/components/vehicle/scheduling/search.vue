@@ -1,5 +1,5 @@
 <template>
-  <search-template :isShow="showSearch" @search="search" @reset="reset" @isShow="isShow">
+  <search-template :isShow="showSearch" :isShowAdvance="false" @isShow="isShow" @reset="reset" @search="search">
     <template slot="title">排单查询</template>
     <template slot="btn">
       <slot name="btn"></slot>
