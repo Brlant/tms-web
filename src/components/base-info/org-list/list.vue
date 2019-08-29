@@ -3,24 +3,29 @@
 
   .d-table-right {
     padding: 10px 20px;
+
     .org-name-h2 {
       font-size: 16px;
       font-weight: bold;
     }
+  }
+
+  .org-list {
+    cursor: pointer
   }
 </style>
 <template>
   <div>
     <div>
       <div class="order-list-status container">
-        <div class="status-item" :class="{'active':key==activeStatus,'item-right':item.type===0} "
+        <div :class="{'active':key===activeStatus,'item-right':item.type===0} " class="status-item"
              v-for="(item,key) in orgStatus" @click="changeType(key,item)">
           <div class="status-bg" :class="['b_color_'+key]"></div>
-          <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{item.title}}<span
+          <div><i class="el-icon-caret-right" v-if="key===activeStatus"></i>{{item.title}}<span
             class="status-num">{{item.num}}</span></div>
         </div>
       </div>
-      <div class=" d-table">
+      <div class="container d-table">
         <div class="d-table-right">
           <h2>
             <span class="pull-right">
@@ -28,13 +33,9 @@
                   <single-input v-model="filters.keyWord" placeholder="请输入关键字搜索" :showFocus="showSearch"></single-input>
                   <i class="el-icon-t-search" @click.stop="showSearch=(!showSearch)"></i>
               </span>
-              <a href="#" class="btn-circle" @click.stop.prevent="showSearch=(!showSearch)" v-show="!showSearch">
-                  <i class="el-icon-t-search"></i>
-              </a>
+              <des-btn @click="showSearch=(!showSearch)" icon="search" v-show="!showSearch"/>
               <perm label="tms-business-unit-add">
-                 <a href="#" class="btn-circle" @click.stop.prevent="add">
-                    <i class="el-icon-t-plus"></i>
-                </a>
+                <des-btn @click="add" icon="plus"/>
               </perm>
             </span>
             <h2 class="org-name-h2">
@@ -64,24 +65,24 @@
               <tr>
                 <th>系统代码</th>
                 <th>{{ orgTitle }}名称</th>
-                <th>{{ orgTitle }}级别</th>
+                <!--<th>{{ orgTitle }}级别</th>-->
                 <th>{{ orgTitle }}分类</th>
                 <th>状态</th>
                 <th>操作</th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="row in dataRows" class="org-list">
+              <tr :key="row.id" @click="showItem(row)" class="org-list" v-for="row in dataRows">
                 <td>
                   {{row.manufacturerCode}}
-                  <el-tag type="success" v-show="row.type === '0' && filters.type===1 ">货主</el-tag>
+                  <!--<el-tag type="success" v-show="row.type === '0' && filters.type===1 ">货主</el-tag>-->
                 </td>
                 <td>
                   {{row.name}}
                 </td>
-                <td>
-                  <dict :dict-group="'orgLevel'" :dict-key="row.level"></dict>
-                </td>
+                <!--<td>-->
+                <!--<dict :dict-group="'orgLevel'" :dict-key="row.level"></dict>-->
+                <!--</td>-->
                 <td>
                   <span v-for="(relationType,index) in row.orgRelationTypeList">
                     <dict :dict-group="'orgRelationType'" :dict-key="relationType"></dict><span
@@ -91,33 +92,44 @@
                 <td>
                   <span v-show="row.deleteFlag">停用</span>
                   <span v-show="!row.deleteFlag">
-                    <span v-if="row.auditDto.baseInfoStatus === '0'">
-                      基础信息待审核
+                    <span v-if="row.auditDto.baseInfoStatus === '0'"
+                          v-show="row.auditDto.baseInfoStatus === '0'">
+                     <li>基础信息待审核</li>
                     </span>
-                    <span v-if="row.auditDto.financeStatus === '0'">
-                      <li>财务信息待审核</li>
-                    </span>
-                    <span v-if="row.auditDto.warehouseStatus === '0'">
+                    <span v-if="row.auditDto.warehouseStatus === '0'"
+                          v-show="row.auditDto.warehouseStatus === '0'">
                       <li>仓库地址待审核</li>
                     </span>
+                    <span v-if="row.auditDto.baseInfoStatus === '2'"
+                          v-show="row.auditDto.baseInfoStatus === '2'">
+                      <li>基础信息审核未通过</li>
+                    </span>
                     <span
-                      v-if="row.auditDto.baseInfoStatus === '1' && row.auditDto.financeStatus === '1' && row.auditDto.warehouseStatus === '1'&&!row.showAuditButton">
+                      v-if="row.auditDto.warehouseStatus === '2'"
+                      v-show="row.auditDto.warehouseStatus === '2'">
+                      <li>仓库地址审核未通过</li>
+                    </span>
+                    <span v-if="row.type==='0'&&row.auditDto.baseInfoStatus === '1'
+                    && row.auditDto.financeStatus === '1' && row.auditDto.warehouseStatus === '1'">
                       正常
                     </span>
                     <span
-                      v-else-if="row.auditedStatus==='0'&&row.auditDto.status==='3'&&row.auditDto.baseInfoStatus === '1'&&row.auditDto.baseInfoStatus === '1'&&row.auditDto.baseInfoStatus === '1'">未激活</span>
-                  </span>
+                      v-if="row.type==='1'&&row.auditDto.baseInfoStatus === '1' && row.auditDto.warehouseStatus === '1'">
+                      正常
+                    </span>
+                    </span>
                 </td>
                 <td>
                   <perm label="tms-business-unit-edit">
-                    <a href="#" @click.prevent.stop="edit(row)" class="margin-left" v-show="!row.deleteFlag"><i
-                      class="el-icon-t-edit"></i>编辑</a>
+                    <des-btn @click="edit(row)" icon="edit">编辑</des-btn>
                   </perm>
-                  <perm label="tms-business-unit-delete">
-                    <a href="#" @click.prevent.stop="forbid(row)" class="margin-left" v-show="!row.deleteFlag"><i
-                      class="el-icon-t-forbidden"></i>停用</a>
-                    <a href="#" @click.prevent.stop="enableGoods(row)" class="margin-left" v-show="row.deleteFlag"><i
-                      class="el-icon-t-start"></i>启用</a>
+                  <perm label="tms-business-unit-edit">
+                    <des-btn @click="forbid(row)" icon="forbidden"
+                             v-show="!row.deleteFlag">停用
+                    </des-btn>
+                    <des-btn @click="enableGoods(row)" icon="start"
+                             v-show="row.deleteFlag">启用
+                    </des-btn>
                   </perm>
                 </td>
               </tr>
@@ -127,8 +139,7 @@
             <div class="text-center" v-show="dataRows.length">
               <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                              :current-page="pager.currentPage"
-                             :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
-                             layout="total, sizes, prev, pager, next, jumper"
+                             :page-size="20" :page-sizes="[20,50,100]" layout="sizes, prev, pager, next, jumper"
                              :total="pager.count">
               </el-pagination>
             </div>
@@ -143,24 +154,30 @@
       <base-form :formItem="form" :orgTitle="orgTitle" @close="showRight=false" :action="action" @change="onSubmit">
       </base-form>
     </page-right>
+    <page-right :css="{'width':'800px','padding':0}" :show="showDetailRight" @right-close="resetRightBox">
+      <detail :data="form" :show="showDetailRight" @change="onSubmit"/>
+    </page-right>
   </div>
 
 </template>
 <script>
   import {BaseInfo} from '@/resources';
-  import baseForm from './form/form.vue';
+  import baseForm from './form.vue';
+  import utils from '@/tools/utils';
+  import Detail from './detail';
 
   export default {
     components: {
-      baseForm
+      baseForm,
+      Detail
     },
     data: function () {
       return {
         loadingData: true,
         showRight: false,
-        showTypeRight: false,
-        showTypeSearch: false,
+        showDetailRight: false,
         showSearch: false,
+        showtext: false,
         data: {},
         dataRows: [],
         typeList: [],
@@ -199,36 +216,35 @@
           relationList: [],
           remarks: '',
           type: '',
-          updateTime: ''
+          updateTime: '',
+          selectOptions: []
         },
         action: '',
         filters: {
           orgAuditStatus: 1,
           keyWord: this.typeTxt,
-          type: this.$route.meta.type,
+          type: '',
           deleteFlag: false,
-          orgRelationType: '',
-          otherAuditStatus: '1'
+          orgRelationType: ''
         },
-        typePage: this.$route.path.substring(1),
+        typePage: 'org',
         pager: {
           currentPage: 1,
           count: 0,
-          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10
+          pageSize: 20
         },
         orgStatus: [
-          {'title': '待审核', 'num': '', 'type': 1, deleteFlag: false, 'orgAuditStatus': 0, 'otherAuditStatus': null},
-          {'title': '正常', 'num': '', 'type': 1, deleteFlag: false, 'orgAuditStatus': 1, 'otherAuditStatus': '1'},
-          {'title': '停用', 'num': '', 'type': 1, deleteFlag: true, 'otherAuditStatus': null},
-          {'title': '部分待审核', 'num': '', 'type': 1, deleteFlag: false, 'orgAuditStatus': 1, 'otherAuditStatus': '0'}
+          {'title': '待审核', 'num': '', 'type': 1, deleteFlag: false, 'orgAuditStatus': 0},
+          {'title': '正常', 'num': '', 'type': 1, deleteFlag: false, 'orgAuditStatus': 1},
+          {'title': '停用', 'num': '', 'type': 1, deleteFlag: true}
         ],
         kindsTitle: '全部',
         activeStatus: 1,
-        menuTitle: '',
-        orgTitle: ''
+        menuTitle: '业务单位管理',
+        orgTitle: '单位'
       };
     },
-    mounted () {
+    mounted() {
       this.getOrgPage(1);
       this.setMenuTitle(this.$route.meta.type);
     },
@@ -249,7 +265,7 @@
       }
     },
     computed: {
-      kindsMenu () {
+      kindsMenu() {
         let typeList = this.$getDict('orgRelationType');
         let kindsMenu = [{title: '全部', key: ''}];
         if (typeList) {
@@ -261,12 +277,42 @@
       }
     },
     methods: {
-      handleSizeChange (val) {
+      exportFile: function () {
+        let params = Object.assign({}, this.filters);
+        let moduleId = this.$route.meta.type === 0 ? '/supplier' : '/org';
+        let fileName = this.$route.meta.type === 0 ? '货主表' : '业务单位表';
+        this.$store.commit('initPrint', {
+          isPrinting: true,
+          moduleId: moduleId
+        });
+        // 如果是业务单位将类型字段置空
+        if (this.$route.meta.type === 1) {
+          params.type = '';
+        }
+        this.$http.get('/orgs/export', {params}).then(res => {
+          utils.download(res.data.path, fileName);
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: moduleId
+          });
+        }).catch(error => {
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: moduleId
+          });
+          this.$notify.error({
+            message: error.response.data && error.response.data.msg || '导出失败'
+          });
+        });
+      },
+      itemChange: function (item) {//  处理表单发出的change事件
+        this.getPageList(this.pager.currentPage);
+      },
+      handleSizeChange(val) {
         this.pager.pageSize = val;
-        window.localStorage.setItem('currentPageSize', val);
         this.getOrgPage(1);
       },
-      handleCurrentChange (val) {
+      handleCurrentChange(val) {
         this.getOrgPage(val);
       },
       changeFinds: function (val) {
@@ -277,13 +323,13 @@
           }
         });
       },
-      queryStatusNum: function (params) {
+      queryStatusNum: function (params, nowTime) {
         BaseInfo.queryStateNum(params).then(res => {
+          if (this.nowTime > nowTime) return;
           let data = res.data;
           this.orgStatus[0].num = data['auditing'];
           this.orgStatus[1].num = data['valid'];
           this.orgStatus[2].num = data['stop'];
-          this.orgStatus[3].num = data['otherAuditCount'];
         });
       },
       getOrgPage: function (pageNo) {
@@ -297,22 +343,19 @@
           param.type = '';
         }
         this.loadingData = true;
+        this.nowTime = Date.now();
+        let nowTime = this.nowTime;
         this.$http.get('/orgs/pager', {params: param}).then(res => {
+          if (this.nowTime > nowTime) return;
           this.dataRows = res.data.list;
           this.pager.count = res.data.count;
           this.loadingData = false;
         });
-        this.queryStatusNum(param);
+        this.queryStatusNum(param, nowTime);
       },
       resetRightBox: function () {
-        this.showTypeRight = false;
         this.showRight = false;
-      },
-      addType: function () {
-        this.showTypeRight = true;
-      },
-      searchType: function () {
-        this.showTypeSearch = !this.showTypeSearch;
+        this.showDetailRight = false;
       },
       add: function () {
         this.action = 'add';
@@ -349,18 +392,27 @@
           relationList: [],
           remarks: '',
           type: '',
-          updateTime: ''
+          updateTime: '',
+          selectOptions: []
         };
         this.showRight = true;
       },
       edit: function (item) {
-        this.action = 'edit';
-        this.showRight = true;
         BaseInfo.queryBaseInfo(item.id).then(res => {
+          res.data.orgDto.auditDto = item.auditDto;
           this.form = res.data.orgDto;
+          this.action = 'edit';
+          this.showRight = true;
         });
       },
-      setMenuTitle (type) {// 设置表格的标题
+      showItem(item) {
+        BaseInfo.queryBaseInfo(item.id).then(res => {
+          res.data.orgDto.auditDto = item.auditDto;
+          this.form = res.data.orgDto;
+          this.showDetailRight = true;
+        });
+      },
+      setMenuTitle(type) {// 设置表格的标题
         if (type === 0) {
           this.menuTitle = '货主/厂商管理';
           this.orgTitle = '货主';
@@ -422,9 +474,9 @@
         this.filters.deleteFlag = item.deleteFlag;
         this.filters.otherAuditStatus = item.otherAuditStatus;
       },
-      onSubmit () {
+      onSubmit() {
         this.getOrgPage(1);
-        this.showRight = false;
+        this.resetRightBox();
       }
     }
   };

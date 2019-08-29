@@ -37,7 +37,7 @@
   </dialog-template>
 </template>
 <script>
-  import {BaseInfo, OmsAttachment, TmsWayBill} from '@/resources';
+  import {TmsWayBill} from '@/resources';
 
   export default {
     data () {
@@ -76,7 +76,7 @@
             TmsWayBill.deliverDate(this.form.id, this.form).then(res => {
               this.$notify.success({
                 name: '成功',
-                message: '编辑运单送达时间"' + this.form.waybillNumber + '"成功'
+                message: '编辑运单送达时间成功'
               });
               this.doing = false;
               this.$emit('change', this.form);

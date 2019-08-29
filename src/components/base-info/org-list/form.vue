@@ -1,5 +1,5 @@
 <style lang="scss" scoped="">
-  @import "../../../../assets/scss/mixins.scss";
+  @import "../../../assets/scss/mixins";
 
   $leftWidth: 200px;
   .min-gutter {
@@ -15,6 +15,7 @@
     left: 0;
     right: 0;
     overflow: auto;
+
     .content-left {
       width: $leftWidth;
       position: absolute;
@@ -23,9 +24,11 @@
       bottom: 0;
       text-align: left;
       background-color: #eef2f3;
+
       > ul {
         margin: 0;
       }
+
       > h2 {
         padding: 0;
         margin: 0;
@@ -34,14 +37,17 @@
         line-height: 55px;
         border-bottom: 1px solid #ddd;
       }
+
       .list-style {
         cursor: pointer;
         padding: 10px;
         text-align: center;
+
         span {
           display: inline-block;
           padding: 8px 35px;
         }
+
         &.active {
           span {
             background-color: $activeColor;
@@ -49,6 +55,7 @@
             color: $activeColorFont
           }
         }
+
         &:hover {
           background: #dee9eb
         }
@@ -74,6 +81,7 @@
         background: #fff;
         z-index: 2;
       }
+
       position: absolute;
       top: 0;
       left: $leftWidth;
@@ -81,9 +89,11 @@
       bottom: 0;
       overflow: auto;
       padding-top: 75px;
+
       .hide-content {
         display: none;
       }
+
       .show-content {
         padding: 0 20px;
         display: block;
@@ -94,6 +104,7 @@
       .el-form-item {
         margin-bottom: 20px;
       }
+
       .el-form-item__label {
         font-size: 12px
       }
@@ -124,8 +135,25 @@
         <h3></h3>
         <el-form ref="baseform" :rules="rules" :model="form" label-width="140px" class="min-gutter"
                  @submit.prevent="onSubmit('baseform')" onsubmit="return false" style="padding-right: 20px">
-          <el-form-item :label="orgTitle+'ID'" v-if="form.id">
-            {{form.id}}
+          <el-form-item label="DHS单位">
+            <el-select :clearable="true" :disabled="!!form.id" :remote-method="filterDhsOrgs" @change="setDhsOrg"
+                       @clear="resetDhsOrgInfo"
+                       filterable placeholder="名称/拼音/系统代码搜索单位"
+                       popperClass="good-selects" remote v-model="form.dhsOrgId">
+              <el-option :key="org.id" :label="org.name" :value="org.id" v-for="org in dhsOrgList">
+                <div style="overflow: hidden">
+                  <span class="pull-left" style="clear: right">{{org.name}}</span>
+                </div>
+                <div style="overflow: hidden">
+                      <span class="select-other-info pull-left">
+                        <span>系统代码:</span>{{org.manufacturerCode}}
+                      </span>
+                </div>
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="'DHS单位ID'" key="dhsOrgId" v-show="form.dhsOrgId">
+            {{form.dhsOrgId}}
           </el-form-item>
           <el-form-item :label="orgTitle+'名称'" prop="name">
             <oms-input type="text" v-model="form.name" placeholder="请输入名称"></oms-input>
@@ -133,23 +161,27 @@
           <el-form-item :label=" orgTitle+'简称'">
             <oms-input type="text" v-model="form.nameJc" placeholder="请输入简称"></oms-input>
           </el-form-item>
-          <el-form-item :label=" orgTitle+'名称拼音'" prop="namePhonetic" v-if="action==='edit'">
+          <el-form-item :label=" orgTitle+'名称拼音'" :prop="action==='edit' ? 'namePhonetic' : '' "
+                        :rules="[{required: true, message: '请输入单位名称拼音', trigger: 'blur'}]"
+                        v-show="action==='edit'">
             <oms-input type="text" v-model="form.namePhonetic" placeholder="请输入通用名称拼音"></oms-input>
           </el-form-item>
-          <el-form-item :label=" orgTitle+'拼音首字母'" prop="nameAcronymy" v-if="action==='edit'">
+          <el-form-item :label=" orgTitle+'拼音首字母'" :prop="action==='edit' ? 'nameAcronymy' : ''"
+                        :rules="[{required: true, message: '请输入单位拼音首字母', trigger: 'blur'}]"
+                        v-show="action==='edit'">
             <oms-input type="text" v-model="form.nameAcronymy" placeholder="请输入通用名称拼音首字母"></oms-input>
           </el-form-item>
           <el-form-item label="公司图标">
             <oms-upload-picture :photoUrl="form.orgPhoto" @change="changPhoto"></oms-upload-picture>
           </el-form-item>
           <el-form-item :label="orgTitle+'系统代码'" prop="manufacturerCode">
-            <oms-input type="text" v-model="form.manufacturerCode" placeholder="请输入oms代码"></oms-input>
+            <oms-input placeholder="请输入系统代码" type="text" v-model="form.manufacturerCode"></oms-input>
           </el-form-item>
           <el-form-item label="统一社会信用代码" prop="creditCode">
             <oms-input type="text" v-model="form.creditCode" placeholder="请输入统一社会信用代码"></oms-input>
           </el-form-item>
           <el-form-item label="区域代码" prop="orgAreaCode">
-            <oms-input type="text" v-model="form.orgAreaCode" placeholder="请输入区域代码"></oms-input>
+            <oms-input :maxlength="10" placeholder="请输入区域代码" type="text" v-model="form.orgAreaCode"></oms-input>
           </el-form-item>
           <el-form-item label="是否入库扫码">
             <el-switch v-model="form.orgScanCode" active-text="是" inactive-text="否"
@@ -161,6 +193,12 @@
             <el-switch v-model="form.orgOutScanCode" active-text="是" inactive-text="否"
                        active-color="#13ce66"
                        inactive-color="#ff4949">
+            </el-switch>
+          </el-form-item>
+          <el-form-item label="是否跳过订单审核">
+            <el-switch active-color="#13ce66" active-text="是" inactive-color="#ff4949"
+                       inactive-text="否"
+                       v-model="form.skipFlag">
             </el-switch>
           </el-form-item>
           <el-form-item label="法人代表">
@@ -187,19 +225,20 @@
           <el-form-item label="邮政编码">
             <oms-input type="text" v-model="form.postcode" placeholder="请输入邮政编码"></oms-input>
           </el-form-item>
-          <el-form-item :label="orgTitle+'所在地区'">
-            <el-cascader :options="options" v-model="selectOptions" placeholder="请选择省市区"></el-cascader>
+          <el-form-item :label="orgTitle+'所在地区'" prop="selectOptions">
+            <el-cascader :change-on-select="true" :options="options" placeholder="请选择省市区"
+                         v-model="form.selectOptions"></el-cascader>
           </el-form-item>
-          <el-form-item label="详细地址">
+          <el-form-item label="详细地址" prop="address">
             <oms-input type="text" placeholder="建议您如实填写详细地址,例如街道名称,门牌号码等信息" v-model="form.address"></oms-input>
           </el-form-item>
-          <el-form-item label="管理员手机号码" prop="adminTelephone" v-if="!form.id">
+          <el-form-item label="管理员手机号码" v-if="!form.id">
             <oms-input type="text" v-model="form.adminTelephone" placeholder="请输入手机号码"></oms-input>
           </el-form-item>
           <el-form-item label="管理员邮箱" v-if="!form.id">
             <oms-input type="text" v-model="form.adminEmail" placeholder="请输入邮箱"></oms-input>
           </el-form-item>
-          <el-form-item label="默认物流中心" prop="defaultCentreId" v-if="form.type==='0'||orgType===0">
+          <el-form-item label="默认物流中心" v-if="form.type==='0'||orgType===0">
             <el-select placeholder="请选择默认物流中心" v-model="form.defaultCentreId" filterable>
               <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in LogisticsCenter"/>
             </el-select>
@@ -300,7 +339,7 @@
         if (value === '') {
           callback(new Error('请输入手机号码'));
         } else {
-          let re = /^1[345789]\d{9}$/;
+          let re = /^\d{11}$/;
           if (!re.test(value)) {
             callback(new Error('请输入正确的手机号码'));
           }
@@ -320,13 +359,13 @@
       };
       let checkName = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入姓名'));
+          callback(new Error('请输入单位名称'));
         } else {
           BaseInfo.checkName(value, this.form.id).then(function (res) {
             if (res.data.valid) {
               callback();
             } else {
-              callback(new Error('姓名已经存在'));
+              callback(new Error('单位名称已经存在'));
             }
           });
         }
@@ -346,13 +385,13 @@
       };
       let checkManufacturerCode = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入oms代码'));
+          callback(new Error('请输入单位代码'));
         } else {
           BaseInfo.checkManufacturerCode(value, this.form.id).then(function (res) {
             if (res.data.valid) {
               callback();
             } else {
-              callback(new Error('oms代码已经存在'));
+              callback(new Error('单位代码已经存在'));
             }
           });
         }
@@ -372,12 +411,16 @@
       };
       return {
         orgType: this.$route.meta.type,
-        form: this.formItem,
+        form: {
+          orgRelationTypeList: []
+        },
         options: utils.address,
-        selectOptions: [],
         rules: {
+          dhsOrgId: [
+            {required: true, message: '请选择DHS单位', trigger: 'blur'}
+          ],
           name: [
-            {required: true, message: '请输入用户名', trigger: 'blur'},
+            {required: true, message: '请输入单位名称', trigger: 'blur'},
             {validator: checkName, trigger: 'blur'}
           ],
           orgAreaCode: [
@@ -388,7 +431,7 @@
             {validator: checkCreditCode, trigger: 'blur'}
           ],
           manufacturerCode: [
-            {required: true, message: '请输入oms代码', trigger: 'blur'},
+            {required: true, message: '请输入单位代码', trigger: 'blur'},
             {validator: checkManufacturerCode, trigger: 'blur'}
           ],
           adminAccount: [
@@ -414,22 +457,20 @@
           defaultCentreId: [
             {required: true, message: '请选择默认物流中心', trigger: 'blur'}
           ],
-          orgRelationType: [
-            {required: true, message: '请选择单位类型', trigger: 'blur'}
-          ],
           orgRelationTypeList: [
-            {required: true, message: '请选择单位类型', trigger: 'change'}
+            {required: true, type: 'array', message: '请选择单位类型', trigger: 'change'}
           ],
-          namePhonetic: [
-            {required: true, message: '请输入单位名称拼音', trigger: 'blur'}
+          address: [
+            {required: true, message: '请输入单位详细地址', trigger: 'blur'}
           ],
-          nameAcronymy: [
-            {required: true, message: '请输入单位拼音首字母', trigger: 'blur'}
+          selectOptions: [
+            {required: true, message: '请输入单位所在地区', trigger: 'change'}
           ]
         },
         doing: false,
         photo: {},
-        LogisticsCompanies: []
+        LogisticsCompanies: [],
+        dhsOrgList: []
       };
     },
     mounted: function () {
@@ -437,93 +478,40 @@
       let type = this.$route.meta.type;
     },
     computed: {
-      orgLevel () {
+      orgLevel() {
         return this.$getDict('orgLevel');
       },
-      orgRelationType () {
+      orgRelationType() {
         return this.$getDict('orgRelationType');
       },
-      LogisticsCenter () {
+      LogisticsCenter() {
         return this.$store.state.logisticsCenterList || [];
       }
     },
     watch: {
       formItem: function (val) {
+        // 清空选择的dhs单位
+        this.form.dhsOrgId = '';
+        this.dhsOrgList = [];
         if (val.id) {
-          this.form = Object.assign({}, val);
-          // this.orgRelationTypeList = this.form.orgRelationTypeList;
-          if (!this.form.plateList.length) {
-            this.form.plateList.push({orgPlateNumber: ''});
+          this.setDhsOrgInfo(val);
+          // 如果是编辑页面，查询dhs单位信息
+          if (this.action === 'edit') {
+            BaseInfo.filterDhsOrgById(val.dhsOrgId).then(res => {
+              this.dhsOrgList.push(res.data);
+            });
           }
-          this.selectOptions.push(this.form.province);
-          this.selectOptions.push(this.form.city);
-          this.selectOptions.push(this.form.region);
-          this.queryLogisticsCompany(this.form.logisticsCompanyName);
         } else {
-          this.photo = {};
-          this.selectOptions = [];
-          this.form = {
-            address: '',
-            orgAreaCode: '',
-            adminAccount: '',
-            adminEmail: '',
-            adminId: '',
-            adminName: '',
-            adminTelephone: '',
-            auditedBy: '',
-            auditedStatus: '',
-            auditedTime: '',
-            contact: '',
-            createTime: '',
-            createdBy: '',
-            creditCode: '',
-            defaultCenter: '',
-            defaultCentreId: '',
-            deleteFlag: false,
-            id: '',
-            legalRepresentative: '',
-            level: '',
-            manufacturerCode: '',
-            name: '',
-            nameJc: '',
-            namePhonetic: '',
-            orgAuditStatus: '',
-            phone: '',
-            postcode: '',
-            province: '',
-            city: '',
-            region: '',
-            relationList: [],
-            remarks: '',
-            type: '',
-            updateTime: '',
-            logisticsCompany: '',
-            transportationTime: '',
-            plateList: [
-              {orgPlateNumber: ''}
-            ],
-            orgScanCode: false,
-            orgOutScanCode: false,
-            extDto: {
-              id: '',
-              licensePlateNumber: '',
-              transportTimeLimit: '',
-              logisticsDealer: ''
-            },
-            orgRelationTypeList: []
-          };
-          this.form.extDto = Object.assign({}, {
-            id: '',
-            licensePlateNumber: '',
-            transportTimeLimit: '',
-            logisticsDealer: ''
-          }, val.extDto);
+          this.resetDhsOrgInfo(val);
         }
+        this.$nextTick(() => {
+          this.$refs.baseform && this.$refs.baseform.clearValidate();
+        });
       },
-      selectOptions () {
-        this.form.province = this.selectOptions[0];
-        this.form.city = this.selectOptions[1];
-        this.form.region = this.selectOptions[2];
+      'form.selectOptions': function () {
+        this.form.province = this.form.selectOptions[0];
+        this.form.city = this.form.selectOptions[1];
+        this.form.region = this.form.selectOptions[2];
       },
       'form.creditCode': function (val) {
         if (val) {
@@ -532,6 +520,139 @@
       }
     },
     methods: {
+      filterDhsOrgs(query) {
+        BaseInfo.queryDhsOrgs({keyWord: query, deleteFlag: false}).then(res => {
+          if (res.data.list.length > 0) {
+            this.dhsOrgList = res.data.list;
+          } else {
+            this.dhsOrgList = [];
+          }
+        });
+      },
+      setDhsOrg: function (val) {
+        if (val) {
+          BaseInfo.filterDhsOrgById(val).then(res => {
+            let dhsOrg = res.data;
+            if (dhsOrg) {
+              this.setDhsOrgInfo(dhsOrg);
+            }
+          });
+        }
+      },
+      setDhsOrgInfo: function (val) {
+        let orgId = '';
+        if (this.action === 'edit') {
+          // 保存id
+          orgId = this.formItem.id;
+        } else {
+          orgId = '';
+        }
+        this.form = Object.assign({}, val);
+        this.form.selectOptions = [];
+        // 设置orgId
+        this.form.id = orgId;
+        if (!this.form.orgRelationTypeList) {
+          this.form.orgRelationTypeList = [];
+        }
+        if (!this.form.plateList || !this.form.plateList.length) {
+          this.form.plateList = [{orgPlateNumber: ''}];
+        }
+        if (!this.form.dhsOrgId) {
+          this.form.dhsOrgId = val.id;
+        }
+        this.form.province && this.form.selectOptions.push(this.form.province);
+        this.form.city && this.form.selectOptions.push(this.form.city);
+        this.form.region && this.form.selectOptions.push(this.form.region);
+        this.queryLogisticsCompany(this.form.logisticsCompanyName);
+      },
+      resetDhsOrgInfo: function (val) {
+        let orgId = '';
+        if (this.action === 'edit') {
+          // 保存id
+          orgId = this.formItem.id;
+        }
+        this.photo = {};
+        this.form.selectOptions = [];
+        this.form = {
+          'address': '',
+          'adminAccount': '',
+          'adminEmail': '',
+          'adminId': '',
+          'adminName': '',
+          'adminTelephone': '',
+          'auditDto': {
+            'baseInfoStatus': '',
+            'bizScopeStatus': '',
+            'financeStatus': '',
+            'id': '',
+            'licenseStatus': '',
+            'nextProcess': '',
+            'objectId': '',
+            'objectType': '',
+            'process': '',
+            'status': '',
+            'warehouseStatus': ''
+          },
+          'auditedBy': '',
+          'auditedStatus': '',
+          'auditedTime': '',
+          'city': '',
+          'contact': '',
+          'createTime': '',
+          'createdBy': '',
+          'creditCode': '',
+          'defaultCenter': '',
+          'defaultCentreId': '',
+          'deleteFlag': true,
+          'dhsOrgId': '',
+          'extDto': {
+            'id': '',
+            'licensePlateNumber': '',
+            'logisticsDealer': '',
+            'transportTimeLimit': ''
+          },
+          'id': orgId,
+          'legalRepresentative': '',
+          'level': '',
+          'logisticsCompany': '',
+          'logisticsCompanyName': '',
+          'manufacturerCode': '',
+          'name': '',
+          'nameAcronymy': '',
+          'nameJc': '',
+          'namePhonetic': '',
+          'orgAreaCode': '',
+          'orgAuditStatus': '',
+          'orgOutScanCode': true,
+          'orgPhoto': '',
+          'orgPhotoId': '',
+          'orgRelationList': [],
+          'orgRelationType': '',
+          'orgRelationTypeList': [],
+          'orgScanCode': true,
+          'otherAuditStatus': '',
+          'outScanCode': '',
+          'phone': '',
+          'plateList': [],
+          'postcode': '',
+          'province': '',
+          'region': '',
+          'relationList': [],
+          'remarks': '',
+          'scanCode': '',
+          'skipFlag': true,
+          'transportationTime': 0,
+          'type': '',
+          'updateTime': '',
+          'selectOptions': []
+        };
+        this.form.extDto = Object.assign({}, {
+          id: '',
+          licensePlateNumber: '',
+          transportTimeLimit: '',
+          logisticsDealer: ''
+        }, val.extDto || {});
+      },
       changPhoto: function (photo) {
         if (photo) {
           this.photo = photo;
@@ -539,7 +660,7 @@
           this.form.orgPhotoId = this.photo.attachmentId;
         }
       },
-      queryLogisticsCompany (query) {
+      queryLogisticsCompany(query) {
         BaseInfo.query({keyWord: query, orgRelationType: 'LogisticCorp'}).then(res => {
           this.LogisticsCompanies = res.data.list;
         });
@@ -552,21 +673,27 @@
 //          this.LogisticsCenter = res.data;
 //        });
 //      },
-      addPlateNumberItem (item) {
+      addPlateNumberItem(item) {
         this.form.plateList.push({orgPlateNumber: ''});
       },
-      deletePlateNumberItem (item) {
+      deletePlateNumberItem(item) {
         let index = this.form.plateList.indexOf(item);
         if (index !== -1) this.form.plateList.splice(index, 1);
       },
       onSubmit: function (formName) {
-        if (this.form.orgRelationTypeList.length === 0) {
-          this.$notify.warning({
-            duration: 2000,
-            name: '警告',
-            message: '请选择单位类型'
-          });
-          return;
+        // if (!this.form.orgRelationTypeList || this.form.orgRelationTypeList.length === 0) {
+        //   this.$notify.warning({
+        //     duration: 2000,
+        //     name: '警告',
+        //     message: '请选择单位类型'
+        //   });
+        //   return;
+        // }
+        if (!this.form.city) {
+          this.form.city = '';
+        }
+        if (!this.form.region) {
+          this.form.region = '';
         }
         let self = this;
         this.$refs[formName].validate((valid) => {
@@ -575,8 +702,14 @@
           }
           this.doing = true;
           // this.form.orgRelationTypeList = this.orgRelationTypeList;
+          self.form.type = '1';
           if (this.action === 'add') {
-            self.form.type = this.$route.meta.type;
+            if (self.form.id) {
+              self.form.id = '';
+            }
+            if (self.form.extDto && self.form.extDto.id) {
+              self.form.extDto.id = '';
+            }
             BaseInfo.save(self.form).then(() => {
               this.doing = false;
               this.$notify.success({

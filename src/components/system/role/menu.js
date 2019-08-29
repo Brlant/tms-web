@@ -9,9 +9,9 @@ export default [{
     'label': '业务单位',
     'sort': 1,
     'children': [{
-      'id': 'tms-business-unit-delete',
+      'id': 'base-info-manager-audit',
       'parentId': 'tms-business-unit',
-      'label': '删除单位',
+      'label': '审核单位',
       'sort': null,
       'children': null,
       'leaf': true

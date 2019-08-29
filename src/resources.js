@@ -498,6 +498,15 @@ export const BaseInfo = resource('/orgs', http, {
   queryStateNum: (params) => {
     return http.get('/orgs/count', {params});
   },
+
+  // 查询dhs的平台单位
+  queryDhsOrgs: (params) => {
+    return http.get('/orgs/dhs', {params});
+  },
+  filterDhsOrgById: (orgId) => {
+    return http.get('/orgs/dhs/' + orgId, {});
+  },
+
   queryOrgMainInfoList: (params) => {
     return http.get('/orgs/main-info/list', {params});
   },
@@ -525,9 +534,7 @@ export const BaseInfo = resource('/orgs', http, {
   },
   // 校验名字
   checkName: (name, orgId) => {
-    return http.get('/orgs/name', {
-      params: {name, orgId}
-    });
+    return http.post('/orgs/name', {name, orgId});
   },
   // 校验身份证
   checkCreditCode: (creditCode, orgId) => {
