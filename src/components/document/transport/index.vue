@@ -107,7 +107,7 @@
       <div class="flex-list-dom">
         <el-row class="order-list-header">
           <el-col :span="2">
-            <el-checkbox @change="checkAll" v-model="isCheckAll" v-if="filters.status"></el-checkbox>
+            <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
             运单号
           </el-col>
           <el-col :span="2">类型</el-col>
@@ -139,15 +139,10 @@
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
-            <el-col :span="2" class="special-col R" v-if="filters.status">
-              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)" v-if="filters.status">
+            <el-col :span="2" class="special-col R">
+              <div @click.stop.prevent="checkItem(item)" class="el-checkbox-warp">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
-              <div>
-                {{item.waybillNumber}}
-              </div>
-            </el-col>
-            <el-col :span="2" class="R" v-if="!filters.status">
               <div>
                 {{item.waybillNumber}}
               </div>
