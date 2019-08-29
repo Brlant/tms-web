@@ -422,6 +422,9 @@
       formItem: function (val) {
         if (this.action === 'add') {
           this.form = Object.assign({}, val);
+          this.$nextTick(() => {
+            this.$refs.form && this.$refs.form.clearValidate();
+          });
         }
         if (this.action === 'edit') {
           if (val.id) {
@@ -433,6 +436,9 @@
               if (this.form.goodsList.length === 0) {
                 this.addGoods();
               }
+              this.$nextTick(() => {
+                this.$refs.form && this.$refs.form.clearValidate();
+              });
             });
           }
         }

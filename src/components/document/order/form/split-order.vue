@@ -81,7 +81,7 @@
   </dialog-template>
 </template>
 <script>
-  import {BaseInfo, TmsOrder} from '@/resources';
+  import {TmsOrder} from '@/resources';
 
   export default {
     data () {
@@ -104,6 +104,8 @@
     props: ['formItem', 'action'],
     watch: {
       formItem: function (val) {
+        this.splitCount = '';
+        this.splitList = [];
         if (val.id) {
           TmsOrder.getOneTmsOrder(val.id).then(res => {
             this.form = res.data;
