@@ -4,10 +4,12 @@
     .content-left {
       width: $labelWidth;
     }
+
     .content-right {
       > h3 {
         left: $labelWidth;
       }
+
       left: $labelWidth;
     }
   }
@@ -318,7 +320,7 @@
 
   export default {
     components: {TwoColumn},
-    data () {
+    data() {
       return {
         list: [],
         times: [],
@@ -390,13 +392,13 @@
       };
     },
     computed: {
-      shipmentWayList () {
+      shipmentWayList() {
         return this.$getDict('transportationCondition');
       },
-      typeList () {
+      typeList() {
         return this.$getDict('bizType');
       },
-      serviceTypeList () {
+      serviceTypeList() {
         return this.$getDict('serviceType');
       },
       showTitle: function () {
@@ -412,6 +414,9 @@
       formItem: function (val) {
         if (this.action === 'add') {
           this.form = Object.assign({}, val);
+          this.$nextTick(() => {
+            this.$refs.form && this.$refs.form.clearValidate();
+          });
         }
         if (this.action === 'edit') {
           if (val.id) {
@@ -420,6 +425,9 @@
               this.filterCustomer(this.form.orgName);
               this.filterSenderOrg(this.form.senderName);
               this.filterReceiverOrg(this.form.receiverName);
+              this.$nextTick(() => {
+                this.$refs.form && this.$refs.form.clearValidate();
+              });
             });
           }
         }
@@ -472,10 +480,10 @@
           this.receiverOrgList = res.data.list;
         });
       },
-      selectTab (item) {
+      selectTab(item) {
         this.currentTab = item;
       },
-      save (formName) {
+      save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             // 处理货品列表
