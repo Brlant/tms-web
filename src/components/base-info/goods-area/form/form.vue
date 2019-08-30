@@ -91,7 +91,7 @@
         if (val.id) {
           this.$nextTick(() => {
             this.form = this.formItem;
-            this.form = Object.assign({}, {objectId: []}, this.form);
+            this.form = Object.assign({}, {objectId: [], orgIdList: []}, this.form);
             this.filterOrg();
           });
         }
@@ -124,6 +124,9 @@
         });
       },
       onSubmit: function (formName) {
+        if (!this.form.orgIdList.length) {
+          return this.$notify.info({message: '请选择单位'});
+        }
         let self = this;
         this.$refs[formName].validate((valid) => {
           if (!valid || this.doing) {
