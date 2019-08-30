@@ -45,7 +45,7 @@
             <span v-show="!showSearch">展开筛选</span>
           </span>
         </div>
-        <el-form class="advanced-query-form" onsubmit="return false">
+        <el-form class="advanced-query-form" onsubmit="return false" v-show="showSearch">
           <el-row>
             <el-col :span="10">
               <oms-form-row label="日志操作人" :span="5">

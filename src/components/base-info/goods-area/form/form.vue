@@ -21,7 +21,7 @@
             <el-form-item label="所属集货区">
               {{form.name}}
             </el-form-item>
-            <el-form-item label="单位">
+            <el-form-item label="单位" v-if="form.id">
               <el-transfer v-loading="loading"
                            v-model="form.orgIdList"
                            :props="{key: 'id',label: 'name'}"
@@ -43,7 +43,7 @@
 </template>
 
 <script type="text/jsx">
-  import {BaseInfo, GoodsArea} from '@/resources';
+  import {GoodsArea} from '@/resources';
 
   export default {
     name: 'editForm',
@@ -66,7 +66,7 @@
         default: true
       }
     },
-    mounted () {
+    mounted() {
     },
     data: function () {
       return {
@@ -87,12 +87,13 @@
     },
     watch: {
       formItem: function (val) {
+        this.form = {};
         if (val.id) {
-          this.form = this.formItem;
-          this.form = Object.assign({}, {objectId: []}, this.form);
-          this.$refs['org-transfer'].clearQuery('left');
-          this.$refs['org-transfer'].clearQuery('right');
-          this.filterOrg();
+          this.$nextTick(() => {
+            this.form = this.formItem;
+            this.form = Object.assign({}, {objectId: []}, this.form);
+            this.filterOrg();
+          });
         }
       },
       showRight: function (val) {
@@ -102,17 +103,17 @@
       }
     },
     methods: {
-      selectTab (item) {
+      selectTab(item) {
         this.currentTab = item;
       },
-      filterMethod (query, item) {
+      filterMethod(query, item) {
         if (!query) return true;
         return item.name && item.name.indexOf(query) > -1 ||
           item.nameAcronymy && item.nameAcronymy.indexOf(query) > -1 ||
           item.namePhonetic && item.namePhonetic.indexOf(query) > -1 ||
           item.manufacturerCode && item.manufacturerCode.indexOf(query) > -1;
       },
-      renderFunc (h, option) {
+      renderFunc(h, option) {
         return (<span title={option.name}>{option.name}</span>);
       },
       filterOrg: function () {

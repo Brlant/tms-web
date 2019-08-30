@@ -72,6 +72,9 @@
       formItem: function (val) {
         this.form = Object.assign({}, val);
         this.attachmentList = [];
+        this.$nextTick(() => {
+          this.$refs.form && this.$refs.form.clearValidate();
+        });
       },
       actionType: function (val) {
         if (!val) {

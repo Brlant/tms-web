@@ -478,13 +478,6 @@ export default [{
       'children': null,
       'leaf': true
     }, {
-      'id': 'tms-access-role-delete',
-      'parentId': 'tms-user-role-manager',
-      'label': '删除角色',
-      'sort': null,
-      'children': null,
-      'leaf': true
-    }, {
       'id': 'access-role-watch',
       'parentId': 'tms-user-role-manager',
       'label': '查看角色',
@@ -534,21 +527,21 @@ export default [{
       'children': null,
       'leaf': true
     }, {
-      'id': 'tms-department-delete',
+      'id': 'department-delete',
       'parentId': 'tms-platform-user-manager',
       'label': '删除部门',
       'sort': null,
       'children': null,
       'leaf': true
     }, {
-      'id': 'tms-department-edit',
+      'id': 'department-edit',
       'parentId': 'tms-platform-user-manager',
       'label': '编辑部门',
       'sort': null,
       'children': null,
       'leaf': true
     }, {
-      'id': 'tms-department-add',
+      'id': 'department-add',
       'parentId': 'tms-platform-user-manager',
       'label': '新增部门',
       'sort': null,

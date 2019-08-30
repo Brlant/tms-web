@@ -22,7 +22,7 @@
         <div>
           <h2 class="header">
             <span class="pull-right">
-              <perm label="tms-department-add">
+              <perm label="department-add">
                 <a href="#" class="btn-circle" @click.stop.prevent="addDepartment">
                   <i class="el-icon-t-plus"></i>
                 </a>
@@ -46,13 +46,13 @@
                 <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
                     :class="{'active':item.id==currentItem.id}">
                   <span class="hover-show">
-                    <perm label="tms-department-edit">
+                    <perm label="department-edit">
                       <a href="#" @click.stop.prevent="editDepartment(item)"
                          class="pull-right">
                         <i class="el-icon-t-edit"></i>
                       </a>
                     </perm>
-                    <perm label="tms-department-delete">
+                    <perm label="department-delete">
                       <a href="#" @click.stop.prevent="deleteDepartment(item)"
                          class="pull-right">
                         <i class="el-icon-t-delete"></i>
@@ -303,7 +303,10 @@
           companyDepartment: type.id,
           objectId: 'tms-system'
         });
+        let nowTime = Date.now();
+        this.nowTime = nowTime;
         Department.getOnesMember(type.id, data).then(res => {
+          if (this.nowTime > nowTime) return;
           this.dataRows = res.data.list;
           this.pager.count = res.data.count;
         });
@@ -355,8 +358,11 @@
           pageSize: this.pager.pageSize,
           keyword: this.typeTxt
         });
+        let nowTime = Date.now();
+        this.nowLeftTime = nowTime;
         Department.getPage(param).then(res => {
           if (param.keyword !== this.typeTxt) return;
+          if (this.nowLeftTime > nowTime) return;
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
             this.showTypeList = this.showTypeList.concat(res.data.list);

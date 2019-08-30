@@ -358,6 +358,9 @@
             thirdPartyInsuranceNumber: '',
             thirdPartyInsuranceEndDate: ''
           };
+          this.$nextTick(() => {
+            this.$refs.form && this.$refs.form.clearValidate();
+          });
         }
         if (this.action === 'edit') {
           this.form.carDto = Object.assign({}, {
@@ -398,6 +401,10 @@
           }
           this.form.carDto.perFreight = utils.autoformatDecimalPoint(this.form.carDto.perFreight ? this.form.carDto.perFreight.toString() : '');
           this.form.carDto.freight = utils.autoformatDecimalPoint(this.form.carDto.freight ? this.form.carDto.freight.toString() : '');
+
+          this.$nextTick(() => {
+            this.$refs.form && this.$refs.form.clearValidate();
+          });
         }
       }
     },

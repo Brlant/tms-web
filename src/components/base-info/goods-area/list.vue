@@ -31,7 +31,8 @@
             <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight"
                           @scroll="scrollLoadingData">
               <ul class="show-list">
-                <li class="list-item" @click="showAllType(1)" :class="{'active':showAll}">
+                <li class="empty-info" v-show="!showTypeList.length">暂无信息</li>
+                <li :class="{'active':showAll}" @click="showAllType(1)" class="list-item" v-show="showTypeList.length">
                   全部
                 </li>
                 <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
@@ -188,7 +189,7 @@
         currentItem: {}
       };
     },
-    mounted () {
+    mounted() {
       this.getGoodsAreaPage(1);
       this.showAllType(1);
     },
@@ -236,15 +237,18 @@
           pageSize: this.pager.pageSize,
           id: type.id
         });
+        let nowTime = Date.now();
+        this.nowTime = nowTime;
         GoodsArea.getDetailPage(data).then(res => {
+          if (this.nowTime > nowTime) return;
           this.dataRows = res.data.list;
           this.pager.count = res.data.count;
         });
       },
-      scrollLoadingData (event) {
+      scrollLoadingData(event) {
         this.$scrollLoadingData(event);
       },
-      handleSizeChange (val) {
+      handleSizeChange(val) {
         window.localStorage.setItem('currentPageSize', val);
         if (this.showAll) {
           this.showAllType(1);
@@ -253,7 +257,7 @@
           this.showType(this.currentItem, 1);
         }
       },
-      handleCurrentChange (val) {
+      handleCurrentChange(val) {
         if (this.showAll) {
           this.showAllType(val);
         } else if (!this.showAll && this.currentItem.id) {
@@ -277,15 +281,20 @@
           pageSize: this.pager.pageSize,
           keyWord: this.typeTxt
         });
+        let nowTime = Date.now();
+        this.nowLeftTime = nowTime;
         GoodsArea.getPage(param).then(res => {
           if (param.keyWord !== this.typeTxt) return;
+          if (this.nowLeftTime > nowTime) return;
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
             this.showTypeList = this.showTypeList.concat(res.data.list);
           } else {
             this.showTypeList = res.data.list;
             this.data = Object.assign({}, {'id': ''}, res.data.list[0]);
-            if (this.typeTxt) {
+            this.dataRows = [];
+            this.pager.count = 0;
+            if (this.showTypeList.length) {
               this.showType(this.data, 1);
             }
           }

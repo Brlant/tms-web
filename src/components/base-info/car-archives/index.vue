@@ -233,7 +233,7 @@
                 <el-row>
                   <el-col :span="24" class="title-spacing">
                     [ 运输黑名单列表 ]
-                    <div class="pull-right">
+                    <div class="pull-right" v-if="blacklist.length">
                     <span class="btn-search-toggle open" v-show="showSearch">
                       <single-input v-model="keyTxt" placeholder="请输入关键字搜索"
                                     :showFocus="showSearch"></single-input>
@@ -496,8 +496,11 @@
           pageSize: this.pager.pageSize,
           keyword: this.typeTxt
         });
+        let nowTime = Date.now();
+        this.nowLeftTime = nowTime;
         CarArchives.query(param).then(res => {
           if (param.keyword !== this.typeTxt) return;
+          if (this.nowLeftTime > nowTime) return;
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
             this.showTypeList = this.showTypeList.concat(res.data.list);
