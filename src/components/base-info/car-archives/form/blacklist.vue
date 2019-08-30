@@ -66,7 +66,7 @@
         default: true
       }
     },
-    mounted () {
+    mounted() {
     },
     data: function () {
       return {
@@ -89,7 +89,9 @@
       formItem: function (val) {
         if (val.carDto.id) {
           this.form = this.formItem.carDto;
-          this.form = Object.assign({}, {objectId: []}, this.form);
+          this.form = Object.assign({}, {objectId: []}, this.form, {
+            orgIdList: []
+          });
           this.form.carId = val.carDto.id;
           this.$refs['blacklist'].clearQuery('left');
           this.$refs['blacklist'].clearQuery('right');
@@ -103,17 +105,17 @@
       }
     },
     methods: {
-      selectTab (item) {
+      selectTab(item) {
         this.currentTab = item;
       },
-      filterMethod (query, item) {
+      filterMethod(query, item) {
         if (!query) return true;
         return item.name && item.name.indexOf(query) > -1 ||
           item.nameAcronymy && item.nameAcronymy.indexOf(query) > -1 ||
           item.namePhonetic && item.namePhonetic.indexOf(query) > -1 ||
           item.manufacturerCode && item.manufacturerCode.indexOf(query) > -1;
       },
-      renderFunc (h, option) {
+      renderFunc(h, option) {
         return (<span title={option.name}>{option.name}</span>);
       },
       filterOrg: function () {
@@ -127,6 +129,9 @@
         });
       },
       onSubmit: function (formName) {
+        if (!this.form.orgIdList.length) {
+          return this.$notify.info({message: '请选择单位'});
+        }
         let self = this;
         this.$refs[formName].validate((valid) => {
           if (!valid || this.doing) {
