@@ -134,175 +134,179 @@
         </div>
       </div>
       <div class="d-table-right">
-        <div class="content-right">
-          <div class="form-header-part part-bg p-r-20">
-            <div class="header">
-              <div class="sign f-dib"></div>
-              <h3 class="tit f-dib index-tit">包装信息</h3>
+        <div class="empty-info" v-if="!currentItem.id">暂无信息</div>
+        <div v-else>
+          <div class="content-right">
+            <div class="form-header-part part-bg p-r-20">
+              <div class="header">
+                <div class="sign f-dib"></div>
+                <h3 class="tit f-dib index-tit">包装信息</h3>
+              </div>
+              <div class="content content-sp">
+                <el-row>
+                  <el-col :span="6">
+                    <oms-row :span="5" label="名称" v-show="currentItem.name">{{currentItem.name }}</oms-row>
+                    <oms-row :span="5" label="型号" v-show="currentItem.model">{{ currentItem.model}}</oms-row>
+                    <oms-row :span="5" label="规格" v-show="currentItem.specification">{{currentItem.specification }}
+                    </oms-row>
+                  </el-col>
+                  <el-col :span="6">
+                    <oms-row label="类型" v-show="currentItem.type">
+                      <dict :dict-group="'equipmentType'" :dict-key="currentItem.type"/>
+                    </oms-row>
+                    <oms-row label="品牌" v-show="currentItem.brand">{{currentItem.brand }}</oms-row>
+                    <oms-row label="单次计费价格" v-show="currentItem.rentPrice">
+                      <span v-show="currentItem.rentPrice">¥</span>{{currentItem.rentPrice}}
+                    </oms-row>
+                  </el-col>
+                  <el-col :span="6">
+                    <oms-row :span="5" label="体积" v-show="currentItem.volume">{{currentItem.volume }} <span>m³</span>
+                    </oms-row>
+                    <oms-row :span="5" label="重量" v-show="currentItem.weight">{{currentItem.weight }} <span>kg</span>
+                    </oms-row>
+                    <oms-row label="租赁计费价格" v-show="currentItem.singlePrice"><span
+                      v-show="currentItem.singlePrice">¥</span>{{currentItem.singlePrice}}
+                    </oms-row>
+                  </el-col>
+                  <el-col :span="6">
+                    <!--<oms-row label="库存数" v-show="currentItem.count">{{ currentItem.count}}</oms-row>-->
+                    <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
+                    <oms-row label="采购价格" v-show="currentItem.purchasePrice"><span
+                      v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice}}
+                    </oms-row>
+                    <oms-row label="销售价格" v-show="currentItem.salePrice">
+                      <span v-show="currentItem.salePrice">¥</span>{{currentItem.salePrice}}
+                    </oms-row>
+                  </el-col>
+                </el-row>
+              </div>
             </div>
-            <div class="content content-sp">
+            <div class="form-header-part mt-10 p-r-20">
               <el-row>
                 <el-col :span="6">
-                  <oms-row label="名称" :span="5" v-show="currentItem.name">{{currentItem.name }}</oms-row>
-                  <oms-row label="型号" :span="5" v-show="currentItem.model">{{ currentItem.model}}</oms-row>
-                  <oms-row label="规格" :span="5" v-show="currentItem.specification">{{currentItem.specification }}
-                  </oms-row>
+                  <div class="header">
+                    <div class="sign f-dib"></div>
+                    <h3 class="tit f-dib index-tit">包装详情列表</h3>
+                  </div>
                 </el-col>
-                <el-col :span="6">
-                  <oms-row label="类型" v-show="currentItem.type">
-                    <dict :dict-group="'equipmentType'" :dict-key="currentItem.type"/>
-                  </oms-row>
-                  <oms-row label="品牌" v-show="currentItem.brand">{{currentItem.brand }}</oms-row>
-                  <oms-row label="单次计费价格" v-show="currentItem.rentPrice">
-                    <span v-show="currentItem.rentPrice">¥</span>{{currentItem.rentPrice}}
-                  </oms-row>
+                <el-col :span="18" class="text-right ">
+                  <el-button-group>
+                    <el-button :plain="true" @click="searchInOrder" native-type="submit">查询</el-button>
+                    <el-button @click="resetSearchForm" native-type="reset">重置</el-button>
+                    <el-button @click="batchUpdateStatus" native-type="reset">批量修改状态</el-button>
+                    <el-button :disabled="isLoading" :plain="true" @click="exportFile">
+                      导出Excel
+                    </el-button>
+                    <perm label="tms-equipment-consumables-detail-add">
+                      <el-button :plain="true" @click="add">添加</el-button>
+                    </perm>
+                  </el-button-group>
                 </el-col>
-                <el-col :span="6">
-                  <oms-row label="体积" :span="5" v-show="currentItem.volume">{{currentItem.volume }} <span>m³</span>
-                  </oms-row>
-                  <oms-row label="重量" :span="5" v-show="currentItem.weight">{{currentItem.weight }} <span>kg</span>
-                  </oms-row>
-                  <oms-row label="租赁计费价格" v-show="currentItem.singlePrice"><span
-                    v-show="currentItem.singlePrice">¥</span>{{currentItem.singlePrice}}
-                  </oms-row>
-                </el-col>
-                <el-col :span="6">
-                  <!--<oms-row label="库存数" v-show="currentItem.count">{{ currentItem.count}}</oms-row>-->
-                  <!--<oms-row label="序列号管理">{{currentItem.devIsSerialNumber | formatStatus}}</oms-row>-->
-                  <oms-row label="采购价格" v-show="currentItem.purchasePrice"><span
-                    v-show="currentItem.purchasePrice">¥</span>{{currentItem.purchasePrice}}
-                  </oms-row>
-                  <oms-row label="销售价格" v-show="currentItem.salePrice">
-                    <span v-show="currentItem.salePrice">¥</span>{{currentItem.salePrice}}
-                  </oms-row>
-                </el-col>
-              </el-row>
-            </div>
-          </div>
-          <div class="form-header-part mt-10 p-r-20">
-            <el-row>
-              <el-col :span="6">
-                <div class="header">
-                  <div class="sign f-dib"></div>
-                  <h3 class="tit f-dib index-tit">包装详情列表</h3>
-                </div>
-              </el-col>
-              <el-col :span="18" class="text-right ">
-                <el-button-group>
-                  <el-button :plain="true" native-type="submit" @click="searchInOrder">查询</el-button>
-                  <el-button native-type="reset" @click="resetSearchForm">重置</el-button>
-                  <el-button @click="batchUpdateStatus" native-type="reset">批量修改状态</el-button>
-                  <el-button :plain="true" @click="exportFile" :disabled="isLoading">
-                    导出Excel
-                  </el-button>
-                  <perm label="tms-equipment-consumables-detail-add">
-                    <el-button :plain="true" @click="add">添加</el-button>
-                  </perm>
-                </el-button-group>
-              </el-col>
-              <el-dialog
-                :visible.sync="centerDialogVisible"
-                title="请选择需要改成的状态:"
-                width="30%">
-                <el-radio-group v-model="radioStatus">
-                  <template v-for="item of typeList">
-                    <el-radio :label="item.key">{{item.label}}</el-radio>
-                  </template>
-                </el-radio-group>
-                <span class="dialog-footer" slot="footer">
+                <el-dialog
+                  :visible.sync="centerDialogVisible"
+                  title="请选择需要改成的状态:"
+                  width="30%">
+                  <el-radio-group v-model="radioStatus">
+                    <template v-for="item of typeList">
+                      <el-radio :label="item.key">{{item.label}}</el-radio>
+                    </template>
+                  </el-radio-group>
+                  <span class="dialog-footer" slot="footer">
               <el-button @click="centerDialogVisible = false">取 消</el-button>
               <el-button @click="submitStatusChange" type="primary">确 定</el-button>
             </span>
-              </el-dialog>
-            </el-row>
-            <div class="content">
-              <el-form class="advanced-query-form clearfix" style="padding-top: 10px" onsubmit="return false">
-                <el-row>
-                  <el-col :span="6">
-                    <oms-form-row label="编号" :span="4">
-                      <oms-input type="text" v-model="searchCondition.devNo" placeholder="包装编号"
-                                 @keyup.native.enter="searchInOrder"></oms-input>
-                    </oms-form-row>
-                  </el-col>
-                  <el-col :span="10">
-                    <oms-form-row label="状态" :span="3">
-                      <el-radio-group v-model="currentStatus" size="small" @change="changeStatus">
-                        <el-radio-button :key="item.statusKey" :label="item.statusType + item.count"
-                                         :value="item.statusKey"
-                                         v-for="item in devDetailCount"></el-radio-button>
-                      </el-radio-group>
-                    </oms-form-row>
-                  </el-col>
-                  <el-col :span="8">
-                    <!--<oms-form-row label="包装状态" :span="4">-->
-                    <!--<el-select placeholder="请选择包装状态" v-model="searchCondition.status">-->
-                    <!--<el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList">-->
-                    <!--</el-option>-->
-                    <!--</el-select>-->
-                    <!--</oms-form-row>-->
-                    <oms-form-row label="有效期" :span="4">
-                      <el-date-picker v-model="validityTimes" type="daterange"></el-date-picker>
-                    </oms-form-row>
-                  </el-col>
-                </el-row>
-              </el-form>
+                </el-dialog>
+              </el-row>
+              <div class="content">
+                <el-form class="advanced-query-form clearfix" onsubmit="return false" style="padding-top: 10px">
+                  <el-row>
+                    <el-col :span="6">
+                      <oms-form-row :span="4" label="编号">
+                        <oms-input @keyup.native.enter="searchInOrder" placeholder="包装编号" type="text"
+                                   v-model="searchCondition.devNo"></oms-input>
+                      </oms-form-row>
+                    </el-col>
+                    <el-col :span="10">
+                      <oms-form-row :span="3" label="状态">
+                        <el-radio-group @change="changeStatus" size="small" v-model="currentStatus">
+                          <el-radio-button :key="item.statusKey" :label="item.statusType + item.count"
+                                           :value="item.statusKey"
+                                           v-for="item in devDetailCount"></el-radio-button>
+                        </el-radio-group>
+                      </oms-form-row>
+                    </el-col>
+                    <el-col :span="8">
+                      <!--<oms-form-row label="包装状态" :span="4">-->
+                      <!--<el-select placeholder="请选择包装状态" v-model="searchCondition.status">-->
+                      <!--<el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList">-->
+                      <!--</el-option>-->
+                      <!--</el-select>-->
+                      <!--</oms-form-row>-->
+                      <oms-form-row :span="4" label="有效期">
+                        <el-date-picker type="daterange" v-model="validityTimes"></el-date-picker>
+                      </oms-form-row>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="p-r-20 mt-10">
-          <div v-if="loadingDetailData">
-            <oms-loading :loading="loadingDetailData"></oms-loading>
-          </div>
-          <div v-else-if="devDetailList.length===0">
-            <div class="empty-info">暂无信息</div>
-          </div>
-          <el-table v-else :data="devDetailList" class="header-list" border style="margin-right:-15px;width: 100%;"
-                    :header-row-class-name="'headerClass'" :maxHeight="tableHeight"
-                    @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="devNo" label="包装编号" min-width="150" :sortable="true"></el-table-column>
-            <el-table-column prop="status" label="状态" min-width="80" :sortable="true">
-              <template slot-scope="scope">
-                <dict :dict-group="currentItem.type+'Status'" :dict-key="scope.row.status"></dict>
-              </template>
-            </el-table-column>
-            <el-table-column prop="validityDate" label="有效期" min-width="100" :sortable="true">
-              <template slot-scope="scope">
-                {{scope.row.validityDate|date}}
-              </template>
-            </el-table-column>
-            <el-table-column prop="remark" label="备注" min-width="180">
-              <template slot-scope="scope">
-                {{scope.row.remark}}
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" fixed="right" min-width="200">
-              <template slot-scope="scope">
-                <div class="opera-btn">
-                  <perm label="tms-equipment-consumables-detail-edit" class="btn-line-block">
+          <div class="p-r-20 mt-10">
+            <div v-if="loadingDetailData">
+              <oms-loading :loading="loadingDetailData"></oms-loading>
+            </div>
+            <div v-else-if="devDetailList.length===0">
+              <div class="empty-info">暂无信息</div>
+            </div>
+            <el-table :data="devDetailList" :header-row-class-name="'headerClass'" :maxHeight="tableHeight"
+                      @selection-change="handleSelectionChange" border
+                      class="header-list" style="margin-right:-15px;width: 100%;"
+                      v-else>
+              <el-table-column type="selection" width="55"></el-table-column>
+              <el-table-column :sortable="true" label="包装编号" min-width="150" prop="devNo"></el-table-column>
+              <el-table-column :sortable="true" label="状态" min-width="80" prop="status">
+                <template slot-scope="scope">
+                  <dict :dict-group="currentItem.type+'Status'" :dict-key="scope.row.status"></dict>
+                </template>
+              </el-table-column>
+              <el-table-column :sortable="true" label="有效期" min-width="100" prop="validityDate">
+                <template slot-scope="scope">
+                  {{scope.row.validityDate|date}}
+                </template>
+              </el-table-column>
+              <el-table-column label="备注" min-width="180" prop="remark">
+                <template slot-scope="scope">
+                  {{scope.row.remark}}
+                </template>
+              </el-table-column>
+              <el-table-column fixed="right" label="操作" min-width="200">
+                <template slot-scope="scope">
+                  <div class="opera-btn">
+                    <perm class="btn-line-block" label="tms-equipment-consumables-detail-edit">
                     <span @click.stop="editDetailType(scope.row)">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
-                  </perm>
-                  <span @click.stop="showDetailStatusLog(scope.row)" style="margin-left: 10px">
+                    </perm>
+                    <span @click.stop="showDetailStatusLog(scope.row)" style="margin-left: 10px">
                     <a @click.pervent="" class="btn-circle btn-opera">
                       <i class="el-icon-t-search"></i>
                     </a>状态变更日志
                   </span>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-        <div class="text-center clearfix" v-if="devDetailList.length">
-          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                         :current-page="detailPager.currentPage"
-                         :page-sizes="[10,20,50,100]" :page-size="detailPager.pageSize"
-                         layout="total, sizes, prev, pager, next, jumper"
-                         :total="detailPager.count">
-          </el-pagination>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="text-center clearfix" v-if="devDetailList.length">
+            <el-pagination :current-page="detailPager.currentPage" :page-size="detailPager.pageSize"
+                           :page-sizes="[10,20,50,100]"
+                           :total="detailPager.count" @current-change="handleCurrentChange"
+                           @size-change="handleSizeChange"
+                           layout="total, sizes, prev, pager, next, jumper">
+            </el-pagination>
+          </div>
         </div>
       </div>
     </div>
@@ -569,6 +573,12 @@
         });
       },
       getDevDetailList: function (pageNo) {
+        if (!this.currentItem.id) {
+          this.devDetailList = [];
+          this.detailPager.count = 0;
+          this.detailPager.totalPage = 0;
+          return;
+        }
         this.loadingDetailData = true;
         this.detailPager.currentPage = pageNo;
         let param = Object.assign({}, {
