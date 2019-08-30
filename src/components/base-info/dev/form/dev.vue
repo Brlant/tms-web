@@ -113,6 +113,9 @@
     watch: {
       formItem: function (val) {
         this.form = Object.assign({}, val);
+        this.$nextTick(() => {
+          this.$refs.form && this.$refs.form.clearValidate();
+        });
       }
     },
     methods: {
