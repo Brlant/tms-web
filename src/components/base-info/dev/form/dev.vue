@@ -13,7 +13,7 @@
 <template>
   <el-form ref="form" :rules="rules" :model="form" label-width="160px" class="demo-ruleForm">
     <h2 class="clearfix">包装资料</h2>
-    <el-form-item label="名称">
+    <el-form-item label="名称" prop="name">
       <oms-input model="text" v-model="form.name" placeholder="请输入名称"></oms-input>
     </el-form-item>
     <el-form-item label="型号">
@@ -83,6 +83,9 @@
     data: function () {
       return {
         rules: {
+          name: [
+            {required: true, message: '请输入名称', trigger: 'blur'}
+          ],
           type: [
             {required: true, message: '请选择包装类型', trigger: 'change'}
           ],
