@@ -604,8 +604,11 @@
           keyWord: this.typeTxt,
           deleteFlag: false
         });
+        let nowTime = Date.now();
+        this.nowLeftTime = nowTime;
         Dev.query(param).then(res => {
           if (param.keyWord !== this.typeTxt) return;
+          if (this.nowLeftTime > nowTime) return;
           if (isContinue) {
             this.showTypeList = this.showTypeList.concat(res.data.list);
           } else {

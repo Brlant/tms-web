@@ -496,8 +496,11 @@
           pageSize: this.pager.pageSize,
           keyword: this.typeTxt
         });
+        let nowTime = Date.now();
+        this.nowLeftTime = nowTime;
         CarArchives.query(param).then(res => {
           if (param.keyword !== this.typeTxt) return;
+          if (this.nowLeftTime > nowTime) return;
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
             this.showTypeList = this.showTypeList.concat(res.data.list);

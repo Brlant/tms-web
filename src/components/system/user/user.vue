@@ -303,7 +303,10 @@
           companyDepartment: type.id,
           objectId: 'tms-system'
         });
+        let nowTime = Date.now();
+        this.nowTime = nowTime;
         Department.getOnesMember(type.id, data).then(res => {
+          if (this.nowTime > nowTime) return;
           this.dataRows = res.data.list;
           this.pager.count = res.data.count;
         });
@@ -355,8 +358,11 @@
           pageSize: this.pager.pageSize,
           keyword: this.typeTxt
         });
+        let nowTime = Date.now();
+        this.nowLeftTime = nowTime;
         Department.getPage(param).then(res => {
           if (param.keyword !== this.typeTxt) return;
+          if (this.nowLeftTime > nowTime) return;
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
             this.showTypeList = this.showTypeList.concat(res.data.list);
