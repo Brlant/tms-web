@@ -527,21 +527,21 @@ export default [{
       'children': null,
       'leaf': true
     }, {
-      'id': 'tms-department-delete',
+      'id': 'department-delete',
       'parentId': 'tms-platform-user-manager',
       'label': '删除部门',
       'sort': null,
       'children': null,
       'leaf': true
     }, {
-      'id': 'tms-department-edit',
+      'id': 'department-edit',
       'parentId': 'tms-platform-user-manager',
       'label': '编辑部门',
       'sort': null,
       'children': null,
       'leaf': true
     }, {
-      'id': 'tms-department-add',
+      'id': 'department-add',
       'parentId': 'tms-platform-user-manager',
       'label': '新增部门',
       'sort': null,
