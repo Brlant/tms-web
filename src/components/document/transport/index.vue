@@ -260,7 +260,7 @@
                     <span @click.stop="packageWayBill(item)" v-if="item.status === '-1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-basic"></i>
-                      </a>打包
+                      </a>打包完成
                     </span>
                   </perm>
                 </div>
@@ -609,7 +609,7 @@
             this.$notify.success({
               duration: 2000,
               title: '成功',
-              message: '运单"' + item.waybillNumber + '已成功打包"'
+              message: '运单"' + item.waybillNumber + '已完成打包"'
             });
             this.getTmsWayBillPage(1);
           }).catch(error => {
