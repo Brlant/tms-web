@@ -165,7 +165,7 @@
                     </span>
                 </div>
                 <div v-if="item.status==='1'||item.status==='2'">
-                  <span @click.stop="showInfo(item)" v-if="item.status==='1'||item.status==='2'">
+                  <span @click.stop="showInfo(item)" class="btn-line-block" v-if="item.status==='1'||item.status==='2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-search"></i>
                       </a>查看
