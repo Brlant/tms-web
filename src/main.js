@@ -13,6 +13,7 @@ import store from './store';
 import {init} from './tools/init';
 import VueAMap from 'vue-amap';
 import App from './components/App';
+import utils from './tools/utils';
 
 init(Vue);
 Vue.use(require('vue-moment'), {moment});
@@ -91,6 +92,16 @@ Vue.filter('formatMoney', function (val) {
     }
     return result;
   }
+});
+
+
+Vue.filter('formatAddress', val => {
+  if (!val) return '';
+  let arr = val.split('/');
+  let address = utils.formatAddress(...val.split('/'));
+  if (!address) return val;
+  let arrAddress = address.split('/');
+  return arr.map((m, index) => arrAddress[index] || m).join('/');
 });
 
 // 滚动下拉加载

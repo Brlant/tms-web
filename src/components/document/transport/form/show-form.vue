@@ -135,8 +135,8 @@
           <div class="content">
             <oms-col label="提货时间" :rowSpan="span" :value="form.pickUpTime">{{form.pickUpTime|date}}</oms-col>
             <oms-col label="送达时限" :rowSpan="span" :value="form.deliveryTime">{{form.deliveryTime|date}}</oms-col>
-            <oms-col label="始发地" :rowSpan="span" :value="form.provenance"/>
-            <oms-col label="目的地" :rowSpan="span" :value="form.destination"/>
+            <oms-col :rowSpan="span" :value="form.provenance | formatAddress" label="始发地"/>
+            <oms-col :rowSpan="span" :value="form.destination | formatAddress" label="目的地"/>
             <oms-col label="备注" :rowSpan="span" :value="form.remark"/>
             <div class="hr mb-10 clearfix"></div>
           </div>
@@ -405,7 +405,7 @@
 </template>
 <script>
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {OmsAttachment, TempDev, TmsLog, TmsPack, TmsWayBill} from '@/resources';
+  import {OmsAttachment, TmsLog, TmsPack, TmsWayBill} from '@/resources';
   import MapPath from '../../common/map-path';
   import attachmentLists from '../../../common/attachment/attachmentList';
   import OmsCol from '@dtop/dtop-web-common/packages/col';

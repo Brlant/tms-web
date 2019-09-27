@@ -134,8 +134,8 @@
             <div class="content">
               <oms-col label="提货时间" :rowSpan="span" :value="form.pickUpTime">{{form.pickUpTime|date}}</oms-col>
               <oms-col label="送达时限" :rowSpan="span" :value="form.deliveryTime">{{form.deliveryTime|date}}</oms-col>
-              <oms-col label="始发地" :rowSpan="span" :value="form.provenance"/>
-              <oms-col label="目的地" :rowSpan="span" :value="form.destination"/>
+              <oms-col :rowSpan="span" :value="form.provenance | formatAddress" label="始发地"/>
+              <oms-col :rowSpan="span" :value="form.destination | formatAddress" label="目的地"/>
               <oms-col label="备注" :rowSpan="span" :value="form.remark"/>
               <div class="hr mb-10 clearfix"></div>
             </div>
