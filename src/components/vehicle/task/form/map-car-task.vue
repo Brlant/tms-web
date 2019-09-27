@@ -15,8 +15,7 @@
 <template>
   <div>
     <div class="map-part">
-      <el-amap :vid="mapRef" :zoom="10" ref="taskMap" v-show="markers.length"
-               :style="mapStyle">
+      <el-amap :style="mapStyle" :vid="mapRef" :zoom="10" ref="taskMap">
         <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
         <!--:label="marker.label"></el-amap-marker>-->
       </el-amap>
