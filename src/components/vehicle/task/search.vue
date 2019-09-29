@@ -33,35 +33,48 @@
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
-          <div v-show="showSearch">
-            <el-row>
-              <el-col :span="8">
-                <oms-form-row label="创建时间" :span="5" :required="true">
-                  <el-date-picker v-model="createTimes" type="datetimerange" :default-time="['00:00:00', '23:59:59']"
-                                  placeholder="请选择创建时间" @change="search"/>
-                </oms-form-row>
-              </el-col>
-              <el-col :span="8">
-                <oms-form-row label="开始时间" :span="5" :required="true">
-                  <el-date-picker v-model="startTimes" type="datetimerange" :default-time="['00:00:00', '23:59:59']"
-                                  placeholder="请选择开始时间" @change="search"/>
-                </oms-form-row>
-              </el-col>
-              <el-col :span="8">
-                <oms-form-row label="结束时间" :span="5" :required="true">
-                  <el-date-picker v-model="endTimes" type="datetimerange" :default-time="['00:00:00', '23:59:59']"
-                                  placeholder="请选择结束时间" @change="search"/>
-                </oms-form-row>
-              </el-col>
-            </el-row>
-          </div>
         </el-row>
+        <div v-show="showSearch">
+          <el-row>
+            <el-col :span="8">
+              <oms-form-row :required="true" :span="5" label="创建时间">
+                <el-date-picker :default-time="['00:00:00', '23:59:59']" @change="search" placeholder="请选择创建时间"
+                                type="datetimerange" v-model="createTimes"/>
+              </oms-form-row>
+            </el-col>
+            <el-col :span="8">
+              <oms-form-row :required="true" :span="5" label="开始时间">
+                <el-date-picker :default-time="['00:00:00', '23:59:59']" @change="search" placeholder="请选择开始时间"
+                                type="datetimerange" v-model="startTimes"/>
+              </oms-form-row>
+            </el-col>
+            <el-col :span="8">
+              <oms-form-row :required="true" :span="5" label="结束时间">
+                <el-date-picker :default-time="['00:00:00', '23:59:59']" @change="search" placeholder="请选择结束时间"
+                                type="datetimerange" v-model="endTimes"/>
+              </oms-form-row>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <oms-form-row :required="true" :span="5" label="负责人">
+                <oms-input @keyup.native.enter="search" placeholder="请输入负责人"
+                           v-model="searchCondition.headName"></oms-input>
+              </oms-form-row>
+            </el-col>
+            <el-col :span="8">
+              <oms-form-row :required="true" :span="5" label="司机">
+                <oms-input @keyup.native.enter="search" placeholder="请输入司机"
+                           v-model="searchCondition.driverName"></oms-input>
+              </oms-form-row>
+            </el-col>
+          </el-row>
+        </div>
       </el-form>
     </template>
   </search-template>
 </template>
 <script>
-  import {BaseInfo} from '@/resources';
 
   export default {
     data: function () {
@@ -76,7 +89,9 @@
           sStartTime: '',
           sEndTime: '',
           eStartTime: '',
-          eEndTime: ''
+          eEndTime: '',
+          headName: '',
+          driverName: ''
         },
         showSearch: false,
         list: [],
@@ -117,7 +132,9 @@
           sStartTime: '',
           sEndTime: '',
           eStartTime: '',
-          eEndTime: ''
+          eEndTime: '',
+          headName: '',
+          driverName: ''
         };
         this.createTimes = [];
         this.startTimes = [];
