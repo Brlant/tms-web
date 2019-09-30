@@ -321,7 +321,9 @@
           sStartTime: '',
           sEndTime: '',
           eStartTime: '',
-          eEndTime: ''
+          eEndTime: '',
+          headName: '',
+          driverName: ''
         },
         isCheckAll: false,
         checkList: [],
