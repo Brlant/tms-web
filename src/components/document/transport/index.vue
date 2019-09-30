@@ -937,6 +937,8 @@
         this.showIndex = index;
         this.currentPart = this.dialogComponents[index];
         this.form = {
+          receiverAddressLongitude: '',
+          receiverAddressDimension: '',
           goodsList: [
             {
               goodsName: '',

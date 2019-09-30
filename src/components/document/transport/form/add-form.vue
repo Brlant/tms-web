@@ -116,7 +116,8 @@
               </el-form-item>
             </two-column>
             <el-form-item slot="right" label="发货地址">
-              <oms-input v-model="form.senderAddress" placeholder="请输入发货地址"></oms-input>
+              <oms-input placeholder="请输入发货地址" v-model="form.senderAddress">
+              </oms-input>
             </el-form-item>
           </div>
           <div class="hr mb-10"></div>
@@ -153,8 +154,14 @@
               </el-form-item>
             </two-column>
             <el-form-item slot="right" label="收货地址" prop="receiverAddress">
-              <oms-input v-model="form.receiverAddress" placeholder="请输入收货地址"></oms-input>
+              <oms-input @blur="isShowMap" placeholder="请输入收货地址" v-model="form.receiverAddress">
+                <el-button @click="isShowMap" class="search-button" icon="el-icon-search" slot="append"
+                           type="primary"></el-button>
+              </oms-input>
+              <span v-show="form.receiverAddressLongitude">经度:{{form.receiverAddressLongitude}} 维度:{{form.receiverAddressDimension}}</span>
             </el-form-item>
+            <map-location @changeAddress="changeAddress" ref="bdMap"></map-location>
+
           </div>
           <div class="hr mb-10"></div>
         </div>
@@ -325,9 +332,10 @@
 <script>
   import {BaseInfo, TmsWayBill} from '@/resources';
   import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+  import MapLocation from '@/components/common/map-location';
 
   export default {
-    components: {TwoColumn},
+    components: {TwoColumn, MapLocation},
     data() {
       return {
         list: [],
@@ -342,6 +350,8 @@
         ],
         currentTab: {},
         form: {
+          receiverAddressLongitude: '',
+          receiverAddressDimension: '',
           goodsList: [
             {
               goodsName: '',
@@ -423,6 +433,7 @@
         if (this.action === 'add') {
           this.form = Object.assign({}, val);
           this.$nextTick(() => {
+            this.clearMap();
             this.$refs.form && this.$refs.form.clearValidate();
           });
         }
@@ -437,6 +448,12 @@
                 this.addGoods();
               }
               this.$nextTick(() => {
+                this.clearMap();
+                if (!this.form.receiverAddressLongitude) {
+                  this.form.receiverAddress && this.getLocation();
+                } else {
+                  this.setMarker();
+                }
                 this.$refs.form && this.$refs.form.clearValidate();
               });
             });
@@ -445,6 +462,37 @@
       }
     },
     methods: {
+      setMarker() {
+        const that = this.$refs['bdMap'];
+        that.onSearchResult([
+          {lng: this.form.receiverAddressLongitude, lat: this.form.receiverAddressDimension}
+        ]);
+      },
+      clearMap() {
+        const that = this.$refs['bdMap'];
+        that && that.clear();
+      },
+      changeAddress(poi) {
+        if (poi[0]) {
+          this.form.receiverAddressLongitude = poi[0].lng;
+          this.form.receiverAddressDimension = poi[0].lat;
+        }
+      },
+      isShowMap() {
+        this.showMap = true;
+        this.getLocation();
+      },
+      getLocation() {
+        const that = this.$refs['bdMap'];
+        that.getLgtAndLat(this.form.receiverAddress, result => {
+          let geoCodes = result.geocodes;
+          if (geoCodes.length) {
+            that.onSearchResult([
+              {lng: geoCodes[0].location.getLng(), lat: geoCodes[0].location.getLat()}
+            ]);
+          }
+        });
+      },
       remove: function (item) {
         let index = this.form.goodsList.indexOf(item);
         // 移除删除项

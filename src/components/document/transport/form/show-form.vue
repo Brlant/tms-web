@@ -94,6 +94,11 @@
             <oms-col label="电话" :rowSpan="span" :value="form.receiverContractPhone"/>
             <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName"/>
             <oms-col label="收货地址" :rowSpan="span" :value="form.receiverAddress"/>
+            <oms-col :rowSpan="span" :value="form.receiverAddressLongitude" label="经度"/>
+            <oms-col :rowSpan="span" :value="form.receiverAddressDimension" label="维度"/>
+            <div class="clearfix">
+              <map-location :draggable="false" ref="bdMap" v-if="form.receiverAddress" vid="showmap"></map-location>
+            </div>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
@@ -413,12 +418,14 @@
   import Perm from '@/components/common/perm';
   import OmsCostTime from '@/components/common/timeCost.vue';
   import Show3dData from './show-3d-data';
+  import MapLocation from '@/components/common/map-location';
 
   export default {
     components: {
       Perm,
       OmsCol,
-      TwoColumn, MapPath, attachmentLists, OmsCostTime, Show3dData
+      TwoColumn, MapPath, attachmentLists, OmsCostTime, Show3dData,
+      MapLocation
     },
     data() {
       return {
@@ -483,6 +490,7 @@
         if (val.id) {
           TmsWayBill.getOneTmsWayBill(val.id).then(res => {
             this.form = res.data;
+            this.form.receiverAddressLongitude && this.setMarker();
             this.detailForm = {
               incubator: '',
               thermometerList: [],
@@ -502,6 +510,19 @@
       }
     },
     methods: {
+      setMarker() {
+        const that = this.$refs['bdMap'];
+        if (!that) {
+          setTimeout(() => {
+            this.setMarker();
+          }, 1000);
+          return;
+        }
+        that.clear();
+        that.onSearchResult([
+          {lng: this.form.receiverAddressLongitude, lat: this.form.receiverAddressDimension}
+        ]);
+      },
       onSubmit: function () {
         if (!this.detailForm.incubator && !this.detailForm.thermometerList.length) {
           this.$notify.warning({
