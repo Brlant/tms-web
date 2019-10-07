@@ -349,7 +349,10 @@
           deleteFlag: false,
           objectId: 'tms-system'
         }, this.filters);
+        let nowTime = Date.now();
+        this.nowTime = nowTime;
         Access.query(param).then(res => {
+          if (this.nowTime > nowTime) return;
           if (param.keyword !== this.typeTxt) return;
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
