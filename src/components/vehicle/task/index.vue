@@ -723,7 +723,10 @@
         this.checkList = [];
         this.checkListPara = [];
         this.taskIdList = [];
+        let nowTime = Date.now();
+        this.nowTime = nowTime;
         TransportTask.query(param).then(res => {
+          if (this.nowTime > nowTime) return;
           res.data.list.forEach(val => {
             val.isChecked = false;
           });

@@ -460,7 +460,10 @@
         // 清空勾选列表
         this.checkList = [];
         this.checkListPara = [];
+        let nowTime = Date.now();
+        this.nowTime = nowTime;
         TmsOrder.query(param).then(res => {
+          if (this.nowTime > nowTime) return;
           res.data.list.forEach(val => {
             val.isChecked = false;
           });
