@@ -376,7 +376,7 @@
     <el-dialog :title="'运单号: ' + formItem.waybillNumber" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
                custom-class="custom-dialog-map">
       <map-path :formItem="formItem" :mapStyle="{height: bodyHeight}" vid="mapBigPath"
-                v-show="isShowMulBigMap"></map-path>
+                showPoint v-show="isShowMulBigMap"></map-path>
     </el-dialog>
   </div>
 </template>

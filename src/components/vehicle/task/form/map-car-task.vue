@@ -10,11 +10,15 @@
     padding: 4px 6px;
     background: #fff;
     border-radius: 2px;
+    z-index: 2;
   }
 </style>
 <template>
   <div>
     <div class="map-part">
+      <div class="map__checkbox" v-show="showPoint">
+        <el-checkbox size="mini" v-model="isShowTemp">标题</el-checkbox>
+      </div>
       <el-amap :style="mapStyle" :vid="mapRef" :zoom="10" ref="taskMap">
         <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
         <!--:label="marker.label"></el-amap-marker>-->
@@ -30,13 +34,13 @@
     props: {
       formItem: {
         type: Object,
-        default () {
+        default() {
           return {};
         }
       },
       mapStyle: {
         type: Object,
-        default () {
+        default() {
           return {
             height: '200px'
           };
@@ -46,18 +50,20 @@
         type: String,
         default: 'taskMap'
       },
-      position: Array
+      position: Array,
+      showPoint: Boolean
     },
     mixins: [MapMixin],
     data: function () {
       return {
         pathSimplifierIns: null,
         isShowTemp: false,
-        timers: []
+        timers: [],
+        simpleMarkers: []
       };
     },
     computed: {
-      markers () {
+      markers() {
         let waybillList = this.formItem.waybillList || [];
         if (!waybillList.length) return [];
         let set = new Set();
@@ -78,7 +84,7 @@
       }
     },
     watch: {
-      formItem (val) {
+      formItem(val) {
         this.timers.forEach(i => {
           window.clearTimeout(i);
         });
@@ -87,13 +93,14 @@
         if (!val.id) return;
         this.$http.get(`/track-transportation/task/${val.id}`).then(res => {
           let point = res.data.map(m => [m.longitude, m.latitude]);
-          const pointDetails = res.data.filter(f => f.longitude && f.latitude).map((m, index) => {
+          this.pointDetails = res.data.filter(f => f.longitude && f.latitude).map((m, index) => {
             return {
               lnglat: [m.longitude, m.latitude],
               time: this.$moment(m.collectionTime).format('YYYY-MM-DD HH:mm:ss'),
               m
             };
           });
+
           // 起点
           if (point.length) {
             this.drawPoint({
@@ -116,12 +123,28 @@
           });
           // 轨迹
           this.drawPath(point);
-          // 画点
-          this.drawPathPoint(pointDetails);
         });
+      },
+      isShowTemp(val) {
+        this.removeSimpleMarkers(this.simpleMarkers);
+        if (val) {
+          this.simpleMarkers = [];
+          // 画点
+          this.drawPathPoint(this.pointDetails);
+        }
       }
     },
     methods: {
+      removeSimpleMarkers(list, limit = 20, index = 0) {
+        let childList = list.slice(index * limit, limit * (index + 1));
+        if (!childList.length) return;
+        let map = this.$refs.taskMap.$$getInstance();
+        map && map.remove(childList);
+        index++;
+        setTimeout(() => {
+          this.removeSimpleMarkers(list, limit, index);
+        }, 20);
+      },
       clearMap() {
         let map = this.$refs.taskMap.$$getInstance();
         if (!map || !window.AMapUI) {
@@ -130,7 +153,7 @@
         map && map.clearMap();
       },
       // 画点
-      drawPoint (i, index, iconStyle = 'green') {
+      drawPoint(i, index, iconStyle = 'green') {
         let map = this.$refs.taskMap.$$getInstance();
         if (!map || !window.AMapUI) {
           setTimeout(() => this.drawPoint(map, i, index), 200);
@@ -155,7 +178,7 @@
         });
       },
       // 画出轨迹
-      drawPath (points) {
+      drawPath(points) {
         if (!points.length) return;
         let map = this.$refs.taskMap.$$getInstance();
         if (!map || !window.AMapUI) {
@@ -168,7 +191,7 @@
             getPath: function (pathData, pathIndex) {
               return pathData.points;
             },
-            getHoverTitle () {
+            getHoverTitle() {
               return '';
             },
             renderOptions: {
@@ -186,6 +209,7 @@
         });
       },
       drawPathPoint(points, isNotFirst) {
+        if (!this.isShowTemp) return;
         if (this.mapRef === 'taskMap') return;
         if (!points.length) return;
         let prePoints = [];
@@ -199,7 +223,7 @@
         });
         this.timers.push(setTimeout(() => {
           this.drawPathPoint(nextPoints, true);
-        }, 50));
+        }, 20));
       },
       createSvgMarker(i) {
         let map = this.$refs.taskMap.$$getInstance();
@@ -215,7 +239,7 @@
             strokeColor: '#666' //描边颜色
           });
           //利用该shape构建SvgMarker
-          const marker = new SvgMarker(
+          this.simpleMarkers.push(new SvgMarker(
             //第一个参数传入shape实例
             shape,
             //第二个参数为SimpleMarker的构造参数（iconStyle除外）
@@ -223,12 +247,12 @@
               // showPositionPoint: true, //显示定位点
               map: map,
               position: i.lnglat,
-              label: this.isShowTemp ? {
+              label: {
                 content: this.formatLabel(i),
                 offset: new window.AMap.Pixel(16, -12)
-              } : null
+              }
             }
-          );
+          ));
         });
       },
       formatTempLevel(temp) {
