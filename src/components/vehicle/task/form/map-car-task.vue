@@ -19,7 +19,7 @@
         <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
         <!--:label="marker.label"></el-amap-marker>-->
       </el-amap>
-      <div v-show class="empty-info mini">暂无信息</div>
+      <!--      <div class="empty-info mini">暂无信息</div>-->
     </div>
   </div>
 </template>
@@ -52,7 +52,7 @@
     data: function () {
       return {
         pathSimplifierIns: null,
-        isShowTemp: true,
+        isShowTemp: false,
         timers: []
       };
     },

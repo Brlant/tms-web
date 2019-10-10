@@ -12,7 +12,7 @@ module.exports = {
     https: false,
     hotOnly: false, disableHostCheck: true, proxy: {
       '/api': {
-        target: 'https://tms.cnvss.net/',
+        target: 'https://tms.sinopharm-bio.com/',
         changOrigin: true
       }
     }
