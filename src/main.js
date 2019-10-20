@@ -97,11 +97,7 @@ Vue.filter('formatMoney', function (val) {
 
 Vue.filter('formatAddress', val => {
   if (!val) return '';
-  let arr = val.split('/');
-  let address = utils.formatAddress(...val.split('/'));
-  if (!address) return val;
-  let arrAddress = address.split('/');
-  return arr.map((m, index) => arrAddress[index] || m).join('/');
+  return utils.formatAddress(...val.split('/'));
 });
 
 // 滚动下拉加载
