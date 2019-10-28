@@ -267,9 +267,11 @@
         let time = this.$moment(i.m.positioningTime).format('YYYY-MM-DD HH:mm:ss');
         let speed = i.m.speed && (i.m.speed * 3.6).toFixed(1) || '';
         let speedTitle = speed ? `<span class="title">车速:${speed} km/h</span>` : '';
+        let angleTitle = i.m.angle ? `<span class="title">角度:${i.m.angle}</span>` : '';
         return `<div class="marker-title">
               <span>${time}</span>
               ${speedTitle}
+              ${angleTitle}
           </div>`;
       }
     }
