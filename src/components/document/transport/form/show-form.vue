@@ -95,7 +95,7 @@
             <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName"/>
             <oms-col label="收货地址" :rowSpan="span" :value="form.receiverAddress"/>
             <oms-col :rowSpan="span" :value="form.receiverAddressLongitude" label="经度"/>
-            <oms-col :rowSpan="span" :value="form.receiverAddressDimension" label="纬度"/>
+            <oms-col :rowSpan="span" :value="form.receiverAddressDimension" label="维度"/>
             <div class="clearfix">
               <map-location :draggable="false" ref="bdMap" v-if="form.receiverAddress" vid="showmap"></map-location>
             </div>

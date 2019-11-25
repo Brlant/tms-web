@@ -158,7 +158,7 @@
                 <el-button @click="isShowMap" class="search-button" icon="el-icon-search" slot="append"
                            type="primary"></el-button>
               </oms-input>
-              <span v-show="form.receiverAddressLongitude">经度:{{form.receiverAddressLongitude}} 纬度:{{form.receiverAddressDimension}}</span>
+              <span v-show="form.receiverAddressLongitude">经度:{{form.receiverAddressLongitude}} 维度:{{form.receiverAddressDimension}}</span>
             </el-form-item>
             <map-location @changeAddress="changeAddress" ref="bdMap"></map-location>
 
