@@ -701,7 +701,6 @@
           }
           this.doing = true;
           // this.form.orgRelationTypeList = this.orgRelationTypeList;
-          self.form.type = '1';
           if (this.action === 'add') {
             if (self.form.id) {
               self.form.id = '';
@@ -709,6 +708,7 @@
             if (self.form.extDto && self.form.extDto.id) {
               self.form.extDto.id = '';
             }
+            self.form.type = '1';
             BaseInfo.save(self.form).then(() => {
               this.doing = false;
               this.$notify.success({
