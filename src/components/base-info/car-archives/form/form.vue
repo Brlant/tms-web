@@ -102,7 +102,7 @@
             </two-column>
             <two-column>
               <el-form-item slot="left" label="每公里运费" prop="carDto.perFreight">
-                <oms-input type="text" v-model="form.carDto.perFreight" min="0" placeholder="请输入车厢高度"
+                <oms-input min="0" placeholder="请输入每公里运费" type="text" v-model="form.carDto.perFreight"
                            @blur="formatPrice">
                   <template slot="prepend">¥</template>
                 </oms-input>
