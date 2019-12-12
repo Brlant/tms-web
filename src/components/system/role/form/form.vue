@@ -216,6 +216,11 @@
           }
         }
       },
+      getNodeIndex(id) {
+        let item = this.$store.state.allMenuArray.find(f => f.id === id);
+        if (!item) return 0;
+        return this.$store.state.allMenuArray.indexOf(item);
+      },
       onSubmit: function (formName) {
         this.$refs[formName].validate((valid) => {
           if (!valid || this.doing) {
@@ -226,8 +231,27 @@
           // 获取选中的菜单
           let menuList = [];
           this.getCheckedMenu(this.$refs['tree'].root.childNodes, menuList);
-          menuList.forEach(val => {
-            rolelist.push({name: val.id, title: val.label});
+          menuList.forEach((val, index) => {
+            let node = this.$refs.tree.getNode(val.id);
+            let parent = node.parent;
+            if (Array.isArray(parent.data)) {
+              rolelist.push({
+                name: val.id,
+                title: val.label,
+                sort: this.getNodeIndex(val.id) || index,
+                superiorName: null,
+                superiorTitle: null
+              });
+            } else {
+              rolelist.push({
+                name: val.id,
+                title: val.label,
+                sort: this.getNodeIndex(val.id) || index,
+                superiorName: parent.data.id,
+                superiorTitle:
+                parent.data.label
+              });
+            }
           });
           this.form.permissionList = rolelist;
           if (this.action === 'add') {
