@@ -5,6 +5,14 @@ export default {
 
   },
   methods: {
+    flattenArray(menu, list = []) {
+      menu.forEach(i => {
+        list.push(i);
+        if (i.children) {
+          this.flattenArray(i.children, list);
+        }
+      });
+    },
     getRoleMenus(noCache = false) {
       return new Promise((resolve, reject) => {
         let menu = this.$store.state.allMenuList;
@@ -14,6 +22,9 @@ export default {
           let res = {
             data: menuTree
           };
+          let list = [];
+          this.flattenArray(menuTree, list);
+          this.$store.commit('initAllMenuArray', list);
           this.$store.commit('initPermList', res);
           resolve(res);
           let getParentIds = (menus, parentsIds) => {

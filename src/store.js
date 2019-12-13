@@ -10,6 +10,7 @@ const state = {
   dict: {},
   permissions: [],
   allMenuList: {},
+  allMenuArray: [],
   roleList: {},
   attachmentDialog: {attachmentId: 0, open: false, attachmentList: []},
   dev: {},
@@ -49,6 +50,9 @@ const mutations = {
   },
   initPermList (state, data) {
     state.allMenuList = data;
+  },
+  initAllMenuArray(state, data) {
+    state.allMenuArray = data;
   },
   setBodyHeight (state, data) {
     state.bodyHeight = data.height;

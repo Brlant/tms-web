@@ -491,6 +491,9 @@ export default [{
       'sort': null,
       'children': null,
       'leaf': true
+    }, {
+      id: 'tms-access-platfrom-permission-export',
+      label: '导出角色权限信息'
     }],
     'leaf': false
   }, {
