@@ -228,7 +228,7 @@
                     <el-select filterable remote placeholder="请输入温度计名称/编号/编码查询温度计" :remote-method="queryDevList"
                                :clearable="true" @click.native="queryDevList('')"
                                v-model="detailForm.thermometerList" popperClass="good-selects" multiple="">
-                      <el-option :value="ccsDev.devCode" :key="ccsDev.devCode" :label="ccsDev.devName"
+                      <el-option :key="ccsDev.id" :label="ccsDev.devName" :value="ccsDev.devCode"
                                  v-for="ccsDev in ccsDevList">
                         <div style="overflow: hidden">
                           <span class="pull-left" style="clear: right">{{ccsDev.devName}}</span>
@@ -572,7 +572,8 @@
         let params = {
           keyWord: query,
           pageNo: 1,
-          pageSize: 20
+          pageSize: 20,
+          devType: 1
         };
         this.$http.get('/tms-pack/dev', {params}).then(res => {
           this.ccsDevList = res.data.currentList;
