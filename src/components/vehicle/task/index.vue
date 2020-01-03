@@ -32,6 +32,12 @@
             打印预派车任务
           </el-button>
         </perm>
+        <perm label="tms-task-car-task-export-detail">
+          <el-button :disabled="isLoading" @click="exportOrderFile" plain size="small">
+            <f-a class="icon-small" name="print"></f-a>
+            导出运单统计明细
+          </el-button>
+        </perm>
         <perm label="tms-task-car-task-export">
           <el-button plain size="small" @click="exportFile" :disabled="isLoading">
             <f-a class="icon-small" name="print"></f-a>
@@ -563,6 +569,36 @@
             isPrinting: false,
             moduleId: '/vehicle/delivery/task'
           });
+          this.$notify.error({
+            message: error.response.data && error.response.data.msg || '导出失败'
+          });
+        });
+      },
+      exportOrderFile() {
+        if (!this.taskIdList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请勾选出车任务'
+          });
+          return;
+        }
+        this.isLoading = true;
+        this.$store.commit('initPrint', {isPrinting: true, moduleId: '/vehicle/delivery/task', text: '正在导出'});
+        let params = Object.assign({}, {taskList: this.taskIdList});
+        http.post('transport-task/export/list', params).then(res => {
+          utils.download(res.data.path, '运单统计明细');
+          this.isLoading = false;
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: '/vehicle/delivery/task'});
+          // 清空列表
+          this.taskIdList = [];
+          this.checkList = [];
+          // 清空勾选
+          this.dataList.forEach(val => {
+            val.isChecked = false;
+          });
+        }).catch(error => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: '/vehicle/delivery/task'});
           this.$notify.error({
             message: error.response.data && error.response.data.msg || '导出失败'
           });

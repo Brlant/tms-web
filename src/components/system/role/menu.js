@@ -442,6 +442,9 @@ export default [{
       'sort': null,
       'children': null,
       'leaf': true
+    }, {
+      id: 'tms-task-car-task-export-detail',
+      label: '导出运单统计明细'
     }],
     'leaf': false
   }],
