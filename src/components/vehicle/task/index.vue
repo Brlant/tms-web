@@ -12,7 +12,7 @@
 </style>
 <template>
   <div class="order-page">
-    <search-part @search="searchResult">
+    <search-part @search="searchResult" ref="search">
       <template slot="btn">
         <perm label="tms-task-car-task-cancel">
           <el-button plain size="small" @click="batchCancel" v-if="activeStatus==='0'">
@@ -575,32 +575,28 @@
         });
       },
       exportOrderFile() {
-        if (!this.taskIdList.length) {
-          this.$notify.warning({
-            duration: 2000,
-            message: '请勾选出车任务'
-          });
-          return;
-        }
         this.isLoading = true;
-        this.$store.commit('initPrint', {isPrinting: true, moduleId: '/vehicle/delivery/task', text: '正在导出'});
-        let params = Object.assign({}, {taskList: this.taskIdList});
-        http.post('transport-task/export/list', params).then(res => {
-          utils.download(res.data.path, '运单统计明细');
-          this.isLoading = false;
-          this.$store.commit('initPrint', {isPrinting: false, moduleId: '/vehicle/delivery/task'});
-          // 清空列表
-          this.taskIdList = [];
-          this.checkList = [];
-          // 清空勾选
-          this.dataList.forEach(val => {
-            val.isChecked = false;
-          });
-        }).catch(error => {
-          this.isLoading = false;
-          this.$store.commit('initPrint', {isPrinting: false, moduleId: '/vehicle/delivery/task'});
-          this.$notify.error({
-            message: error.response.data && error.response.data.msg || '导出失败'
+        this.$refs.search.search();
+        this.$nextTick(() => {
+          this.$store.commit('initPrint', {isPrinting: true, moduleId: '/vehicle/delivery/task', text: '正在导出'});
+          let params = Object.assign({}, this.filters);
+          http.post('transport-task/export/list', params).then(res => {
+            utils.download(res.data.path, '运单统计明细');
+            this.isLoading = false;
+            this.$store.commit('initPrint', {isPrinting: false, moduleId: '/vehicle/delivery/task'});
+            // 清空列表
+            this.taskIdList = [];
+            this.checkList = [];
+            // 清空勾选
+            this.dataList.forEach(val => {
+              val.isChecked = false;
+            });
+          }).catch(error => {
+            this.isLoading = false;
+            this.$store.commit('initPrint', {isPrinting: false, moduleId: '/vehicle/delivery/task'});
+            this.$notify.error({
+              message: error.response.data && error.response.data.msg || '导出失败'
+            });
           });
         });
       },
