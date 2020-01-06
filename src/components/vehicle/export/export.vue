@@ -202,7 +202,7 @@
       },
       exportOrderFile() {
         this.searchCondition.startTime = this.startTimes ? this.$moment(this.startTimes[0]).valueOf() : '';
-        this.searchCondition.sEndTime = this.startTimes ? this.$moment(this.startTimes[1]).valueOf() : '';
+        this.searchCondition.EndTime = this.startTimes ? this.$moment(this.startTimes[1]).valueOf() : '';
         this.searchCondition.weStartTime = this.endTimes ? this.$moment(this.endTimes[0]).valueOf() : '';
         this.searchCondition.weEndTime = this.endTimes ? this.$moment(this.endTimes[1]).valueOf() : '';
         let params = Object.assign({}, this.searchCondition);
