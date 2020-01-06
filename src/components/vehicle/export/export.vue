@@ -148,9 +148,8 @@
         times: [],
         senderOrgList: [],
         receiverOrgList: [],
-        createTimes: [],
-        startTimes: [],
-        endTimes: [],
+        startTimes: null,
+        endTimes: null,
         isLoading: false,
       };
     },
@@ -185,8 +184,8 @@
           receiverId: ''
         };
         this.createTimes = [];
-        this.startTimes = [];
-        this.endTimes = [];
+        this.startTimes = null;
+        this.endTimes = null;
       },
       isShow(val) {
         this.showSearch = val;
@@ -202,12 +201,13 @@
         });
       },
       exportOrderFile() {
-        this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path, text: '正在导出'});
+        this.searchCondition.startTime = this.startTimes ? this.$moment(this.startTimes[0]).valueOf() : '';
+        this.searchCondition.sEndTime = this.startTimes ? this.$moment(this.startTimes[1]).valueOf() : '';
+        this.searchCondition.weStartTime = this.endTimes ? this.$moment(this.endTimes[0]).valueOf() : '';
+        this.searchCondition.weEndTime = this.endTimes ? this.$moment(this.endTimes[1]).valueOf() : '';
         let params = Object.assign({}, this.searchCondition);
-        params.startTime = params.startTime ? this.$moment(params.startTime).valueOf() : '';
-        params.endTime = params.endTime ? this.$moment(params.endTime).valueOf() : '';
-        params.weStartTime = params.weStartTime ? this.$moment(params.weStartTime).valueOf() : '';
-        params.weEndTime = params.weEndTime ? this.$moment(params.weEndTime).valueOf() : '';
+        if (!Object.keys(params).some(k => params[k])) return this.$notify.info('请选择查询条件');
+        this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path, text: '正在导出'});
         this.$http.post('transport-task/export/list', params).then(res => {
           utils.download(res.data.path, '运单统计明细');
           this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
