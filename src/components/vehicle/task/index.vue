@@ -32,12 +32,12 @@
             打印预派车任务
           </el-button>
         </perm>
-        <perm label="tms-task-car-task-export-detail">
-          <el-button :disabled="isLoading" @click="exportOrderFile" plain size="small">
-            <f-a class="icon-small" name="print"></f-a>
-            导出运单统计明细
-          </el-button>
-        </perm>
+        <!--        <perm label="tms-task-car-task-export-detail">-->
+        <!--          <el-button :disabled="isLoading" @click="exportOrderFile" plain size="small">-->
+        <!--            <f-a class="icon-small" name="print"></f-a>-->
+        <!--            导出运单统计明细-->
+        <!--          </el-button>-->
+        <!--        </perm>-->
         <perm label="tms-task-car-task-export">
           <el-button plain size="small" @click="exportFile" :disabled="isLoading">
             <f-a class="icon-small" name="print"></f-a>
