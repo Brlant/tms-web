@@ -32,12 +32,12 @@
             打印预派车任务
           </el-button>
         </perm>
-        <perm label="tms-task-car-task-export-detail">
-          <el-button :disabled="isLoading" @click="exportOrderFile" plain size="small">
-            <f-a class="icon-small" name="print"></f-a>
-            导出运单统计明细
-          </el-button>
-        </perm>
+        <!--        <perm label="tms-task-car-task-export-detail">-->
+        <!--          <el-button :disabled="isLoading" @click="exportOrderFile" plain size="small">-->
+        <!--            <f-a class="icon-small" name="print"></f-a>-->
+        <!--            导出运单统计明细-->
+        <!--          </el-button>-->
+        <!--        </perm>-->
         <perm label="tms-task-car-task-export">
           <el-button plain size="small" @click="exportFile" :disabled="isLoading">
             <f-a class="icon-small" name="print"></f-a>
@@ -580,6 +580,12 @@
         this.$nextTick(() => {
           this.$store.commit('initPrint', {isPrinting: true, moduleId: '/vehicle/delivery/task', text: '正在导出'});
           let params = Object.assign({}, this.filters);
+          params.createStartTime = params.createStartTime ? this.$moment(params.createStartTime).valueOf() : '';
+          params.createEndTime = params.createEndTime ? this.$moment(params.createEndTime).valueOf() : '';
+          params.sStartTime = params.sStartTime ? this.$moment(params.sStartTime).valueOf() : '';
+          params.sEndTime = params.sEndTime ? this.$moment(params.sEndTime).valueOf() : '';
+          params.eStartTime = params.eStartTime ? this.$moment(params.eStartTime).valueOf() : '';
+          params.eEndTime = params.eEndTime ? this.$moment(params.eEndTime).valueOf() : '';
           http.post('transport-task/export/list', params).then(res => {
             utils.download(res.data.path, '运单统计明细');
             this.isLoading = false;
