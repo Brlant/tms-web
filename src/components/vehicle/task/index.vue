@@ -12,7 +12,7 @@
 </style>
 <template>
   <div class="order-page">
-    <search-part @search="searchResult">
+    <search-part @search="searchResult" ref="search">
       <template slot="btn">
         <perm label="tms-task-car-task-cancel">
           <el-button plain size="small" @click="batchCancel" v-if="activeStatus==='0'">
@@ -30,6 +30,12 @@
           <el-button plain size="small" @click="printPreFile" :disabled="isLoading" v-if="activeStatus==='0'">
             <f-a class="icon-small" name="print"></f-a>
             打印预派车任务
+          </el-button>
+        </perm>
+        <perm label="tms-task-car-task-export-detail">
+          <el-button :disabled="isLoading" @click="exportOrderFile" plain size="small">
+            <f-a class="icon-small" name="print"></f-a>
+            导出运单统计明细
           </el-button>
         </perm>
         <perm label="tms-task-car-task-export">
@@ -565,6 +571,32 @@
           });
           this.$notify.error({
             message: error.response.data && error.response.data.msg || '导出失败'
+          });
+        });
+      },
+      exportOrderFile() {
+        this.isLoading = true;
+        this.$refs.search.search();
+        this.$nextTick(() => {
+          this.$store.commit('initPrint', {isPrinting: true, moduleId: '/vehicle/delivery/task', text: '正在导出'});
+          let params = Object.assign({}, this.filters);
+          http.post('transport-task/export/list', params).then(res => {
+            utils.download(res.data.path, '运单统计明细');
+            this.isLoading = false;
+            this.$store.commit('initPrint', {isPrinting: false, moduleId: '/vehicle/delivery/task'});
+            // 清空列表
+            this.taskIdList = [];
+            this.checkList = [];
+            // 清空勾选
+            this.dataList.forEach(val => {
+              val.isChecked = false;
+            });
+          }).catch(error => {
+            this.isLoading = false;
+            this.$store.commit('initPrint', {isPrinting: false, moduleId: '/vehicle/delivery/task'});
+            this.$notify.error({
+              message: error.response.data && error.response.data.msg || '导出失败'
+            });
           });
         });
       },
