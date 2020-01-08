@@ -113,6 +113,7 @@
             this.btnString = '登陆中..';
             this.loading = true;
             let user = Object.assign({}, this.user, {encryptionPsw: base64(this.user.password)});
+            delete user.password;
             Auth.login(user).then(response => {
               let userId = window.localStorage.getItem('userId');
               this.$store.commit('initUser', response.data);
