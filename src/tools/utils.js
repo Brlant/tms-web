@@ -198,16 +198,18 @@ export default {
     fileLink.click();
     body.removeChild($a);
   },
-  printLocation (that, obj) {
+  printLocation(that, obj) {
     let url = 'https://print.sinopharm-bio.com:8015';
-    let ary = JSON.parse(window.localStorage.getItem('localConfiguration')) || [];
-    ary.forEach(i => {
-      if (i.key === 'printIp' && i.value) {
-        url = i.value;
-      }
-    });
+    let printerList = that.$store.state.dict.printer || [];
+    const type = obj.type;
+    let dictUrl = '';
+    let printerItem = printerList.find(f => f.label === type);
+    if (printerItem) {
+      dictUrl = printerItem.key;
+    }
+    obj.type = undefined;
     that.$http({
-      url: `${url}/print/${obj.type}`,
+      url: dictUrl ? dictUrl : `${url}/print/${type}`,
       method: 'get',
       params: obj,
       timeout: 30000
@@ -219,9 +221,9 @@ export default {
         message: '打印机正在打印文件'
       });
     }).catch(error => {
-      that.$notify.error({
-        message: error.response && error.response.data && error.response.data.msg || '打印失败'
-      });
+      // that.$notify.error({
+      //   message: error.response && error.response && error.response.data && error.response.msg || '打印失败'
+      // });
     });
   },
   getPos (e) {//这是一个 获取鼠标位置的函数
