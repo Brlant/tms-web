@@ -202,14 +202,13 @@ export default {
     let url = 'https://print.sinopharm-bio.com:8015';
     let printerList = that.$store.state.dict.printer || [];
     const type = obj.type;
-    let dictUrl = '';
-    let printerItem = printerList.find(f => f.label === type);
+    let printerItem = printerList.find(f => f.label === 'printUrl');
     if (printerItem) {
-      dictUrl = printerItem.key;
+      url = printerItem.key;
     }
     obj.type = undefined;
     that.$http({
-      url: dictUrl ? dictUrl : `${url}/print/${type}`,
+      url: `${url}/print/${type}`,
       method: 'get',
       params: obj,
       timeout: 30000
