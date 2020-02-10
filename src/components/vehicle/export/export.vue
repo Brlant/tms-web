@@ -49,8 +49,8 @@
     </el-row>
     <el-row>
       <el-col :span="8">
-        <oms-form-row :span="5" label="波次号">
-          <oms-input placeholder="请输入波次号" v-model="searchCondition.orderNumber"
+        <oms-form-row :span="5" label="TMS订单号">
+          <oms-input placeholder="请输入TMS订单号" v-model="searchCondition.orderNumber"
           ></oms-input>
         </oms-form-row>
       </el-col>
@@ -93,8 +93,8 @@
     </el-row>
     <el-row>
       <el-col :span="8">
-        <oms-form-row :span="5" label="订单号">
-          <oms-input placeholder="请输入订单号" v-model="searchCondition.orderNo"
+        <oms-form-row :span="5" label="货主订单号">
+          <oms-input placeholder="请输入货主订单号" v-model="searchCondition.orderNo"
           ></oms-input>
         </oms-form-row>
       </el-col>
