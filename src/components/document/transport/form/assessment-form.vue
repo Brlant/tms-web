@@ -43,7 +43,7 @@
   </dialog-template>
 </template>
 <script>
-  import {BaseInfo, OmsAttachment, TmsWayBill} from '@/resources';
+  import {OmsAttachment, TmsWayBill} from '@/resources';
 
   export default {
     data () {
@@ -120,7 +120,6 @@
       save (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
-            this.doing = true;
             this.$confirm('确认保存运单"' + this.form.waybillNumber + '"的评估结果?', '', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
@@ -131,6 +130,7 @@
                 qualityInspection: this.form.qualityInspection,
                 attachmentIdList: this.form.attachmentIdList
               };
+              this.doing = true;
               TmsWayBill.assessmentTmsWayBill(this.form.id, tempForm).then(res => {
                 this.$notify.success({
                   name: '成功',
