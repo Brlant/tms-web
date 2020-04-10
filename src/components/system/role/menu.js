@@ -429,13 +429,6 @@ export default [{
       'children': null,
       'leaf': true
     }, {
-      id: 'tms-task-car-task-export-new',
-      'parentId': 'tms-task-car-task',
-      'label': '导出派车任务单',
-      'sort': null,
-      'children': null,
-      'leaf': true
-    }, {
       'id': 'tms-task-car-task-print',
       'parentId': 'tms-task-car-task',
       'label': '打印出车任务',
