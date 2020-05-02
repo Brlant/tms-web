@@ -21,3 +21,14 @@ local-build:
     - scp -r dist/* root@172.25.10.10:/opt/dev-web-dist/tms
   only:
     - dev3.0
+
+patch-deploy:
+  stage: deploy
+  when: manual
+  script:
+    - npm run build
+    - npm version minor
+  only:
+    - master
+  tags:
+    - node

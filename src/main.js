@@ -4,8 +4,8 @@ import tinyVue from './lib/tinyVue';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import '@/assets/scss/index.scss';
-import Raven from 'raven-js';
-import RavenVue from 'raven-js/plugins/vue';
+import * as Sentry from '@sentry/browser';
+import * as Integrations from '@sentry/integrations';
 import './assets/css/basic.css';
 import '../static/fonts/iconfont.css';
 import Vuex from 'vuex';
@@ -29,25 +29,17 @@ VueAMap.initAMapApiLoader({
 });
 
 if (process.env.NODE_ENV === 'production') {
-  // 日志工具
-  Raven
-    .config('https://62f56ceea555483fab3d6238ff4a80d0@sinopharm-bio.com/3', {
-      serverName: 'tms',
-      // debug: true,
-      shouldSendCallback: (date) => { // 过滤错误日志
-        // 开发调试过程不发送错误日志
-        // if (process.env.NODE_ENV !== 'production') {
-        //   return false;
-        // }
-        let filterArray = ['Request failed with status code 401', 'Request failed with status code 502'];
-        if (date && date.hasOwnProperty('exception') && date.exception.hasOwnProperty('values') && filterArray.indexOf(date.exception.values[0].value) > -1) {
-          return false;
-        }
-        return date;
+  Sentry.init({
+    dsn: 'https://eb94ae86f9104780be615d09d50416f2@f-log.sinopharm-bio.com/3',
+    integrations: [new Integrations.Vue({Vue, attachProps: true})],
+    shouldSendCallback: (date) => {// 过滤错误日志
+      let filterArray = ['Request failed with status code 401', 'Request failed with status code 502'];
+      if (date && date.hasOwnProperty('exception') && date.exception.hasOwnProperty('values') && filterArray.indexOf(date.exception.values[0].value) > -1 || date && date.transaction && date.transaction.indexOf('http://requirejs.org/docs/errors.html') > -1) {
+        return false;
       }
-    })
-    .addPlugin(RavenVue, Vue)
-    .install();
+      return date;
+    }
+  });
 }
 
 new Vue({
