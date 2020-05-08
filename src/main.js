@@ -12,6 +12,8 @@ import {init} from './tools/init';
 import VueAMap from 'vue-amap';
 import App from './components/App';
 import utils from './tools/utils';
+import * as Sentry from '@sentry/browser';
+import * as Integrations from '@sentry/integrations';
 
 init(Vue);
 Vue.use(require('vue-moment'), {moment});
