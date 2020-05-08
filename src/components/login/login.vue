@@ -110,7 +110,7 @@
       done() {
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
-            this.btnString = '登陆中..';
+            this.btnString = '登录中..';
             this.loading = true;
             let user = Object.assign({}, this.user, {encryptionPsw: base64(this.user.password)});
             delete user.password;
@@ -131,12 +131,12 @@
             }, error => {
               let data = error.response.data;
               this.$notify.error({
-                message: data.msg || '无法登陆'
+                message: data.msg || '无法登录'
               });
               if (data.code === 101 || data.code === 100) {
                 this.getCode();
               }
-              this.btnString = '登陆';
+              this.btnString = '登录';
               this.loading = false;
             });
           }

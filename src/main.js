@@ -4,8 +4,6 @@ import tinyVue from './lib/tinyVue';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import '@/assets/scss/index.scss';
-import * as Sentry from '@sentry/browser';
-import * as Integrations from '@sentry/integrations';
 import './assets/css/basic.css';
 import '../static/fonts/iconfont.css';
 import Vuex from 'vuex';
@@ -31,6 +29,7 @@ VueAMap.initAMapApiLoader({
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({
     dsn: 'https://eb94ae86f9104780be615d09d50416f2@f-log.sinopharm-bio.com/3',
+    environment: 'vss',
     integrations: [new Integrations.Vue({Vue, attachProps: true})],
     shouldSendCallback: (date) => {// 过滤错误日志
       let filterArray = ['Request failed with status code 401', 'Request failed with status code 502'];
