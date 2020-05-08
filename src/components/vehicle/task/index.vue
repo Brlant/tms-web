@@ -620,7 +620,7 @@
           moduleId: '/vehicle/delivery/task'
         });
         let params = Object.assign({}, {taskList: this.taskIdList});
-        http.post('transport-task/export', params).then(res => {
+        http.post('/transport-task/export/task-info', params).then(res => {
           utils.download(res.data.url, '派车任务表');
           this.isLoading = false;
           this.$store.commit('initPrint', {
