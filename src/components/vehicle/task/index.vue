@@ -516,7 +516,7 @@
         };
         this.isLoading = true;
         this.$store.commit('initPrint', {isPrinting: true});
-        http.post('transport-task/export', obj).then(res => {
+        http.post('transport-task/export/task-info', obj).then(res => {
           this.isLoading = false;
           this.$store.commit('initPrint', {isPrinting: false});
           utils.printLocation(this, {'type': 'transport_task', 'path': res.data.url});
