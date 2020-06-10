@@ -558,7 +558,7 @@
             moduleId: '/document/transport'
           });
           this.$notify.error({
-            message: error.response.data && error.response.data.msg || '导出失败'
+            message: error.response&&error.response.data && error.response.data.msg || '导出失败'
           });
         });
       },
@@ -595,7 +595,7 @@
             moduleId: '/document/transport'
           });
           this.$notify.error({
-            message: error.response.data && error.response.data.msg || '导出失败'
+            message: error.response&&error.response.data && error.response.data.msg || '导出失败'
           });
         });
       },

@@ -125,7 +125,7 @@
             this.doing = false;
           }).catch(error => {
             this.$notify.error({
-              message: error.response.data && error.response.data.msg || '修改附件文件名失败'
+              message: error.response&&error.response.data && error.response.data.msg || '修改附件文件名失败'
             });
             this.doing = false;
           });

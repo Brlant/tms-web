@@ -445,7 +445,7 @@
               this.$emit('right-close');
             }).catch(error => {
               this.$notify.error({
-                message: error.response.data && error.response.data.msg || '新增派送任务失败'
+                message: error.response&&error.response.data && error.response.data.msg || '新增派送任务失败'
               });
               this.doing = false;
             });

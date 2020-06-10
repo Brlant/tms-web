@@ -722,7 +722,7 @@
               this.$notify.error({
                 duration: 2000,
                 name: '失败',
-                message: error.response.data && error.response.data.msg || '新增失败'
+                message: error.response&&error.response.data && error.response.data.msg || '新增失败'
               });
             });
           } else {
@@ -745,7 +745,7 @@
               this.$notify.error({
                 duration: 2000,
                 name: '失败',
-                message: error.response.data && error.response.data.msg || '修改' + this.orgTitle + '基础信息"' + self.form.name + '"失败'
+                message: error.response&&error.response.data && error.response.data.msg || '修改' + this.orgTitle + '基础信息"' + self.form.name + '"失败'
               });
             });
           }

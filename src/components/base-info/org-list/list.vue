@@ -301,7 +301,7 @@
             moduleId: moduleId
           });
           this.$notify.error({
-            message: error.response.data && error.response.data.msg || '导出失败'
+            message: error.response&&error.response.data && error.response.data.msg || '导出失败'
           });
         });
       },

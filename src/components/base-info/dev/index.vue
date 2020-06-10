@@ -518,7 +518,7 @@
             moduleId: '/equipmentfiles'
           });
           this.$notify.error({
-            message: error.response.data && error.response.data.msg || '导出失败'
+            message: error.response&&error.response.data && error.response.data.msg || '导出失败'
           });
         });
       },
@@ -828,7 +828,7 @@
           this.$notify({
             type: 'error',
             title: '错误',
-            message: error.response.data && error.response.data.msg || '批量修改状态失败'
+            message: error.response&&error.response.data && error.response.data.msg || '批量修改状态失败'
           });
           this.resetStatusChange();
         });
