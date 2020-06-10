@@ -9,7 +9,7 @@
         <el-row>
           <el-col :span="4">
             <oms-form-row label="订单号" :span="8">
-              <oms-input v-model="searchCondition.orderNo" placeholder="请输入运单号"
+              <oms-input v-model="searchCondition.orderNo" placeholder="请输入订单号"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
