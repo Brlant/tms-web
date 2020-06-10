@@ -21,6 +21,8 @@ local-build:
     - scp -r dist/* root@172.25.10.10:/opt/dev-web-dist/tms
   only:
     - dev3.0
+  tags:
+    - node
 
 patch-deploy:
   stage: deploy
