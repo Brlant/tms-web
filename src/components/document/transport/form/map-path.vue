@@ -184,7 +184,7 @@
             if (that.stateIsShowTemp) return '';
             // 不在点上
             if (!pointIndex) return '';
-            return that.getPointLabel(pathData.points[pathIndex]);
+            return that.getPointLabel(pathData.points[pointIndex]);
           },
           renderOptions: {
             hoverTitleStyle: {
