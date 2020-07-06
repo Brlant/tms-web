@@ -28,8 +28,10 @@
     <template slot="content">
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
         <el-form-item label="是否合格" prop="qualityFlag">
-          <el-switch active-text="合格" inactive-text="不合格" active-color="#13ce66" inactive-color="#ff4949"
-                     v-model="form.qualityFlag"></el-switch>
+<!--          <el-switch active-text="合格" inactive-text="不合格" active-color="#13ce66" inactive-color="#ff4949"-->
+<!--                     v-model="form.qualityFlag"></el-switch>-->
+          <el-radio v-model="form.qualityFlag" :label="true">合格</el-radio>
+          <el-radio v-model="form.qualityFlag" :label="false">不合格</el-radio>
         </el-form-item>
         <el-form-item label="评估结论" prop="qualityInspection">
           <oms-input v-model="form.qualityInspection" type="textarea" placeholder="请输入评估结论"></oms-input>
@@ -88,9 +90,6 @@
       formItem: function (val) {
         if (val.id) {
           this.form = val;
-          if (!val.qualityFlag) {
-            this.form.qualityFlag = false;
-          }
           this.getFileList();
         }
       }
