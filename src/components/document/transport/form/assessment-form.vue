@@ -4,10 +4,12 @@
     .content-left {
       width: $labelWidth;
     }
+
     .content-right {
       > h3 {
         left: $labelWidth;
       }
+
       left: $labelWidth;
     }
   }
@@ -28,8 +30,8 @@
     <template slot="content">
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
         <el-form-item label="是否合格" prop="qualityFlag">
-<!--          <el-switch active-text="合格" inactive-text="不合格" active-color="#13ce66" inactive-color="#ff4949"-->
-<!--                     v-model="form.qualityFlag"></el-switch>-->
+          <!--          <el-switch active-text="合格" inactive-text="不合格" active-color="#13ce66" inactive-color="#ff4949"-->
+          <!--                     v-model="form.qualityFlag"></el-switch>-->
           <el-radio v-model="form.qualityFlag" :label="true">合格</el-radio>
           <el-radio v-model="form.qualityFlag" :label="false">不合格</el-radio>
         </el-form-item>
@@ -38,6 +40,8 @@
         </el-form-item>
         <el-form-item label="附件">
           <oms-upload :fileList="attachmentList" @change="changeFiles"
+                      @refreshCodes="setDoing(false)"
+                      @beforeUpload="setDoing(true)"
                       :formData="{ objectId: form.id, objectType: 'waybill-check'}"></oms-upload>
         </el-form-item>
       </el-form>
@@ -48,7 +52,7 @@
   import {OmsAttachment, TmsWayBill} from '@/resources';
 
   export default {
-    data () {
+    data() {
       return {
         list: [],
         times: [],
@@ -75,13 +79,13 @@
       };
     },
     computed: {
-      shipmentWayList () {
+      shipmentWayList() {
         return this.$getDict('shipmentWayType');
       },
-      typeList () {
+      typeList() {
         return this.$getDict('transportationCondition');
       },
-      serviceTypeList () {
+      serviceTypeList() {
         return this.$getDict('serviceType');
       }
     },
@@ -95,13 +99,17 @@
       }
     },
     methods: {
+      setDoing(val) {
+        this.doing = val;
+      },
       changeFiles: function (fileList) {
         let ids = [];
         fileList.forEach(file => {
           ids.push(file.attachmentId);
         });
         this.form.attachmentIdList = ids;
-      },
+      }
+      ,
       getFileList: function () {
         if (!this.form.id) return;
         OmsAttachment.queryOneAttachmentList(this.form.id, 'waybill-check').then(res => {
@@ -112,11 +120,13 @@
           });
           this.form.attachmentIdList = ids;
         });
-      },
-      selectTab (item) {
+      }
+      ,
+      selectTab(item) {
         this.currentTab = item;
-      },
-      save (formName) {
+      }
+      ,
+      save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.$confirm('确认保存运单"' + this.form.waybillNumber + '"的评估结果?', '', {
@@ -151,5 +161,6 @@
 
       }
     }
-  };
+  }
+  ;
 </script>
