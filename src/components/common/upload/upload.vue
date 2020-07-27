@@ -141,6 +141,7 @@
           }
         }
         this.uploadingFiles.push(file);
+        this.$emit('beforeUpload');
       },
       success (response, file, fileList) {
         this.uploadingFiles = this.uploadingFiles.filter(item => item.uid !== file.uid);
@@ -149,6 +150,7 @@
             duration: 2000,
             message: '上传附件成功'
           });
+          this.$emit('refreshCodes');
         } else {
           this.$notify.error({
             duration: 2000,
