@@ -368,11 +368,18 @@ export default [{
     'children': null,
     'leaf': true
   }, {
-    'id': 'tms-task-car-task',
+    'id': 'rescue-task-add',
     'parentId': 'tms-task-manager',
     'label': '出车任务',
     'sort': 2,
     'children': [{
+      'id': 'rescue-task-add',
+      'parentId': 'tms-task-car-task',
+      'label': '生成新出车任务',
+      'sort': null,
+      'children': null,
+      'leaf': true
+    },{
       'id': 'tms-task-car-task-confirm',
       'parentId': 'tms-task-car-task',
       'label': '确认出车任务',
