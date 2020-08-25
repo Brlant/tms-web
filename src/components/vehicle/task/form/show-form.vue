@@ -4,12 +4,10 @@
     .content-left {
       width: $labelWidth;
     }
-
     .content-right {
       > h3 {
         left: $labelWidth;
       }
-
       left: $labelWidth;
     }
   }
@@ -97,13 +95,6 @@
                 </oms-row>
               </div>
             </el-col>
-            <el-col :span="24">
-              <oms-row label="" :span="20" style="margin-top: -75px" v-show="form.status==='2'">
-                <perm label="rescue-task-add">
-                  <el-button model="primary" @click="creatTask()" :disabled="doing">生成新出车任务</el-button>
-                </perm>
-              </oms-row>
-            </el-col>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
@@ -149,7 +140,6 @@
               <el-table-column prop="waybillNumber" label="运单号" width="140">
                 <template slot-scope=" scope">
                      <span class="f-14">
-                       <el-checkbox v-model="scope.row.isChecked" v-if="scope.row.status==='7'"></el-checkbox>
                      {{scope.row.waybillNumber}}
                        <el-tag v-if="scope.row.packFlag" type="success">已包</el-tag>
                         <el-tag v-if="!scope.row.packFlag" type="warning">未包</el-tag>
@@ -276,13 +266,12 @@
 <script>
   import {TmsLog, TransportTask} from '@/resources';
   import TaskMap from './map-car-task';
-  import deliveryForm from './delivery-form';
   import utils from '@/tools/utils';
   import OmsCostTime from '@/components/common/timeCost.vue';
 
   export default {
-    components: {TaskMap, OmsCostTime, deliveryForm},
-    data() {
+    components: {TaskMap, OmsCostTime},
+    data () {
       return {
         span: 7,
         list: [],
@@ -317,8 +306,7 @@
         wayBillList: [],
         doing: false,
         curPosition: null,
-        wayBillType: utils.wayBillType,
-        orderIdList: []
+        wayBillType: utils.wayBillType
       };
     },
     computed: {},
@@ -340,42 +328,19 @@
             });
           });
         }
-        if (this.form.waybillList) {
-          this.form.waybillList.forEach(val => {
-            if (val.isChceked) {
-              this.orderIdList.push(val.id);
-            }
-          });
-        }
       },
       'detailForm.list': function () {
         this.doing = false;
       }
     },
     methods: {
-      resetRightBox() {
-        this.showAddIndex = false;
-      },
-      creatTask: function () {
-        // 获取勾选的运单
-        this.form.waybillList.forEach(o => {
-          if (o.isChecked) {
-            this.orderIdList.push(o.id);
-          }
-        });
-        if (this.orderIdList.length === 0) {
-          return this.$notify.info({message: '请勾选需要生成新出车任务的运单号'});
-        }
-        // 关闭详情页
-        this.$emit('close-detail-info', this.orderIdList);
-      },
       getPackFlag: function (val) {
         if (val) {
           return '已包';
         }
         return '未包';
       },
-      setCurPosition() {
+      setCurPosition () {
         if (this.formItem.status !== '2') {
           this.curPosition = null;
           return;
@@ -410,7 +375,7 @@
           this.loadingLog = false;
         });
       },
-      formatStatusTitle(status, statusType) {
+      formatStatusTitle (status, statusType) {
         let title = '';
         Object.keys(statusType).forEach(k => {
           if (status === null) {
@@ -495,10 +460,10 @@
 
         });
       },
-      selectTab(item) {
+      selectTab (item) {
         this.currentTab = item;
       },
-      close() {
+      close () {
         this.$emit('right-close');
       }
     }
