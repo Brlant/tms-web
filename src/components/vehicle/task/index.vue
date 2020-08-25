@@ -2,7 +2,6 @@
   .special-col {
     padding-left: 20px;
     position: relative;
-
     .el-checkbox {
       position: absolute;
       left: 0;
@@ -22,10 +21,10 @@
           </el-button>
         </perm>
         <!--<perm label="tms-task-prepare-export">-->
-        <!--<el-button plain size="small" @click="exportPreFile" :disabled="isLoading" v-if="activeStatus==='0'">-->
-        <!--<f-a class="icon-small" name="print"></f-a>-->
-        <!--导出预派车任务-->
-        <!--</el-button>-->
+          <!--<el-button plain size="small" @click="exportPreFile" :disabled="isLoading" v-if="activeStatus==='0'">-->
+            <!--<f-a class="icon-small" name="print"></f-a>-->
+            <!--导出预派车任务-->
+          <!--</el-button>-->
         <!--</perm>-->
         <perm label="tms-task-prepare-print">
           <el-button plain size="small" @click="printPreFile" :disabled="isLoading" v-if="activeStatus==='0'">
@@ -253,7 +252,7 @@
 
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentPart" :formItem="form" :isOverTime="isOverTime" :showBigMap="showBigMap"
-                 @right-close="resetRightBox" @close-detail-info="closeDetailInfo"/>
+                 @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentEditPart" :formItem="form" @change="submit" @right-close="resetRightBox"/>
@@ -270,10 +269,6 @@
                     :mapStyle="{height: bodyHeight}" :isShowBigMap="isShowMulBigMap"
                     v-show="isShowMulBigMap"></map-multiple>
     </el-dialog>
-    <page-right :show="showAddIndex" @right-close="resetRightBox"
-                :css="{'width':'1000px','padding':0, 'z-index': 1000}">
-      <delivery-form :checkList="orderIdList" @right-close="resetRightBox" @change="refresh"/>
-    </page-right>
   </div>
 </template>
 <script>
@@ -283,7 +278,6 @@
   import showForm from './form/show-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
-  import deliveryForm from './form/delivery-form';
   import Perm from '../../common/perm';
   import TaskMap from './form/map-car-task';
   import MapMultiple from './form/map-multiple';
@@ -294,8 +288,7 @@
       Perm,
       SearchPart,
       TaskMap,
-      MapMultiple,
-      deliveryForm
+      MapMultiple
     },
     mixins: [StatusMixin],
     data() {
@@ -307,7 +300,6 @@
         dataList: [],
         showIndex: -1,
         showEditIndex: -1,
-        showAddIndex: false,
         dialogComponents: {
           0: showForm
         },
@@ -348,8 +340,7 @@
         isShowBigMap: false,
         isShowMulBigMap: false,
         mapBigFormItem: {},
-        multipleWaybillList: [],
-        orderIdList: []
+        multipleWaybillList: []
       };
     },
     computed: {
@@ -387,10 +378,6 @@
       }
     },
     methods: {
-      refresh: function () {
-        this.orderIdList = [];
-        this.getTransportTaskPage(1);
-      },
       startTransport: function (item) {
         this.$confirm('确认启运任务"' + item.transportTaskNo + '"?', '', {
           confirmButtonText: '确定',
@@ -512,7 +499,7 @@
           this.isLoading = false;
           this.$store.commit('initPrint', {isPrinting: false});
           this.$notify.error({
-            message: error.response && error.response.data && error.response.data.msg || '打印预派车任务失败'
+            message: error.response&&error.response.data && error.response.data.msg || '打印预派车任务失败'
           });
         });
       },
@@ -544,7 +531,7 @@
           this.isLoading = false;
           this.$store.commit('initPrint', {isPrinting: false});
           this.$notify.error({
-            message: error.response && error.response.data && error.response.data.msg || '打印标签失败'
+            message: error.response&&error.response.data && error.response.data.msg || '打印标签失败'
           });
         });
       },
@@ -583,7 +570,7 @@
             moduleId: '/vehicle/delivery/task'
           });
           this.$notify.error({
-            message: error.response && error.response.data && error.response.data.msg || '导出失败'
+            message: error.response&&error.response.data && error.response.data.msg || '导出失败'
           });
         });
       },
@@ -614,7 +601,7 @@
             this.isLoading = false;
             this.$store.commit('initPrint', {isPrinting: false, moduleId: '/vehicle/delivery/task'});
             this.$notify.error({
-              message: error.response && error.response.data && error.response.data.msg || '导出失败'
+              message: error.response&&error.response.data && error.response.data.msg || '导出失败'
             });
           });
         });
@@ -654,7 +641,7 @@
             moduleId: '/vehicle/delivery/task'
           });
           this.$notify.error({
-            message: error.response && error.response.data && error.response.data.msg || '导出失败'
+            message: error.response&&error.response.data && error.response.data.msg || '导出失败'
           });
         });
       },
@@ -758,15 +745,9 @@
         this.filters.status = item.status;
         this.activeStatus = key;
       },
-      closeDetailInfo(val) {
-        this.showIndex = -1;
-        this.orderIdList = val;
-        this.showAddIndex = true;
-      },
       resetRightBox() {
         this.showIndex = -1;
         this.showEditIndex = -1;
-        this.showAddIndex = false;
         this.$router.push('/vehicle/delivery/task/list');
       },
       getTransportTaskPage: function (pageNo, isContinue = false) {
