@@ -105,6 +105,7 @@
     </div>
     <attachmentDialog></attachmentDialog>
     <print-dialog></print-dialog>
+    <q-code-dialog ref="qrCode" @closeQcode="closeQcode"/>
   </div>
 </template>
 
@@ -115,7 +116,7 @@
   import attachmentDialog from './common/attachment/attachment.dialog.vue';
   import {Auth} from '@/resources';
   import printDialog from './common/print.loading.vue';
-  import QCodeDialog from './chart/q-code-dialog';
+  import QCodeDialog from './q-code/q-code-dialog';
 
   export default {
     data: () => ({
@@ -219,6 +220,8 @@
       }
     },
     mounted: function () {
+      // 查询登录用户微信绑定信息
+      this.queryUserwehcatInfo();
       this.$getDict('printer');
       window.localStorage.removeItem('noticeError');
       if (!this.$store.state.user || !this.$store.state.user.userId) {
@@ -231,8 +234,6 @@
           }
           data = JSON.parse(data);
           this.$store.commit('initUser', data);
-          // 查询登录用户微信绑定信息
-          this.queryUserwehcatInfo();
         }).catch(() => {
           Auth.logout().then(() => {
             this.$router.replace('/login');
