@@ -146,21 +146,21 @@
                       </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="发货单位" mix-width="190">
+              <el-table-column prop="receiverName" label="发货单位" mix-width="110">
                 <template slot-scope=" scope">
                   <div class="f-14">
                     {{scope.row.senderName}}
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="收货单位" mix-width="190">
+              <el-table-column prop="receiverName" label="收货单位" mix-width="110">
                 <template slot-scope=" scope">
                   <div class="f-14">
                     {{scope.row.receiverName}}
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="receiverName" label="收货地址" mix-width="200">
+              <el-table-column prop="receiverName" label="收货地址" mix-width="110">
                 <template slot-scope=" scope">
                   <div class="f-14">
                     {{scope.row.receiverAddress}}
@@ -178,6 +178,27 @@
                 <template slot-scope=" scope">
                   <span class="f-14">
                     {{formatStatusTitle(scope.row.status, wayBillType)}}
+                  </span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="status" label="开始运输时间" width="110">
+                <template slot-scope=" scope">
+                  <span class="f-14">
+                    {{scope.row.startTransportTime|time}}
+                  </span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="status" label="送达时间" width="110">
+                <template slot-scope=" scope">
+                  <span class="f-14">
+                    {{scope.row.deliveryCompleteTime|time}}
+                  </span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="status" label="结束时间" width="110">
+                <template slot-scope=" scope">
+                  <span class="f-14">
+                    {{scope.row.waybillCompleteTime|time}}
                   </span>
                 </template>
               </el-table-column>
