@@ -57,6 +57,12 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="6">
+            <oms-form-row label="目的地区域代码" :span="8">
+              <oms-input v-model="searchCondition.destinationAreaCode" placeholder="请输入目的地区域代码"
+                         @keyup.native.enter="search"></oms-input>
+            </oms-form-row>
+          </el-col>
           <el-col :span="8">
             <oms-form-row label="送达时限" :span="4">
               <el-date-picker v-model="deliveryDate" type="daterange" placeholder="请选择">
@@ -118,7 +124,8 @@
           receiverId: '',
           startTime: '',
           endTime: '',
-          packFlag: ''
+          packFlag: '',
+          destinationAreaCode:''
         },
         showSearch: false,
         list: [],
@@ -183,7 +190,8 @@
           receiverId: '',
           startTime: '',
           endTime: '',
-          packFlag: ''
+          packFlag: '',
+          destinationAreaCode:''
         };
         this.deliveryDate = '';
         this.$emit('search', this.searchCondition);

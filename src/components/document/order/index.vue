@@ -266,7 +266,9 @@
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          tmsOrderNumber:'',
+          destinationAreaCode:''
         },
         isCheckAll: false,
         checkList: [],

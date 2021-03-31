@@ -57,7 +57,19 @@
           </el-col>
           <div v-show="showSearch">
             <el-col :span="4">
-              <oms-form-row label="订单类型" :span="8">
+              <oms-form-row label="委托单号" :span="8">
+                <oms-input v-model="searchCondition.tmsOrderNumber" placeholder="请输入委托单号"
+                           @keyup.native.enter="search"></oms-input>
+              </oms-form-row>
+            </el-col>
+            <el-col :span="6">
+              <oms-form-row label="目的地区域代码" :span="8">
+                <oms-input v-model="searchCondition.destinationAreaCode" placeholder="请输入目的地区域代码"
+                           @keyup.native.enter="search"></oms-input>
+              </oms-form-row>
+            </el-col>
+            <el-col :span="4">
+              <oms-form-row label="订单类型" :span="9">
                 <el-select v-model="searchCondition.waybillType" placeholder="订单类型" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-option>
                 </el-select>
@@ -99,7 +111,9 @@
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          tmsOrderNumber:'',
+          destinationAreaCode:''
         },
         showSearch: false,
         list: [],
@@ -153,7 +167,9 @@
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          tmsOrderNumber:'',
+          destinationAreaCode:''
         };
         this.deliveryDate = '';
         this.$emit('search', this.searchCondition);

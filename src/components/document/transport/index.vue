@@ -471,7 +471,8 @@
           receiverId: '',
           startTime: '',
           endTime: '',
-          packFlag: ''
+          packFlag: '',
+          destinationAreaCode:''
         },
         isCheckAll: false,
         checkList: [],
