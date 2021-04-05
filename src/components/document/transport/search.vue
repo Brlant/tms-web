@@ -63,6 +63,12 @@
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
+          <el-col :span="6">
+            <oms-form-row label="货品名称(模糊)" :span="8">
+              <oms-input v-model="searchCondition.goodsTotalName" placeholder="请输入货品名称模糊查询"
+                         @keyup.native.enter="search"></oms-input>
+            </oms-form-row>
+          </el-col>
           <el-col :span="8">
             <oms-form-row label="送达时限" :span="4">
               <el-date-picker v-model="deliveryDate" type="daterange" placeholder="请选择">
@@ -109,7 +115,6 @@
 </template>
 <script>
   import {BaseInfo} from '@/resources';
-  import utils from '@/tools/utils';
 
   export default {
     data: function () {
@@ -125,6 +130,7 @@
           startTime: '',
           endTime: '',
           packFlag: '',
+          goodsTotalName: '',
           destinationAreaCode:''
         },
         showSearch: false,
@@ -190,6 +196,7 @@
           receiverId: '',
           startTime: '',
           endTime: '',
+          goodsTotalName: '',
           packFlag: '',
           destinationAreaCode:''
         };

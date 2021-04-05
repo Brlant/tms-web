@@ -472,7 +472,8 @@
           startTime: '',
           endTime: '',
           packFlag: '',
-          destinationAreaCode:''
+          destinationAreaCode:'',
+          goodsTotalName:''
         },
         isCheckAll: false,
         checkList: [],
