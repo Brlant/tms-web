@@ -268,6 +268,7 @@
           startTime: '',
           endTime: '',
           tmsOrderNumber:'',
+          goodsTotalName:'',
           destinationAreaCode:''
         },
         isCheckAll: false,
