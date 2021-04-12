@@ -50,8 +50,10 @@
                 </perm>
                   </span>
                   <div class="id-part" v-if="item.scope">
-                    运输范围 -
-                    <dict :dict-group="'transportationCondition'" :dict-key="item.scope"/>
+                    运输范围：<dict :dict-group="'transportationCondition'" :dict-key="item.scope"/>
+                  </div>
+                  <div class="id-part" v-if="item.code">
+                    集货区代码：{{item.code}}
                   </div>
                   {{item.name}}
                 </li>
