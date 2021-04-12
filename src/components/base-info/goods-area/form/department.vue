@@ -4,6 +4,9 @@
     <el-form-item label="集货区名称" prop="name">
       <oms-input type="text" v-model="form.name" placeholder="请输入集货区名称"></oms-input>
     </el-form-item>
+    <el-form-item label="集货区代码" prop="code">
+      <oms-input type="text" v-model="form.code" placeholder="请输入集货区代码"></oms-input>
+    </el-form-item>
     <el-form-item label="运输范围">
       <el-select placeholder="请选择运输范围" v-model="form.scope">
         <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in transportScope"></el-option>
@@ -24,9 +27,12 @@
         rules: {
           name: [
             {required: true, message: '请输入集货区名称', trigger: 'blur'}
+          ],
+          code: [
+            {required: true, message: '请输入集货区代码', trigger: 'blur'}
           ]
         },
-        form: {id: '', scope: ''},
+        form: {id: '', code:'',scope: ''},
         doing: false,
         attachmentList: [],
         x: ''
