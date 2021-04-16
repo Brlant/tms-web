@@ -6,7 +6,7 @@
     margin-bottom: 0;
 
     .d-table-left {
-      width: 450px;
+      width: 550px;
     }
 
     .d-table-right {
@@ -200,10 +200,13 @@
               <th width="8%" class="search-no-border" @click="isShowSearch = !isShowSearch">
                 <span><i class="el-icon-t-search"></i></span>
               </th>
-              <th width="14%">包件数</th>
-              <th width="30%">运单号</th>
-              <th width="24%">收货单位</th>
-              <th width="24%">收货地址</th>
+              <th width="20%">运单号</th>
+              <th width="8%">整件</th>
+              <th width="8%">散件</th>
+              <th width="8%">实际包件</th>
+              <th width="8%">预估包件</th>
+              <th width="20%">收货单位</th>
+              <th width="20%">收货地址</th>
             </tr>
             </thead>
           </table>
@@ -225,8 +228,7 @@
                     <td width="8%">
                       <el-checkbox v-model="item.isChecked"></el-checkbox>
                     </td>
-                    <td width="14%">{{showIncubatorCount(item)}}</td>
-                    <td width="30%" class="R">
+                    <td width="20%" class="R">
                       <div class="id-part">
                         <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
                       </div>
@@ -234,8 +236,12 @@
                         {{item.waybillNumber}}
                       </div>
                     </td>
-                    <td width="24%" class="R">{{item.waybillType==='1-1'?item.senderName:item.receiverName}}</td>
-                    <td width="24%" class="R">{{item.waybillType==='1-1'?item.senderAddress:item.receiverAddress}}</td>
+                    <td width="8%">{{item.wholeBoxCount}}</td>
+                    <td width="8%">{{item.bulkBoxCount}}</td>
+                    <td width="8%">{{item.incubatorCount}}</td>
+                    <td width="8%">{{item.preIncubatorCount}}</td>
+                    <td width="20%" class="R">{{item.waybillType==='1-1'?item.senderName:item.receiverName}}</td>
+                    <td width="20%" class="R">{{item.waybillType==='1-1'?item.senderAddress:item.receiverAddress}}</td>
                   </tr>
                   </tbody>
                 </table>
@@ -320,7 +326,8 @@
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          goodsAreaIdList:[]
         },
         orderIdList: [],
         totalTicket: 0,
