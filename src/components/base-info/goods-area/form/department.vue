@@ -5,7 +5,7 @@
       <oms-input type="text" v-model="form.name" placeholder="请输入集货区名称"></oms-input>
     </el-form-item>
     <el-form-item label="集货区代码" prop="code">
-      <oms-input type="text" v-model="form.code" placeholder="请输入集货区代码"></oms-input>
+      <oms-input type="text" v-model="form.code" placeholder="请输入集货区代码" :maxlength="10"></oms-input>
     </el-form-item>
     <el-form-item label="运输范围">
       <el-select placeholder="请选择运输范围" v-model="form.scope">
