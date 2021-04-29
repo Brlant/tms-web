@@ -106,6 +106,14 @@
           </el-select>
         </oms-form-row>
       </el-col>
+      <el-col :span="8">
+        <oms-form-row :span="5" label="运单状态">
+          <el-select v-model="searchCondition.waybillStatus">
+            <el-option :key="item.status" :label="item.title" :value="item.status"
+                       v-for="item in wayBillType"></el-option>
+          </el-select>
+        </oms-form-row>
+      </el-col>
     </el-row>
     <el-row>
 
@@ -140,9 +148,11 @@
           orderNo: '',
           orderStatus: '',
           ownerId: '',
-          receiverId: ''
+          receiverId: '',
+          waybillStatus:''
         },
         orderType: utils.orderType,
+        wayBillType: utils.wayBillType,
         showSearch: false,
         list: [],
         times: [],
@@ -181,7 +191,8 @@
           orderNo: '',
           orderStatus: '',
           ownerId: '',
-          receiverId: ''
+          receiverId: '',
+          waybillStatus:''
         };
         this.createTimes = [];
         this.startTimes = null;
