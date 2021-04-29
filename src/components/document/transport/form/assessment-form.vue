@@ -29,6 +29,9 @@
     </template>
     <template slot="content">
       <el-form ref="form" :rules="rules" :model="form" class="clearfix" label-width="100px" onsubmit="return false">
+        <el-form-item label="中止原因" prop="suspendReason">
+          <dict :dict-group="'waybillEndReason'" :dict-key="formItem.suspendReason"></dict>
+        </el-form-item>
         <el-form-item label="是否合格" prop="qualityFlag">
           <!--          <el-switch active-text="合格" inactive-text="不合格" active-color="#13ce66" inactive-color="#ff4949"-->
           <!--                     v-model="form.qualityFlag"></el-switch>-->
