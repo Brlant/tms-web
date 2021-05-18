@@ -17,10 +17,22 @@
     <template slot="content">
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-row>
-          <el-col :span="4">
-            <oms-form-row label="运单号" :span="8">
-              <oms-input v-model="searchCondition.waybillNumber" placeholder="请输入运单号"
-                         @keyup.native.enter="search"></oms-input>
+          <el-col :span="10">
+            <oms-form-row label="集货区" :span="6">
+              <el-select filterable remote placeholder="请选择集货区" :remote-method="filterGoodsArea"
+                         :clearable="true" multiple
+                         v-model="searchCondition.goodsAreaIdList" popperClass="good-selects">
+                <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in goodsAraeList">
+                  <div style="overflow: hidden">
+                    <span class="pull-left" style="clear: right">{{org.name}}</span>
+                  </div>
+                  <div style="overflow: hidden" v-show="org.code">
+                    <span class="select-other-info pull-left">
+                      <span>集货区代码:</span>{{org.code}}
+                    </span>
+                  </div>
+                </el-option>
+              </el-select>
             </oms-form-row>
           </el-col>
           <el-col :span="6">
@@ -41,24 +53,6 @@
               </el-select>
             </oms-form-row>
           </el-col>
-          <el-col :span="6">
-            <oms-form-row label="收货单位" :span="6">
-              <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterReceiverOrg"
-                         :clearable="true"
-                         v-model="searchCondition.receiverId" popperClass="good-selects">
-                <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
-                  <div style="overflow: hidden">
-                    <span class="pull-left" style="clear: right">{{org.name}}</span>
-                  </div>
-                  <div style="overflow: hidden">
-                    <span class="select-other-info pull-left">
-                      <span>系统代码:</span>{{org.manufacturerCode}}
-                    </span>
-                  </div>
-                </el-option>
-              </el-select>
-            </oms-form-row>
-          </el-col>
           <el-col :span="8">
             <oms-form-row label="送达时限" :span="4" style="width: 100%">
               <el-date-picker v-model="deliveryDate" type="daterange" format="yyyy-MM-dd" start-placeholder="开始日期"
@@ -67,6 +61,30 @@
             </oms-form-row>
           </el-col>
           <div v-show="showSearch">
+            <el-col :span="4">
+              <oms-form-row label="运单号" :span="8">
+                <oms-input v-model="searchCondition.waybillNumber" placeholder="请输入运单号"
+                           @keyup.native.enter="search"></oms-input>
+              </oms-form-row>
+            </el-col>
+            <el-col :span="6">
+              <oms-form-row label="收货单位" :span="6">
+                <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterReceiverOrg"
+                           :clearable="true"
+                           v-model="searchCondition.receiverId" popperClass="good-selects">
+                  <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
+                    <div style="overflow: hidden">
+                      <span class="pull-left" style="clear: right">{{org.name}}</span>
+                    </div>
+                    <div style="overflow: hidden">
+                    <span class="select-other-info pull-left">
+                      <span>系统代码:</span>{{org.manufacturerCode}}
+                    </span>
+                    </div>
+                  </el-option>
+                </el-select>
+              </oms-form-row>
+            </el-col>
             <el-col :span="4">
               <oms-form-row label="运单类型" :span="8">
                 <el-select v-model="searchCondition.waybillType" placeholder="运单类型" :clearable="true">
@@ -97,7 +115,7 @@
   </search-template>
 </template>
 <script>
-  import {BaseInfo} from '@/resources';
+  import {BaseInfo,GoodsArea} from '@/resources';
   import utils from '@/tools/utils';
 
   export default {
@@ -111,13 +129,15 @@
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          goodsAreaIdList:[]
         },
         showSearch: false,
         list: [],
         times: [],
         senderOrgList: [],
         receiverOrgList: [],
+        goodsAraeList:[],
         deliveryDate: []
       };
     },
@@ -132,6 +152,9 @@
         this.search();
       },
       'searchCondition.shipmentWay': function () {
+        this.search();
+      },
+      'searchCondition.goodsAreaIdList': function () {
         this.search();
       },
       'deliveryDate': function (val) {
@@ -165,7 +188,8 @@
           senderId: '',
           receiverId: '',
           startTime: '',
-          endTime: ''
+          endTime: '',
+          goodsAreaIdList:[]
         };
         this.deliveryDate = '';
         this.$emit('search', this.searchCondition);
@@ -186,6 +210,16 @@
       filterReceiverOrg: function (query) {// 过滤收货单位
         BaseInfo.query({keyWord: query}).then(res => {
           this.receiverOrgList = res.data.list;
+        });
+      },
+      filterGoodsArea: function (query) {// 过滤集货区
+        let param = Object.assign({}, {
+          pageNo: 1,
+          pageSize: 20,
+          keyWord: query
+        });
+        GoodsArea.getPage(param).then(res => {
+          this.goodsAraeList = res.data.list;
         });
       }
     }
