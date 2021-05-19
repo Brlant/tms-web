@@ -209,7 +209,7 @@
           <div>
             <el-form ref="detailForm" :model="detailForm" class="clearfix" label-width="100px" v-show="showAddFlag">
               <el-row>
-                <el-col :span="10">
+                <el-col :span="7">
                   <el-form-item label="保温箱" style="margin-top: 20px;margin-bottom: 20px">
                     <el-select filterable remote placeholder="请输入保温箱名称/编号/编码查询保温箱" :remote-method="queryBoxList"
                                :clearable="true" @click.native="queryBoxList('')"
@@ -223,7 +223,7 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="10">
+                <el-col :span="7">
                   <el-form-item label="温度计" style="margin-top: 20px;margin-bottom: 20px">
                     <el-select filterable remote placeholder="请输入温度计名称/编号/编码查询温度计" :remote-method="queryDevList"
                                :clearable="true" @click.native="queryDevList('')"
@@ -245,7 +245,13 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4" style="margin-top: 20px;margin-bottom: 20px;padding-left: 40px">
+                <el-col :span="8">
+                  <el-form-item label="追溯码" style="margin-top: 20px;margin-bottom: 20px">
+                    <el-input v-model="detailForm.codeList" :rows="5" class="input-width" type="textarea"
+                              @change="formatNumberToAry"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="2" style="margin-top: 20px;margin-bottom: 20px;padding-left: 40px">
                   <el-button type="primary" @click="onSubmit('detailForm')" :disabled="doing">保存</el-button>
                 </el-col>
               </el-row>
@@ -456,6 +462,8 @@
         detailForm: {
           incubator: '',
           thermometerList: [],
+          codeList:'',
+          boxCodeList:[],
           waybillId: ''
         },
         ccsDevList: [],
@@ -494,6 +502,8 @@
             this.detailForm = {
               incubator: '',
               thermometerList: [],
+              boxCodeList:[],
+              codeList:'',
               waybillId: ''
             };
             this.showAddFlag = false;
@@ -510,6 +520,15 @@
       }
     },
     methods: {
+      formatNumberToAry(value) {
+        if (!value){
+          this.detailForm.boxCodeList=[];
+        }
+        let list = value.split(/[\n,\s，]/g).filter(i => i);
+        list.forEach(v=>{
+          this.detailForm.boxCodeList.push({boxCode:v});
+        })
+      },
       setMarker() {
         const that = this.$refs['bdMap'];
         if (!that) {
@@ -540,6 +559,14 @@
             duration: 2000,
             message: '新增保温箱成功'
           });
+          // 清空表单
+          this.detailForm = {
+            incubator: '',
+            thermometerList: [],
+            codeList:'',
+            boxCodeList:[],
+            waybillId: ''
+          };
           // 刷新页面信息
           TmsWayBill.getOneTmsWayBill(this.form.id).then(res => {
             this.form = res.data;
