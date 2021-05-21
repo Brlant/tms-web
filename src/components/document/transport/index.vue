@@ -223,7 +223,7 @@
               <div>
                 {{formatStatusTitle(item.status, orderType)}}
               </div>
-              <div v-show="item.suspendReason&&item.status==='10'">
+              <div v-show="item.suspendReason&&item.status==='6'">
                 中止原因：<dict :dict-group="'waybillEndReason'" :dict-key="item.suspendReason"></dict>
               </div>
               <div>
