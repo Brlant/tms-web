@@ -223,6 +223,9 @@
               <div>
                 {{formatStatusTitle(item.status, orderType)}}
               </div>
+              <div v-show="item.suspendReason&&item.status==='6'">
+                中止原因：<dict :dict-group="'waybillEndReason'" :dict-key="item.suspendReason"></dict>
+              </div>
               <div>
                 <el-tag v-if="!item.packFlag" type="warning">未打包</el-tag>
                 <el-tag v-if="item.packFlag" type="success">已打包</el-tag>
