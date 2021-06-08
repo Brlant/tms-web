@@ -552,7 +552,7 @@
         }
         this.detailForm.waybillId = this.form.id;
         this.doing = true;
-        this.$http.post('tms-pack/waybill', this.detailForm).then(res => {
+        this.$http.post('tms-waybill-pack/waybill', this.detailForm).then(res => {
           this.doing = false;
           this.showAddFlag = !this.showAddFlag;
           this.$notify.success({
@@ -602,7 +602,7 @@
           pageSize: 20,
           devType: 1
         };
-        this.$http.get('/tms-pack/dev', {params}).then(res => {
+        this.$http.get('/tms-waybill-pack/dev', {params}).then(res => {
           this.ccsDevList = res.data.currentList;
         });
       },

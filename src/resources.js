@@ -137,12 +137,12 @@ export const TmsOrder = resource('/tms-order', http, {
 });
 
 // TmsPack 对象
-export const TmsPack = resource('/tms-pack', http, {
+export const TmsPack = resource('/tms-waybill-pack', http, {
   deleteTemperature: (id) => {
-    return http.delete('/tms-pack/temperature/' + id, {});
+    return http.delete('/tms-waybill-pack/temperature/' + id, {});
   },
   deleteDevBox: (id) => {
-    return http.delete('/tms-pack/box/' + id, {});
+    return http.delete('/tms-waybill-pack/box/' + id, {});
   }
 });
 
