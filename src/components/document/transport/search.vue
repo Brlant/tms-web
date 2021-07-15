@@ -15,11 +15,17 @@
           </el-col>
           <el-col :span="4">
             <oms-form-row label="订单号" :span="8">
-              <oms-input v-model="searchCondition.tmsOrderNumber" placeholder="请输入订单号"
+              <oms-input v-model="searchCondition.orderNo" placeholder="请输入订单号"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="4">
+            <oms-form-row label="委托单号" :span="8">
+              <oms-input v-model="searchCondition.tmsOrderNumber" placeholder="请输入委托单号"
+                         @keyup.native.enter="search"></oms-input>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="6">
             <oms-form-row label="发货单位" :span="6">
               <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterSenderOrg"
                          :clearable="true"
@@ -37,7 +43,7 @@
               </el-select>
             </oms-form-row>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <oms-form-row label="收货单位" :span="6">
               <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterReceiverOrg"
                          :clearable="true"
@@ -121,7 +127,8 @@
       return {
         searchCondition: {
           waybillNumber: '',
-          tmsOrderNumber: '',
+          orderNo: '',
+          tmsOrderNumber:'',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',
@@ -159,6 +166,9 @@
       'searchCondition.packFlag': function () {
         this.search();
       },
+      'searchCondition.orderNo': function () {
+        this.search();
+      },
       'searchCondition.tmsOrderNumber': function () {
         this.search();
       },
@@ -188,7 +198,8 @@
       reset () {
         this.searchCondition = {
           waybillNumber: '',
-          tmsOrderNumber: '',
+          orderNo: '',
+          tmsOrderNumber:'',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',

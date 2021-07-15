@@ -41,6 +41,7 @@
           </div>
           <div class="content">
             <oms-col label="运单号" :rowSpan="span" :value="form.waybillNumber"/>
+            <oms-col label="委托单号" :rowSpan="span" :value="form.tmsOrderNumber"/>
             <oms-col label="运单状态" :rowSpan="span" :value="form.status">
               {{formatStatusTitle(form.status, orderType)}}
             </oms-col>

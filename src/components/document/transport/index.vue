@@ -467,6 +467,7 @@
           status: null,
           waybillNumber: '',
           tmsOrderNumber: '',
+          orderNo:'',
           waybillType: '',
           shipmentWay: '',
           serviceType: '',

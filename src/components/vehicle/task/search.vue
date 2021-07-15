@@ -7,7 +7,7 @@
     <template slot="content">
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="6">
             <oms-form-row label="任务号" :span="5">
               <oms-input v-model="searchCondition.transportTaskNo" placeholder="请输入任务编码"
                          @keyup.native.enter="search"></oms-input>
@@ -21,15 +21,21 @@
           <!--</el-select>-->
           <!--</oms-form-row>-->
           <!--</el-col>-->
-          <el-col :span="8">
+          <el-col :span="6">
             <oms-form-row label="车牌号" :span="5">
               <oms-input v-model="searchCondition.carPlateNumber" placeholder="请输入车牌号"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <oms-form-row label="运单号" :span="5">
               <oms-input v-model="searchCondition.waybillNo" placeholder="请输入运单号"
+                         @keyup.native.enter="search"></oms-input>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="6">
+            <oms-form-row label="委托单号" :span="5">
+              <oms-input v-model="searchCondition.tmsOrderNumber" placeholder="请输入委托单号"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
@@ -84,6 +90,7 @@
           type: '',
           carPlateNumber: '',
           waybillNo: '',
+          tmsOrderNumber:'',
           createStartTime: '',
           createEndTime: '',
           sStartTime: '',
@@ -127,6 +134,7 @@
           type: '',
           carPlateNumber: '',
           waybillNo: '',
+          tmsOrderNumber:'',
           createStartTime: '',
           createEndTime: '',
           sStartTime: '',
