@@ -170,6 +170,15 @@
                       </a>查看
                     </span>
                 </div>
+                <div>
+                  <perm label="tms-task-car-task-detail-sort" class="opera-btn btn-line-block">
+                    <span @click.stop="showAdjustment(item)">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-sort"></i>
+                      </a>调整明细顺序
+                    </span>
+                  </perm>
+                </div>
                 <div v-if="item.status==='1'||item.status==='2'">
                   <span @click.stop="showInfo(item)" class="btn-line-block" v-if="item.status==='1'||item.status==='2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
@@ -250,6 +259,9 @@
       </el-pagination>
     </div>
 
+    <page-right :show="showAdjustmentIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
+      <component :is="currentPart" :formItem="form" :isOverTime="isOverTime" :showBigMap="showBigMap" @right-close="resetRightBox"/>
+    </page-right>
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentPart" :formItem="form" :isOverTime="isOverTime" :showBigMap="showBigMap"
                  @right-close="resetRightBox"/>
@@ -276,6 +288,7 @@
   import SearchPart from './search';
   import {http, TransportTask} from '@/resources';
   import showForm from './form/show-form';
+  import adjustmentForm from './form/adjustment-form';
   import StatusMixin from '@/mixins/statusMixin';
   import editForm from './form/edit-form';
   import Perm from '../../common/perm';
@@ -288,7 +301,8 @@
       Perm,
       SearchPart,
       TaskMap,
-      MapMultiple
+      MapMultiple,
+      adjustmentForm
     },
     mixins: [StatusMixin],
     data() {
@@ -299,9 +313,13 @@
         orderType: utils.carTaskType,
         dataList: [],
         showIndex: -1,
+        showAdjustmentIndex:-1,
         showEditIndex: -1,
         dialogComponents: {
           0: showForm
+        },
+        dialogAdjustmentComponents: {
+          0: adjustmentForm
         },
         dialogEditComponents: {
           0: editForm
@@ -747,6 +765,7 @@
       },
       resetRightBox() {
         this.showIndex = -1;
+        this.showAdjustmentIndex=-1;
         this.showEditIndex = -1;
         this.$router.push('/vehicle/delivery/task/list');
       },
@@ -786,6 +805,14 @@
           this.orderType[2].num = data['pend-end'];
           this.orderType[3].num = data['completed'];
           this.orderType[4].num = data['canceled'];
+        });
+      },
+      showAdjustment: function (item) {
+        this.currentItemId = item.id;
+        this.showAdjustmentIndex = 0;
+        this.currentPart = this.dialogAdjustmentComponents[0];
+        this.$nextTick(() => {
+          this.form = JSON.parse(JSON.stringify(item));
         });
       },
       showInfo: function (item) {

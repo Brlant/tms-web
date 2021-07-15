@@ -414,7 +414,14 @@ export default [{
       'sort': null,
       'children': null,
       'leaf': true
-    }, {
+    },  {
+      'id': 'tms-task-car-task-detail-sort',
+      'parentId': 'tms-task-car-task',
+      'label': '调整出车任务明细顺序',
+      'sort': null,
+      'children': null,
+      'leaf': true
+    },{
       'id': 'tms-task-car-task-cancel',
       'parentId': 'tms-task-car-task',
       'label': '取消出车任务',
