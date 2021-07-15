@@ -137,6 +137,14 @@
           </div>
           <div class="content">
             <el-table :data="form.waybillList" border style="width: 100%">
+              <el-table-column prop="sort" label="序号" width="60">
+                <template slot-scope=" scope">
+                    <span class="f-14">
+                      {{scope.row.sort}}
+                      <i class="el-icon-lock" style="color: red" v-if="scope.row.lockStatus&&scope.row.lockStatus==='1'" type="success"></i>
+                    </span>
+                </template>
+              </el-table-column>
               <el-table-column prop="waybillNumber" label="运单号" width="140">
                 <template slot-scope=" scope">
                      <span class="f-14">
