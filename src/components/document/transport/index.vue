@@ -154,6 +154,9 @@
               <div v-show="item.shipmentWay">
                 <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
               </div>
+              <div v-show="item.deliveryWay">
+                <dict :dict-group="'deliveryWay'" :dict-key="item.deliveryWay"></dict>
+              </div>
             </el-col>
             <el-col :span="4" class="R">
               <div>
@@ -470,6 +473,7 @@
           orderNo:'',
           waybillType: '',
           shipmentWay: '',
+          deliveryWay:'',
           serviceType: '',
           senderId: '',
           receiverId: '',

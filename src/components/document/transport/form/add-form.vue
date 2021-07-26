@@ -50,13 +50,19 @@
                   <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in typeList"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item slot="right" label="发运方式" prop="shipmentWay">
-                <el-select v-model="form.shipmentWay" placeholder="请选择发运方式" :clearable="true">
+              <el-form-item slot="right" label="运输条件" prop="shipmentWay">
+                <el-select v-model="form.shipmentWay" placeholder="请选择运输条件" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
                              v-for="item in shipmentWayList"></el-option>
                 </el-select>
               </el-form-item>
             </two-column>
+            <el-form-item label="发货方式">
+              <el-select placeholder="请选择发货方式" v-model="form.deliveryWay">
+                <el-option :label="item.label" :value="item.key" :key="item.key"
+                           v-for="item in deliveryWayList"></el-option>
+              </el-select>
+            </el-form-item>
             <!--<two-column>-->
             <!--<el-form-item slot="left" label="服务方式">-->
             <!--<el-select v-model="form.serviceType" placeholder="请选择服务方式" :clearable="true">-->
@@ -377,6 +383,9 @@
             {required: true, message: '请选择运单类型', trigger: 'change'}
           ],
           shipmentWay: [
+            {required: true, message: '请选择运输条件', trigger: 'change'}
+          ],
+          deliveryWay: [
             {required: true, message: '请选择发运方式', trigger: 'change'}
           ],
           receiverId: [
@@ -410,6 +419,9 @@
       };
     },
     computed: {
+      deliveryWayList() {
+        return this.$getDict('deliveryWay');
+      },
       shipmentWayList() {
         return this.$getDict('transportationCondition');
       },

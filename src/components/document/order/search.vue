@@ -75,11 +75,19 @@
                 </el-select>
               </oms-form-row>
             </el-col>
-            <el-col :span="6">
-              <oms-form-row label="发运方式" :span="6">
-                <el-select v-model="searchCondition.shipmentWay" placeholder="请选择发运方式" :clearable="true">
+            <el-col :span="5">
+              <oms-form-row label="运输条件" :span="6">
+                <el-select v-model="searchCondition.shipmentWay" placeholder="请选择运输条件" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
                              v-for="item in shipmentWayList"></el-option>
+                </el-select>
+              </oms-form-row>
+            </el-col>
+            <el-col :span="5">
+              <oms-form-row label="发运方式" :span="6">
+                <el-select v-model="searchCondition.deliveryWay" placeholder="请选择发运方式" :clearable="true">
+                  <el-option :label="item.label" :value="item.key" :key="item.key"
+                             v-for="item in deliveryWayList"></el-option>
                 </el-select>
               </oms-form-row>
             </el-col>
@@ -105,6 +113,7 @@
           orderNo: '',
           waybillType: '',
           shipmentWay: '',
+          deliveryWay:'',
           serviceType: '',
           senderId: '',
           receiverId: '',
@@ -123,6 +132,9 @@
       };
     },
     computed: {
+      deliveryWayList () {
+        return this.$getDict('deliveryWay');
+      },
       typeList() {
         return this.$getDict('bizType');
       },
@@ -146,6 +158,9 @@
       'searchCondition.shipmentWay': function () {
         this.search();
       },
+      'searchCondition.deliveryWay': function () {
+        this.search();
+      },
       'deliveryDate': function (val) {
         if (val) {
           this.search();
@@ -162,6 +177,7 @@
           orderNo: '',
           waybillType: '',
           shipmentWay: '',
+          deliveryWay:'',
           serviceType: '',
           senderId: '',
           receiverId: '',

@@ -45,8 +45,11 @@
             <oms-col label="订单类型" :rowSpan="span" :value="form.waybillType">
               <dict :dict-group="'bizType'" :dict-key="form.waybillType"></dict>
             </oms-col>
-            <oms-col label="发运方式" :rowSpan="span" :value="form.shipmentWay">
+            <oms-col label="运输条件" :rowSpan="span" :value="form.shipmentWay">
               <dict :dict-group="'transportationCondition'" :dict-key="form.shipmentWay"></dict>
+            </oms-col>
+            <oms-col label="发运方式" :rowSpan="span" :value="form.deliveryWay">
+              <dict :dict-group="'deliveryWay'" :dict-key="form.deliveryWay"></dict>
             </oms-col>
             <oms-col label="委托单号" :rowSpan="span" :value="form.tmsOrderNumber"/>
             <oms-col label="创建人" :rowSpan="span" :value="form.creatorName"/>
