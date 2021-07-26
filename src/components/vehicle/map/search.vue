@@ -93,8 +93,8 @@
               </oms-form-row>
             </el-col>
             <el-col :span="6">
-              <oms-form-row label="发运方式" :span="6">
-                <el-select v-model="searchCondition.shipmentWay" placeholder="请选择发运方式" :clearable="true">
+              <oms-form-row label="运输条件" :span="6">
+                <el-select v-model="searchCondition.shipmentWay" placeholder="请选择运输条件" :clearable="true">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
                              v-for="item in shipmentWayList"></el-option>
                 </el-select>
