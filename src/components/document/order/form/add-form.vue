@@ -57,8 +57,8 @@
                 </el-select>
               </el-form-item>
             </two-column>
-            <el-form-item label="发货方式">
-              <el-select placeholder="请选择发货方式" v-model="form.deliveryWay">
+            <el-form-item label="发运方式">
+              <el-select placeholder="请选择发运方式" v-model="form.deliveryWay">
                 <el-option :label="item.label" :value="item.key" :key="item.key"
                            v-for="item in deliveryWayList"></el-option>
               </el-select>
