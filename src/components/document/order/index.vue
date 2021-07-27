@@ -20,6 +20,12 @@
             批量生成运单
           </el-button>
         </perm>
+        <perm label="tms-order-generate-single">
+          <el-button plain size="small" @click="singleCreateWayBill" v-if="activeStatus===0||activeStatus==='0'">
+            <f-a class="icon-small" name="wave"></f-a>
+            单独批量生成运单
+          </el-button>
+        </perm>
         <perm label="tms-order-generate">
           <el-button plain size="small" @click="autoCreateWayBill"
                      v-if="(activeStatus===0||activeStatus==='0')&&(!checkList||checkList.length==0)">
@@ -201,6 +207,9 @@
     <page-right :show="shoWayBillPart" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
       <component :is="currentWayBillPart" :checkList="checkListPara" @right-close="resetRightBox" @change="submit"/>
     </page-right>
+    <page-right :show="showSingleWayBillPart" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
+      <component :is="currentSingleWayBillPart" :checkList="checkListPara" @right-close="resetRightBox" @change="submit"/>
+    </page-right>
     <page-right :show="showSplitOrderPart" @right-close="resetRightBox" :css="{'width':'1200px','padding':0}">
       <component :is="currentSplitOrderPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
@@ -219,13 +228,14 @@
   import showForm from './form/show-form.vue';
   import splitForm from './form/split-order.vue';
   import wayBillForm from './form/create-way-bill.vue';
+  import singleWayBillForm from './form/create-single-way-bill.vue';
   import StatusMixin from '@/mixins/statusMixin';
   import Perm from '@/components/common/perm';
   import MapPath from '../common/map-list';
 
   export default {
     components: {
-      Perm, SearchPart, addForm, wayBillForm, MapPath
+      Perm, SearchPart, addForm, wayBillForm,singleWayBillForm, MapPath
     },
     mixins: [StatusMixin],
     data () {
@@ -239,6 +249,7 @@
         currentPart: null,
         currentInfoPart: null,
         currentWayBillPart: null,
+        currentSingleWayBillPart: null,
         currentSplitOrderPart: null,
         dialogComponents: {
           0: addForm
@@ -248,6 +259,9 @@
         },
         dialogWayBillComponents: {
           0: wayBillForm
+        },
+        dialogSingleWayBillComponents: {
+          0: singleWayBillForm
         },
         dialogSplitFormComponents: {
           0: splitForm
@@ -279,6 +293,7 @@
         checkList: [],
         checkListPara: [],
         shoWayBillPart: false,
+        showSingleWayBillPart: false,
         showSplitOrderPart: false,
         formItem: {},
         activeNo: '',
@@ -408,6 +423,20 @@
           this.checkListPara = this.checkList.slice();
         });
       },
+      singleCreateWayBill: function () {
+        if (!this.checkList.length) {
+          this.$notify.warning({
+            duration: 2000,
+            message: '请选择订单'
+          });
+          return;
+        }
+        this.showSingleWayBillPart = true;
+        this.currentSingleWayBillPart = this.dialogSingleWayBillComponents[0];
+        this.$nextTick(() => {
+          this.checkListPara = this.checkList.slice();
+        });
+      },
       checkItem: function (item) {
         // 单选
         // 单选
@@ -451,6 +480,7 @@
         this.showIndex = -1;
         this.showInfoIndex = -1;
         this.shoWayBillPart = false;
+        this.showSingleWayBillPart=false;
         this.showSplitOrderPart = false;
         this.$router.push('/document/order/list');
       },

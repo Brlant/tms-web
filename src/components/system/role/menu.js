@@ -232,6 +232,13 @@ export default [{
       'sort': null,
       'children': null,
       'leaf': true
+    },{
+      'id': 'tms-order-generate-single',
+      'parentId': 'tms-order-manager',
+      'label': '单独生成运单',
+      'sort': null,
+      'children': null,
+      'leaf': true
     }, {
       'id': 'tms-order-query',
       'parentId': 'tms-order-manager',

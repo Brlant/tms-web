@@ -122,6 +122,9 @@ export const TmsOrder = resource('/tms-order', http, {
   createWayBill: (params) => {
     return http.put('/tms-order/list/generate', params);
   },
+  createSingleWayBill: (params) => {
+    return http.put('/tms-order/list/generate/single', params);
+  },
   autoCreateWayBill: (params) => {
     return http.put('/tms-order/generate', params);
   },
