@@ -260,7 +260,7 @@
     </div>
 
     <page-right :show="showAdjustmentIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
-      <component :is="currentPart" :formItem="form" :isOverTime="isOverTime" :showBigMap="showBigMap" @right-close="resetRightBox"/>
+      <component :is="currentAdjustPart" :formItem="form" @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
       <component :is="currentPart" :formItem="form" :isOverTime="isOverTime" :showBigMap="showBigMap"
@@ -325,6 +325,7 @@
           0: editForm
         },
         currentPart: null,
+        currentAdjustPart:null,
         currentEditPart: null,
         pager: {
           currentPage: 1,
@@ -811,7 +812,7 @@
       showAdjustment: function (item) {
         this.currentItemId = item.id;
         this.showAdjustmentIndex = 0;
-        this.currentPart = this.dialogAdjustmentComponents[0];
+        this.currentAdjustPart = this.dialogAdjustmentComponents[0];
         this.$nextTick(() => {
           this.form = JSON.parse(JSON.stringify(item));
         });
