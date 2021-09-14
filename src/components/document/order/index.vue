@@ -39,14 +39,19 @@
             添加
           </el-button>
         </perm>
+        <perm label="tms-order-export">
+          <el-button plain size="small" @click="exportOrder" :disabled="isLoading">
+            <f-a class="icon-small" name="basic"></f-a>
+            导出Excel
+          </el-button>
+        </perm>
       </template>
     </search-part>
     <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus"/>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="3">
-          <el-checkbox @change="checkAll" v-model="isCheckAll"
-                       v-if="activeStatus===0||activeStatus==='0'"></el-checkbox>
+          <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
           订单号
         </el-col>
         <el-col :span="2">类型</el-col>
@@ -75,8 +80,7 @@
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="3" class="special-col R">
-              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
-                   v-if="activeStatus===0||activeStatus==='0'">
+              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
@@ -223,7 +227,7 @@
 <script>
   import utils from '@/tools/utils';
   import SearchPart from './search';
-  import {TmsOrder} from '@/resources';
+  import {http, TmsOrder} from '@/resources';
   import addForm from './form/add-form.vue';
   import showForm from './form/show-form.vue';
   import splitForm from './form/split-order.vue';
@@ -290,6 +294,7 @@
           destinationAreaCode:''
         },
         isCheckAll: false,
+        isLoading:false,
         checkList: [],
         checkListPara: [],
         shoWayBillPart: false,
@@ -335,6 +340,32 @@
       }
     },
     methods: {
+      exportOrder: function () {
+        this.isLoading = true;
+        this.$store.commit('initPrint', {
+          isPrinting: true,
+          moduleId: '/document/order/list',
+          text: '正在导出'
+        });
+        let params = Object.assign({}, this.filters);
+        http.post('/tms-order/export', params).then(res => {
+          utils.download(res.data.path, '订单信息表');
+          this.isLoading = false;
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: '/document/order/list'
+          });
+        }).catch(error => {
+          this.isLoading = false;
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: '/document/order/list'
+          });
+          this.$notify.error({
+            message: error.response&&error.response.data && error.response.data.msg || '导出失败'
+          });
+        });
+      },
       showBigMap (formItem, item) {
         this.formItem = {};
         this.activeNo = '';
