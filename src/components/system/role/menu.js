@@ -365,6 +365,13 @@ export default [{
       'sort': null,
       'children': null,
       'leaf': true
+    }, {
+      'id': 'tms-order-export',
+      'parentId': 'tms-order-manager',
+      'label': '导出订单',
+      'sort': null,
+      'children': null,
+      'leaf': true
     }],
     'leaf': false
   }, {
