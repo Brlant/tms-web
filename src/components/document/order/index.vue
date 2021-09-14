@@ -51,7 +51,8 @@
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="3">
-          <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
+          <el-checkbox @change="checkAll" v-model="isCheckAll"
+                       v-if="activeStatus===0||activeStatus==='0'"></el-checkbox>
           订单号
         </el-col>
         <el-col :span="2">类型</el-col>
@@ -80,7 +81,8 @@
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
             <el-col :span="3" class="special-col R">
-              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)">
+              <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
+                   v-if="activeStatus===0||activeStatus==='0'">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
