@@ -246,6 +246,13 @@ export default [{
       'sort': null,
       'children': null,
       'leaf': true
+    },{
+      'id': 'tms-order-export',
+      'parentId': 'tms-order-manager',
+      'label': '导出订单',
+      'sort': null,
+      'children': null,
+      'leaf': true
     }],
     'leaf': false
   }, {
@@ -362,13 +369,6 @@ export default [{
       'id': 'tms-task-add',
       'parentId': 'tms-task-map-manager',
       'label': '生成派送',
-      'sort': null,
-      'children': null,
-      'leaf': true
-    }, {
-      'id': 'tms-order-export',
-      'parentId': 'tms-order-manager',
-      'label': '导出订单',
       'sort': null,
       'children': null,
       'leaf': true
