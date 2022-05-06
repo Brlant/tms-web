@@ -345,6 +345,23 @@ export const GoodsArea = resource('goods-area', http, {
     return http.get('goods-area/' + id + '/org-list', {});
   }
 });
+export const StorageBin = resource('storage-bin', http, {
+  getPage: (params) => {
+    return http.get('storage-bin', {params});
+  },
+  addDetail: (params) => {
+    return http.post('storage-bin/detail', params);
+  },
+  getDetailPage: (params) => {
+    return http.get('storage-bin/detail', {params});
+  },
+  deleteDetail: (id) => {
+    return http.delete('storage-bin/detail/' + id, {});
+  },
+  queryGoodsAreaOrgList: (id) => {
+    return http.get('storage-bin/' + id + '/org-list', {});
+  }
+});
 
 // dev设备对象
 export const Dev = resource('/dev', http, {});
