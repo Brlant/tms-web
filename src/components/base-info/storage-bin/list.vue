@@ -3,6 +3,10 @@
   display: block;
 }
 
+.el-button  i {
+  font-size: 20px;
+  color: #767676;
+}
 </style>
 <template>
   <div>
@@ -28,7 +32,19 @@
         <div class="empty-info" v-show="!list.length">暂无信息</div>
         <div style="padding-left: 10px">
           <el-collapse v-model="activeName" accordion>
-            <el-collapse-item v-for="(item,index) in list" :title="'  '+item.name" :name="index">
+            <el-collapse-item v-for="(item,index) in list" :title="'  '+item.name" :name="index" :key="index">
+              <template slot="title">
+                <el-button type="text" @click.stop="addStore(item)" title="新增库区">
+                  <i class="el-icon-circle-plus-outline"></i>
+                </el-button>
+                <span style="margin-left: 20px">{{item.name}}</span>
+                <template v-if="item.status == '0'">
+                  <el-tag type="success" class="pull-right ml-10">正常</el-tag>
+                </template>
+                <template v-else-if="item.status == '1'">
+                  <el-tag type="danger" class="pull-right ml-10">禁用</el-tag>
+                </template>
+              </template>
               <ul class="show-list">
                 <li v-for="item1 in item.list" class="list-item">
                   {{ item1.name }}
@@ -60,55 +76,65 @@
         </div>
       </div>
       <div class="d-table-right">
-        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
-          <div class="scrollbar-content">
-            <span class="pull-right" v-show="list.length !== 0">
-              <perm label="tms-goods-area-detail-add">
-                <a href="#" class="btn-circle" @click.stop.prevent="add" v-show="!showAll">
-                  <i class="el-icon-t-plus"></i>
-                </a>
-              </perm>
-            </span>
-            <div v-if="dataRows.length === 0" class="empty-info clearfix">
-              暂无信息
+        <el-descriptions class="form-header-part">
+          <template slot="title">
+            <div class="header">
+              <div class="sign f-dib"></div>
+              <h3 class="tit f-dib index-tit">库区信息</h3>
             </div>
-            <div v-else>
-              <table class="table table-hover">
-                <thead>
-                <tr>
-                  <th width="50%">仓位名称</th>
-                  <th width="30%">仓库名称</th>
-                  <th width="20%">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="row in dataRows">
-                  <td width="50%">
-                    {{ row.orgName }}
-                  </td>
-                  <td width="30%">
-                    {{ row.areaName }}
-                  </td>
-                  <td class="list-op" width="20%">
-                    <perm label="tms-goods-area-detail-delete">
-                      <a href="#" @click.stop.prevent="deleteStorageBinDetail(row)"><i
-                        class="el-icon-t-delete"></i>删除</a>
-                    </perm>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-              <div class="text-center" v-show="dataRows.length">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                               :current-page="pager.currentPage"
-                               :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
-                               layout="total, sizes, prev, pager, next, jumper"
-                               :total="pager.count">
-                </el-pagination>
-              </div>
-            </div>
+          </template>
+          <template slot="extra">
+            <el-button type="text" @click="editStore" title="编辑库区"><i class="el-icon-edit-outline"></i></el-button>
+          </template>
+          <el-descriptions-item label="库区代码">{{ details.code }}</el-descriptions-item>
+          <el-descriptions-item label="库区名称">{{ details.name }}</el-descriptions-item>
+          <el-descriptions-item label="库区类型">{{ details.type }}</el-descriptions-item>
+          <el-descriptions-item label="温度范围">{{ details.temperatureRange }}</el-descriptions-item>
+          <el-descriptions-item label="湿度范围">{{ details.humidityRange }}</el-descriptions-item>
+        </el-descriptions>
+
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit">库位信息</h3>
           </div>
-        </el-scrollbar>
+          <div class="content">
+            <el-table class="border-black" :data="form.goodsList" border style="width: 100%">
+              <!--              <el-table-column type="index" label="序号" width="50"/>-->
+              <el-table-column prop="code" label="库位编号"/>
+              <el-table-column prop="spec" label="规格（长*宽*高）">
+              </el-table-column>
+              <el-table-column prop="batchNumber" label="可存放 cm²">
+              </el-table-column>
+              <el-table-column prop="specifications" label="存放数（已存/容积）">
+              </el-table-column>
+              <el-table-column label="状态" width="120">
+                <template v-slot="{row}">
+                  <el-tag type="success" v-if="row.status == 0">
+                    可用
+                  </el-tag>
+                  <el-tag type="danger" v-else>
+                    不可用
+                  </el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="code" label="操作">
+                <template v-slot="{row}">
+                  <el-button type="text" v-if="row.status == 0" icon="el-icon-disabled">
+                    停用
+                  </el-button>
+                  <el-button type="danger" v-else icon="el-icon-ok">
+                    不可用
+                  </el-button>
+                  <el-button type="danger" v-else icon="el-icon-edit-outline">
+                    编辑
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="hr mb-10"></div>
+          </div>
+        </div>
       </div>
     </div>
     <page-right :show="showRight" @right-close="resetRightBox" :css="{'width':'1100px','padding':0}">
@@ -166,7 +192,7 @@ export default {
       },
       list: [
         {
-          id: 1, name: 'A仓库',
+          id: 1, name: 'A仓库',status:0,
           list: [
             {id: 1, name: 'A仓库A库区', status0: '0', status1: '0',},
             {id: 2, name: 'A仓库B库区', status0: '1', status1: '0',},
@@ -174,14 +200,14 @@ export default {
           ],
         },
         {
-          id: 2, name: 'B仓库',
+          id: 2, name: 'B仓库',status:0,
           list: [
             {id: 1, name: 'A仓库', status0: '0', status1: '0',},
             {id: 2, name: 'B仓库', status0: '0', status1: '0',},
           ],
         },
         {
-          id: 3, name: 'C仓库',
+          id: 3, name: 'C仓库',status:1,
           list: [
             {id: 1, name: 'A仓库', status0: '1', status1: '1',},
           ],
@@ -194,6 +220,8 @@ export default {
       },
       typeTxt: '',
       currentItem: {},
+      span: 10,
+      details: {code: 1, name: 'aaa', type: 1},
       activeName: 0
     };
   },
@@ -381,6 +409,12 @@ export default {
     itemChange: function () {
       this.showType(this.currentItem, this.pager.currentPage);
       this.showRight = false;
+    },
+    addStore(item){
+      this.$message('你点击了新增库区:'+JSON.stringify(item));
+    },
+    editStore(item){
+      this.$message('你点击了编辑库区:'+JSON.stringify(item));
     }
   }
 };

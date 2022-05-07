@@ -16,7 +16,7 @@
     "@sentry/integrations": "^5.19.0",
     "axios": "^0.16.1",
     "babel-polyfill": "^6.26.0",
-    "element-ui": "^2.15.8",
+    "element-ui": "^2.15.7",
     "js-base64": "^3.7.2",
     "moment": "^2.27.0",
     "npm": "^5.10.0",

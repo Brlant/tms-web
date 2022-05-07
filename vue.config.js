@@ -5,6 +5,11 @@ function resolve(dir) {
   return path.join(__dirname, '..', dir);
 }
 
+const targets = [
+  'https://hw-test-tms.cdcerp.cn',
+  'http://localhost:8081',
+];
+
 module.exports = {
   devServer: {
     open: true,
@@ -12,7 +17,7 @@ module.exports = {
     https: false,
     hotOnly: false, disableHostCheck: true, proxy: {
       '/api': {
-        target: 'https://hw-test-tms.cdcerp.cn',
+        target: targets[0],
         changOrigin: true
       }
     }

@@ -100,11 +100,12 @@ import DialogTemplate from '@/components/common/dialog-template';
 import SearchTemplate from '@/components/common/search-template';
 
 import {
-  Pagination
+  Pagination,Descriptions,DescriptionsItem
 } from 'element-ui';
 
 const tinyVue = [
   Pagination,
+  Descriptions,DescriptionsItem,
   CuPagination,
   Dialog,
   Autocomplete,
