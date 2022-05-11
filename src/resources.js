@@ -345,10 +345,7 @@ export const GoodsArea = resource('goods-area', http, {
     return http.get('goods-area/' + id + '/org-list', {});
   }
 });
-export const StorageBin = resource('storage-bin', http, {
-  getPage: (params) => {
-    return http.get('storage-bin', {params});
-  },
+export const StorageBin = resource('/tms-store/queryTmsStore', http, {
   addDetail: (params) => {
     return http.post('storage-bin/detail', params);
   },
@@ -651,4 +648,3 @@ function resource(path, http, actions) {
   };
   return Object.assign(obj, actions);
 }
-

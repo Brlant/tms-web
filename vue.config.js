@@ -5,19 +5,22 @@ function resolve(dir) {
   return path.join(__dirname, '..', dir);
 }
 
-const targets = [
-  'https://hw-test-tms.cdcerp.cn',
-  'http://localhost:8081',
-];
-
+// 代理的目标地址集合
+const proxyTargets = {
+  hw: "https://hw-test-tms.cdcerp.cn", // 华为云环境
+  lxr: "http://192.168.5.10:8081", // 先锐本地
+  yj: "http://127.0.0.1:8015", // 本地
+};
 module.exports = {
   devServer: {
     open: true,
     port: '8014',
     https: false,
-    hotOnly: false, disableHostCheck: true, proxy: {
+    hotOnly: false,
+    disableHostCheck: true,
+    proxy: {
       '/api': {
-        target: targets[0],
+        target: proxyTargets.hw,
         changOrigin: true
       }
     }
