@@ -25,6 +25,10 @@
   position: relative;
   margin: 0 20px;
 }
+
+::v-deep .el-descriptions__body {
+  padding-left: 40px;
+}
 </style>
 <template>
   <div id="store">
@@ -39,7 +43,7 @@
           <el-button icon="el-icon-edit-outline" @click="openEditStorePage">
             编辑仓库
           </el-button>
-          <el-button icon="el-icon-plus" @click="openAddStoreAreaPagePage">
+          <el-button icon="el-icon-plus" @click="openAddStorePage">
             新增仓库
           </el-button>
         </el-col>
@@ -49,10 +53,10 @@
       <div class="d-table-left">
         <div class="empty-info" v-show="!storeList.length">暂无信息</div>
         <div style="padding-left: 10px">
-          <el-collapse v-model="storeIndex" accordion>
+          <el-collapse v-model="activeName" accordion>
             <el-collapse-item v-for="(store,index) in storeList" :name="index" :key="index">
               <template slot="title">
-                <el-button type="text" @click.stop="openAddStoreAreaPage(store)" title="新增库区">
+                <el-button type="text" @click.stop="openAddAreaPage(store)" title="新增库区">
                   <i class="el-icon-circle-plus-outline icon20"></i>
                 </el-button>
                 <div class="storeName" :title="store.storeName">{{ store.storeName }}</div>
@@ -104,7 +108,7 @@
               </div>
             </template>
             <template slot="extra" v-show="areaItem.storeId">
-              <el-button type="text" @click="openEditStoreAreaPage" title="编辑库区">
+              <el-button type="text" @click="openEditAreaPage" title="编辑库区">
                 <i class="el-icon-edit-outline icon20"></i>
               </el-button>
             </template>
@@ -123,10 +127,10 @@
                 </template>
               </el-descriptions-item>
               <el-descriptions-item label="温度范围">
-                {{`${areaItem.temperatureLowerLimit} ~ ${areaItem.temperatureUpperLimit}°C`}}
+                {{ `${areaItem.temperatureLowerLimit} ~ ${areaItem.temperatureUpperLimit}°C` }}
               </el-descriptions-item>
               <el-descriptions-item label="湿度范围">
-                {{`${areaItem.humidityLowerLimit}% ~ ${areaItem.humidityUpperLimit}%`}}
+                {{ `${areaItem.humidityLowerLimit}% ~ ${areaItem.humidityUpperLimit}%` }}
               </el-descriptions-item>
             </template>
 
@@ -160,17 +164,17 @@
               <el-table-column prop="storeCode" label="库位编号"/>
               <el-table-column label="规格（长*宽*高）">
                 <template v-slot="{row}">
-                  {{`${row.storeLength|| 0} * ${row.storeWidth|| 0} * ${row.storeHeight|| 0}`}}
+                  {{ `${row.storeLength || 0} * ${row.storeWidth || 0} * ${row.storeHeight || 0}` }}
                 </template>
               </el-table-column>
               <el-table-column prop="batchNumber" label="可存放cm³">
                 <template v-slot="{row}">
-                  {{row.volume - row.storeUsedSpace}}
+                  {{ row.volume - row.storeUsedSpace }}
                 </template>
               </el-table-column>
-              <el-table-column prop="specifications" label="存放比（已存/容积）">
+              <el-table-column prop="specifications" label="存放数（已存/容积）">
                 <template v-slot="{row}">
-                  {{`${row.storeUsedSpace || 0} / ${row.volume || 0}`}}
+                  {{ `${row.storeUsedSpace || 0} / ${row.volume || 0}` }}
                 </template>
               </el-table-column>
               <el-table-column label="状态" width="120">
@@ -191,7 +195,7 @@
                   <el-button type="text" v-else>
                     <i class="el-icon-success"> 启用</i>
                   </el-button>
-                  <el-button type="text">
+                  <el-button type="text" @click="openEditPositionPage(row)">
                     <i class="el-icon-edit-outline"> 编辑</i>
                   </el-button>
                 </template>
@@ -202,40 +206,57 @@
         </div>
       </div>
     </div>
-    <page-right :show="showRight" @right-close="resetRightBox" :css="{'width':'1100px','padding':0}">
-      <edit-form :formItem="form" :title="formTitle"
-                 :action="action" :actionType="showRight"
-                 @close="showRight=false" @change="itemChange"/>
-    </page-right>
-    <page-right :show="showDepartmentRight" @right-close="resetRightBox">
-      <store-form :formItem="departmentForm" :title="formTitle"
-                  :action="action" :actionType="showRight"
-                  @close="showDepartmentRight=false" @change="StorageBinChange"/>
+
+    <page-right :show="showRight" @right-close="closeForms">
+      <store-form
+        v-show="showStoreForm"
+        :action="formAction"
+        :title="formTitle"
+        :form="formData"
+        @cancel="closeForms"
+        @storeUpdate="storeUpdateHandle"/>
+
+      <store-area-form
+        v-show="showAreaForm"
+        :action="formAction"
+        :title="formTitle"
+        :form="formData"
+        @cancel="closeForms"
+        @storeAreaUpdate="storeAreaUpdateHandle"/>
+      <store-position-form
+        v-show="showPositionForm"
+        :action="formAction"
+        :title="formTitle"
+        :form="formData"
+        @cancel="closeForms"
+        @storePositionUpdate="storePositionUpdateHandle"/>
     </page-right>
   </div>
 
 </template>
 <script>
 import {StorageBin} from '@/resources';
-import editForm from './form/form.vue';
 import StoreForm from './form/StoreForm.vue';
-import bgBox from '../../common/bgbox.vue';
+import StoreAreaForm from './form/StoreAreaForm.vue';
+import StorePositionForm from './form/StorePositionForm.vue';
 
 export default {
   components: {
-    editForm, bgBox, StoreForm
+    StoreForm, StoreAreaForm, StorePositionForm
   },
   data() {
     return {
-      showRight: false,
-      showDepartmentRight: false,
-      form: {},
-      departmentForm: {},
-      formTitle: '',
-      action: 'add',
       span: 10,
-
-      // 以下是重点
+      // 控制右侧显示
+      showRight: false,
+      showStoreForm: false,
+      showAreaForm: false,
+      showPositionForm: false,
+      // form相关参数
+      formAction: '',
+      formTitle: '',
+      formData: {},
+      // 查询参数
       storeParams: {
         pageNo: 1,
         pageSize: 10,
@@ -253,30 +274,45 @@ export default {
         storeParent: '',
         storeLevel: 2
       },
+      // 活动面板名称,实际存的是仓库的下标
+      activeName: 0,
+      // 当前仓库的下标
       storeIndex: 0,
+      // 当前仓库下已打开的库区的下标
       areaIndex: 0,
-      storeList: [],//仓库列表
-      positionList: [],//仓位列表
+      // 当前编辑的库位的下标
+      positionIndex: 0,
+      // 仓库列表
+      storeList: [],
+      // 仓位列表
+      positionList: [],
+      // 已打开的库区信息
       areaItem: {},
-      positionItem: {},
-      showStoreMore: false,//仓库列表显示加载更多
+      // 仓库列表显示加载更多
+      showStoreMore: false,
     };
   },
-  computed: {
-    bodyHeight() {
-      let height = parseInt(this.$store.state.bodyHeight, 10);
-      height = (height - 30) + 'px';
-      return height;
-    },
-  },
+  computed: {},
   watch: {
-    storeIndex(newIndex) {
+    // 监听折叠面板的变化
+    activeName(val) {
+      if (val === '') {
+        // 关闭的情况下不做操作
+        return;
+      }
+
+      this.storeIndex = val;
+      // 仓库切换时,需要懒加载仓库下的所有库区,获取库区的方法会判断是不是最后一页的数据,不是的话会递归调用,直到所有库区都加载完毕
       this.getStoreAreaList();
+    },
+    areaIndex(val) {
+      this.areaItem = this.storeList[this.storeIndex].areaList[val];
     }
   },
   methods: {
     // 获取仓库列表
     getStoreList(isContinue = false) {
+
       StorageBin.query(this.storeParams).then(res => {
         this.$store.commit('initBottomLoading', false);
 
@@ -291,7 +327,7 @@ export default {
           return item;
         });
 
-        const storeIndex = this.storeList.length;
+
         this.showStoreMore = this.storeParams.pageNo < totalPage;
         if (isContinue) {
           this.storeList = this.storeList.concat(list);
@@ -300,15 +336,24 @@ export default {
         }
 
         // 获取仓库下的库区
-        this.storeIndex = storeIndex;
         this.getStoreAreaList();
       });
     },
     //获取库区列表
     getStoreAreaList(pageNo = 1, isContinue = false) {
-      const {storeId, isLoadData} = this.storeList[this.storeIndex];
-      if (isLoadData && this.areaItem.storeId) {
-        return;
+      const {storeId, storeCode, storeName, isLoadData, areaList} = this.storeList[this.storeIndex];
+      if (isLoadData) {
+        if (areaList.length == 0) {
+          this.areaItem = {};
+          this.positionList = [];
+          return
+        }
+
+        if (pageNo == 1) {
+          this.areaItem = areaList[this.areaIndex];
+          this.positionList = this.areaItem.positionList;
+          return;
+        }
       }
 
       this.areaParams.pageNo = pageNo;
@@ -316,25 +361,30 @@ export default {
       this.areaParams.storeParent = storeId;
 
       StorageBin.query(this.areaParams).then(res => {
-        const {list, count, totalPage} = res.data;
+        let {list, count, totalPage} = res.data;
         if (list.length === 0) {
           // 库区信息清空
           this.areaItem = {};
           return;
         }
 
-        const areaIndex = this.storeList[this.storeIndex].areaList.length;
+        list = list.map(item => {
+          item.positionList = [];
+          item.loadPageNo = -1;
+          item.storeParent = storeId;
+          item.highestCode = storeCode;
+          item.highestName = storeName;
+          return item;
+        });
+
+        this.storeList[this.storeIndex].isLoadData = true;
         if (isContinue) {
           this.storeList[this.storeIndex].areaList = this.areaList.concat(list);
         } else {
           this.storeList[this.storeIndex].areaList = list;
-        }
-
-        this.storeList[this.storeIndex].isLoadData = true;
-        this.areaItem = list[0];
-        if (areaIndex === 0) {
           // 只有第一次的时候调用
-          this.areaIndex = areaIndex;
+          this.areaIndex = 0;
+          this.areaItem = list[0];
           this.getStorePositionList(1);
         }
 
@@ -347,8 +397,8 @@ export default {
       });
     },
     //获取库位列表
-    getStorePositionList(pageNo = 1, isContinue = false) {
-      const {storeId, loadPageNo} = this.storeList[this.storeIndex].areaList[this.areaIndex];
+    getStorePositionList(pageNo = 1) {
+      const {storeId,  loadPageNo} = this.areaItem;
       if (pageNo == loadPageNo) {
         this.positionList = this.storeList[this.storeIndex].areaList[this.areaIndex].positionList;
       }
@@ -358,8 +408,6 @@ export default {
       this.positionParams.storeParent = storeId;
 
       StorageBin.query(this.positionParams).then(res => {
-        this.$store.commit('initBottomLoading', false);
-
         const {list, count, totalPage} = res.data;
         if (list.length === 0) {
           return;
@@ -367,40 +415,129 @@ export default {
 
         this.positionParams.totalCount = count;
         this.positionParams.totalPage = totalPage;
-        if (isContinue) {
-          this.storeList[this.storeIndex].areaList[this.areaIndex].positionList = this.storeList[this.storeIndex].areaList[this.areaIndex].positionList.concat(list);
-        } else {
-          this.storeList[this.storeIndex].areaList[this.areaIndex].positionList = list;
-        }
-
+        this.storeList[this.storeIndex].areaList[this.areaIndex].positionList = list;
         this.storeList[this.storeIndex].areaList[this.areaIndex].loadPageNo = pageNo;
         this.positionList = list;
       });
     },
-    StorageBinChange() {
-      this.getStoreList(1);
-      this.showDepartmentRight = false;
+    openAddStorePage() {
+      // 新增仓库时,表单数据需要清空
+      this.formData = {};
+      this.formAction = 'add';
+      this.formTitle = '新增仓库';
+      this.showRight = true;
+      this.showStoreForm = true;
     },
-    itemChange() {
-      this.showRight = false;
+    openEditStorePage() {
+      // 编辑时取当前仓库的数据
+      this.formData = this.storeList[this.storeIndex];
+      this.formAction = 'edit';
+      this.formTitle = '编辑仓库';
+      this.showRight = true;
+      this.showStoreForm = true;
     },
-    openAddStoreAreaPage(item) {
-      this.$message('你点击了新增库区:' + JSON.stringify(item));
+    openAddAreaPage(store) {
+      // 新增库区需要把仓库的代码和名称带上
+      this.formData = {
+        storeParent: store.storeId,
+        highestCode: store.storeCode,
+        highestName: store.storeName,
+      };
+
+      this.formAction = 'add';
+      this.formTitle = '新增库区信息';
+      this.showRight = true;
+      this.showAreaForm = true;
     },
-    openEditStoreAreaPage(item) {
-      this.$message('你点击了编辑库区:' + JSON.stringify(item));
+    openEditAreaPage(store) {
+      // 编辑库区也需要需要把仓库的代码和名称带上
+      this.formData = this.areaItem;
+      this.formAction = 'edit';
+      this.formTitle = '编辑库区信息';
+      this.showRight = true;
+      this.showAreaForm = true;
     },
-    openAddStoreAreaPagePage() {
-      this.action = 'add';
-      this.departmentForm = {};
-      this.formTitle = '新增';
-      this.showDepartmentRight = true;
+    openAddPositionPage() {
+      // 新增库区需要把仓库的代码和名称带上
+      this.formData = {
+        storeParent: this.areaItem.storeId,
+        parentCode: this.areaItem.storeCode,
+        parentName: this.areaItem.storeName,
+        highestCode: this.areaItem.highestCode,
+        highestName: this.areaItem.highestName,
+      };
+
+      this.formAction = 'add';
+      this.formTitle = '新增库位信息';
+      this.showRight = true;
+      this.showPositionForm = true;
     },
-    openEditStorePage(item) {
-      this.action = 'edit';
-      this.departmentForm = Object.assign({}, item);
-      this.formTitle = '编辑';
-      this.showDepartmentRight = true;
+    openEditPositionPage(storePosition) {
+      // 编辑库区也需要需要把仓库的代码和名称带上
+      this.formData = Object.assign({}, storePosition, {
+        storeParent: this.areaItem.storeId,
+        parentCode: this.areaItem.storeCode,
+        parentName: this.areaItem.storeName,
+        highestCode: this.areaItem.highestCode,
+        highestName: this.areaItem.highestName,
+      });
+
+      this.formAction = 'edit';
+      this.formTitle = '编辑库位信息';
+      this.showRight = true;
+      this.showPositionForm = true;
+    },
+    // 仓库更新处理
+    storeUpdateHandle(item, updated) {
+      this.closeForms();
+      // console.log(`storeUpdateHandle:`, item);
+
+      if (updated) {
+        // 如果仓库已经更新,那么不需要再次请求,刷新数据就好
+        let store = this.storeList[this.storeIndex];
+        this.storeList[this.storeIndex] = Object.assign(store, item);
+        return;
+      }
+
+      // 如果是新增仓库成功,那么把新增的追加到storeList
+      item.areaList = [];
+      item.isLoadData = false;
+      this.storeList.push(item);
+    },
+    // 库区更新处理
+    storeAreaUpdateHandle(item, updated) {
+      this.closeForms();
+      // console.log(`storeAreaUpdateHandle:`, item);
+
+      if (updated) {
+        // 如果已经更新,那么不需要再次请求,刷新数据就好
+        let store = this.storeList[this.storeIndex].areaList[this.areaIndex];
+        this.storeList[this.storeIndex].areaList[this.areaIndex] = Object.assign(store, item);
+        return;
+      }
+
+      // 如果是新增库区,需要追加到对应的仓库下面
+      item.positionList = [];
+      item.isLoadData = false;
+      this.storeList[this.storeIndex].areaList.push(item);
+    },
+    // 库位更新处理
+    storePositionUpdateHandle(item, updated) {
+      this.closeForms();
+      console.log(`storePositionUpdateHandle:`, item);
+
+      if (updated) {
+        // 如果已经更新,那么不需要再次请求,刷新数据就好
+        let store = this.storeList[this.storeIndex].areaList[this.areaIndex].positionList[this.positionIndex];
+        this.storeList[this.storeIndex].areaList[this.areaIndex] = Object.assign(store, item);
+        return;
+      }
+
+      // 如果是新增库区,需要追加到对应的仓库下面
+      item.positionList = [];
+      item.isLoadData = false;
+      this.storeList[this.storeIndex].areaList[this.areaIndex].positionList.push(item);
+      this.positionList.push(item);
     },
     getStoreMore() {
       this.storeParams.pageNo++;
@@ -409,17 +546,19 @@ export default {
     scrollLoadingData(event) {
       this.$scrollLoadingData(event);
     },
-    resetRightBox() {
+    closeForms() {
       this.showRight = false;
-      this.showDepartmentRight = false;
+      this.showStoreForm = false;
+      this.showAreaForm = false;
+      this.showPositionForm = false;
     },
     areaClick(index) {
       this.areaIndex = index;
     }
   },
   mounted() {
-    this.getStoreList(1);
-  },
+    this.getStoreList();
+  }
 
 };
 </script>

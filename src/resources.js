@@ -345,20 +345,12 @@ export const GoodsArea = resource('goods-area', http, {
     return http.get('goods-area/' + id + '/org-list', {});
   }
 });
-export const StorageBin = resource('/tms-store/queryTmsStore', http, {
-  addDetail: (params) => {
-    return http.post('storage-bin/detail', params);
-  },
-  getDetailPage: (params) => {
-    return http.get('storage-bin/detail', {params});
-  },
-  deleteDetail: (id) => {
-    return http.delete('storage-bin/detail/' + id, {});
-  },
-  queryGoodsAreaOrgList: (id) => {
-    return http.get('storage-bin/' + id + '/org-list', {});
-  }
-});
+export const StorageBin = {
+  query: (params) => http.get('/tms-store/queryTmsStore', {params}),
+  addSave: (params) => http.post('/tms-store/addTmsStore', params),
+  editSave: (params) => http.post('/tms-store/editTmsStore', params),
+  batchUpdateStatus: (params) => http.post('/tms-store/batchUpdate', params),
+};
 
 // dev设备对象
 export const Dev = resource('/dev', http, {});
