@@ -8,37 +8,37 @@
 
 </style>
 <template>
-  <el-form ref="form" :rules="rules" :model="form" label-width="120px">
+  <el-form ref="form" :rules="rules" :model="formData" label-width="120px">
     <h2 class="clearfix">{{ title }}</h2>
     <el-form-item label="仓库名称" :required="true">
-      <el-input type="text" v-model="form.highestName" :disabled="true"></el-input>
+      <el-input type="text" v-model="formData.highestName" :disabled="true"></el-input>
     </el-form-item>
     <el-form-item label="库区代码" prop="storeCode">
-      <el-input type="text" v-model="form.storeCode" placeholder="请输入库区代码" ></el-input>
+      <el-input type="text" v-model="formData.storeCode" placeholder="请输入库区代码"></el-input>
     </el-form-item>
     <el-form-item label="库区名称" prop="storeName">
-      <el-input type="text" v-model="form.storeName" placeholder="请输入库区名称" ></el-input>
+      <el-input type="text" v-model="formData.storeName" placeholder="请输入库区名称"></el-input>
     </el-form-item>
     <el-form-item label="温度范围" prop="temperatureLowerLimit" class="inline">
-      <el-input placeholder="请输入最低温度" v-model="form.temperatureLowerLimit">
+      <el-input placeholder="请输入最低温度" v-model="formData.temperatureLowerLimit">
         <template slot="append">°C</template>
       </el-input>
       &nbsp;~&nbsp;
-      <el-input placeholder="请输入最高温度" v-model="form.temperatureUpperLimit">
+      <el-input placeholder="请输入最高温度" v-model="formData.temperatureUpperLimit">
         <template slot="append">°C</template>
       </el-input>
     </el-form-item>
     <el-form-item label="湿度范围" prop="humidityLowerLimit" class="inline">
-      <el-input placeholder="请输入最低湿度" v-model="form.humidityLowerLimit">
+      <el-input placeholder="请输入最低湿度" v-model="formData.humidityLowerLimit">
         <template slot="append">%</template>
       </el-input>
       &nbsp;~&nbsp;
-      <el-input placeholder="请输入最高湿度" v-model="form.humidityUpperLimit">
+      <el-input placeholder="请输入最高湿度" v-model="formData.humidityUpperLimit">
         <template slot="append">%</template>
       </el-input>
     </el-form-item>
     <el-form-item label="库区类型" prop="storeType">
-      <el-select v-model="form.storeType" placeholder="请选择库区类型">
+      <el-select v-model="formData.storeType" placeholder="请选择库区类型">
         <el-option
           v-for="item in storeTypes"
           :key="item.value"
@@ -47,13 +47,15 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="是否启用" prop="deleteFlag" v-if="action == 'edit'" required>
+    <el-form-item label="是否启用" prop="storeStatus" v-if="action == 'edit'" required>
       <el-switch
-        v-model="form.deleteFlag"
-        active-color="#dcdfe6"
-        inactive-color="#13ce66"
-        active-text="否"
-        inactive-text="是">
+        v-model="formData.storeStatus"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-value="1"
+        inactive-value="0"
+        active-text="是"
+        inactive-text="否">
       </el-switch>
     </el-form-item>
     <el-form-item label-width="120px">
@@ -98,19 +100,20 @@ export default {
           {
             trigger: 'blur',
             validator: (rules, value, cb) => {
-              if (!value){
-                return ;
-              }
 
               // 获取最高温度,校验最低温度的同时也校验最高温度
-              let {temperatureUpperLimit} = this.form;
+              let {temperatureUpperLimit} = this.formData;
               if (!temperatureUpperLimit) {
                 return cb(new Error("最高温度不能为空"));
               }
 
-              if (isNaN(value) || isNaN(temperatureUpperLimit)){
+              if (isNaN(value) || isNaN(temperatureUpperLimit)) {
                 return cb(new Error("温度值只能是数字"));
               }
+
+              // 保留两位小数
+              this.formData.temperatureLowerLimit = utils.format2DecimalPoint(value);
+              this.formData.temperatureUpperLimit = utils.format2DecimalPoint(temperatureUpperLimit);
 
               value = parseInt(value);
               temperatureUpperLimit = parseInt(temperatureUpperLimit);
@@ -122,10 +125,6 @@ export default {
                 return cb(new Error("最低温度不能低于绝对零度(-273.15°C)"));
               }
 
-              // 保留两位小数
-              this.form.temperatureLowerLimit = utils.autoformatDecimalPoint(value);
-              this.form.temperatureUpperLimit = utils.autoformatDecimalPoint(temperatureUpperLimit);
-
               return cb();
             },
           },
@@ -135,19 +134,19 @@ export default {
           {
             trigger: 'blur',
             validator: (rules, value, cb) => {
-              if (!value){
-                return ;
-              }
-
               // 获取最高湿度,校验最低湿度的同时也校验最高湿度
-              let {humidityUpperLimit} = this.form;
+              let {humidityUpperLimit} = this.formData;
               if (!humidityUpperLimit) {
                 return cb(new Error("最高湿度不能为空"));
               }
 
-              if (isNaN(value) || isNaN(humidityUpperLimit)){
+              if (isNaN(value) || isNaN(humidityUpperLimit)) {
                 return cb(new Error("湿度值只能是数字"));
               }
+
+              // 保留两位小数
+              this.formData.humidityLowerLimit = utils.format2DecimalPoint(value);
+              this.formData.humidityUpperLimit = utils.format2DecimalPoint(humidityUpperLimit);
 
               value = parseInt(value);
               humidityUpperLimit = parseInt(humidityUpperLimit);
@@ -164,10 +163,6 @@ export default {
                 return cb(new Error("最高湿度不能超过100%"));
               }
 
-              // 保留两位小数
-              this.form.humidityLowerLimit = utils.autoformatDecimalPoint(value);
-              this.form.humidityUpperLimit = utils.autoformatDecimalPoint(humidityUpperLimit);
-
               return cb();
             },
           },
@@ -181,8 +176,14 @@ export default {
         {value: 'A', label: '整件'},
         {value: 'B', label: '散件'},
         {value: 'C', label: '不合格'},
-      ]
+      ],
+      formData: {...this.form},
     };
+  },
+  watch: {
+    form(val) {
+      this.formData = val;
+    }
   },
   methods: {
     // 保存前需要先校验表单数据
@@ -204,12 +205,12 @@ export default {
       }).then(() => {
         // 校验通过设置doing为true防止重复操作
         this.doing = true;
-        StorageBin.addSave({storeLevel: 1, ...this.form}).then(res => {
+        StorageBin.addSave({storeLevel: 1, ...this.formData}).then(res => {
           this.$notify.success('新增成功');
           // 告诉父页面,库区更新了
           this.$emit('storeAreaUpdate', res.data, false);
           this.$emit('right-close');
-          this.$refs.form.resetFields();
+          this.$refs.formData.resetFields();
         }).catch((error) => {
           console.log(error)
           const msg = error.response.data.msg;
@@ -217,7 +218,7 @@ export default {
         }).finally(() => {
           this.doing = false;
         });
-      });
+      }).catch(()=>{});
     },
     editSave() {
       this.$confirm('是否确认保存', '提示', {
@@ -227,16 +228,16 @@ export default {
       }).then(() => {
         // 校验通过设置doing为true防止重复操作
         this.doing = true;
-        StorageBin.editSave({storeLevel: 1, ...this.form}).then(res => {
-            this.$notify.success('编辑成功');
-            this.$emit('storeAreaUpdate', this.form, true);
-          }).catch(error => {
-            const msg = error.response.data.msg;
-            this.$notify.error(msg || '编辑失败');
-          }).finally(() => {
+        StorageBin.editSave({storeLevel: 1, ...this.formData}).then(res => {
+          this.$notify.success('编辑成功');
+          this.$emit('storeAreaUpdate', this.formData, true);
+        }).catch(error => {
+          const msg = error.response.data.msg;
+          this.$notify.error(msg || '编辑失败');
+        }).finally(() => {
           this.doing = false;
         });
-      });
+      }).catch(()=>{});
     },
     cancel() {
       this.$emit('cancel');

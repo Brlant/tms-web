@@ -8,29 +8,31 @@
 
 </style>
 <template>
-  <el-form ref="form" :rules="rules" :model="form" label-width="120px">
+  <el-form ref="form" :rules="rules" :model="formData" label-width="120px">
     <h2 class="clearfix">{{ title }}</h2>
     <el-form-item label="仓库代码" prop="storeCode">
-      <el-input type="text" v-model="form.storeCode" placeholder="请输入仓库代码"></el-input>
+      <el-input type="text" v-model="formData.storeCode" placeholder="请输入仓库代码"></el-input>
     </el-form-item>
     <el-form-item label="仓库名称" prop="storeName">
-      <el-input type="text" v-model="form.storeName" placeholder="请输入仓库名称"></el-input>
+      <el-input type="text" v-model="formData.storeName" placeholder="请输入仓库名称"></el-input>
     </el-form-item>
     <el-form-item label="备注" prop="storeRemarks">
       <el-input
         type="textarea"
         :rows="5"
         placeholder="请输入备注"
-        v-model="form.storeRemarks">
+        v-model="formData.storeRemarks">
       </el-input>
     </el-form-item>
-    <el-form-item label="是否启用" prop="deleteFlag" v-if="action == 'edit'" required>
+    <el-form-item label="是否启用" prop="storeStatus" v-if="action == 'edit'" required>
       <el-switch
-        v-model="form.deleteFlag"
-        active-color="#dcdfe6"
-        inactive-color="#13ce66"
-        active-text="否"
-        inactive-text="是">
+        v-model="formData.storeStatus"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-value="1"
+        inactive-value="0"
+        active-text="是"
+        inactive-text="否">
       </el-switch>
     </el-form-item>
     <el-form-item label-width="120px">
@@ -74,7 +76,13 @@ export default {
         ],
       },
       doing: false,
+      formData: {...this.form},
     };
+  },
+  watch: {
+    form(val) {
+      this.formData = val;
+    }
   },
   methods: {
     // 保存前需要先校验表单数据
@@ -97,7 +105,7 @@ export default {
       }).then(() => {
         // 校验通过设置doing为true防止重复操作
         this.doing = true;
-        StorageBin.addSave({storeLevel: 0, ...this.form}).then(res => {
+        StorageBin.addSave({storeLevel: 0, ...this.formData}).then(res => {
           this.$notify.success('新增成功');
           // 告诉父页面,仓库更新了
           this.$emit('storeUpdate', res.data, false);
@@ -109,7 +117,7 @@ export default {
         }).finally(() => {
           this.doing = false;
         });
-      });
+      }).catch(()=>{});
     },
     editSave() {
       this.$confirm('是否确认保存', '提示', {
@@ -119,16 +127,16 @@ export default {
       }).then(() => {
         // 校验通过设置doing为true防止重复操作
         this.doing = true;
-        StorageBin.editSave({storeLevel: 0, ...this.form}).then(res => {
+        StorageBin.editSave({storeLevel: 0, ...this.formData}).then(res => {
           this.$notify.success('更新成功');
-          this.$emit('storeUpdate', this.form, true);
+          this.$emit('storeUpdate', this.formData, true);
         }).catch(error => {
           const msg = error.response.data.msg;
           this.$notify.error(msg || '编辑保存失败');
         }).finally(() => {
           this.doing = false;
         });
-      });
+      }).catch(()=>{});
     },
     cancel() {
       this.$emit('cancel');

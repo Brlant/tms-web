@@ -56,8 +56,9 @@
   }
 }
 
-.tag {
-  margin-right: 15px;
+.mr10 {
+  margin-right: 10px;
+  float: right;
 }
 
 </style>
@@ -84,42 +85,44 @@
       <div class="d-table-left">
         <div class="empty-info" v-show="!storeList.length">暂无信息</div>
         <div style="padding-left: 10px">
-          <el-collapse v-model="activeName" accordion style="width: 350px">
+          <el-collapse v-model="activeName" accordion style="width: 420px">
             <el-collapse-item v-for="(store,index) in storeList" :name="index" :key="index">
               <template slot="title">
                 <el-button type="text" @click.stop="openAddAreaPage(store)" title="新增库区">
                   <i class="el-icon-circle-plus-outline icon20"></i>
                 </el-button>
                 <div class="overflow" :title="store.storeName">{{ store.storeName }}</div>
-                <template v-if="store.deleteFlag == '0'">
-                  <el-tag type="success" class="tag">正常</el-tag>
-                </template>
-                <template v-else-if="store.deleteFlag == '1'">
-                  <el-tag type="danger" class="tag">禁用</el-tag>
-                </template>
+                <div>
+                  <template v-if="store.storeStatus == '1'">
+                    <el-tag type="success">正常</el-tag>
+                  </template>
+                  <template v-else-if="store.storeStatus == '0'">
+                    <el-tag type="danger">禁用</el-tag>
+                  </template>
+                </div>
               </template>
               <ul class="show-list">
                 <li v-for="(area,areaIndex) in store.areaList" :key="areaIndex" class="list-li"
                     @click="areaClick(areaIndex)">
-                  <div style="display: inline-flex;align-items: center;">
-                    <span class="overflow" :title="area.storeName">{{ area.storeName }}</span>
-                    <template v-if="area.deleteFlag == '0'">
-                      <el-tag type="success" class="tag">正常</el-tag>
+                  <div class="overflow pull-left" :title="area.storeName">{{ area.storeName }}</div>
+                  <div style="margin-right: 10px">
+                    <template v-if="area.storeStatus == '1'">
+                      <el-tag type="success" class="mr10">正常</el-tag>
                     </template>
-                    <template v-else-if="area.deleteFlag == '1'">
-                      <el-tag type="danger" class="tag">禁用</el-tag>
+                    <template v-else-if="area.storeStatus == '0'">
+                      <el-tag type="danger" class="mr10">禁用</el-tag>
                     </template>
                     <template v-if="area.storeType == 'A'">
-                      <el-tag type="success" class="tag">整件</el-tag>
+                      <el-tag type="success" class="mr10">整件</el-tag>
                     </template>
                     <template v-else-if="area.storeType == 'B'">
-                      <el-tag type="warning" class="tag">散件</el-tag>
+                      <el-tag type="warning" class="mr10">散件</el-tag>
                     </template>
                     <template v-else>
-                      <el-tag type="danger" class="tag">不合格</el-tag>
+                      <el-tag type="danger" class="mr10">不合格</el-tag>
                     </template>
-                  </div>
 
+                  </div>
                 </li>
               </ul>
             </el-collapse-item>
@@ -134,14 +137,14 @@
       </div>
       <div class="d-table-right">
         <div class="form-header-part area">
-          <el-descriptions :colon="!!areaItem.storeId" style="height: 175px">
+          <el-descriptions style="height: 175px" :colon="!!areaItem.storeId">
             <template slot="title">
               <div class="header">
                 <div class="sign f-dib"></div>
                 <h3 class="ml-10">库区信息</h3>
               </div>
             </template>
-            <template slot="extra" v-show="areaItem.storeId">
+            <template slot="extra" v-if="areaItem.storeId">
               <el-button type="text" @click="openEditAreaPage" title="编辑库区">
                 <i class="el-icon-edit-outline icon20"></i>
               </el-button>
@@ -167,12 +170,11 @@
                 {{ `${areaItem.humidityLowerLimit}% ~ ${areaItem.humidityUpperLimit}%` }}
               </el-descriptions-item>
             </template>
-            <template v-else>
-              <el-descriptions-item style="display: inline-flex">
-                <div class="empty-type-info" style="height: 0;padding-top: 105px">暂无库区信息</div>
-              </el-descriptions-item>
-            </template>
+            <el-descriptions-item v-else>
+              <span class="el-table__empty-text">暂无库区信息</span>
+            </el-descriptions-item>
           </el-descriptions>
+
         </div>
 
         <div class="mb-15"></div>
@@ -186,7 +188,8 @@
             </template>
             <template slot="extra">
               <el-button-group style="margin-right: 40px">
-                <el-input v-model="positionParams.keyWord" placeholder="请输入关键字搜索" @keyup.enter.native="getStorePositionList(1)">
+                <el-input v-model="positionParams.keyWord" placeholder="请输入关键字搜索"
+                          @keyup.enter.native="getStorePositionList(1)">
                   <a href="javascript:void(0)" slot="suffix" class="el-icon-t-search el-input__icon"
                      @click.stop="getStorePositionList(1)" title="点击搜索"></a>
                 </el-input>
@@ -237,7 +240,7 @@
             </el-table-column>
             <el-table-column label="状态" width="120">
               <template v-slot="{row}">
-                <el-tag type="danger" v-if="row.deleteFlag">
+                <el-tag type="danger" v-if="row.storeStatus == 0">
                   不可用
                 </el-tag>
                 <el-tag type="success" v-else>
@@ -246,14 +249,14 @@
               </template>
             </el-table-column>
             <el-table-column prop="code" label="操作">
-              <template v-slot="{row}">
-                <el-button type="text" v-if="!row.deleteFlag" @click="updateStatus(row,0)">
+              <template v-slot="{row,$index}">
+                <el-button type="text" v-if="row.storeStatus==1" @click="updateStatus(row,0,$index)">
                   <i class="el-icon-t-forbidden"> 停用</i>
                 </el-button>
-                <el-button type="text" v-else @click="updateStatus(row,1)">
+                <el-button type="text" v-else @click="updateStatus(row,1,$index)">
                   <i class="el-icon-success"> 启用</i>
                 </el-button>
-                <el-button type="text" @click="openEditPositionPage(row)">
+                <el-button type="text" @click="openEditPositionPage(row,$index)">
                   <i class="el-icon-edit-outline"> 编辑</i>
                 </el-button>
               </template>
@@ -275,7 +278,7 @@
 
     <page-right :show="showRight" @right-close="closeForms">
       <store-form
-        v-show="showStoreForm"
+        v-if="showStoreForm"
         :action="formAction"
         :title="formTitle"
         :form="formData"
@@ -283,14 +286,14 @@
         @storeUpdate="storeUpdateHandle"/>
 
       <store-area-form
-        v-show="showAreaForm"
+        v-if="showAreaForm"
         :action="formAction"
         :title="formTitle"
         :form="formData"
         @cancel="closeForms"
         @storeAreaUpdate="storeAreaUpdateHandle"/>
       <store-position-form
-        v-show="showPositionForm"
+        v-if="showPositionForm"
         :action="formAction"
         :title="formTitle"
         :form="formData"
@@ -450,6 +453,7 @@ export default {
         if (list.length === 0) {
           // 库区信息清空
           this.areaItem = {};
+          this.positionList = [];
           return;
         }
 
@@ -483,7 +487,7 @@ export default {
       });
     },
     //获取库位列表
-    getStorePositionList(pageNo = 1,search=false) {
+    getStorePositionList(pageNo = 1, search = false) {
       if (this.doing) {
         return;
       }
@@ -502,7 +506,7 @@ export default {
       }).catch(({res}) => {
         console.log(res);
 
-      }).finally(()=>{
+      }).finally(() => {
         this.doing = false;
       });
     },
@@ -559,7 +563,8 @@ export default {
       this.showRight = true;
       this.showPositionForm = true;
     },
-    openEditPositionPage(storePosition) {
+    openEditPositionPage(storePosition, index) {
+      this.positionIndex = index;
       // 编辑库区也需要需要把仓库的代码和名称带上
       this.formData = Object.assign({}, storePosition, {
         storeType: this.areaItem.storeType,
@@ -605,6 +610,7 @@ export default {
 
       // 如果是新增库区,需要追加到对应的仓库下面
       this.storeList[this.storeIndex].areaList.push(item);
+      this.areaItem = item;
     },
     // 库位更新处理
     storePositionUpdateHandle(item, updated) {
@@ -660,19 +666,20 @@ export default {
     handleSelectionChange(rows) {
       this.checkedRows = rows;
     },
-    updateStatus(row, status) {
-      const params = [{storeId: row.storeId, deleteFlag: status === 0}];
-      const tip = '是否确认' + (status == 1 ? '启用' : '停用');
+    updateStatus(row, storeStatus,index) {
+      const params = [{storeId: row.storeId, storeStatus}];
+      const tip = '是否确认' + (storeStatus == 1 ? '启用' : '停用');
       this.$confirm(tip, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.positionIndex = index;
         StorageBin.batchUpdateStatus(params)
           .then(res => {
             this.$notify.success(res.msg || '操作成功');
             // 更新后刷新页面
-            this.getStorePositionList();
+            this.positionList[this.positionIndex].storeStatus = storeStatus;
           })
           .catch((error) => {
             const msg = error.response.data.msg;
@@ -680,17 +687,17 @@ export default {
           });
       });
     },
-    batchUpdateStatus(status) {
+    batchUpdateStatus(storeStatus) {
       if (this.checkedRows.length == 0) {
         this.$notify.warning('请选择仓位后再操作');
         return;
       }
 
       const params = this.checkedRows.map(row => {
-        return {storeId: row.storeId, deleteFlag: status === 0};
+        return {storeId: row.storeId, storeStatus};
       })
 
-      const tip = '是否确认批量' + (status == 1 ? '启用' : '停用');
+      const tip = '是否确认批量' + (storeStatus == 1 ? '启用' : '停用');
 
       this.$confirm(tip, '提示', {
         confirmButtonText: '确定',
