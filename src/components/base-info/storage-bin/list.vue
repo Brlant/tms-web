@@ -13,22 +13,53 @@
   color: #767676;
 }
 
-.storeName {
-  width: 150px;
-  height: inherit;
+
+.area ::v-deep .el-descriptions__body {
+  padding-left: 40px;
+}
+
+.overflow {
+  width: 180px;
+  margin-right: 20px;
+  line-height: 40px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.storeStatus {
-  position: relative;
-  margin: 0 20px;
+.list-li {
+  cursor: pointer;
+  padding: 0 20px;
+  line-height: 40px;
+
+  .hover-show {
+    display: none
+
+  }
+
+  &.active, &:hover {
+    background: #f5f5f5;
+  }
+
+  &.active {
+    .hover-show {
+      display: block;
+
+      a:hover {
+        color: #00bff3
+      }
+    }
+
+    a.hover-show:hover {
+      color: #00bff3
+    }
+  }
 }
 
-::v-deep .el-descriptions__body {
-  padding-left: 40px;
+.tag {
+  margin-right: 15px;
 }
+
 </style>
 <template>
   <div id="store">
@@ -53,39 +84,42 @@
       <div class="d-table-left">
         <div class="empty-info" v-show="!storeList.length">暂无信息</div>
         <div style="padding-left: 10px">
-          <el-collapse v-model="activeName" accordion>
+          <el-collapse v-model="activeName" accordion style="width: 350px">
             <el-collapse-item v-for="(store,index) in storeList" :name="index" :key="index">
               <template slot="title">
                 <el-button type="text" @click.stop="openAddAreaPage(store)" title="新增库区">
                   <i class="el-icon-circle-plus-outline icon20"></i>
                 </el-button>
-                <div class="storeName" :title="store.storeName">{{ store.storeName }}</div>
+                <div class="overflow" :title="store.storeName">{{ store.storeName }}</div>
                 <template v-if="store.deleteFlag == '0'">
-                  <el-tag type="success" class="storeStatus">正常</el-tag>
+                  <el-tag type="success" class="tag">正常</el-tag>
                 </template>
                 <template v-else-if="store.deleteFlag == '1'">
-                  <el-tag type="danger" class="storeStatus">禁用</el-tag>
+                  <el-tag type="danger" class="tag">禁用</el-tag>
                 </template>
               </template>
               <ul class="show-list">
-                <li v-for="(area,areaIndex) in store.areaList" :key="areaIndex" class="list-item"
+                <li v-for="(area,areaIndex) in store.areaList" :key="areaIndex" class="list-li"
                     @click="areaClick(areaIndex)">
-                  {{ area.storeName }}
-                  <template v-if="area.deleteFlag == '0'">
-                    <el-tag type="success" class="pull-right ml-10">正常</el-tag>
-                  </template>
-                  <template v-else-if="area.deleteFlag == '1'">
-                    <el-tag type="danger" class="pull-right ml-10">禁用</el-tag>
-                  </template>
-                  <template v-if="area.storeType == 'A'">
-                    <el-tag type="success" class="pull-right ml-10">整件</el-tag>
-                  </template>
-                  <template v-else-if="area.storeType == 'B'">
-                    <el-tag type="danger" class="pull-right ml-10">散件</el-tag>
-                  </template>
-                  <template v-else>
-                    <el-tag type="danger" class="pull-right ml-10">不合格</el-tag>
-                  </template>
+                  <div style="display: inline-flex;align-items: center;">
+                    <span class="overflow" :title="area.storeName">{{ area.storeName }}</span>
+                    <template v-if="area.deleteFlag == '0'">
+                      <el-tag type="success" class="tag">正常</el-tag>
+                    </template>
+                    <template v-else-if="area.deleteFlag == '1'">
+                      <el-tag type="danger" class="tag">禁用</el-tag>
+                    </template>
+                    <template v-if="area.storeType == 'A'">
+                      <el-tag type="success" class="tag">整件</el-tag>
+                    </template>
+                    <template v-else-if="area.storeType == 'B'">
+                      <el-tag type="warning" class="tag">散件</el-tag>
+                    </template>
+                    <template v-else>
+                      <el-tag type="danger" class="tag">不合格</el-tag>
+                    </template>
+                  </div>
+
                 </li>
               </ul>
             </el-collapse-item>
@@ -99,8 +133,8 @@
         </div>
       </div>
       <div class="d-table-right">
-        <div class="form-header-part">
-          <el-descriptions v-show="areaItem.storeId" style="height: 175px">
+        <div class="form-header-part area">
+          <el-descriptions :colon="!!areaItem.storeId" style="height: 175px">
             <template slot="title">
               <div class="header">
                 <div class="sign f-dib"></div>
@@ -112,7 +146,7 @@
                 <i class="el-icon-edit-outline icon20"></i>
               </el-button>
             </template>
-            <template>
+            <template v-if="areaItem.storeId">
               <el-descriptions-item label="库区代码">{{ areaItem.storeCode }}</el-descriptions-item>
               <el-descriptions-item label="库区名称">{{ areaItem.storeName }}</el-descriptions-item>
               <el-descriptions-item label="库区类型">
@@ -133,75 +167,107 @@
                 {{ `${areaItem.humidityLowerLimit}% ~ ${areaItem.humidityUpperLimit}%` }}
               </el-descriptions-item>
             </template>
-
+            <template v-else>
+              <el-descriptions-item style="display: inline-flex">
+                <div class="empty-type-info" style="height: 0;padding-top: 105px">暂无库区信息</div>
+              </el-descriptions-item>
+            </template>
           </el-descriptions>
-          <div v-show="!areaItem.storeId">
-            <div class="el-descriptions__header">
-              <div class="el-descriptions__title">
-                <div class="header">
-                  <div class="sign f-dib"></div>
-                  <h3 class="ml-10">库位信息</h3>
-                </div>
-              </div>
-            </div>
-            <div class="empty-type-info" style="height: 0;padding-top: 105px">暂无库区信息</div>
-          </div>
         </div>
 
         <div class="mb-15"></div>
         <div class="form-header-part">
-          <div class="el-descriptions__header">
-            <div class="el-descriptions__title">
+          <el-descriptions :colon="false">
+            <template slot="title">
               <div class="header">
                 <div class="sign f-dib"></div>
                 <h3 class="ml-10">库位信息</h3>
               </div>
-            </div>
-          </div>
-          <div class="content">
-            <el-table class="border-black" :data="positionList" border style="width: 100%">
-              <!--              <el-table-column type="index" label="序号" width="50"/>-->
-              <el-table-column prop="storeCode" label="库位编号"/>
-              <el-table-column label="规格（长*宽*高）">
-                <template v-slot="{row}">
-                  {{ `${row.storeLength || 0} * ${row.storeWidth || 0} * ${row.storeHeight || 0}` }}
-                </template>
-              </el-table-column>
-              <el-table-column prop="batchNumber" label="可存放cm³">
-                <template v-slot="{row}">
-                  {{ row.volume - row.storeUsedSpace }}
-                </template>
-              </el-table-column>
-              <el-table-column prop="specifications" label="存放数（已存/容积）">
-                <template v-slot="{row}">
-                  {{ `${row.storeUsedSpace || 0} / ${row.volume || 0}` }}
-                </template>
-              </el-table-column>
-              <el-table-column label="状态" width="120">
-                <template v-slot="{row}">
-                  <el-tag type="success" v-if="row.storeStatus == 0">
-                    可用
-                  </el-tag>
-                  <el-tag type="danger" v-else>
-                    不可用
-                  </el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column prop="code" label="操作">
-                <template v-slot="{row}">
-                  <el-button type="text" v-if="row.deleteFlag == 0">
-                    <i class="el-icon-t-forbidden"> 停用</i>
-                  </el-button>
-                  <el-button type="text" v-else>
-                    <i class="el-icon-success"> 启用</i>
-                  </el-button>
-                  <el-button type="text" @click="openEditPositionPage(row)">
-                    <i class="el-icon-edit-outline"> 编辑</i>
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <div class="hr mb-10"></div>
+            </template>
+            <template slot="extra">
+              <el-button-group style="margin-right: 40px">
+                <el-input v-model="positionParams.keyWord" placeholder="请输入关键字搜索">
+                  <a href="javascript:void(0)" slot="suffix" class="el-icon-t-search el-input__icon"
+                     @click.stop="getStorePositionList(1)" title="点击搜索"></a>
+                </el-input>
+              </el-button-group>
+              <el-button-group>
+                <el-button @click="openAddPositionPage">
+                  新增
+                </el-button>
+                <el-button @click="batchUpdateStatus(0)">
+                  批量停用
+                </el-button>
+                <el-button @click="batchUpdateStatus(1)">
+                  批量启用
+                </el-button>
+                <el-button @click="exportExcel">
+                  导出Excel
+                </el-button>
+              </el-button-group>
+            </template>
+            <template>
+              <el-descriptions-item>
+
+              </el-descriptions-item>
+            </template>
+
+          </el-descriptions>
+          <el-table :data="positionList" border @selection-change="handleSelectionChange">>
+            <!--              <el-table-column type="index" label="序号" width="50"/>-->
+            <el-table-column
+              type="selection"
+              width="55">
+            </el-table-column>
+            <el-table-column prop="storeCode" label="库位编号"/>
+            <el-table-column label="规格（长*宽*高）">
+              <template v-slot="{row}">
+                {{ `${row.storeLength || 0} * ${row.storeWidth || 0} * ${row.storeHeight || 0}` }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="batchNumber" label="可存放cm³">
+              <template v-slot="{row}">
+                {{ row.volume - row.storeUsedSpace }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="specifications" label="存放数（已存/容积）">
+              <template v-slot="{row}">
+                {{ `${row.storeUsedSpace || 0} / ${row.volume || 0}` }}
+              </template>
+            </el-table-column>
+            <el-table-column label="状态" width="120">
+              <template v-slot="{row}">
+                <el-tag type="danger" v-if="row.deleteFlag">
+                  不可用
+                </el-tag>
+                <el-tag type="success" v-else>
+                  可用
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="code" label="操作">
+              <template v-slot="{row}">
+                <el-button type="text" v-if="!row.deleteFlag" @click="updateStatus(row,0)">
+                  <i class="el-icon-t-forbidden"> 停用</i>
+                </el-button>
+                <el-button type="text" v-else @click="updateStatus(row,1)">
+                  <i class="el-icon-success"> 启用</i>
+                </el-button>
+                <el-button type="text" @click="openEditPositionPage(row)">
+                  <i class="el-icon-edit-outline"> 编辑</i>
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="text-center" v-show="positionList.length">
+            <el-pagination @size-change="handleSizeChange"
+                           @current-change="handleCurrentChange"
+                           :current-page="positionParams.pageNo"
+                           :page-sizes="[10,20,50,100]"
+                           :page-size="positionParams.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="positionParams.count">
+            </el-pagination>
           </div>
         </div>
       </div>
@@ -240,6 +306,8 @@ import StoreForm from './form/StoreForm.vue';
 import StoreAreaForm from './form/StoreAreaForm.vue';
 import StorePositionForm from './form/StorePositionForm.vue';
 
+import utils from '@/tools/utils';
+
 export default {
   components: {
     StoreForm, StoreAreaForm, StorePositionForm
@@ -270,9 +338,10 @@ export default {
       },
       positionParams: {
         pageNo: 1,
-        pageSize: 100,
+        pageSize: 10,
         storeParent: '',
-        storeLevel: 2
+        storeLevel: 2,
+        count: 0,
       },
       // 活动面板名称,实际存的是仓库的下标
       activeName: 0,
@@ -290,6 +359,8 @@ export default {
       areaItem: {},
       // 仓库列表显示加载更多
       showStoreMore: false,
+      doing: false,
+      checkedRows: [],
     };
   },
   computed: {},
@@ -312,8 +383,13 @@ export default {
   methods: {
     // 获取仓库列表
     getStoreList(isContinue = false) {
+      if (this.doing) {
+        return;
+      }
 
+      this.doing = true;
       StorageBin.query(this.storeParams).then(res => {
+        this.doing = false;
         this.$store.commit('initBottomLoading', false);
 
         let {list, totalPage} = res.data;
@@ -337,10 +413,17 @@ export default {
 
         // 获取仓库下的库区
         this.getStoreAreaList();
+      }).catch(({res}) => {
+        console.log(res);
+        this.doing = false;
       });
     },
     //获取库区列表
     getStoreAreaList(pageNo = 1, isContinue = false) {
+      if (this.doing) {
+        return;
+      }
+
       const {storeId, storeCode, storeName, isLoadData, areaList} = this.storeList[this.storeIndex];
       if (isLoadData) {
         if (areaList.length == 0) {
@@ -360,11 +443,14 @@ export default {
       // 把仓库的id作为查询库区的父节点id
       this.areaParams.storeParent = storeId;
 
+      this.doing = true;
       StorageBin.query(this.areaParams).then(res => {
+        this.doing = false;
         let {list, count, totalPage} = res.data;
         if (list.length === 0) {
           // 库区信息清空
           this.areaItem = {};
+          this.positionList = [];
           return;
         }
 
@@ -394,11 +480,18 @@ export default {
           pageNo++;
           this.getStoreAreaList(pageNo, true);
         }
+      }).catch(({res}) => {
+        console.log(res);
+        this.doing = false;
       });
     },
     //获取库位列表
     getStorePositionList(pageNo = 1) {
-      const {storeId,  loadPageNo} = this.areaItem;
+      if (this.doing) {
+        return;
+      }
+
+      const {storeId, loadPageNo} = this.areaItem;
       if (pageNo == loadPageNo) {
         this.positionList = this.storeList[this.storeIndex].areaList[this.areaIndex].positionList;
       }
@@ -407,17 +500,22 @@ export default {
       // 把仓库的id作为查询库区的父节点id
       this.positionParams.storeParent = storeId;
 
+      this.doing = true;
       StorageBin.query(this.positionParams).then(res => {
+        this.doing = false;
         const {list, count, totalPage} = res.data;
         if (list.length === 0) {
           return;
         }
 
-        this.positionParams.totalCount = count;
+        this.positionParams.count = count;
         this.positionParams.totalPage = totalPage;
         this.storeList[this.storeIndex].areaList[this.areaIndex].positionList = list;
         this.storeList[this.storeIndex].areaList[this.areaIndex].loadPageNo = pageNo;
         this.positionList = list;
+      }).catch(({res}) => {
+        console.log(res);
+        this.doing = false;
       });
     },
     openAddStorePage() {
@@ -460,6 +558,7 @@ export default {
     openAddPositionPage() {
       // 新增库区需要把仓库的代码和名称带上
       this.formData = {
+        storeType: this.areaItem.storeType,
         storeParent: this.areaItem.storeId,
         parentCode: this.areaItem.storeCode,
         parentName: this.areaItem.storeName,
@@ -475,6 +574,7 @@ export default {
     openEditPositionPage(storePosition) {
       // 编辑库区也需要需要把仓库的代码和名称带上
       this.formData = Object.assign({}, storePosition, {
+        storeType: this.areaItem.storeType,
         storeParent: this.areaItem.storeId,
         parentCode: this.areaItem.storeCode,
         parentName: this.areaItem.storeName,
@@ -524,7 +624,7 @@ export default {
     // 库位更新处理
     storePositionUpdateHandle(item, updated) {
       this.closeForms();
-      console.log(`storePositionUpdateHandle:`, item);
+      // console.log(`storePositionUpdateHandle:`, item);
 
       if (updated) {
         // 如果已经更新,那么不需要再次请求,刷新数据就好
@@ -534,10 +634,9 @@ export default {
       }
 
       // 如果是新增库区,需要追加到对应的仓库下面
-      item.positionList = [];
-      item.isLoadData = false;
       this.storeList[this.storeIndex].areaList[this.areaIndex].positionList.push(item);
-      this.positionList.push(item);
+      // 新增完总量加1
+      this.positionParams.count++;
     },
     getStoreMore() {
       this.storeParams.pageNo++;
@@ -554,6 +653,88 @@ export default {
     },
     areaClick(index) {
       this.areaIndex = index;
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+
+    // 分页处理
+    handleSizeChange(val) {
+      this.positionParams.pageSize = val;
+      this.getStorePositionList(1);
+    },
+    handleCurrentChange(val) {
+      this.getStorePositionList(val);
+    },
+    handleSelectionChange(rows) {
+      this.checkedRows = rows;
+    },
+    updateStatus(row, status) {
+      const params = [{storeId: row.storeId, deleteFlag: status === 0}];
+      const tip = '是否确认' + (status == 1 ? '启用' : '停用');
+      this.$confirm(tip, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        StorageBin.batchUpdateStatus(params)
+          .then(res => {
+            this.$notify.success(res.msg || '操作成功');
+            // 更新后刷新页面
+            this.getStorePositionList();
+          })
+          .catch((error) => {
+            const msg = error.response.data.msg;
+            this.$notify.error(msg || '操作失败');
+          });
+      });
+    },
+    batchUpdateStatus(status) {
+      if (this.checkedRows.length == 0) {
+        this.$notify.warning('请选择仓位后再操作');
+        return;
+      }
+
+      const params = this.checkedRows.map(row => {
+        return {storeId: row.storeId, deleteFlag: status === 0};
+      })
+
+      const tip = '是否确认批量' + (status == 1 ? '启用' : '停用');
+
+      this.$confirm(tip, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        StorageBin.batchUpdateStatus(params)
+          .then(res => {
+            this.$notify.success(res.msg || '操作成功');
+            // 更新后刷新页面
+            this.getStorePositionList();
+          })
+          .catch((error) => {
+            const msg = error.response.data.msg;
+            this.$notify.error(msg || '操作失败');
+          });
+      });
+    },
+    // 导出库区下的所有库位信息
+    exportExcel() {
+      StorageBin.exportExcel({storeId: this.areaItem.storeId})
+        .then(res => {
+          this.$notify.success(res.msg || '操作成功');
+          utils.download(res.data, 'TMS库位信息')
+        })
+        .catch((error) => {
+          const msg = error.response.data.msg;
+          this.$notify.error(msg || '导出失败');
+        });
     }
   },
   mounted() {

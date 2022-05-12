@@ -1,4 +1,12 @@
 <!--仓库的新增和编辑-->
+<style scoped>
+/*控制宽度,以便多个input显示在一行*/
+/*noinspection CssUnusedSymbol*/
+.inline .el-input {
+  width: 193px;
+}
+
+</style>
 <template>
   <el-form ref="form" :rules="rules" :model="form" label-width="120px">
     <h2 class="clearfix">{{ title }}</h2>
@@ -67,40 +75,51 @@ export default {
           return;
         }
 
-        // 校验通过设置doing为true防止重复操作
-        this.doing = true;
         // 根据action的值来决定是新增保存还是编辑保存
         this.action == 'add' ? this.addSave() : this.editSave();
       });
     }
     ,
     addSave() {
-      StorageBin.addSave({storeLevel: 0, ...this.form}).then(res => {
-        this.$notify.success('新增成功');
-        // 告诉父页面,仓库更新了
-        this.$emit('storeUpdate', res.data, false);
-        this.$emit('right-close');
-        this.$refs.form.resetFields();
-      }).catch((error) => {
-        console.log(error)
-        const msg = error.response.data.msg;
-        this.$notify.error(msg || '新增保存失败');
-      }).finally(() => {
-        this.doing = false;
+      this.$confirm('是否确认保存', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 校验通过设置doing为true防止重复操作
+        this.doing = true;
+        StorageBin.addSave({storeLevel: 0, ...this.form}).then(res => {
+          this.$notify.success('新增成功');
+          // 告诉父页面,仓库更新了
+          this.$emit('storeUpdate', res.data, false);
+          this.$refs.form.resetFields();
+        }).catch((error) => {
+          console.log(error)
+          const msg = error.response.data.msg;
+          this.$notify.error(msg || '新增保存失败');
+        }).finally(() => {
+          this.doing = false;
+        });
       });
     },
     editSave() {
-      StorageBin.editSave({storeLevel: 0, ...this.form})
-        .then(res => {
+      this.$confirm('是否确认保存', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 校验通过设置doing为true防止重复操作
+        this.doing = true;
+        StorageBin.editSave({storeLevel: 0, ...this.form}).then(res => {
           this.$notify.success('更新成功');
-          this.doing = false;
           this.$emit('storeUpdate', this.form, true);
-        })
-        .catch(error => {
+        }).catch(error => {
           const msg = error.response.data.msg;
           this.$notify.error(msg || '编辑保存失败');
+        }).finally(() => {
           this.doing = false;
         });
+      });
     },
     cancel() {
       this.$emit('cancel');

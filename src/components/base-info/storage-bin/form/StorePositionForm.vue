@@ -1,6 +1,7 @@
 <!--库位的新增和编辑-->
 <style scoped>
 /*控制宽度,以便多个input显示在一行*/
+/*noinspection CssUnusedSymbol*/
 .inline .el-input {
   width: 193px;
 }
@@ -22,7 +23,7 @@
       <el-input type="text" v-model="form.parentName" :disabled="true"></el-input>
     </el-form-item>
     <el-form-item label="库区类型" :required="true">
-      <el-input type="text" v-model="form.storeType" :disabled="true"></el-input>
+      <el-input type="text" v-model="storeTypeName" :disabled="true"></el-input>
     </el-form-item>
     <el-form-item label="库位代码" prop="storeCode">
       <el-input type="text" v-model="form.storeCode" placeholder="请输入库位代码"></el-input>
@@ -134,11 +135,6 @@ export default {
         ],
       },
       doing: false,
-      storeTypes: [
-        {value: 'A', label: '整件'},
-        {value: 'B', label: '散件'},
-        {value: 'C', label: '不合格'},
-      ]
     };
   },
   computed: {
@@ -157,6 +153,12 @@ export default {
 
       const lwh = storeLength * storeWidth * storeHeight;
       return lwh.toFixed(2);
+    },
+    storeTypeName() {
+      const storeType = this.form.storeType;
+      if ('A' == storeType) return '整件';
+      if ('B' == storeType) return '散件';
+      if ('C' == storeType) return '不合格';
     }
   },
   methods: {
@@ -167,40 +169,53 @@ export default {
           return;
         }
 
-        // 校验通过设置doing为true防止重复操作
-        this.doing = true;
         // 根据action的值来决定是新增保存还是编辑保存
         this.action == 'add' ? this.addSave() : this.editSave();
       });
     }
     ,
     addSave() {
-      StorageBin.addSave({storeLevel: 1, ...this.form}).then(res => {
-        this.$notify.success('新增成功');
-        // 告诉父页面,库位更新了
-        this.$emit('storeAreaUpdate', res.data, false);
-        this.$emit('right-close');
-        this.$refs.form.resetFields();
-      }).catch((error) => {
-        console.log(error)
-        const msg = error.response.data.msg;
-        this.$notify.error(msg || '新增保存失败');
-      }).finally(() => {
-        this.doing = false;
+      this.$confirm('是否确认保存', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 校验通过设置doing为true防止重复操作
+        this.doing = true;
+        StorageBin.addSave({storeLevel: 2, ...this.form}).then(res => {
+          this.$notify.success('新增成功');
+          // 告诉父页面,库位更新了
+          this.$emit('storePositionUpdate', res.data, false);
+          this.$emit('right-close');
+          this.$refs.form.resetFields();
+        }).catch((error) => {
+          console.log(error)
+          const msg = error.response.data.msg;
+          this.$notify.error(msg || '新增保存失败');
+        }).finally(() => {
+          this.doing = false;
+        });
       });
     },
     editSave() {
-      StorageBin.editSave({storeLevel: 1, ...this.form})
-        .then(res => {
+      this.$confirm('是否确认保存', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 校验通过设置doing为true防止重复操作
+        this.doing = true;
+        StorageBin.editSave({storeLevel: 2, ...this.form}).then(res => {
           this.$notify.success('更新成功');
-          this.doing = false;
-          this.$emit('storeAreaUpdate', this.form, true);
-        })
-        .catch(error => {
+          this.$emit('storePositionUpdate', this.form, true);
+        }).catch(error => {
           const msg = error.response.data.msg;
           this.$notify.error(msg || '编辑保存失败');
-          this.doing = false;
+        }).finally(() => {
+          // 校验通过设置doing为true防止重复操作
+          this.doing = true;
         });
+      });
     },
     cancel() {
       this.$emit('cancel');
