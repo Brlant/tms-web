@@ -20,20 +20,20 @@
       <el-input type="text" v-model="form.storeName" placeholder="请输入库区名称" ></el-input>
     </el-form-item>
     <el-form-item label="温度范围" prop="temperatureLowerLimit" class="inline">
-      <el-input placeholder="请输入最低温度" v-model.number="form.temperatureLowerLimit">
+      <el-input placeholder="请输入最低温度" v-model="form.temperatureLowerLimit">
         <template slot="append">°C</template>
       </el-input>
       &nbsp;~&nbsp;
-      <el-input placeholder="请输入最高温度" v-model.number="form.temperatureUpperLimit">
+      <el-input placeholder="请输入最高温度" v-model="form.temperatureUpperLimit">
         <template slot="append">°C</template>
       </el-input>
     </el-form-item>
     <el-form-item label="湿度范围" prop="humidityLowerLimit" class="inline">
-      <el-input placeholder="请输入最低湿度" v-model.number="form.humidityLowerLimit">
+      <el-input placeholder="请输入最低湿度" v-model="form.humidityLowerLimit">
         <template slot="append">%</template>
       </el-input>
       &nbsp;~&nbsp;
-      <el-input placeholder="请输入最高湿度" v-model.number="form.humidityUpperLimit">
+      <el-input placeholder="请输入最高湿度" v-model="form.humidityUpperLimit">
         <template slot="append">%</template>
       </el-input>
     </el-form-item>
@@ -47,6 +47,15 @@
         </el-option>
       </el-select>
     </el-form-item>
+    <el-form-item label="是否启用" prop="deleteFlag" v-if="action == 'edit'" required>
+      <el-switch
+        v-model="form.deleteFlag"
+        active-color="#dcdfe6"
+        inactive-color="#13ce66"
+        active-text="否"
+        inactive-text="是">
+      </el-switch>
+    </el-form-item>
     <el-form-item label-width="120px">
       <el-button type="primary" @click="validate" :disabled="doing">保存</el-button>
       <el-button @click="cancel">取消</el-button>
@@ -55,6 +64,7 @@
 </template>
 <script>
 import {StorageBin} from '@/resources';
+import utils from '@/tools/utils';
 
 export default {
   name: 'StoreAreaForm',
@@ -88,12 +98,22 @@ export default {
           {
             trigger: 'blur',
             validator: (rules, value, cb) => {
+              if (!value){
+                return ;
+              }
+
               // 获取最高温度,校验最低温度的同时也校验最高温度
               let {temperatureUpperLimit} = this.form;
               if (!temperatureUpperLimit) {
                 return cb(new Error("最高温度不能为空"));
               }
 
+              if (isNaN(value) || isNaN(temperatureUpperLimit)){
+                return cb(new Error("温度值只能是数字"));
+              }
+
+              value = parseInt(value);
+              temperatureUpperLimit = parseInt(temperatureUpperLimit);
               if (value > temperatureUpperLimit) {
                 return cb(new Error("最低温度不能超过最高温度"));
               }
@@ -102,13 +122,9 @@ export default {
                 return cb(new Error("最低温度不能低于绝对零度(-273.15°C)"));
               }
 
-              if (!Number.isInteger(value)) {
-                return cb(new Error("最低温度必须是整数"));
-              }
-
-              if (!Number.isInteger(temperatureUpperLimit)) {
-                return cb(new Error("最高温度必须是整数"));
-              }
+              // 保留两位小数
+              this.form.temperatureLowerLimit = utils.autoformatDecimalPoint(value);
+              this.form.temperatureUpperLimit = utils.autoformatDecimalPoint(temperatureUpperLimit);
 
               return cb();
             },
@@ -119,11 +135,22 @@ export default {
           {
             trigger: 'blur',
             validator: (rules, value, cb) => {
+              if (!value){
+                return ;
+              }
+
               // 获取最高湿度,校验最低湿度的同时也校验最高湿度
               let {humidityUpperLimit} = this.form;
               if (!humidityUpperLimit) {
                 return cb(new Error("最高湿度不能为空"));
               }
+
+              if (isNaN(value) || isNaN(humidityUpperLimit)){
+                return cb(new Error("湿度值只能是数字"));
+              }
+
+              value = parseInt(value);
+              humidityUpperLimit = parseInt(humidityUpperLimit);
 
               if (value > humidityUpperLimit) {
                 return cb(new Error("最低湿度不能超过最高湿度"));
@@ -137,13 +164,9 @@ export default {
                 return cb(new Error("最高湿度不能超过100%"));
               }
 
-              if (!Number.isInteger(value) || value < 0) {
-                return cb(new Error("最低湿度必须是正整数"));
-              }
-
-              if (!Number.isInteger(humidityUpperLimit) || value < 0) {
-                return cb(new Error("最高湿度必须是正整数"));
-              }
+              // 保留两位小数
+              this.form.humidityLowerLimit = utils.autoformatDecimalPoint(value);
+              this.form.humidityUpperLimit = utils.autoformatDecimalPoint(humidityUpperLimit);
 
               return cb();
             },

@@ -5,6 +5,10 @@
 .inline .el-input {
   width: 193px;
 }
+/*noinspection CssUnusedSymbol*/
+::v-deep .el-input-group__append {
+  width: 25px;
+}
 
 </style>
 <template>
@@ -59,7 +63,7 @@
 </template>
 <script>
 import {StorageBin} from '@/resources';
-import utils from '@/tools/utils'
+import utils from '@/tools/utils';
 
 export default {
   name: 'StorePositionForm',

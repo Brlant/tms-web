@@ -220,7 +220,7 @@ export default [
           {
             'id': 'tms-storage-bin-add',
             'parentId': 'tms-goods-area',
-            'label': '新增仓库',
+            'label': '新增',
             'sort': null,
             'children': null,
             'leaf': true
@@ -228,7 +228,7 @@ export default [
           {
             'id': 'tms-storage-bin-edit',
             'parentId': 'tms-goods-area',
-            'label': '编辑仓库',
+            'label': '编辑',
             'sort': null,
             'children': null,
             'leaf': true
@@ -236,7 +236,7 @@ export default [
           {
             'id': 'tms-storage-bin-query',
             'parentId': 'tms-goods-area',
-            'label': '查看仓库信息',
+            'label': '查询',
             'sort': null,
             'children': null,
             'leaf': true
@@ -244,7 +244,15 @@ export default [
           {
             'id': 'tms-storage-bin-delete',
             'parentId': 'tms-storage-bin',
-            'label': '删除仓库',
+            'label': '删除',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-storage-bin-export',
+            'parentId': 'tms-storage-bin',
+            'label': '导出',
             'sort': null,
             'children': null,
             'leaf': true

@@ -24,6 +24,15 @@
         v-model="form.storeRemarks">
       </el-input>
     </el-form-item>
+    <el-form-item label="是否启用" prop="deleteFlag" v-if="action == 'edit'" required>
+      <el-switch
+        v-model="form.deleteFlag"
+        active-color="#dcdfe6"
+        inactive-color="#13ce66"
+        active-text="否"
+        inactive-text="是">
+      </el-switch>
+    </el-form-item>
     <el-form-item label-width="120px">
       <el-button type="primary" @click="validate" :disabled="doing">保存</el-button>
       <el-button @click="cancel">取消</el-button>
