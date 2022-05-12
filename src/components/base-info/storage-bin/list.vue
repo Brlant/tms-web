@@ -434,7 +434,7 @@ export default {
 
         if (pageNo == 1) {
           this.areaItem = areaList[this.areaIndex];
-          this.positionList = this.areaItem.positionList;
+          this.positionList = this.areaItem.positionList || [];
           return;
         }
       }
@@ -493,7 +493,7 @@ export default {
 
       const {storeId, loadPageNo} = this.areaItem;
       if (pageNo == loadPageNo) {
-        this.positionList = this.storeList[this.storeIndex].areaList[this.areaIndex].positionList;
+        this.positionList = this.storeList[this.storeIndex].areaList[this.areaIndex].positionList || [];
       }
 
       this.positionParams.pageNo = pageNo;
@@ -728,7 +728,6 @@ export default {
     exportExcel() {
       StorageBin.exportExcel({storeId: this.areaItem.storeId})
         .then(res => {
-          this.$notify.success(res.msg || '操作成功');
           utils.download(res.data, 'TMS库位信息')
         })
         .catch((error) => {
