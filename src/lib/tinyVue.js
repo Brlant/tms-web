@@ -100,7 +100,7 @@ import DialogTemplate from '@/components/common/dialog-template';
 import SearchTemplate from '@/components/common/search-template';
 
 import {
-  Pagination,Descriptions,DescriptionsItem
+  Pagination,Descriptions,DescriptionsItem,Link
 } from 'element-ui';
 
 const tinyVue = [
@@ -195,7 +195,8 @@ const tinyVue = [
   DialogTemplate,
   SearchTemplate,
   Scrollbar,
-  compressedImg
+  compressedImg,
+  Link
 ];
 
 const install = function (Vue, opts = {}) {

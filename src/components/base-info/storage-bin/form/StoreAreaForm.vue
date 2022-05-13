@@ -199,7 +199,7 @@ export default {
     },
     addSave() {
       this.$confirm('是否确认保存', '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
@@ -209,7 +209,6 @@ export default {
           this.$notify.success('新增成功');
           // 告诉父页面,库区更新了
           this.$emit('storeAreaUpdate', res.data, false);
-          this.$emit('right-close');
           this.$refs.formData.resetFields();
         }).catch((error) => {
           console.log(error)
@@ -222,7 +221,7 @@ export default {
     },
     editSave() {
       this.$confirm('是否确认保存', '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {

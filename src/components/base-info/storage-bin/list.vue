@@ -63,7 +63,7 @@
 
 </style>
 <template>
-  <div id="store">
+  <div>
     <div class="opera-btn-group">
       <div class="opera-icon">
         <el-col :span="2">
@@ -216,7 +216,7 @@
             </template>
 
           </el-descriptions>
-          <el-table :data="positionList" border @selection-change="handleSelectionChange">>
+          <el-table :data="positionList" border @selection-change="handleSelectionChange">
             <!--              <el-table-column type="index" label="序号" width="50"/>-->
             <el-table-column
               type="selection"
@@ -248,7 +248,7 @@
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="code" label="操作">
+            <el-table-column label="操作">
               <template v-slot="{row,$index}">
                 <el-button type="text" v-if="row.storeStatus==1" @click="updateStatus(row,0,$index)">
                   <i class="el-icon-t-forbidden"> 停用</i>
@@ -670,7 +670,7 @@ export default {
       const params = [{storeId: row.storeId, storeStatus}];
       const tip = '是否确认' + (storeStatus == 1 ? '启用' : '停用');
       this.$confirm(tip, '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
@@ -700,7 +700,7 @@ export default {
       const tip = '是否确认批量' + (storeStatus == 1 ? '启用' : '停用');
 
       this.$confirm(tip, '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {

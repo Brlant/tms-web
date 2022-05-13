@@ -99,7 +99,7 @@ export default {
     ,
     addSave() {
       this.$confirm('是否确认保存', '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
@@ -121,7 +121,7 @@ export default {
     },
     editSave() {
       this.$confirm('是否确认保存', '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
