@@ -83,30 +83,37 @@ export const routes = [
         ]
       },
       {
-        path: '/baseInfo',
+        path: '/base-info',
         component: () => import('./components/base-info/index.vue'),
-        meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'basic', perm: 'tms-base-info'},
+        meta: {moduleId: 'base-info', title: '基础信息', icon: 'basic', perm: 'tms-base-info'},
         children: [
           {
-            path: '/baseInfo/org-list',
+            path: '/base-info/org-list',
             component: () => import('./components/base-info/org-list/list.vue'),
-            meta: {moduleId: 'baseInfo', title: '业务单位', perm: 'tms-business-unit-query'}
+            meta: {moduleId: 'base-info', title: '业务单位', perm: 'tms-business-unit-query'}
           },
           {
-            path: '/baseInfo/car-archives',
+            path: '/base-info/car-archives',
             component: () => import('./components/base-info/car-archives/index.vue'),
-            meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'tms-car-archives-watch'}
+            meta: {moduleId: 'base-info', title: '车辆档案', perm: 'tms-car-archives-watch'}
           },
           {
-            path: '/baseInfo/packaging-consumables',
+            path: '/base-info/packaging-consumables',
             component: () => import('./components/base-info/dev/index.vue'),
-            meta: {moduleId: 'baseInfo', title: '包装耗材', perm: 'tms-car-archives-watch'},
+            meta: {moduleId: 'base-info', title: '包装耗材', perm: 'tms-car-archives-watch'},
             children: []
           },
           {
-            path: '/baseInfo/goods-area',
+            path: '/base-info/goods-area',
             component: () => import('./components/base-info/goods-area/list.vue'),
-            meta: {moduleId: 'baseInfo', title: '集货区管理', perm: 'tms-goods-area-query'},
+            meta: {moduleId: 'base-info', title: '集货区管理', perm: 'tms-goods-area-query'},
+            children: []
+          },
+          // todo 权限配置,第三方承运商路由配置等
+          {
+            path: '/base-info/storage-bin',
+            component: () => import('./components/base-info/storage-bin/list.vue'),
+            meta: {moduleId: 'base-info', title: '仓位档案', perm: 'tms-storage-bin-query'},
             children: []
           }
         ]

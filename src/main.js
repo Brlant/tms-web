@@ -15,6 +15,8 @@ import utils from './tools/utils';
 import * as Sentry from '@sentry/browser';
 import * as Integrations from '@sentry/integrations';
 
+// import './mock'
+
 init(Vue);
 Vue.use(require('vue-moment'), {moment});
 Vue.use(tinyVue);

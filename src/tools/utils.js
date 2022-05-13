@@ -118,6 +118,7 @@ export default {
    * @param th
    */
   autoformatDecimalPoint: function (v) {
+    v = v + '';
     v = v.replace(/[^0-9\.]*/g, '');
     if (v === '') {
       v = '0.00';
