@@ -109,7 +109,12 @@ export const routes = [
             meta: {moduleId: 'base-info', title: '集货区管理', perm: 'tms-goods-area-query'},
             children: []
           },
-          // todo 权限配置,第三方承运商路由配置等
+          {
+            path: '/base-info/carrier',
+            component: () => import('./components/base-info/carrier/CarrierList.vue'),
+            meta: {moduleId: 'base-info', title: '第三方承运商管理', perm: 'tms-carrier-query'},
+            children: []
+          },
           {
             path: '/base-info/storage-bin',
             component: () => import('./components/base-info/storage-bin/list.vue'),
