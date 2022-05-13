@@ -27,7 +27,9 @@
                    :value="item.value"></el-option>
       </el-select>
     </el-form-item>
-
+    <el-form-item label="备注" prop="remarks">
+      <el-input type="textarea" v-model="formData.remarks" placeholder="请输入备注"></el-input>
+    </el-form-item>
     <el-form-item label-width="120px">
       <el-button type="primary" @click="validate" :disabled="doing">保存</el-button>
       <el-button @click="close">关闭</el-button>
@@ -68,12 +70,15 @@ export default {
           {required: true, message: '联系人不能为空', trigger: 'blur'},
           {max: 25, message: '最大长度25个字符', trigger: 'change'},
         ],
+        remarks: [
+          {max: 100, message: '最大长度100个字符', trigger: 'change'},
+        ],
         carrierTelephone: [
           {required: true, message: '联系电话不能为空', trigger: 'blur'},
           {
             trigger: 'blur',
             validator: (rules, value, cb) => {
-              const zz = /^1\d{10}$|^(0\d{2,3}-?|0\d2,3)?[1-9]\d{4,7}(-\d{1,8})?$/;
+              const zz = /^((\+?86)|(\(\+86\)))?1\d{10}$|^(0\d{2,3}-?|0\d2,3)?[1-9]\d{4,7}(-\d{1,8})?$/;
               if (!zz.test(value)) {
                 return cb(new Error('请输入正确的电话或者手机号'));
               }
@@ -102,6 +107,7 @@ export default {
         carrierAddress: '',
         transportationConditions: '',
         status: '0',
+        remarks: '',
         // 是否对接默认不选中，需要用户手动选择是或否
         butt: undefined
       },
