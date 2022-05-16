@@ -81,7 +81,7 @@ export default {
   },
   watch: {
     form(val) {
-      this.formData = val;
+      this.formData = Object.assign({}, this.form);
     }
   },
   methods: {

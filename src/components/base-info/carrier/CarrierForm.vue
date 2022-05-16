@@ -70,6 +70,9 @@ export default {
           {required: true, message: '联系人不能为空', trigger: 'blur'},
           {max: 25, message: '最大长度25个字符', trigger: 'change'},
         ],
+        transportationConditions: [
+          {required: true, message: '承运条件不能为空', trigger: 'blur'},
+        ],
         remarks: [
           {max: 100, message: '最大长度100个字符', trigger: 'change'},
         ],
@@ -109,7 +112,8 @@ export default {
         status: '0',
         remarks: '',
         // 是否对接默认不选中，需要用户手动选择是或否
-        butt: undefined
+        butt: true,
+        ...this.form
       },
     }
   },

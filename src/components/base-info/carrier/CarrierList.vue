@@ -3,7 +3,7 @@
   <div>
     <!-- 搜索条件 -->
     <div class="search-form">
-      <el-form ref="csForm" :inline="true" :model="searchParams">
+      <el-form :inline="true" :model="searchParams">
         <el-form-item label="承运商名称">
           <el-input v-model="searchParams.carrierName" placeholder="请输入承运商名称" clearable></el-input>
         </el-form-item>
@@ -54,21 +54,25 @@
             {{ transName(row.transportationConditions) }}
           </template>
         </el-table-column>
-        <el-table-column prop="modifyTime" label="最后更新时间"/>
+        <el-table-column label="最后更新时间">
+          <template v-slot="{row,$index}">
+            {{ row.modifyTime|time }}
+          </template>
+        </el-table-column>
         <el-table-column prop="modifyBy" label="更新人"/>
         <el-table-column label="状态">
           <template v-slot="{row}">
             <el-tag v-if="row.status == 0">
               待审核
             </el-tag>
-            <el-tag type="success" v-else-if="row.status == 1">
+            <el-tag type="danger" v-else-if="row.status == 1">
               禁用
             </el-tag>
-            <el-tag type="danger" v-else-if="row.status == 2">
+            <el-tag type="success" v-else-if="row.status == 2">
               启用
             </el-tag>
             <el-tag type="warning" v-else>
-              {{row.status}}
+              {{ row.status }}
             </el-tag>
           </template>
         </el-table-column>
@@ -184,9 +188,15 @@ export default {
     // 查询需要重置分页，从第一页开始查，所以不能直接调用getCarrierList，这里我们和保存的操作是一样的
     query() {
       this.getCarrierList(1);
+      this.getCount();
     },
     resetForm() {
-      this.$refs['csForm'].resetFields();
+      this.searchParams = {
+        carrierName: '', // 承运商名称（模糊查询）
+        transportationConditions: '', // 承运条件 A 全部 B 冷链运输 C 常温运输
+      };
+
+      this.query();
     },
     add() {
       // 新增的话，重置carrierForm属性
@@ -232,7 +242,7 @@ export default {
             .then(res => {
               this.$notify.success(res.msg || '操作成功');
               // 更新后刷新状态
-              this.activeStatus = status;
+              // this.activeStatus = status;
               this.getCarrierList(1);
               this.getCount();
             })
@@ -250,7 +260,7 @@ export default {
               .then(res => {
                 this.$notify.success(res.msg || '审核成功');
                 // 更新后刷新状态
-                this.activeStatus = status;
+                // this.activeStatus = status;
                 this.getCarrierList(1);
                 this.getCount();
               })
