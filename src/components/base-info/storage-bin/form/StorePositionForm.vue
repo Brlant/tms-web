@@ -168,7 +168,7 @@ export default {
   },
   watch: {
     form(val) {
-      this.formData = val;
+      this.formData = Object.assign({},this.form);
     }
   },
   methods: {
@@ -186,7 +186,7 @@ export default {
     ,
     addSave() {
       this.$confirm('是否确认保存', '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
@@ -196,8 +196,7 @@ export default {
           this.$notify.success('新增成功');
           // 告诉父页面,库位更新了
           this.$emit('storePositionUpdate', res.data, false);
-          this.$emit('right-close');
-          this.$refs.formData.resetFields();
+          this.$refs.form.resetFields();
         }).catch((error) => {
           console.log(error)
           const msg = error.response.data.msg;
@@ -209,7 +208,7 @@ export default {
     },
     editSave() {
       this.$confirm('是否确认保存', '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {

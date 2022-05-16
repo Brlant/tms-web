@@ -63,7 +63,7 @@
 
 </style>
 <template>
-  <div id="store">
+  <div>
     <div class="opera-btn-group">
       <div class="opera-icon">
         <el-col :span="2">
@@ -189,9 +189,9 @@
             <template slot="extra">
               <el-button-group style="margin-right: 40px">
                 <el-input v-model="positionParams.keyWord" placeholder="请输入关键字搜索"
-                          @keyup.enter.native="getStorePositionList(1)">
+                          @keyup.enter.native="searchPositionList">
                   <a href="javascript:void(0)" slot="suffix" class="el-icon-t-search el-input__icon"
-                     @click.stop="getStorePositionList(1)" title="点击搜索"></a>
+                     @click.stop="searchPositionList" title="点击搜索"></a>
                 </el-input>
               </el-button-group>
               <el-button-group>
@@ -216,7 +216,7 @@
             </template>
 
           </el-descriptions>
-          <el-table :data="positionList" border @selection-change="handleSelectionChange">>
+          <el-table :data="positionList" border @selection-change="handleSelectionChange">
             <!--              <el-table-column type="index" label="序号" width="50"/>-->
             <el-table-column
               type="selection"
@@ -248,7 +248,7 @@
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="code" label="操作">
+            <el-table-column label="操作">
               <template v-slot="{row,$index}">
                 <el-button type="text" v-if="row.storeStatus==1" @click="updateStatus(row,0,$index)">
                   <i class="el-icon-t-forbidden"> 停用</i>
@@ -356,17 +356,67 @@ export default {
       positionIndex: 0,
       // 仓库列表
       storeList: [],
-      // 仓位列表
-      positionList: [],
-      // 已打开的库区信息
-      areaItem: {},
       // 仓库列表显示加载更多
       showStoreMore: false,
       doing: false,
       checkedRows: [],
     };
   },
-  computed: {},
+  computed: {
+    storeItem: {
+      get() {
+        if (this.storeList.length === 0) {
+          return {}
+        }
+
+        return this.storeList[this.storeIndex];
+
+      },
+      set(item) {
+        this.storeList[this.storeIndex] = item;
+      }
+    },
+    areaList: {
+      get() {
+        return this.storeItem.areaList  || [];
+      },
+      set(list) {
+        this.storeList[this.storeIndex].areaList = list;
+      }
+    },
+    areaItem: {
+      get() {
+        if (this.areaList.length === 0) {
+          return {}
+        }
+
+        return this.areaList[this.areaIndex] || {};
+      },
+      set(item) {
+        this.storeList[this.storeIndex].areaList[this.areaIndex] = item;
+      }
+    },
+    positionList: {
+      get() {
+        return this.areaItem.positionList || [];
+      },
+      set(list) {
+        this.storeList[this.storeIndex].areaList[this.areaIndex].positionList = list;
+      }
+    },
+    positionItem: {
+      get() {
+        if (this.positionList.length === 0) {
+          return {}
+        }
+
+        return this.positionList[this.positionIndex] || {};
+      },
+      set(item) {
+        this.storeList[this.storeIndex].areaList[this.areaIndex].positionList[this.positionIndex] = item;
+      }
+    },
+  },
   watch: {
     // 监听折叠面板的变化
     activeName(val) {
@@ -376,11 +426,14 @@ export default {
       }
 
       this.storeIndex = val;
-      // 仓库切换时,需要懒加载仓库下的所有库区,获取库区的方法会判断是不是最后一页的数据,不是的话会递归调用,直到所有库区都加载完毕
+    },
+    storeIndex(val) {
+      // 仓库切换时,重新获取库区信息
       this.getStoreAreaList();
     },
     areaIndex(val) {
-      this.areaItem = this.storeList[this.storeIndex].areaList[val];
+      // 库区切换时,重新获取库位信息
+      this.getStorePositionList()
     }
   },
   methods: {
@@ -416,44 +469,33 @@ export default {
 
         // 获取仓库下的库区
         this.getStoreAreaList();
-      }).catch(({res}) => {
-        console.log(res);
+      }).catch(error => {
+        console.error(`getStoreList`,error);
         this.doing = false;
       });
     },
     //获取库区列表
-    getStoreAreaList(pageNo = 1, isContinue = false) {
+    getStoreAreaList(isContinue = false) {
       if (this.doing) {
         return;
       }
 
-      const {storeId, storeCode, storeName, isLoadData, areaList} = this.storeList[this.storeIndex];
-      if (isLoadData) {
-        if (areaList.length == 0) {
-          this.areaItem = {};
-          this.positionList = [];
-          return
-        }
-
-        if (pageNo == 1) {
-          this.areaItem = areaList[this.areaIndex];
-          this.getStorePositionList(1);
-          return;
-        }
-      }
-
-      this.areaParams.pageNo = pageNo;
+      const {storeId, storeCode, storeName, isLoadData, areaList} = this.storeItem;
       // 把仓库的id作为查询库区的父节点id
       this.areaParams.storeParent = storeId;
+      if (isLoadData) {
+        this.areaIndex = 0;
+        return;
+      }
 
       this.doing = true;
       StorageBin.query(this.areaParams).then(res => {
         this.doing = false;
+
         let {list, count, totalPage} = res.data;
         if (list.length === 0) {
           // 库区信息清空
           this.areaItem = {};
-          this.positionList = [];
           return;
         }
 
@@ -466,35 +508,31 @@ export default {
 
         this.storeList[this.storeIndex].isLoadData = true;
         if (isContinue) {
-          this.storeList[this.storeIndex].areaList = this.areaList.concat(list);
+          this.areaList = this.areaList.concat(list);
         } else {
-          this.storeList[this.storeIndex].areaList = list;
+          this.areaList = list;
           // 只有第一次的时候调用
           this.areaIndex = 0;
-          this.areaItem = list[0];
-          this.getStorePositionList(1);
         }
 
         // 判断是否加载完，没有的话继续请求
         const hasMore = this.storeParams.pageNo < totalPage;
         if (hasMore) {
-          pageNo++;
-          this.getStoreAreaList(pageNo, true);
+          this.areaParams.pageNo++;
+          this.getStoreAreaList(true);
         }
-      }).catch(({res}) => {
-        console.log(res);
+      }).catch(error => {
+        console.error(`getStoreAreaList`,error);
         this.doing = false;
       });
     },
     //获取库位列表
-    getStorePositionList(pageNo = 1, search = false) {
+    getStorePositionList() {
       if (this.doing) {
         return;
       }
 
       const {storeId} = this.areaItem;
-
-      this.positionParams.pageNo = pageNo;
       // 把仓库的id作为查询库区的父节点id
       this.positionParams.storeParent = storeId;
 
@@ -503,12 +541,15 @@ export default {
         const {list, count, totalPage} = res.data;
         this.positionParams.count = count;
         this.positionList = list;
-      }).catch(({res}) => {
-        console.log(res);
-
+      }).catch(error => {
+        console.error(`getStorePositionList`,error);
       }).finally(() => {
         this.doing = false;
       });
+    },
+    searchPositionList() {
+      this.positionParams.pageNo = 1;
+      this.getStorePositionList();
     },
     openAddStorePage() {
       // 新增仓库时,表单数据需要清空
@@ -520,7 +561,7 @@ export default {
     },
     openEditStorePage() {
       // 编辑时取当前仓库的数据
-      this.formData = this.storeList[this.storeIndex];
+      this.formData = this.store;
       this.formAction = 'edit';
       this.formTitle = '编辑仓库';
       this.showRight = true;
@@ -587,8 +628,7 @@ export default {
 
       if (updated) {
         // 如果仓库已经更新,那么不需要再次请求,刷新数据就好
-        let store = this.storeList[this.storeIndex];
-        this.storeList[this.storeIndex] = Object.assign(store, item);
+        this.storeItem = Object.assign({}, this.storeItem, item);
         return;
       }
 
@@ -604,13 +644,14 @@ export default {
 
       if (updated) {
         // 如果已经更新,那么不需要再次请求,刷新数据就好
-        this.storeList[this.storeIndex].areaList[this.areaIndex] = Object.assign(this.areaItem, item);
+        this.areaItem = Object.assign({}, this.areaItem, item);
         return;
       }
 
       // 如果是新增库区,需要追加到对应的仓库下面
-      this.storeList[this.storeIndex].areaList.push(item);
-      this.areaItem = item;
+      const list = this.areaList;
+      list.push(item);
+      this.areaList = list;
     },
     // 库位更新处理
     storePositionUpdateHandle(item, updated) {
@@ -619,13 +660,14 @@ export default {
 
       if (updated) {
         // 如果已经更新,那么不需要再次请求,刷新数据就好
-        let store = this.positionList[this.positionIndex];
-        this.positionList[this.positionIndex] = Object.assign(store, item);
+        this.positionItem = Object.assign({}, this.positionItem, item);
         return;
       }
 
       // 如果是新增库区,需要追加到对应的仓库下面
-      this.positionList.push(item);
+      const list = this.positionList;
+      list.push(item);
+      this.positionList = list;
       // 新增完总量加1
       this.positionParams.count++;
     },
@@ -654,23 +696,23 @@ export default {
         this.$refs.multipleTable.clearSelection();
       }
     },
-
     // 分页处理
     handleSizeChange(val) {
       this.positionParams.pageSize = val;
       this.getStorePositionList(1);
     },
     handleCurrentChange(val) {
-      this.getStorePositionList(val);
+      this.positionParams.pageNo = val;
+      this.getStorePositionList();
     },
     handleSelectionChange(rows) {
       this.checkedRows = rows;
     },
-    updateStatus(row, storeStatus,index) {
+    updateStatus(row, storeStatus, index) {
       const params = [{storeId: row.storeId, storeStatus}];
       const tip = '是否确认' + (storeStatus == 1 ? '启用' : '停用');
       this.$confirm(tip, '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
@@ -700,7 +742,7 @@ export default {
       const tip = '是否确认批量' + (storeStatus == 1 ? '启用' : '停用');
 
       this.$confirm(tip, '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {

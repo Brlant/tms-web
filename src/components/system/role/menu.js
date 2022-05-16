@@ -211,6 +211,7 @@ export default [
         ],
         'leaf': false
       },
+      // 仓位档案
       {
         'id': 'tms-storage-bin',
         'parentId': 'tms-base-info',
@@ -219,7 +220,7 @@ export default [
         'children': [
           {
             'id': 'tms-storage-bin-add',
-            'parentId': 'tms-goods-area',
+            'parentId': 'tms-storage-bin',
             'label': '新增',
             'sort': null,
             'children': null,
@@ -227,7 +228,7 @@ export default [
           },
           {
             'id': 'tms-storage-bin-edit',
-            'parentId': 'tms-goods-area',
+            'parentId': 'tms-storage-bin',
             'label': '编辑',
             'sort': null,
             'children': null,
@@ -235,7 +236,7 @@ export default [
           },
           {
             'id': 'tms-storage-bin-query',
-            'parentId': 'tms-goods-area',
+            'parentId': 'tms-storage-bin',
             'label': '查询',
             'sort': null,
             'children': null,
@@ -253,6 +254,48 @@ export default [
             'id': 'tms-storage-bin-export',
             'parentId': 'tms-storage-bin',
             'label': '导出',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          }
+        ],
+        'leaf': false
+      },
+      // 第三方承运商
+      {
+        'id': 'tms-carrier',
+        'parentId': 'tms-base-info',
+        'label': '第三方承运商管理',
+        'sort': 6,
+        'children': [
+          {
+            'id': 'tms-carrier-add',
+            'parentId': 'tms-carrier',
+            'label': '新增',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-carrier-edit',
+            'parentId': 'tms-carrier',
+            'label': '编辑',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-carrier-query',
+            'parentId': 'tms-carrier',
+            'label': '查询',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-carrier-audit',
+            'parentId': 'tms-carrier',
+            'label': '审核',
             'sort': null,
             'children': null,
             'leaf': true

@@ -345,12 +345,22 @@ export const GoodsArea = resource('goods-area', http, {
     return http.get('goods-area/' + id + '/org-list', {});
   }
 });
+
+// 仓位档案相关的接口
 export const StorageBin = {
   query: (params) => http.get('/tms-store/queryTmsStore', {params}),
   addSave: (params) => http.post('/tms-store/addTmsStore', params),
   editSave: (params) => http.post('/tms-store/editTmsStore', params),
   batchUpdateStatus: (params) => http.post('/tms-store/batchUpdate', params),
   exportExcel: (params) => http.get('/tms-store/exportTmsStore', {params}),
+};
+
+// 承运商相关的接口
+export const Carrier = {
+  query: (params) => http.get('/carrier/findCarrierByPage', {params}),
+  count: (params) => http.get('/carrier/count',{params}),
+  addSave: (params) => http.post('/carrier/addCarrier', params),
+  editSave: (params) => http.post('/carrier/editCarrier', params),
 };
 
 // dev设备对象
