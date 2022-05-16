@@ -52,8 +52,8 @@
         v-model="formData.storeStatus"
         active-color="#13ce66"
         inactive-color="#ff4949"
-        active-value="1"
-        inactive-value="0"
+        :active-value="1"
+        :inactive-value="0"
         active-text="是"
         inactive-text="否">
       </el-switch>
@@ -177,12 +177,12 @@ export default {
         {value: 'B', label: '散件'},
         {value: 'C', label: '不合格'},
       ],
-      formData: {...this.form},
+      formData:{...this.form}
     };
   },
-  watch: {
+  watch:{
     form(val) {
-      this.formData = val;
+      this.formData = Object.assign({}, this.form);
     }
   },
   methods: {
@@ -209,7 +209,7 @@ export default {
           this.$notify.success('新增成功');
           // 告诉父页面,库区更新了
           this.$emit('storeAreaUpdate', res.data, false);
-          this.$refs.formData.resetFields();
+          this.$refs.form.resetFields();
         }).catch((error) => {
           console.log(error)
           const msg = error.response.data.msg;
