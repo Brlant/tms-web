@@ -6,7 +6,8 @@
       <el-input type="text" v-model="formData.carrierCode" placeholder="保存后自动生成" :disabled="true"></el-input>
     </el-form-item>
     <el-form-item label="承运商名称" prop="carrierName">
-      <el-input type="text" v-model="formData.carrierName" placeholder="请输入承运商名称"></el-input>
+      <el-input type="text" v-model="formData.carrierName" placeholder="请输入承运商名称"
+                :disabled="action == 'edit'"></el-input>
     </el-form-item>
     <el-form-item label="是否对接" prop="butt" required>
       <el-radio v-model="formData.butt" :label="true">是</el-radio>
@@ -61,7 +62,7 @@ export default {
       rules: {
         carrierName: [
           {required: true, message: '承运商名称不能为空', trigger: 'blur'},
-          {max: 40, message: '最大长度4个字符', trigger: 'change'},
+          {max: 40, message: '最大长度40个字符', trigger: 'change'},
         ],
         butt: [
           {required: true, message: '请选择是否对接', trigger: 'blur'},
@@ -113,13 +114,27 @@ export default {
         remarks: '',
         // 是否对接默认不选中，需要用户手动选择是或否
         butt: true,
-        ...this.form
       },
     }
   },
   watch: {
     form(val) {
-      this.formData = Object.assign({}, this.form);
+      if (this.action == 'edit') {
+        this.formData = {...this.form};
+      }else {
+        this.formData = {
+          carrierCode: '',
+          carrierName: '',
+          carrierContact: '',
+          carrierTelephone: '',
+          carrierAddress: '',
+          transportationConditions: '',
+          status: '0',
+          remarks: '',
+          // 是否对接默认不选中，需要用户手动选择是或否
+          butt: true,
+        }
+      }
     }
   },
   methods: {
@@ -184,6 +199,11 @@ export default {
     },
     resetForm() {
       this.$refs.form.resetFields();
+    }
+  },
+  mounted() {
+    if (this.action == 'edit') {
+      this.formData = {...this.form};
     }
   }
 }
