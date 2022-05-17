@@ -95,6 +95,7 @@
               <i class="el-icon-t-shenhe"> 审核</i>
             </el-link>
             <el-link class="ml-15"
+                     v-if="row.status == 1"
                      :underline="false"
                      @click="edit(row,$index)">
               <i class="el-icon-edit-outline"> 编辑</i>

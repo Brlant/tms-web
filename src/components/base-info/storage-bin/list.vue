@@ -102,8 +102,8 @@
                 </div>
               </template>
               <ul class="show-list">
-                <li v-for="(area,areaIndex) in store.areaList" :key="areaIndex" class="list-li"
-                    @click="areaClick(areaIndex)">
+                <li v-for="(area,index) in areaList" :key="index" class="list-li"
+                    @click="areaClick(index)">
                   <div class="overflow pull-left" :title="area.storeName">{{ area.storeName }}</div>
                   <div style="margin-right: 10px">
                     <template v-if="area.storeStatus == '1'">
@@ -356,66 +356,14 @@ export default {
       positionIndex: 0,
       // 仓库列表
       storeList: [],
+      areaList: [],
+      positionList: [],
+      areaItem: {},
       // 仓库列表显示加载更多
       showStoreMore: false,
       doing: false,
       checkedRows: [],
     };
-  },
-  computed: {
-    storeItem: {
-      get() {
-        if (this.storeList.length === 0) {
-          return {}
-        }
-
-        return this.storeList[this.storeIndex];
-
-      },
-      set(item) {
-        this.storeList[this.storeIndex] = item;
-      }
-    },
-    areaList: {
-      get() {
-        return this.storeItem.areaList  || [];
-      },
-      set(list) {
-        this.storeList[this.storeIndex].areaList = list;
-      }
-    },
-    areaItem: {
-      get() {
-        if (this.areaList.length === 0) {
-          return {}
-        }
-
-        return this.areaList[this.areaIndex] || {};
-      },
-      set(item) {
-        this.storeList[this.storeIndex].areaList[this.areaIndex] = item;
-      }
-    },
-    positionList: {
-      get() {
-        return this.areaItem.positionList || [];
-      },
-      set(list) {
-        this.storeList[this.storeIndex].areaList[this.areaIndex].positionList = list;
-      }
-    },
-    positionItem: {
-      get() {
-        if (this.positionList.length === 0) {
-          return {}
-        }
-
-        return this.positionList[this.positionIndex] || {};
-      },
-      set(item) {
-        this.storeList[this.storeIndex].areaList[this.areaIndex].positionList[this.positionIndex] = item;
-      }
-    },
   },
   watch: {
     // 监听折叠面板的变化
@@ -426,15 +374,9 @@ export default {
       }
 
       this.storeIndex = val;
-    },
-    storeIndex(val) {
-      // 仓库切换时,重新获取库区信息
+      this.areaIndex = 0;
       this.getStoreAreaList();
     },
-    areaIndex(val) {
-      // 库区切换时,重新获取库位信息
-      this.getStorePositionList()
-    }
   },
   methods: {
     // 获取仓库列表
@@ -449,16 +391,10 @@ export default {
         this.$store.commit('initBottomLoading', false);
 
         let {list, totalPage} = res.data;
-        if (list.length === 0) {
+        if (list.length == 0) {
+          this.storeList = [];
           return;
         }
-
-        list = list.map(item => {
-          item.areaList = [];
-          item.isLoadData = false;
-          return item;
-        });
-
 
         this.showStoreMore = this.storeParams.pageNo < totalPage;
         if (isContinue) {
@@ -470,7 +406,7 @@ export default {
         // 获取仓库下的库区
         this.getStoreAreaList();
       }).catch(error => {
-        console.error(`getStoreList`,error);
+        console.error(`getStoreList`, error);
         this.doing = false;
       });
     },
@@ -480,22 +416,19 @@ export default {
         return;
       }
 
-      const {storeId, storeCode, storeName, isLoadData, areaList} = this.storeItem;
+      const {storeId, storeCode, storeName} = this.storeList[this.storeIndex];
       // 把仓库的id作为查询库区的父节点id
       this.areaParams.storeParent = storeId;
-      if (isLoadData) {
-        this.areaIndex = 0;
-        return;
-      }
 
       this.doing = true;
       StorageBin.query(this.areaParams).then(res => {
         this.doing = false;
-
         let {list, count, totalPage} = res.data;
         if (list.length === 0) {
           // 库区信息清空
           this.areaItem = {};
+          this.areaList = [];
+          this.positionList = [];
           return;
         }
 
@@ -506,13 +439,14 @@ export default {
           return item;
         });
 
-        this.storeList[this.storeIndex].isLoadData = true;
+
         if (isContinue) {
           this.areaList = this.areaList.concat(list);
         } else {
           this.areaList = list;
+          this.areaItem = list[0];
           // 只有第一次的时候调用
-          this.areaIndex = 0;
+          this.getStorePositionList()
         }
 
         // 判断是否加载完，没有的话继续请求
@@ -522,7 +456,7 @@ export default {
           this.getStoreAreaList(true);
         }
       }).catch(error => {
-        console.error(`getStoreAreaList`,error);
+        console.error(`getStoreAreaList`, error);
         this.doing = false;
       });
     },
@@ -542,7 +476,7 @@ export default {
         this.positionParams.count = count;
         this.positionList = list;
       }).catch(error => {
-        console.error(`getStorePositionList`,error);
+        console.error(`getStorePositionList`, error);
       }).finally(() => {
         this.doing = false;
       });
@@ -628,14 +562,11 @@ export default {
 
       if (updated) {
         // 如果仓库已经更新,那么不需要再次请求,刷新数据就好
-        this.storeItem = Object.assign({}, this.storeItem, item);
-        return;
+        this.storeList[this.storeIndex] = item;
+      } else {
+        // 如果是新增仓库成功,那么把新增的追加到storeList
+        this.storeList.push(item);
       }
-
-      // 如果是新增仓库成功,那么把新增的追加到storeList
-      item.areaList = [];
-      item.isLoadData = false;
-      this.storeList.push(item);
     },
     // 库区更新处理
     storeAreaUpdateHandle(item, updated) {
@@ -644,14 +575,12 @@ export default {
 
       if (updated) {
         // 如果已经更新,那么不需要再次请求,刷新数据就好
-        this.areaItem = Object.assign({}, this.areaItem, item);
-        return;
+        this.areaList[this.areaIndex] = item;
+        this.areaItem = item;
+      } else {
+        // 如果是新增库区,需要追加到对应的仓库下面
+        this.areaList.push(item);
       }
-
-      // 如果是新增库区,需要追加到对应的仓库下面
-      const list = this.areaList;
-      list.push(item);
-      this.areaList = list;
     },
     // 库位更新处理
     storePositionUpdateHandle(item, updated) {
@@ -660,16 +589,12 @@ export default {
 
       if (updated) {
         // 如果已经更新,那么不需要再次请求,刷新数据就好
-        this.positionItem = Object.assign({}, this.positionItem, item);
-        return;
+        this.positionList[this.positionIndex] = item;
+      } else {
+        // 如果是新增库区,需要追加到对应的仓库下面
+        this.positionList.push(item);
+        this.positionParams.count++;
       }
-
-      // 如果是新增库区,需要追加到对应的仓库下面
-      const list = this.positionList;
-      list.push(item);
-      this.positionList = list;
-      // 新增完总量加1
-      this.positionParams.count++;
     },
     getStoreMore() {
       this.storeParams.pageNo++;
@@ -686,6 +611,8 @@ export default {
     },
     areaClick(index) {
       this.areaIndex = index;
+      this.areaItem = this.areaList[index];
+      this.getStorePositionList();
     },
     toggleSelection(rows) {
       if (rows) {
@@ -699,7 +626,7 @@ export default {
     // 分页处理
     handleSizeChange(val) {
       this.positionParams.pageSize = val;
-      this.getStorePositionList(1);
+      this.getStorePositionList();
     },
     handleCurrentChange(val) {
       this.positionParams.pageNo = val;

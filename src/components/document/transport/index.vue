@@ -26,12 +26,12 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <perm label="tms-waybill-add">
-          <el-button plain size="small" @click="showPart(0)">
-            <f-a class="icon-small" name="plus"></f-a>
-            添加
-          </el-button>
-        </perm>
+<!--        <perm label="tms-waybill-add">-->
+<!--          <el-button plain size="small" @click="showPart(0)">-->
+<!--            <f-a class="icon-small" name="plus"></f-a>-->
+<!--            添加-->
+<!--          </el-button>-->
+<!--        </perm>-->
         <perm label="tms-waybill-verifyPass">
           <el-button plain size="small" @click="autoConfirmWayBill" v-if="filters.status==='-2'">
             <f-a class="icon-small" name="wave"></f-a>
