@@ -495,7 +495,7 @@ export default {
     },
     openEditStorePage() {
       // 编辑时取当前仓库的数据
-      this.formData = this.store;
+      this.formData = this.storeList[this.storeIndex];
       this.formAction = 'edit';
       this.formTitle = '编辑仓库';
       this.showRight = true;
@@ -617,9 +617,11 @@ export default {
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
+          // noinspection JSUnresolvedFunction
           this.$refs.multipleTable.toggleRowSelection(row);
         });
       } else {
+        // noinspection JSUnresolvedFunction
         this.$refs.multipleTable.clearSelection();
       }
     },
@@ -646,6 +648,7 @@ export default {
         this.positionIndex = index;
         StorageBin.batchUpdateStatus(params)
           .then(res => {
+            // noinspection JSUnresolvedVariable
             this.$notify.success(res.msg || '操作成功');
             // 更新后刷新页面
             this.positionList[this.positionIndex].storeStatus = storeStatus;
@@ -675,6 +678,7 @@ export default {
       }).then(() => {
         StorageBin.batchUpdateStatus(params)
           .then(res => {
+            // noinspection JSUnresolvedVariable
             this.$notify.success(res.msg || '操作成功');
             // 更新后刷新页面
             this.getStorePositionList();
