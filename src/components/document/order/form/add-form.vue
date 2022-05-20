@@ -131,15 +131,16 @@ $labelWidth: 180px;
                 <oms-input v-model="form.senderContactPhone" placeholder="请输入电话"></oms-input>
               </el-form-item>
             </two-column>
-            <el-form-item label="发货地区" prop="senderAddress">
-              <el-cascader
-                v-model="senderOptions"
-                placeholder="试试搜索：合肥"
-                :options="address"
-                filterable clearable></el-cascader>
+            <el-form-item label="发货地区" prop="senderRegionCode">
+              <el-cascader ref="senderCascader"
+                           v-model="senderOptions"
+                           placeholder="试试搜索：合肥"
+                           :options="address"
+
+                           filterable clearable></el-cascader>
             </el-form-item>
-            <el-form-item label="具体地址" prop="senderAddress">
-              <oms-input v-model="form.senderAddress" placeholder="请输入具体的发货地址"></oms-input>
+            <el-form-item label="具体地址" prop="senderDetailAddr">
+              <oms-input v-model="form.senderDetailAddr" placeholder="请输入具体的发货地址"></oms-input>
             </el-form-item>
           </div>
           <div class="hr mb-10"></div>
@@ -154,8 +155,8 @@ $labelWidth: 180px;
             <el-form-item label="收货单位" prop="receiverId">
               <el-select filterable remote placeholder="请选择/输入收货单位" :remote-method="filterReceiverOrg"
                          :clearable="true" allow-create default-first-option
-                         @change="receiverChange"
                          @clear="addressList = []"
+                         @change="receiverChange"
                          v-model="form.receiverId" popperClass="good-selects">
                 <el-option :value="org.receiverId" :key="org.receiverId" :label="org.receiverName"
                            v-for="org in receiverOrgList">
@@ -171,7 +172,7 @@ $labelWidth: 180px;
               </el-form-item>
             </two-column>
 
-            <el-form-item label="收货地区" required>
+            <el-form-item label="收货地区" prop="receiverRegionCode">
               <el-cascader ref="receiverCascader"
                            v-model="receiverOptions"
                            placeholder="试试搜索：合肥"
@@ -221,11 +222,11 @@ $labelWidth: 180px;
                               </el-select>
                             </div>-->
             </el-form-item>
-            <el-form-item label="具体地址" prop="receiverDetailAddress">
+            <el-form-item label="具体地址" prop="receiverDetailAddr">
               <el-select filterable placeholder="请选择/输入具体的收货地址"
                          :clearable="true" allow-create default-first-option
-                         @change="receiverDetailAddressChange"
-                         v-model="form.receiverDetailAddress">
+                         @change="receiverDetailAddrChange"
+                         v-model="form.receiverDetailAddr">
                 <el-option :value="item.receiverAddress" :key="item.receiverAddressId" :label="item.receiverAddress"
                            v-for="item in addressList">
                 </el-option>
@@ -392,33 +393,9 @@ export default {
   data() {
     return {
       address: utils.address,
-      hisOrgs: [
-        {
-          "receiverId": "Q6gT4fHT2Ls1rytMZAt",
-          "receiverName": "国控生物",
-          "addressList": [
-            {
-              "receiverAddressId": "SgtbPxmBqgzosZtFLbJ",
-              "receiverId": "Q6gT4fHT2Ls1rytMZAt",
-              "receiverProvinceCode": "340000",
-              "receiverCityCode": "340100",
-              "receiverRegionCode": "340104",
-              "receiverAddress": "科大先研院11楼"
-            },
-            {
-              "receiverAddressId": "vIP8Rv6smC71fBgsP4A",
-              "receiverId": "Q6gT4fHT2Ls1rytMZAt",
-              "receiverProvinceCode": "310000",
-              "receiverCityCode": "310100",
-              "receiverRegionCode": "310101",
-              "receiverAddress": "公司总部"
-            }
-          ]
-        }
-      ],
-      provinces: utils.address,
-      cities: [],
-      regions: [],
+      // provinces: utils.address,
+      // cities: [],
+      // regions: [],
       addressList: [],
       list: [],
       times: [],
@@ -465,13 +442,39 @@ export default {
         receiverId: '', //收货单位主键id
         receiverName: '', //收货单位主键id
         receiverAddress: '', //收货单位地址
-        receiverDetailAddress: '', //收货单位地址
+        receiverDetailAddr: '', //收货单位地址
         receiverProvinceCode: '', //收货单位省编码
         receiverCityCode: '', //收货单位市编码
         receiverRegionCode: '' //收货单位区编码
       },
       doing: false,
       rules: {
+        senderRegionCode: [
+          {
+            required: true,
+            validator: (rules, value, cb) => {
+              if (!value && this.senderOptions.length === 0) {
+                return cb(new Error('请选择发货地区'));
+              }
+
+              return cb();
+            },
+            trigger: 'change'
+          },
+        ],
+        receiverRegionCode: [
+          {
+            required: true,
+            validator: (rules, value, cb) => {
+              if (!value && this.receiverOptions.length === 0) {
+                return cb(new Error('请选择收货地区'));
+              }
+
+              return cb();
+            },
+            trigger: 'change'
+          },
+        ],
         waybillType: [
           {required: true, message: '请选择订单类型', trigger: 'change'}
         ],
@@ -487,8 +490,11 @@ export default {
         receiverId: [
           {required: true, message: '请选择收货单位', trigger: 'change'}
         ],
-        receiverDetailAddress: [
-          {required: true, message: '请输入收货地址', trigger: 'blur'}
+        senderDetailAddr: [
+          {required: true, message: '请输入具体的发货地址', trigger: 'blur'}
+        ],
+        receiverDetailAddr: [
+          {required: true, message: '请输入具体的收货地址', trigger: 'blur'}
         ],
         wholeBoxCount: [
           {required: true, type: 'integer', message: '请输入整装箱数', trigger: 'blur'}
@@ -514,47 +520,71 @@ export default {
     };
   },
   computed: {
+    // 发货地址：省市区+详细地址
+    senderAddress() {
+      if (this.senderOptions.length === 0) {
+        return '';
+      }
+
+      if (!this.form.senderDetailAddr) {
+        return '';
+      }
+
+      // 根据所选择的地区信息获取省市区的名字
+      const nodes = this.$refs.senderCascader.getCheckedNodes();
+      if (nodes.length == 0){
+        return '';
+      }
+
+      const pathLabels = nodes[0].pathLabels;
+      return pathLabels.join('') + this.form.senderDetailAddr;
+    },
     // 收货地址：省市区+详细地址
     receiverAddress() {
       if (this.receiverOptions.length === 0) {
         return '';
       }
 
-      if (!this.form.receiverDetailAddress) {
+      if (!this.form.receiverDetailAddr) {
         return '';
       }
 
       // 根据所选择的地区信息获取省市区的名字
-      const pathLabels = this.$refs.receiverCascader.getCheckedNodes()[0].pathLabels;
-      return pathLabels.join('') + this.form.receiverDetailAddress;
+      const nodes = this.$refs.receiverCascader.getCheckedNodes();
+      if (nodes.length == 0){
+        return '';
+      }
+
+      const pathLabels = nodes[0].pathLabels;
+      return pathLabels.join('') + this.form.receiverDetailAddr;
     },
-    provinceOptions() {
-      return [{
-        label: '常用省份',
-        options: []
-      }, {
-        label: '全部省份',
-        options: this.provinces
-      }]
-    },
-    cityOptions() {
-      return [{
-        label: '常用城市',
-        options: []
-      }, {
-        label: '全部城市',
-        options: this.cities
-      }]
-    },
-    regionOptions() {
-      return [{
-        label: '常用区/县',
-        options: []
-      }, {
-        label: '全部区/县',
-        options: this.regions
-      }]
-    },
+    // provinceOptions() {
+    //   return [{
+    //     label: '常用省份',
+    //     options: []
+    //   }, {
+    //     label: '全部省份',
+    //     options: this.provinces
+    //   }]
+    // },
+    // cityOptions() {
+    //   return [{
+    //     label: '常用城市',
+    //     options: []
+    //   }, {
+    //     label: '全部城市',
+    //     options: this.cities
+    //   }]
+    // },
+    // regionOptions() {
+    //   return [{
+    //     label: '常用区/县',
+    //     options: []
+    //   }, {
+    //     label: '全部区/县',
+    //     options: this.regions
+    //   }]
+    // },
     deliveryWayList() {
       return this.$getDict('deliveryWay');
     },
@@ -588,41 +618,104 @@ export default {
         if (val.id) {
           TmsOrder.getOneTmsOrder(val.id).then(res => {
             this.form = res.data;
+
             this.filterCustomer(this.form.orgName);
             this.filterSenderOrg(this.form.senderName);
             this.filterReceiverOrg(this.form.receiverName);
             this.$nextTick(() => {
+              this.addrHandel();
+
               this.$refs.form && this.$refs.form.clearValidate();
             });
           });
         }
       }
     },
+    senderOptions(val) {
+      let senderProvinceCode = '', senderCityCode = '', senderRegionCode = '';
+      if (val.length === 3) {
+        // 额外处理地区和地址的信息
+        senderProvinceCode = val[0];
+        senderCityCode = val[1];
+        senderRegionCode = val[2];
+      }
+
+      this.form = Object.assign({}, this.form, {
+        senderProvinceCode,
+        senderCityCode,
+        senderRegionCode,
+      });
+    },
+    receiverOptions(val) {
+      if (val.length == 0) {
+        this.form.receiverProvinceCode = '';
+        this.form.receiverCityCode = '';
+        this.form.receiverRegionCode = '';
+        return;
+      }
+
+      this.form.receiverProvinceCode = val[0];
+      this.form.receiverCityCode = val[1];
+      this.form.receiverRegionCode = val[2];
+    },
+    senderAddress(val) {
+      this.form.senderAddress = val;
+    },
+    receiverAddress(val) {
+      this.form.receiverAddress = val;
+    }
+    // 监听收货单位变化
+    // "form.receiverId": function (val) {
+    //   this.receiverChange(val);
+    // }
   },
   methods: {
-    provinceChange(val) {
-      for (const item of this.provinces) {
-        if (item.value === val) {
-          this.cities = item.children;
-          break;
-        }
+    addrHandel() {
+      // 历史订单中detailAddr没有数据，就把原来的地址赋值给详细地址,方便编辑
+      const {senderAddress, senderDetailAddr, receiverDetailAddr, receiverAddress} = this.form;
+      if (!senderDetailAddr) {
+        this.form.senderDetailAddr = senderAddress;
       }
-    },
-    cityChange(val) {
-      for (const item of this.cities) {
-        if (item.value === val) {
-          this.regions = item.children;
-          break;
-        }
+
+      if (!receiverDetailAddr) {
+        this.form.receiverDetailAddr = receiverAddress;
       }
+
+      this.senderOptions = [
+        this.form.senderProvinceCode,
+        this.form.senderCityCode,
+        this.form.senderRegionCode
+      ];
+
+      this.receiverOptions = [
+        this.form.receiverProvinceCode,
+        this.form.receiverCityCode,
+        this.form.receiverRegionCode
+      ];
     },
-    regionChange(val) {
-      for (const item of this.regions) {
-        if (item.value === val) {
-          break;
-        }
-      }
-    },
+    // provinceChange(val) {
+    //   for (const item of this.provinces) {
+    //     if (item.value === val) {
+    //       this.cities = item.children;
+    //       break;
+    //     }
+    //   }
+    // },
+    // cityChange(val) {
+    //   for (const item of this.cities) {
+    //     if (item.value === val) {
+    //       this.regions = item.children;
+    //       break;
+    //     }
+    //   }
+    // },
+    // regionChange(val) {
+    //   for (const item of this.regions) {
+    //     if (item.value === val) {
+    //       break;
+    //     }
+    //   }
+    // },
     remove(item) {
       let index = this.form.goodsList.indexOf(item);
       // 移除删除项
@@ -667,8 +760,20 @@ export default {
       });
     },
     // 过滤收货单位
-    filterReceiverOrg(keyword) {
-      this.receiverOrgList = this.hisOrgs.filter(item => item.receiverName.includes(keyword));
+    filterReceiverOrg(receiverName, pageNo = 1, pageSize = 100) {
+      this.$http.get('/receiver', {params: {receiverName, pageNo, pageSize}})
+        .then(res => {
+          const {totalPage, list} = res.data;
+          if (pageNo == 1) {
+            this.receiverOrgList = list;
+          } else {
+            this.receiverOrgList = this.receiverOrgList.concat(list);
+          }
+
+          if (totalPage > pageNo) {
+            this.filterReceiverOrg(receiverName, pageNo++);
+          }
+        })
     },
     selectTab(item) {
       this.currentTab = item;
@@ -687,12 +792,10 @@ export default {
             this.form.goodsList = goodsList;
           }
 
-          // 额外处理地区和地址的信息
-          this.form.receiverProvinceCode = this.receiverOptions[0];
-          this.form.receiverCityCode = this.receiverOptions[1];
-          this.form.receiverRegionCode = this.receiverOptions[2];
-          this.form.receiverId = this.receiverOptions[2];
-          this.form.receiverAddress = this.receiverAddress;
+          if (this.form.receiverName === this.form.receiverId) {
+            // 如果id和名字是一样的说明是新增的单位，需要把id置空
+            this.form.receiverId = '';
+          }
 
           if (this.action === 'add') {
             this.doing = true;
@@ -771,11 +874,10 @@ export default {
       if (value === '') {
         this.form.receiverId = '';
         this.form.receiverName = '';
-        this.form.receiN = '';
         this.form.receiverProvinceCode = '';
         this.form.receiverCityCode = '';
         this.form.receiverRegionCode = '';
-        this.form.receiverDetailAddress = '';
+        this.form.receiverDetailAddr = '';
         this.receiverOptions = [];
         this.addressList = [];
         return;
@@ -783,13 +885,11 @@ export default {
 
       const item = this.receiverOrgList.find(item => item.receiverId == value);
       if (!item) {
-        this.form.receiverId = '';
-        this.form.receiverName = '';
-        this.form.receiN = '';
+        this.form.receiverName = value;
         this.form.receiverProvinceCode = '';
         this.form.receiverCityCode = '';
         this.form.receiverRegionCode = '';
-        this.form.receiverDetailAddress = '';
+        this.form.receiverDetailAddr = '';
         this.receiverOptions = [];
         this.addressList = [];
         return;
@@ -797,6 +897,7 @@ export default {
 
       this.addressList = item.addressList;
       if (this.addressList.length == 0) {
+        this.form.receiverDetailAddr = '';
         this.receiverOptions = [];
         return;
       }
@@ -817,7 +918,7 @@ export default {
       this.form.receiverProvinceCode = receiverProvinceCode;
       this.form.receiverCityCode = receiverCityCode;
       this.form.receiverRegionCode = receiverRegionCode;
-      this.form.receiverDetailAddress = receiverAddress;
+      this.form.receiverDetailAddr = receiverAddress;
 
       this.receiverOptions = [
         this.form.receiverProvinceCode,
@@ -825,19 +926,22 @@ export default {
         this.form.receiverRegionCode
       ];
     },
-    receiverDetailAddressChange(value) {
+    receiverDetailAddrChange(value) {
       if (!value) {
         return;
       }
 
       const addr = this.addressList.find(item => item.receiverAddress == value);
       if (!addr) {
-        this.form.receiverDetailAddress = value;
+        this.form.receiverDetailAddr = value;
         return;
       }
 
       this.receiverOptions = [addr.receiverProvinceCode, addr.receiverCityCode, addr.receiverRegionCode];
-    }
+    },
+  },
+  mounted() {
+    // this.filterReceiverOrg('');
   }
 };
 </script>

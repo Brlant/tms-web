@@ -113,6 +113,7 @@
           <el-col :span="2">类型</el-col>
           <el-col :span="4">发货单位</el-col>
           <el-col :span="4">收货单位</el-col>
+          <el-col :span="4">承运类型</el-col>
           <el-col :span="1">整件</el-col>
           <el-col :span="1">散件</el-col>
           <el-col :span="1">实际包件</el-col>
@@ -135,7 +136,7 @@
           </div>
         </el-col>
       </el-row>
-      <div v-else="" class="order-list-body flex-list-dom">
+      <div v-else class="order-list-body flex-list-dom">
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
@@ -172,6 +173,11 @@
               </div>
               <div>
                 {{item.receiverAddress}}
+              </div>
+            </el-col>
+            <el-col :span="4" class="R">
+              <div>
+                {{item.carryType}}
               </div>
             </el-col>
             <!--<el-col :span="5" class="R">-->
@@ -296,6 +302,11 @@
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-start"></i>
                       </a>启运销退运单
+                    </span>
+                  <span @click.stop="shipmentWayBill(item)" v-if="item.status === '1'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-start"></i>
+                      </a>启运
                     </span>
                 </perm>
               </div>
