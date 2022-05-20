@@ -3,6 +3,7 @@ import axios from 'axios';
 import Vue from 'vue';
 import qs from 'qs';
 import * as Sentry from '@sentry/browser';
+import createSingleWayBill from '@/components/document/order/form/create-single-way-bill'
 
 export const http = axios.create({
   baseURL: process.env.VUE_APP_API,
@@ -119,7 +120,10 @@ export const TmsOrder = resource('/tms-order', http, {
   queryStateNum: (params) => {
     return http.get('/tms-order/count', {params});
   },
-  createWayBill: (params) => {
+  createWayBill: (params,single) => {
+    if (single){
+      return http.put('/tms-order/list/generate/single', params);
+    }
     return http.put('/tms-order/list/generate', params);
   },
   createSingleWayBill: (params) => {
