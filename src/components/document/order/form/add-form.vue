@@ -532,7 +532,7 @@ export default {
 
       // 根据所选择的地区信息获取省市区的名字
       const nodes = this.$refs.senderCascader.getCheckedNodes();
-      if (nodes.length == 0){
+      if (nodes.length == 0) {
         return '';
       }
 
@@ -551,7 +551,7 @@ export default {
 
       // 根据所选择的地区信息获取省市区的名字
       const nodes = this.$refs.receiverCascader.getCheckedNodes();
-      if (nodes.length == 0){
+      if (nodes.length == 0) {
         return '';
       }
 
@@ -608,23 +608,33 @@ export default {
   props: ['formItem', 'action'],
   watch: {
     formItem(val) {
+
       if (this.action === 'add') {
-        this.form = Object.assign({}, val);
+        this.form = {};
+        this.senderOptions = [];
+        this.receiverOptions = [];
+        this.customerList = [];
+        this.senderOrgList = [];
+        this.receiverOrgList = [];
+
         this.$nextTick(() => {
-          this.$refs.form && this.$refs.form.clearValidate();
+          this.$refs.form.clearValidate();
         });
+
+        return;
       }
+
       if (this.action === 'edit') {
         if (val.id) {
           TmsOrder.getOneTmsOrder(val.id).then(res => {
             this.form = res.data;
-
             this.filterCustomer(this.form.orgName);
             this.filterSenderOrg(this.form.senderName);
             this.filterReceiverOrg(this.form.receiverName);
             this.$nextTick(() => {
+              this.senderOptions = [];
+              this.receiverOptions = [];
               this.addrHandel();
-
               this.$refs.form && this.$refs.form.clearValidate();
             });
           });
