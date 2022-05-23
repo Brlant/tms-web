@@ -23,14 +23,14 @@ $labelWidth: 220px;
 
 .h40 ::v-deep .height20 {
   .el-col {
-    line-height: 40px;
+    line-height: 36px;
   }
 
-  &.lh26 {
-    .col-label {
-      line-height: 46px;
-    }
-  }
+  //&.lh26 {
+  //  .col-label {
+  //    line-height: 40px;
+  //  }
+  //}
 }
 </style>
 <template>
@@ -46,8 +46,8 @@ $labelWidth: 220px;
           </div>
         </div>
         <div class="opera-btn">
-          <el-button plain @click="$emit('entrustShow',true)" :disabled="doing" class="mb-10">委托第三方承运</el-button>
-          <el-button plain @click="createWayBill" :disabled="doing">生成运单</el-button>
+          <!--          <el-button plain @click="$emit('entrustShow',true)" :disabled="doing" class="mb-10">委托第三方承运</el-button>-->
+          <el-button plain @click="validate" :disabled="doing">生成运单</el-button>
         </div>
       </div>
       <div class="content-right min-row" v-show="currentOrder.id">
@@ -58,7 +58,7 @@ $labelWidth: 220px;
               <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
                 {{ pageSets[0].name }}</h3>
             </div>
-            <div class="content">
+            <div class="content h40">
               <oms-col label="订单号" :rowSpan="span" :value="form.orderNo"/>
               <oms-col label="订单类型" :rowSpan="span" :value="form.waybillType">
                 <dict :dict-group="'bizType'" :dict-key="form.waybillType"></dict>
@@ -76,13 +76,14 @@ $labelWidth: 220px;
                 {{ form.updateTime|time }}
               </oms-col>
 
-              <oms-col label="承运类型" :rowSpan="span" :value="1" class="h40">
+              <oms-col label="承运类型" :rowSpan="span" :value="1">
                 <el-radio-group v-model="carryInfo.carryType" size="mini">
-                  <el-radio label="0">自行承运</el-radio>
-                  <el-radio label="1">第三方承运</el-radio>
+                  <el-radio :label="0">自行承运</el-radio>
+                  <el-radio :label="1">第三方承运</el-radio>
                 </el-radio-group>
               </oms-col>
-              <oms-col label="承运商名称" :rowSpan="span" :value="1" class="h40">
+              <oms-col label="承运商名称" :rowSpan="span" :value="carryInfo.carryType == 1"
+                       v-show="carryInfo.carryType == 1">
                 <el-select v-model="carryInfo.carrierId" placeholder="请选择承运商" filterable
                            size="mini">
                   <el-option v-for="item in carrierList"
@@ -96,6 +97,19 @@ $labelWidth: 220px;
                   </el-option>
                 </el-select>
 
+              </oms-col>
+
+              <oms-col label="是否投保" :rowSpan="span" :value="1">
+                <el-radio-group v-model="carryInfo.insure" size="mini">
+                  <el-radio :label="false">否</el-radio>
+                  <el-radio :label="true">是</el-radio>
+                </el-radio-group>
+              </oms-col>
+              <oms-col label="投保金额（元）" :rowSpan="span" :value="1" v-show="carryInfo.insure">
+                <oms-input model="text" v-model="carryInfo.insureAmount" min="0" placeholder="请输入投保金额,最多保留两位小数"
+                           @blur="insureAmountFormat">
+                  <template slot="prepend">¥</template>
+                </oms-input>
               </oms-col>
             </div>
             <div class="hr mb-10 clearfix"></div>
@@ -219,13 +233,14 @@ $labelWidth: 220px;
 import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
 import {TmsOrder} from '@/resources';
 import MapPath from '../../common/map-list-new';
+import utils from '@/tools/utils'
 
 export default {
   components: {TwoColumn, MapPath},
-  props: ['checkList','carrierList'],
+  props: ['checkList', 'carrierList'],
   data() {
     return {
-      span: 7,
+      span: 8,
       dataList: [],
       times: [],
       pageSets: [
@@ -260,7 +275,13 @@ export default {
   computed: {
     carryInfo() {
       if (this.activeId === '') {
-        return {};
+        return {
+          "orderId": "", //订单id
+          "carryType": 0, //承运类型
+          "carrierId": "", //承运商id
+          "insure": false, //是否投保
+          "insureAmount": 10 //投保金额
+        };
       }
 
       return this.wayBillParams[this.activeId];
@@ -275,7 +296,9 @@ export default {
         this.wayBillParams = this.dataList.map(data => {
           return {
             "orderId": data.id,
-            "carryType": '0',
+            "carryType": 0,
+            "insure": false,
+            "insureAmount": '',
             "carrierId": ''
           }
         });
@@ -297,31 +320,60 @@ export default {
     }
   },
   methods: {
-    createWayBill() {
+    insureAmountFormat() {// 格式化单价，保留两位小数
+      this.carryInfo.insureAmount = utils.autoformatDecimalPoint(this.carryInfo.insureAmount);
+    },
+    checkError() {
+      let error = false;
+      for (const item of this.wayBillParams) {
+        // 没选择承运商
+        if (item.carryType === 1 && !item.carrierId) {
+          this.$notify.warning("包含必填项未填写");
+          error = true;
+          break;
+        }
+
+        // 没填写投保金额
+        if (item.insure && !item.insureAmount) {
+          this.$notify.warning("包含必填项未填写");
+          error = true;
+          break;
+        }
+      }
+
+      return error;
+    },
+    validate() {
+      if (this.checkError()) return;
+
       this.$confirm('确认生成运单?', '', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.doing = true;
-        TmsOrder.createSingleWayBill({wayBillParams: this.wayBillParams}).then(() => {
-          this.$notify.success({
-            duration: 2000,
-            title: '成功',
-            message: '已成功生成运单'
-          });
-          this.doing = false;
-          this.$emit('change');
-          this.$emit('right-close');
-        }).catch(error => {
-          this.$notify.error({
-            duration: 2000,
-            message: error.response && error.response.data && error.response.data.msg || '生成运单失败'
-          });
-          this.doing = false;
-        });
+        // 确认后调用接口
+        this.createSingleWayBill();
       }).catch(() => {
-
+        // 取消不做任何处理
+      });
+    },
+    createSingleWayBill() {
+      this.doing = true;
+      TmsOrder.createSingleWayBill({wayBillParams: this.wayBillParams}).then(() => {
+        this.$notify.success({
+          duration: 2000,
+          title: '成功',
+          message: '已成功生成运单'
+        });
+        this.doing = false;
+        this.$emit('change');
+        this.$emit('right-close');
+      }).catch(error => {
+        this.$notify.error({
+          duration: 2000,
+          message: error.response && error.response.data && error.response.data.msg || '生成运单失败'
+        });
+        this.doing = false;
       });
     },
     showOrder: function (item, index) {

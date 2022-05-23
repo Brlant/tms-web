@@ -1,37 +1,37 @@
 <style lang="scss">
-  .special-col {
-    padding-left: 20px;
-    position: relative;
+.special-col {
+  padding-left: 20px;
+  position: relative;
 
-    .el-checkbox {
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-    }
+  .el-checkbox {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
   }
+}
 
-  .order-list-status-right {
-    justify-content: flex-end;
-  }
+.order-list-status-right {
+  justify-content: flex-end;
+}
 
-  .order-list .order-list-header {
-    background: #dfebf8;
-    line-height: 15px;
-    padding: 10px 5px 10px 15px;
-    margin: 10px 0 5px 0;
-  }
+.order-list .order-list-header {
+  background: #dfebf8;
+  line-height: 15px;
+  padding: 10px 5px 10px 15px;
+  margin: 10px 0 5px 0;
+}
 </style>
 <template>
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-<!--        <perm label="tms-waybill-add">-->
-<!--          <el-button plain size="small" @click="showPart(0)">-->
-<!--            <f-a class="icon-small" name="plus"></f-a>-->
-<!--            添加-->
-<!--          </el-button>-->
-<!--        </perm>-->
+        <!--        <perm label="tms-waybill-add">-->
+        <!--          <el-button plain size="small" @click="showPart(0)">-->
+        <!--            <f-a class="icon-small" name="plus"></f-a>-->
+        <!--            添加-->
+        <!--          </el-button>-->
+        <!--        </perm>-->
         <perm label="tms-waybill-verifyPass">
           <el-button plain size="small" @click="autoConfirmWayBill" v-if="filters.status==='-2'">
             <f-a class="icon-small" name="wave"></f-a>
@@ -84,8 +84,8 @@
                v-for="(item,key) in orderType"
                @click="changeStatus(item,key)">
             <div class="status-bg" :class="['b_color_'+key]"></div>
-            <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{item.title}}<span
-              class="status-num">{{item.num}}</span></div>
+            <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{ item.title }}<span
+              class="status-num">{{ item.num }}</span></div>
           </div>
         </div>
       </el-col>
@@ -96,8 +96,8 @@
                v-for="(item,key) in orderType"
                @click="changeStatus(item,key)">
             <div class="status-bg" :class="['b_color_'+key]"></div>
-            <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{item.title}}<span
-              class="status-num">{{item.num}}</span></div>
+            <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{ item.title }}<span
+              class="status-num">{{ item.num }}</span></div>
           </div>
         </div>
       </el-col>
@@ -145,7 +145,7 @@
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
-                {{item.waybillNumber}}
+                {{ item.waybillNumber }}
               </div>
             </el-col>
             <el-col :span="2" class="R">
@@ -161,23 +161,23 @@
             </el-col>
             <el-col :span="4" class="R">
               <div>
-                {{item.senderName}}
+                {{ item.senderName }}
               </div>
               <div>
-                {{item.senderAddress}}
-              </div>
-            </el-col>
-            <el-col :span="4" class="R">
-              <div>
-                {{item.receiverName}}
-              </div>
-              <div>
-                {{item.receiverAddress}}
+                {{ item.senderAddress }}
               </div>
             </el-col>
             <el-col :span="4" class="R">
               <div>
-                {{item.carryType}}
+                {{ item.receiverName }}
+              </div>
+              <div>
+                {{ item.receiverAddress }}
+              </div>
+            </el-col>
+            <el-col :span="4" class="R">
+              <div>
+                {{ item.carryType }}
               </div>
             </el-col>
             <!--<el-col :span="5" class="R">-->
@@ -187,22 +187,22 @@
             <!--</el-col>-->
             <el-col :span="1" class="R">
               <div>
-                {{item.wholeBoxCount}}
+                {{ item.wholeBoxCount }}
               </div>
             </el-col>
             <el-col :span="1" class="R">
               <div>
-                {{item.bulkBoxCount}}
+                {{ item.bulkBoxCount }}
               </div>
             </el-col>
             <el-col :span="1" class="R">
               <div>
-                {{item.incubatorCount}}
+                {{ item.incubatorCount }}
               </div>
             </el-col>
             <el-col :span="1" class="R">
               <div>
-                {{item.preIncubatorCount}}
+                {{ item.preIncubatorCount }}
               </div>
             </el-col>
             <!--<el-col :span="2" class="R">-->
@@ -213,27 +213,28 @@
             <el-col :span="4" class="R">
               <div v-show="item.deliveryTime&&!item.waybillCompleteTime">
                 <span>送达时限:</span>
-                {{item.deliveryTime|date}}
+                {{ item.deliveryTime|date }}
               </div>
               <div v-show="item.startTransportTime">
                 <span>[启运] </span>
-                {{item.startTransportTime|time}}
+                {{ item.startTransportTime|time }}
               </div>
               <div v-show="item.deliveryCompleteTime">
                 <span>[送达] </span>
-                {{item.deliveryCompleteTime|time}}
+                {{ item.deliveryCompleteTime|time }}
               </div>
               <div v-show="item.waybillCompleteTime">
                 <span>[结束] </span>
-                {{item.waybillCompleteTime|time}}
+                {{ item.waybillCompleteTime|time }}
               </div>
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{formatStatusTitle(item.status, orderType)}}
+                {{ formatStatusTitle(item.status, orderType) }}
               </div>
               <div v-show="item.suspendReason&&item.status==='6'">
-                中止原因：<dict :dict-group="'waybillEndReason'" :dict-key="item.suspendReason"></dict>
+                中止原因：
+                <dict :dict-group="'waybillEndReason'" :dict-key="item.suspendReason"></dict>
               </div>
               <div>
                 <el-tag v-if="!item.packFlag" type="warning">未打包</el-tag>
@@ -298,12 +299,15 @@
                     </span>
                 </perm>
                 <perm label="tms-waybill-shipment" class="opera-btn">
-                    <span @click.stop="shipmentWayBill(item)" v-if="item.status === '1'&&item.waybillType==='1-1'">
+                  <!-- 自行承运，待启运 -->
+                  <span @click.stop="shipmentWayBill(item)"
+                        v-if="item.carryType === '0' && item.status === '1' && item.waybillType==='1-1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-start"></i>
                       </a>启运销退运单
                     </span>
-                  <span @click.stop="shipmentWayBill(item)" v-if="item.status === '1'">
+                  <span @click.stop="shipmentWayBill(item)"
+                        v-if="item.carryType === '1' && item.status === '1' && !item.butt">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-start"></i>
                       </a>启运
@@ -335,10 +339,10 @@
           <el-col :span="2"></el-col>
           <el-col :span="4"></el-col>
           <el-col :span="4">合计</el-col>
-          <el-col :span="1">{{totalCount.whole}}</el-col>
-          <el-col :span="1">{{totalCount.buck}}</el-col>
-          <el-col :span="1">{{totalCount.incubatorCount}}</el-col>
-          <el-col :span="1">{{totalCount.preIncubatorCount}}</el-col>
+          <el-col :span="1">{{ totalCount.whole }}</el-col>
+          <el-col :span="1">{{ totalCount.buck }}</el-col>
+          <el-col :span="1">{{ totalCount.incubatorCount }}</el-col>
+          <el-col :span="1">{{ totalCount.preIncubatorCount }}</el-col>
           <!--<el-col :span="2">预估包件</el-col>-->
           <el-col :span="4"></el-col>
           <el-col :span="2"></el-col>
@@ -398,611 +402,611 @@
   </div>
 </template>
 <script>
-  import utils from '@/tools/utils';
-  import SearchPart from './search';
-  import {http, TmsWayBill} from '@/resources';
-  import addForm from './form/add-form.vue';
-  import showForm from './form/show-form.vue';
-  import signForm from './form/sign-form';
-  import deliverForm from './form/deliver-form';
-  import untieForm from './form/untie-form';
-  import assessmentForm from './form/assessment-form';
-  import StatusMixin from '@/mixins/statusMixin';
-  import confirmForm from './form/confirm-form';
-  import autoForm from './form/auto-form';
-  import batchAutoForm from './form/batch-auto-form';
-  import MapPath from './form/map-path';
+import utils from '@/tools/utils';
+import SearchPart from './search';
+import {http, TmsWayBill} from '@/resources';
+import addForm from './form/add-form.vue';
+import showForm from './form/show-form.vue';
+import signForm from './form/sign-form';
+import deliverForm from './form/deliver-form';
+import untieForm from './form/untie-form';
+import assessmentForm from './form/assessment-form';
+import StatusMixin from '@/mixins/statusMixin';
+import confirmForm from './form/confirm-form';
+import autoForm from './form/auto-form';
+import batchAutoForm from './form/batch-auto-form';
+import MapPath from './form/map-path';
 
-  export default {
-    components: {
-      SearchPart, addForm, MapPath
-    },
-    mixins: [StatusMixin],
-    data() {
-      return {
-        loadingData: false,
-        activeStatus: 0,
-        orderType: utils.wayBillType,
-        dataList: [],
-        showIndex: -1,
-        showInfoIndex: -1,
-        showSignIndex: -1,
-        showDeliverIndex: -1,
-        showAssessmentIndex: -1,
-        showConfirmIndex: -1,
-        showAutoIndex: -1,
-        showBatchAutoIndex: -1,
-        showUntieIndex: -1,
-        currentPart: null,
-        currentInfoPart: null,
-        currentSignPart: null,
-        currentDeliverPart: null,
-        currentConfirmPart: null,
-        currentAutoPart: null,
-        currentUntiePart: null,
-        currentBatchAutoPart: null,
-        currentAssessmentPart: null,
-        dialogComponents: {
-          0: addForm
-        },
-        dialogInfoComponents: {
-          0: showForm
-        },
-        dialogSignComponents: {
-          0: signForm
-        },
-        dialogDeliverComponents: {
-          0: deliverForm
-        },
-        dialogAssessmentComponents: {
-          0: assessmentForm
-        },
-        dialogUntieComponents: {
-          0: untieForm
-        },
-        dialogConfirmComponents: {
-          0: confirmForm
-        },
-        dialogAutoComponents: {
-          0: autoForm
-        },
-        dialogBatchAutoComponents: {
-          0: batchAutoForm
-        },
-        pager: {
-          currentPage: 1,
-          count: 0,
-          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
-          totalPage: 1
-        },
-        action: '',
-        form: {},
-        filters: {
-          status: null,
-          waybillNumber: '',
-          tmsOrderNumber: '',
-          orderNo:'',
-          waybillType: '',
-          shipmentWay: '',
-          deliveryWay:'',
-          serviceType: '',
-          senderId: '',
-          receiverId: '',
-          startTime: '',
-          endTime: '',
-          packFlag: '',
-          destinationAreaCode:'',
-          goodsTotalName:''
-        },
-        isCheckAll: false,
-        checkList: [],
-        checkListPara: [],
-        shoWayBillPart: false,
-        isLoading: false,
-        waybillIdList: [],
-        condition: {},
-        formItem: {},
-        isShowMulBigMap: false
-      };
-    },
-    computed: {
-      bodyHeight: function () {
-        let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height + 136) + 'px';
+export default {
+  components: {
+    SearchPart, addForm, MapPath
+  },
+  mixins: [StatusMixin],
+  data() {
+    return {
+      loadingData: false,
+      activeStatus: 0,
+      orderType: utils.wayBillType,
+      dataList: [],
+      showIndex: -1,
+      showInfoIndex: -1,
+      showSignIndex: -1,
+      showDeliverIndex: -1,
+      showAssessmentIndex: -1,
+      showConfirmIndex: -1,
+      showAutoIndex: -1,
+      showBatchAutoIndex: -1,
+      showUntieIndex: -1,
+      currentPart: null,
+      currentInfoPart: null,
+      currentSignPart: null,
+      currentDeliverPart: null,
+      currentConfirmPart: null,
+      currentAutoPart: null,
+      currentUntiePart: null,
+      currentBatchAutoPart: null,
+      currentAssessmentPart: null,
+      dialogComponents: {
+        0: addForm
       },
-      totalCount() {
-        let total = {
-          whole: 0,
-          buck: 0,
-          incubatorCount: 0,
-          preIncubatorCount: 0
-        };
-        this.dataList.forEach(i => {
-          total.whole += i.wholeBoxCount;
-          total.buck += i.bulkBoxCount;
-          total.incubatorCount += i.incubatorCount;
-          total.preIncubatorCount += i.preIncubatorCount;
-        });
-        return total;
-      }
-    },
-    watch: {
+      dialogInfoComponents: {
+        0: showForm
+      },
+      dialogSignComponents: {
+        0: signForm
+      },
+      dialogDeliverComponents: {
+        0: deliverForm
+      },
+      dialogAssessmentComponents: {
+        0: assessmentForm
+      },
+      dialogUntieComponents: {
+        0: untieForm
+      },
+      dialogConfirmComponents: {
+        0: confirmForm
+      },
+      dialogAutoComponents: {
+        0: autoForm
+      },
+      dialogBatchAutoComponents: {
+        0: batchAutoForm
+      },
+      pager: {
+        currentPage: 1,
+        count: 0,
+        pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
+        totalPage: 1
+      },
+      action: '',
+      form: {},
       filters: {
-        handler: function () {
-          this.getTmsWayBillPage(1);
-        },
-        deep: true
-      }
-    },
-    mounted() {
-      this.getTmsWayBillPage(1);
-      let id = this.$route.params.id;
-      if (id !== 'list' && id !== ':id') {
-        this.showInfo({id});
-      } else {
-        this.$router.push('/document/transport/list');
-      }
-    },
-    methods: {
-      showBigMap(formItem) {
-        this.formItem = {};
-        this.isShowMulBigMap = true;
-        this.$nextTick(() => {
-          setTimeout(() => {
-            this.formItem = formItem;
-          }, 300);
-        });
+        status: null,
+        waybillNumber: '',
+        tmsOrderNumber: '',
+        orderNo: '',
+        waybillType: '',
+        shipmentWay: '',
+        deliveryWay: '',
+        serviceType: '',
+        senderId: '',
+        receiverId: '',
+        startTime: '',
+        endTime: '',
+        packFlag: '',
+        destinationAreaCode: '',
+        goodsTotalName: ''
       },
-      exportSearchFile: function () {
-        this.isLoading = true;
-        this.$store.commit('initPrint', {
-          isPrinting: true,
-          moduleId: '/document/transport',
-          text: '正在导出'
-        });
-        let params = Object.assign({}, this.filters);
-        http.get('/tms-waybill/list/export/excel', {params}).then(res => {
-          utils.download(res.data.path, '运单表');
-          this.isLoading = false;
-          this.$store.commit('initPrint', {
-            isPrinting: false,
-            moduleId: '/document/transport'
-          });
-          // 清空勾选
-          this.dataList.forEach(val => {
-            val.isChecked = false;
-          });
-        }).catch(error => {
-          this.isLoading = false;
-          this.$store.commit('initPrint', {
-            isPrinting: false,
-            moduleId: '/document/transport'
-          });
-          this.$notify.error({
-            message: error.response&&error.response.data && error.response.data.msg || '导出失败'
-          });
-        });
+      isCheckAll: false,
+      checkList: [],
+      checkListPara: [],
+      shoWayBillPart: false,
+      isLoading: false,
+      waybillIdList: [],
+      condition: {},
+      formItem: {},
+      isShowMulBigMap: false
+    };
+  },
+  computed: {
+    bodyHeight: function () {
+      let height = parseInt(this.$store.state.bodyHeight, 10);
+      return (height + 136) + 'px';
+    },
+    totalCount() {
+      let total = {
+        whole: 0,
+        buck: 0,
+        incubatorCount: 0,
+        preIncubatorCount: 0
+      };
+      this.dataList.forEach(i => {
+        total.whole += i.wholeBoxCount;
+        total.buck += i.bulkBoxCount;
+        total.incubatorCount += i.incubatorCount;
+        total.preIncubatorCount += i.preIncubatorCount;
+      });
+      return total;
+    }
+  },
+  watch: {
+    filters: {
+      handler: function () {
+        this.getTmsWayBillPage(1);
       },
-
-      exportFile: function () {
-        if (!this.checkList.length) {
-          this.$notify.warning({
-            duration: 2000,
-            message: '请勾选需要导出的运单'
-          });
-          return;
-        }
-        this.isLoading = true;
+      deep: true
+    }
+  },
+  mounted() {
+    this.getTmsWayBillPage(1);
+    let id = this.$route.params.id;
+    if (id !== 'list' && id !== ':id') {
+      this.showInfo({id});
+    } else {
+      this.$router.push('/document/transport/list');
+    }
+  },
+  methods: {
+    showBigMap(formItem) {
+      this.formItem = {};
+      this.isShowMulBigMap = true;
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.formItem = formItem;
+        }, 300);
+      });
+    },
+    exportSearchFile: function () {
+      this.isLoading = true;
+      this.$store.commit('initPrint', {
+        isPrinting: true,
+        moduleId: '/document/transport',
+        text: '正在导出'
+      });
+      let params = Object.assign({}, this.filters);
+      http.get('/tms-waybill/list/export/excel', {params}).then(res => {
+        utils.download(res.data.path, '运单表');
+        this.isLoading = false;
         this.$store.commit('initPrint', {
-          isPrinting: true,
+          isPrinting: false,
           moduleId: '/document/transport'
         });
-        let params = Object.assign({}, {waybillIdList: this.waybillIdList});
-        http.post('tms-waybill/export', params).then(res => {
-          utils.download(res.data.url, '运单表');
-          this.isLoading = false;
-          this.$store.commit('initPrint', {
-            isPrinting: false,
-            moduleId: '/document/transport'
+        // 清空勾选
+        this.dataList.forEach(val => {
+          val.isChecked = false;
+        });
+      }).catch(error => {
+        this.isLoading = false;
+        this.$store.commit('initPrint', {
+          isPrinting: false,
+          moduleId: '/document/transport'
+        });
+        this.$notify.error({
+          message: error.response && error.response.data && error.response.data.msg || '导出失败'
+        });
+      });
+    },
+
+    exportFile: function () {
+      if (!this.checkList.length) {
+        this.$notify.warning({
+          duration: 2000,
+          message: '请勾选需要导出的运单'
+        });
+        return;
+      }
+      this.isLoading = true;
+      this.$store.commit('initPrint', {
+        isPrinting: true,
+        moduleId: '/document/transport'
+      });
+      let params = Object.assign({}, {waybillIdList: this.waybillIdList});
+      http.post('tms-waybill/export', params).then(res => {
+        utils.download(res.data.url, '运单表');
+        this.isLoading = false;
+        this.$store.commit('initPrint', {
+          isPrinting: false,
+          moduleId: '/document/transport'
+        });
+        // 清空勾选
+        this.dataList.forEach(val => {
+          val.isChecked = false;
+        });
+      }).catch(error => {
+        this.isLoading = false;
+        this.$store.commit('initPrint', {
+          isPrinting: false,
+          moduleId: '/document/transport'
+        });
+        this.$notify.error({
+          message: error.response && error.response.data && error.response.data.msg || '导出失败'
+        });
+      });
+    },
+    packageWayBill: function (item) {
+      this.$confirm('确认对运单"' + item.waybillNumber + '进行打包操作"?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        TmsWayBill.packageWayBill(item.id).then(() => {
+          this.$notify.success({
+            duration: 2000,
+            title: '成功',
+            message: '运单"' + item.waybillNumber + '已完成打包"'
           });
-          // 清空勾选
-          this.dataList.forEach(val => {
-            val.isChecked = false;
-          });
+          this.getTmsWayBillPage(1);
         }).catch(error => {
-          this.isLoading = false;
-          this.$store.commit('initPrint', {
-            isPrinting: false,
-            moduleId: '/document/transport'
-          });
           this.$notify.error({
-            message: error.response&&error.response.data && error.response.data.msg || '导出失败'
-          });
-        });
-      },
-      packageWayBill: function (item) {
-        this.$confirm('确认对运单"' + item.waybillNumber + '进行打包操作"?', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          TmsWayBill.packageWayBill(item.id).then(() => {
-            this.$notify.success({
-              duration: 2000,
-              title: '成功',
-              message: '运单"' + item.waybillNumber + '已完成打包"'
-            });
-            this.getTmsWayBillPage(1);
-          }).catch(error => {
-            this.$notify.error({
-              duration: 2000,
-              message: error.response && error.response.data && error.response.data.msg || '运单打包失败'
-            });
-          });
-        }).catch(() => {
-
-        });
-      },
-      autoWayBillList: function () {
-        if (!this.checkList.length) {
-          this.$notify.warning({
             duration: 2000,
-            message: '请勾选需要自动排单的运单'
+            message: error.response && error.response.data && error.response.data.msg || '运单打包失败'
           });
-          return;
-        }
-        this.showAutoIndex = 0;
-        this.currentAutoPart = this.dialogAutoComponents[0];
-        this.$nextTick(() => {
-          this.checkListPara = this.checkList.slice();
         });
-      },
-      batchAutoWayBillList: function () {
-        this.showBatchAutoIndex = 0;
-        this.currentBatchAutoPart = this.dialogBatchAutoComponents[0];
-        this.$nextTick(() => {
-          this.condition = Object.assign({}, this.filters);
+      }).catch(() => {
+
+      });
+    },
+    autoWayBillList: function () {
+      if (!this.checkList.length) {
+        this.$notify.warning({
+          duration: 2000,
+          message: '请勾选需要自动排单的运单'
         });
-      },
-      batchConfirmWayBill: function () {
-        if (!this.checkList.length) {
-          this.$notify.warning({
+        return;
+      }
+      this.showAutoIndex = 0;
+      this.currentAutoPart = this.dialogAutoComponents[0];
+      this.$nextTick(() => {
+        this.checkListPara = this.checkList.slice();
+      });
+    },
+    batchAutoWayBillList: function () {
+      this.showBatchAutoIndex = 0;
+      this.currentBatchAutoPart = this.dialogBatchAutoComponents[0];
+      this.$nextTick(() => {
+        this.condition = Object.assign({}, this.filters);
+      });
+    },
+    batchConfirmWayBill: function () {
+      if (!this.checkList.length) {
+        this.$notify.warning({
+          duration: 2000,
+          message: '请勾选需要确认的运单'
+        });
+        return;
+      }
+      this.showConfirmIndex = 0;
+      this.currentConfirmPart = this.dialogConfirmComponents[0];
+      this.$nextTick(() => {
+        this.checkListPara = this.checkList.slice();
+      });
+    },
+    autoConfirmWayBill: function () {
+      this.$confirm('是否对状态为待确认的运单进行批量确认操作?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let param = Object.assign({}, this.filters);
+        TmsWayBill.autoConfirmWayBill(param).then(() => {
+          this.$notify.success({
             duration: 2000,
-            message: '请勾选需要确认的运单'
+            title: '成功',
+            message: '已成功生成运单'
           });
-          return;
+          this.filters = {
+            status: '0',
+            waybillNumber: '',
+            tmsOrderNumber: '',
+            waybillType: '',
+            shipmentWay: '',
+            serviceType: '',
+            senderId: '',
+            receiverId: '',
+            startTime: '',
+            endTime: '',
+            packFlag: ''
+          };
+          this.getTmsWayBillPage(1);
+        }).catch(error => {
+          this.$notify.error({
+            duration: 2000,
+            message: error.response && error.response.data && error.response.data.msg || '批量确认运单失败'
+          });
+        });
+      }).catch(() => {
+
+      });
+    },
+    confirm: function (item) {
+      this.$confirm('确认运单"' + item.waybillNumber + '信息"?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        TmsWayBill.confirmWayBill(item.id).then(() => {
+          this.$notify.success({
+            duration: 2000,
+            title: '成功',
+            message: '已成功确认运单"' + item.waybillNumber + '"'
+          });
+          this.getTmsWayBillPage(1);
+        }).catch(error => {
+          this.$notify.error({
+            duration: 2000,
+            message: error.response && error.response.data && error.response.data.msg || '确认运单失败'
+          });
+        });
+      }).catch(() => {
+
+      });
+    },
+    deliveryWayBill: function (item) {
+      this.$confirm('确认运单"' + item.waybillNumber + '"已送达?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        TmsWayBill.deliveryWayBill(item.id).then(() => {
+          this.$notify.success({
+            duration: 2000,
+            title: '成功',
+            message: '已成功送达运单"' + item.waybillNumber + '"'
+          });
+          this.getTmsWayBillPage(1);
+        }).catch(error => {
+          this.$notify.error({
+            duration: 2000,
+            message: error.response && error.response.data && error.response.data.msg || '运单送达失败'
+          });
+        });
+      }).catch(() => {
+
+      });
+    },
+    checkItem: function (item) {
+      // 单选
+      item.isChecked = !item.isChecked;
+      let index = this.checkList.indexOf(item);
+      let idIndex = this.waybillIdList.indexOf(item.id);
+      if (item.isChecked) {
+        if (index === -1) {
+          this.checkList.push(item);
         }
-        this.showConfirmIndex = 0;
-        this.currentConfirmPart = this.dialogConfirmComponents[0];
-        this.$nextTick(() => {
-          this.checkListPara = this.checkList.slice();
-        });
-      },
-      autoConfirmWayBill: function () {
-        this.$confirm('是否对状态为待确认的运单进行批量确认操作?', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let param = Object.assign({}, this.filters);
-          TmsWayBill.autoConfirmWayBill(param).then(() => {
-            this.$notify.success({
-              duration: 2000,
-              title: '成功',
-              message: '已成功生成运单'
-            });
-            this.filters = {
-              status: '0',
-              waybillNumber: '',
-              tmsOrderNumber: '',
-              waybillType: '',
-              shipmentWay: '',
-              serviceType: '',
-              senderId: '',
-              receiverId: '',
-              startTime: '',
-              endTime: '',
-              packFlag: ''
-            };
-            this.getTmsWayBillPage(1);
-          }).catch(error => {
-            this.$notify.error({
-              duration: 2000,
-              message: error.response && error.response.data && error.response.data.msg || '批量确认运单失败'
-            });
-          });
-        }).catch(() => {
-
-        });
-      },
-      confirm: function (item) {
-        this.$confirm('确认运单"' + item.waybillNumber + '信息"?', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          TmsWayBill.confirmWayBill(item.id).then(() => {
-            this.$notify.success({
-              duration: 2000,
-              title: '成功',
-              message: '已成功确认运单"' + item.waybillNumber + '"'
-            });
-            this.getTmsWayBillPage(1);
-          }).catch(error => {
-            this.$notify.error({
-              duration: 2000,
-              message: error.response && error.response.data && error.response.data.msg || '确认运单失败'
-            });
-          });
-        }).catch(() => {
-
-        });
-      },
-      deliveryWayBill: function (item) {
-        this.$confirm('确认运单"' + item.waybillNumber + '"已送达?', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          TmsWayBill.deliveryWayBill(item.id).then(() => {
-            this.$notify.success({
-              duration: 2000,
-              title: '成功',
-              message: '已成功送达运单"' + item.waybillNumber + '"'
-            });
-            this.getTmsWayBillPage(1);
-          }).catch(error => {
-            this.$notify.error({
-              duration: 2000,
-              message: error.response && error.response.data && error.response.data.msg || '运单送达失败'
-            });
-          });
-        }).catch(() => {
-
-        });
-      },
-      checkItem: function (item) {
-        // 单选
-        item.isChecked = !item.isChecked;
-        let index = this.checkList.indexOf(item);
-        let idIndex = this.waybillIdList.indexOf(item.id);
-        if (item.isChecked) {
+        if (idIndex === -1) {
+          this.waybillIdList.push(item.id);
+        }
+      } else {
+        this.checkList.splice(index, 1);
+        this.waybillIdList.splice(idIndex, 1);
+      }
+    },
+    checkAll() {
+      // 全选
+      if (this.isCheckAll) {
+        this.dataList.forEach(item => {
+          item.isChecked = true;
+          let index = this.checkList.indexOf(item);
           if (index === -1) {
             this.checkList.push(item);
           }
+          let idIndex = this.waybillIdList.indexOf(item.id);
           if (idIndex === -1) {
             this.waybillIdList.push(item.id);
           }
-        } else {
-          this.checkList.splice(index, 1);
-          this.waybillIdList.splice(idIndex, 1);
-        }
-      },
-      checkAll() {
-        // 全选
-        if (this.isCheckAll) {
-          this.dataList.forEach(item => {
-            item.isChecked = true;
-            let index = this.checkList.indexOf(item);
-            if (index === -1) {
-              this.checkList.push(item);
-            }
-            let idIndex = this.waybillIdList.indexOf(item.id);
-            if (idIndex === -1) {
-              this.waybillIdList.push(item.id);
-            }
-          });
-        } else {
-          this.dataList.forEach(item => {
-            item.isChecked = false;
-          });
-          this.checkList = [];
-          this.waybillIdList = [];
-        }
-      },
-      signWayBill: function (item) {
-        this.showSignIndex = 0;
-        this.currentSignPart = this.dialogSignComponents[0];
-        this.$nextTick(() => {
-          this.form = JSON.parse(JSON.stringify(item));
         });
-      },
-      deliverDate: function (item) {
-        this.showDeliverIndex = 0;
-        this.currentDeliverPart = this.dialogDeliverComponents[0];
-        this.$nextTick(() => {
-          this.form = JSON.parse(JSON.stringify(item));
+      } else {
+        this.dataList.forEach(item => {
+          item.isChecked = false;
         });
-      },
-      assessmentWayBill: function (item) {
-        this.showAssessmentIndex = 0;
-        this.currentAssessmentPart = this.dialogAssessmentComponents[0];
-        this.$nextTick(() => {
-          this.form = JSON.parse(JSON.stringify(item));
-        });
-      },
-      untieWayBill: function (item) {
-        this.showUntieIndex = 0;
-        this.currentUntiePart = this.dialogUntieComponents[0];
-        this.$nextTick(() => {
-          this.form = JSON.parse(JSON.stringify(item));
-        });
-      },
-      shipmentWayBill: function (item) {
-        this.$confirm('确认启运销退运单"' + item.waybillNumber + '"?', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          TmsWayBill.shipmentWayBill(item.id).then(() => {
-            this.$notify.success({
-              duration: 2000,
-              title: '成功',
-              message: '已成功启运销退运单"' + item.waybillNumber + '"'
-            });
-            this.getTmsWayBillPage(1);
-          }).catch(error => {
-            this.$notify.error({
-              duration: 2000,
-              message: error.response && error.response.data && error.response.data.msg || '启运销退运单失败'
-            });
-          });
-        }).catch(() => {
-
-        });
-      },
-      cancelWayBill: function (item) {
-        this.$confirm('确认取消运单"' + item.waybillNumber + '"?', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          TmsWayBill.cancelWayBill(item.id).then(() => {
-            this.$notify.success({
-              duration: 2000,
-              title: '成功',
-              message: '已成功取消运单"' + item.waybillNumber + '"'
-            });
-            this.getTmsWayBillPage(1);
-          }).catch(error => {
-            this.$notify.error({
-              duration: 2000,
-              message: error.response && error.response.data && error.response.data.msg || '取消运单失败'
-            });
-          });
-        }).catch(() => {
-
-        });
-      },
-      handleSizeChange(val) {
-        this.pager.pageSize = val;
-        window.localStorage.setItem('currentPageSize', val);
-        this.getTmsWayBillPage(1);
-      },
-      handleCurrentChange(val) {
-        this.getTmsWayBillPage(val);
-      },
-      searchResult: function (search) {
-        Object.assign(this.filters, search);
-      },
-      checkStatus(item, key) {
-        this.filters.status = item.status;
-        this.activeStatus = key;
         this.checkList = [];
-        this.checkListPara = [];
-      },
-      changeStatus: function (item, key) {// 订单分类改变
-        this.activeStatus = key;
-        this.filters.status = item.status;
-      },
-      resetRightBox() {
-        this.showIndex = -1;
-        this.showInfoIndex = -1;
-        this.shoWayBillPart = false;
-        this.showSignIndex = -1;
-        this.showDeliverIndex = -1;
-        this.showAssessmentIndex = -1;
-        this.showConfirmIndex = -1;
-        this.showAutoIndex = -1;
-        this.showBatchAutoIndex = -1;
-        this.showUntieIndex = -1;
-        this.$router.push('/document/transport/list');
-      },
-      getTmsWayBillPage: function (pageNo, isContinue = false) {
-        this.pager.currentPage = pageNo;
-        let param = Object.assign({}, {
-          pageNo: pageNo,
-          pageSize: this.pager.pageSize
-        }, this.filters);
-        if (this.isCheckAll) {
-          this.isCheckAll = false;
-        }
-        this.loadingData = true;
-        // 清空勾选列表
-        this.checkList = [];
-        this.checkListPara = [];
-        let nowTime = Date.now();
-        this.nowTime = nowTime;
-        TmsWayBill.query(param).then(res => {
-          if (this.nowTime > nowTime) return;
-          res.data.list.forEach(val => {
-            val.isChecked = false;
-          });
-          if (isContinue) {
-            this.dataList = this.showTypeList.concat(res.data.list);
-          } else {
-            this.dataList = res.data.list;
-          }
-          this.pager.count = res.data.count;
-          this.loadingData = false;
-        });
-        this.queryStateNum(param);
-      },
-      queryStateNum: function (params) {
-        TmsWayBill.queryStateNum(params).then(res => {
-          let data = res.data;
-          let count = 0;
-          Object.keys(data).map(k => (count += data[k]));
-          this.orderType[0].num = count;
-          this.orderType[1].num = data['pend-confirm'];
-          this.orderType[2].num = data['pend-package'];
-          this.orderType[3].num = data['pend-choose-car'];
-          this.orderType[4].num = data['pend-shipment'];
-          this.orderType[5].num = data['pend-delivery'];
-          this.orderType[6].num = data['pend-sign'];
-          this.orderType[7].num = data['complete'];
-          this.orderType[8].num = data['canceled'];
-          this.orderType[9].num = data['pend-check'];
-          this.orderType[10].num = data['suspend'];
-        });
-      },
-      showPart(index) {
-        this.action = 'add';
-        this.showIndex = index;
-        this.currentPart = this.dialogComponents[index];
-        this.form = {
-          receiverAddressLongitude: '',
-          receiverAddressDimension: '',
-          goodsList: [
-            {
-              goodsName: '',
-              specifications: '',
-              weight: '',
-              volume: '',
-              code: ''
-            }
-          ]
-        };
-      },
-      edit: function (item) {
-        this.currentItem = item;
-        this.currentItemId = item.id;
-        this.action = 'edit';
-        this.showIndex = 0;
-        this.currentPart = this.dialogComponents[0];
-        this.$nextTick(() => {
-          this.form = JSON.parse(JSON.stringify(item));
-        });
-      },
-      showInfo: function (item) {
-        this.currentItem = item;
-        this.currentItemId = item.id;
-        this.showInfoIndex = 0;
-        this.currentInfoPart = this.dialogInfoComponents[0];
-        this.$nextTick(() => {
-          this.form = JSON.parse(JSON.stringify(item));
-          this.$router.push('/document/transport/' + item.id);
-        });
-      },
-      submit() {
-        this.checkList = [];
-        this.checkListPara = [];
-        this.getTmsWayBillPage(1);
-      },
-      autoSubmit() {
-        this.checkList = [];
-        this.checkListPara = [];
+        this.waybillIdList = [];
       }
+    },
+    signWayBill: function (item) {
+      this.showSignIndex = 0;
+      this.currentSignPart = this.dialogSignComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(item));
+      });
+    },
+    deliverDate: function (item) {
+      this.showDeliverIndex = 0;
+      this.currentDeliverPart = this.dialogDeliverComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(item));
+      });
+    },
+    assessmentWayBill: function (item) {
+      this.showAssessmentIndex = 0;
+      this.currentAssessmentPart = this.dialogAssessmentComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(item));
+      });
+    },
+    untieWayBill: function (item) {
+      this.showUntieIndex = 0;
+      this.currentUntiePart = this.dialogUntieComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(item));
+      });
+    },
+    shipmentWayBill: function (item) {
+      this.$confirm('确认启运销退运单"' + item.waybillNumber + '"?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        TmsWayBill.shipmentWayBill(item.id).then(() => {
+          this.$notify.success({
+            duration: 2000,
+            title: '成功',
+            message: '已成功启运销退运单"' + item.waybillNumber + '"'
+          });
+          this.getTmsWayBillPage(1);
+        }).catch(error => {
+          this.$notify.error({
+            duration: 2000,
+            message: error.response && error.response.data && error.response.data.msg || '启运销退运单失败'
+          });
+        });
+      }).catch(() => {
+
+      });
+    },
+    cancelWayBill: function (item) {
+      this.$confirm('确认取消运单"' + item.waybillNumber + '"?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        TmsWayBill.cancelWayBill(item.id).then(() => {
+          this.$notify.success({
+            duration: 2000,
+            title: '成功',
+            message: '已成功取消运单"' + item.waybillNumber + '"'
+          });
+          this.getTmsWayBillPage(1);
+        }).catch(error => {
+          this.$notify.error({
+            duration: 2000,
+            message: error.response && error.response.data && error.response.data.msg || '取消运单失败'
+          });
+        });
+      }).catch(() => {
+
+      });
+    },
+    handleSizeChange(val) {
+      this.pager.pageSize = val;
+      window.localStorage.setItem('currentPageSize', val);
+      this.getTmsWayBillPage(1);
+    },
+    handleCurrentChange(val) {
+      this.getTmsWayBillPage(val);
+    },
+    searchResult: function (search) {
+      Object.assign(this.filters, search);
+    },
+    checkStatus(item, key) {
+      this.filters.status = item.status;
+      this.activeStatus = key;
+      this.checkList = [];
+      this.checkListPara = [];
+    },
+    changeStatus: function (item, key) {// 订单分类改变
+      this.activeStatus = key;
+      this.filters.status = item.status;
+    },
+    resetRightBox() {
+      this.showIndex = -1;
+      this.showInfoIndex = -1;
+      this.shoWayBillPart = false;
+      this.showSignIndex = -1;
+      this.showDeliverIndex = -1;
+      this.showAssessmentIndex = -1;
+      this.showConfirmIndex = -1;
+      this.showAutoIndex = -1;
+      this.showBatchAutoIndex = -1;
+      this.showUntieIndex = -1;
+      this.$router.push('/document/transport/list');
+    },
+    getTmsWayBillPage: function (pageNo, isContinue = false) {
+      this.pager.currentPage = pageNo;
+      let param = Object.assign({}, {
+        pageNo: pageNo,
+        pageSize: this.pager.pageSize
+      }, this.filters);
+      if (this.isCheckAll) {
+        this.isCheckAll = false;
+      }
+      this.loadingData = true;
+      // 清空勾选列表
+      this.checkList = [];
+      this.checkListPara = [];
+      let nowTime = Date.now();
+      this.nowTime = nowTime;
+      TmsWayBill.query(param).then(res => {
+        if (this.nowTime > nowTime) return;
+        res.data.list.forEach(val => {
+          val.isChecked = false;
+        });
+        if (isContinue) {
+          this.dataList = this.showTypeList.concat(res.data.list);
+        } else {
+          this.dataList = res.data.list;
+        }
+        this.pager.count = res.data.count;
+        this.loadingData = false;
+      });
+      this.queryStateNum(param);
+    },
+    queryStateNum: function (params) {
+      TmsWayBill.queryStateNum(params).then(res => {
+        let data = res.data;
+        let count = 0;
+        Object.keys(data).map(k => (count += data[k]));
+        this.orderType[0].num = count;
+        this.orderType[1].num = data['pend-confirm'];
+        this.orderType[2].num = data['pend-package'];
+        this.orderType[3].num = data['pend-choose-car'];
+        this.orderType[4].num = data['pend-shipment'];
+        this.orderType[5].num = data['pend-delivery'];
+        this.orderType[6].num = data['pend-sign'];
+        this.orderType[7].num = data['complete'];
+        this.orderType[8].num = data['canceled'];
+        this.orderType[9].num = data['pend-check'];
+        this.orderType[10].num = data['suspend'];
+      });
+    },
+    showPart(index) {
+      this.action = 'add';
+      this.showIndex = index;
+      this.currentPart = this.dialogComponents[index];
+      this.form = {
+        receiverAddressLongitude: '',
+        receiverAddressDimension: '',
+        goodsList: [
+          {
+            goodsName: '',
+            specifications: '',
+            weight: '',
+            volume: '',
+            code: ''
+          }
+        ]
+      };
+    },
+    edit: function (item) {
+      this.currentItem = item;
+      this.currentItemId = item.id;
+      this.action = 'edit';
+      this.showIndex = 0;
+      this.currentPart = this.dialogComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(item));
+      });
+    },
+    showInfo: function (item) {
+      this.currentItem = item;
+      this.currentItemId = item.id;
+      this.showInfoIndex = 0;
+      this.currentInfoPart = this.dialogInfoComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(item));
+        this.$router.push('/document/transport/' + item.id);
+      });
+    },
+    submit() {
+      this.checkList = [];
+      this.checkListPara = [];
+      this.getTmsWayBillPage(1);
+    },
+    autoSubmit() {
+      this.checkList = [];
+      this.checkListPara = [];
     }
-  };
+  }
+};
 </script>

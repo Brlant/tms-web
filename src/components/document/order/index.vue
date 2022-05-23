@@ -214,7 +214,7 @@
     <page-right :show="showWayBillPart" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
       <component :is="currentWayBillPart"
                  :carrierList="carrierList"
-                 @entrustShow="entrustShow"
+                 @wayBillShow="wayBillShow"
                  :checkList="checkListPara"
                  @right-close="resetRightBox" @change="submit"/>
     </page-right>
@@ -224,7 +224,7 @@
                  :carrierList="carrierList"
                  @right-close="resetRightBox"
                  @change="submit"
-                 @entrustShow="entrustShow"/>
+                 @wayBillShow="wayBillShow"/>
     </page-right>
     <page-right :show="showSplitOrderPart" @right-close="resetRightBox" :css="{'width':'1200px','padding':0}">
       <component :is="currentSplitOrderPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
@@ -235,16 +235,17 @@
                 v-show="isShowMulBigMap"></map-path>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogFormVisible" center width="30%" >
-      <el-form :model="dialogForm">
+    <el-dialog :visible.sync="dialogFormVisible" center width="25%">
+      <el-form ref="dialogForm" :model="dialogForm" :rules="dialogFormRules">
         <el-form-item label="承运类型" label-width="120px">
-          <el-radio-group v-model="dialogForm.carryType" size="mini">
-            <el-radio label="0">自行承运</el-radio>
-            <el-radio label="1">第三方承运</el-radio>
+          <el-radio-group v-model="dialogForm.carryType" size="mini" @change="carryTypeChangeHandle">
+            <el-radio :label="0">自行承运</el-radio>
+            <el-radio :label="1">第三方承运</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="承运商名称" style="max-width: max-content" label-width="120px">
-          <el-select v-model="dialogForm.carrierId" placeholder="请选择承运商" filterable
+        <el-form-item label="承运商名称" style="max-width: max-content" label-width="120px" prop="carrierId">
+          <el-select v-model="dialogForm.carrierId" :disabled="dialogForm.carryType === 0" placeholder="请选择承运商"
+                     filterable
                      size="mini">
             <el-option v-for="item in carrierList"
                        :key="item.carrierId"
@@ -259,7 +260,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="entrust">确认生成运单</el-button>
+        <el-button type="primary" @click="confirmBeforeHandle">确认生成运单</el-button>
         <el-button @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
@@ -346,15 +347,27 @@ export default {
       activeNo: '',
       isShowMulBigMap: false,
       dialogFormVisible: false,
-      single: false,//true批量生成运单，false是委托第三方承运
+      auto: false,//如果为true，表示自动生成运单
       dialogForm: {
-        carryType: '0',
+        carryType: 0,
         carrierId: '',
+      },
+      dialogFormRules: {
+        carrierId: {
+          trigger: 'change',
+          validator: (rules, value, cb) => {
+            if (this.dialogForm.carryType === 1 && !value) {
+              return cb(new Error('请选择第三方承运商'));
+            }
+
+            return cb();
+          },
+        }
       }
     };
   },
   computed: {
-    bodyHeight: function () {
+    bodyHeight() {
       let height = parseInt(this.$store.state.bodyHeight, 10);
       return (height + 116) + 'px';
     },
@@ -372,7 +385,7 @@ export default {
   },
   watch: {
     filters: {
-      handler: function () {
+      handler() {
         this.getTmsOrderPage(1);
       },
       deep: true
@@ -403,9 +416,9 @@ export default {
     this.getCarrierList(1);
   },
   methods: {
-    entrustShow(single){
+    wayBillShow(auto = false) {
       this.dialogFormVisible = true;
-      this.single = true
+      this.auto = auto
     },
     searchCarriers(keyword) {
       this.getCarrierList(1, keyword)
@@ -424,7 +437,7 @@ export default {
           this.carrierList = [];
         })
     },
-    exportOrder: function () {
+    exportOrder() {
       this.isLoading = true;
       this.$store.commit('initPrint', {
         isPrinting: true,
@@ -461,31 +474,79 @@ export default {
         }, 100);
       });
     },
-    autoCreateWayBill: function () {
+    autoCreateWayBill() {
       this.$confirm('确认将状态为待生成运单的订单自动生成为运单?', '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let param = Object.assign({}, this.filters);
-        TmsOrder.autoCreateWayBill(param).then(() => {
-          this.$notify.success({
-            duration: 2000,
-            title: '成功',
-            message: '已成功生成运单'
-          });
-          this.getTmsOrderPage(1);
-        }).catch(error => {
-          this.$notify.error({
-            duration: 2000,
-            message: error.response && error.response.data && error.response.data.msg || '自动生成运单失败'
-          });
-        });
+        this.wayBillShow(true);
       }).catch(() => {
 
       });
     },
-    cancelOrder: function (item) {
+    confirmBeforeHandle() {
+      this.$refs.dialogForm.validate((valid) => {
+        if (!valid || this.doing) {
+          return;
+        }
+
+        this.doing = true;
+        if (this.auto){
+          this.autoHandle();
+        }else {
+          this.batchHandle();
+        }
+      })
+    },
+    autoHandle() {
+      let param = Object.assign({}, this.filters,this.dialogForm);
+      TmsOrder.autoCreateWayBill(param).then(() => {
+        this.doing = false;
+        this.$notify.success({
+          duration: 2000,
+          title: '成功',
+          message: '已成功生成运单'
+        });
+        this.getTmsOrderPage(1);
+      }).catch(error => {
+        this.doing = false;
+        this.$notify.error({
+          duration: 2000,
+          message: error.response && error.response.data && error.response.data.msg || '自动生成运单失败'
+        });
+      });
+    },
+    batchHandle(){
+      // 批量操作所有订单都是一样的,重新组装下参数
+      const wayBillParams = this.checkListPara.map(item => {
+        return {
+          orderId: item.id,
+          ...this.dialogForm
+        }
+      });
+
+      TmsOrder.createWayBill({wayBillParams}, this.auto)
+        .then(() => {
+          this.doing = false;
+          this.$notify.success({
+            duration: 2000,
+            title: '成功',
+            message: '操作成功'
+          });
+
+          this.submit()
+          this.resetRightBox();
+        })
+        .catch(error => {
+          this.doing = false;
+          this.$notify.error({
+            duration: 2000,
+            message: error.response && error.response.data && error.response.data.msg || '操作失败'
+          });
+        });
+    },
+    cancelOrder(item) {
       this.$confirm('确认取消订单"' + item.orderNo + '"?', '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -508,7 +569,7 @@ export default {
 
       });
     },
-    splitOrder: function (item) {
+    splitOrder(item) {
       this.currentSplitOrderPart = this.dialogSplitFormComponents[0];
       this.showSplitOrderPart = true;
       this.$nextTick(() => {
@@ -524,7 +585,7 @@ export default {
     handleCurrentChange(val) {
       this.getTmsOrderPage(val);
     },
-    createWayBill: function () {
+    createWayBill() {
       if (!this.checkList.length) {
         this.$notify.warning({
           duration: 2000,
@@ -538,7 +599,7 @@ export default {
         this.checkListPara = this.checkList.slice();
       });
     },
-    singleCreateWayBill: function () {
+    singleCreateWayBill() {
       if (!this.checkList.length) {
         this.$notify.warning({
           duration: 2000,
@@ -552,7 +613,7 @@ export default {
         this.checkListPara = this.checkList.slice();
       });
     },
-    checkItem: function (item) {
+    checkItem(item) {
       // 单选
       // 单选
       item.isChecked = !item.isChecked;
@@ -582,7 +643,7 @@ export default {
         this.checkList = [];
       }
     },
-    searchResult: function (search) {
+    searchResult(search) {
       Object.assign(this.filters, search);
     },
     checkStatus(item, key) {
@@ -598,13 +659,13 @@ export default {
       this.showSingleWayBillPart = false;
       this.showSplitOrderPart = false;
       this.dialogForm = {
-        carryType: '0',
+        carryType: 0,
         carrierId: '',
       }
 
       this.$router.push('/document/order/list');
     },
-    getTmsOrderPage: function (pageNo, isContinue = false) {
+    getTmsOrderPage(pageNo, isContinue = false) {
       this.pager.currentPage = pageNo;
       let param = Object.assign({}, {
         pageNo: pageNo,
@@ -634,7 +695,7 @@ export default {
       });
       this.queryStateNum(param);
     },
-    queryStateNum: function (params) {
+    queryStateNum(params) {
       TmsOrder.queryStateNum(params).then(res => {
         let data = res.data;
         this.orderType[0].num = data['pend-generate-waybill'];
@@ -661,7 +722,7 @@ export default {
         ]
       };
     },
-    edit: function (item) {
+    edit(item) {
       this.currentItem = item;
       this.currentItemId = item.id;
       this.action = 'edit';
@@ -671,7 +732,7 @@ export default {
         this.form = JSON.parse(JSON.stringify(item));
       });
     },
-    deleteOrder: function (item) {
+    deleteOrder(item) {
       this.currentItem = item;
       this.currentItemId = item.id;
       this.$confirm('确认删除订单"' + item.orderNo + '"?', '', {
@@ -696,7 +757,7 @@ export default {
 
       });
     },
-    showInfo: function (item) {
+    showInfo(item) {
       this.currentItem = item;
       this.currentItemId = item.id;
       this.showInfoIndex = 0;
@@ -711,35 +772,12 @@ export default {
       this.checkListPara = [];
       this.getTmsOrderPage(1);
     },
-    entrust(wayBillParams) {
-      //委托的话，所有订单都是一样的,用dialogForm的值覆盖所有的订单中的承运类型和承运商
-      wayBillParams = wayBillParams.map(item => {
-        return {
-          ...item,
-          ...this.dialogForm
-        }
-      })
-
-      this.doing = true;
-      TmsOrder.createWayBill({wayBillParams},this.single)
-        .then(() => {
-          this.$notify.success({
-            duration: 2000,
-            title: '成功',
-            message: '操作成功'
-          });
-
-          this.doing = false;
-          this.submit()
-          this.resetRightBox();
-        }).catch(error => {
-        this.$notify.error({
-          duration: 2000,
-          message: error.response && error.response.data && error.response.data.msg || '操作失败'
-        });
-        this.doing = false;
-      });
-    },
+    carryTypeChangeHandle(val) {
+      if (val === 0){
+        // 如果是自行承运，去掉校验
+        this.$refs.dialogForm.clearValidate();
+      }
+    }
   }
 };
 </script>
