@@ -244,7 +244,7 @@
     },
     methods: {
       createWayBill: function () {
-        this.$emit('entrustShow');
+        this.$emit('wayBillShow');
       },
       showOrder: function (item, index) {
         if (item.id) {
