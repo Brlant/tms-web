@@ -14,7 +14,10 @@
       <!--</span>-->
       <!--</el-col>-->
       <el-col :span="22" class="text-right">
-        <el-button-group>
+        <div style="position: relative;top:-3.5px;display: inline-block;padding: 0 15px;">
+          <slot name="pre-btn"></slot>
+        </div>
+        <el-button-group class="ml-10">
           <perm label="show">
             <el-button plain size="small" @click="search">
               <f-a class="icon-small" name="search"></f-a>

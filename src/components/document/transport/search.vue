@@ -1,6 +1,9 @@
 <template>
   <search-template :isShow="showSearch" @search="search" @reset="reset" @isShow="isShow">
     <template slot="title">运单查询</template>
+    <template slot="pre-btn">
+      <slot name="pre-btn"></slot>
+    </template>
     <template slot="btn">
       <slot name="btn"></slot>
     </template>
@@ -66,8 +69,8 @@
           <el-col :span="elColSpan">
             <oms-form-row label="承运类型" :span="omsRowSpan">
               <el-select v-model="searchCondition.carryType" placeholder="请选择承运类型" clearable>
-                <el-option value="0" label="自行承运"></el-option>
-                <el-option value="1" label="第三方承运"></el-option>
+                <el-option :value="0" label="自行承运"></el-option>
+                <el-option :value="1" label="第三方承运"></el-option>
               </el-select>
             </oms-form-row>
           </el-col>
@@ -185,33 +188,36 @@ export default {
     }
   },
   watch: {
-      'searchCondition.packFlag': function () {
+    'searchCondition.carryType': function () {
+      this.search();
+    },
+    'searchCondition.packFlag': function () {
+      this.search();
+    },
+    'searchCondition.senderId': function () {
+      this.search();
+    },
+    'searchCondition.receiverId': function () {
+      this.search();
+    },
+    'searchCondition.waybillType': function () {
+      this.search();
+    },
+    'searchCondition.shipmentWay': function () {
+      this.search();
+    },
+    'searchCondition.deliveryWay': function () {
+      this.search();
+    },
+    'deliveryDate': function (val) {
+      if (val) {
         this.search();
-      },
-      'searchCondition.senderId': function () {
-        this.search();
-      },
-      'searchCondition.receiverId': function () {
-        this.search();
-      },
-      'searchCondition.waybillType': function () {
-        this.search();
-      },
-      'searchCondition.shipmentWay': function () {
-        this.search();
-      },
-      'searchCondition.deliveryWay': function () {
-        this.search();
-      },
-      'deliveryDate': function (val) {
-        if (val) {
-          this.search();
-        } else {
-          this.searchCondition.startTime = '';
-          this.searchCondition.endTime = '';
-          this.$emit('search', this.searchCondition);
-        }
+      } else {
+        this.searchCondition.startTime = '';
+        this.searchCondition.endTime = '';
+        this.$emit('search', this.searchCondition);
       }
+    }
   },
   methods: {
     reset() {
