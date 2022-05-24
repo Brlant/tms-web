@@ -25,6 +25,31 @@
 <template>
   <div class="order-page">
     <search-part @search="searchResult">
+
+      <template slot="pre-btn">
+        <!--        <perm label="tms-waybill-import">-->
+        <el-dropdown @command="handleCommand">
+          <el-button plain size="small">
+            导入物流信息<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="a">导入物流信息</el-dropdown-item>
+            <el-dropdown-item command="b">下载物流模板</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <!--        </perm>-->
+        <!--        <perm label="tms-waybill-import">-->
+        <el-dropdown @command="handleCommand" class="ml-10">
+          <el-button plain size="small">
+            导入温度数据<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="c">导入温度数据</el-dropdown-item>
+            <el-dropdown-item command="d">下载温度数据</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <!--        </perm>-->
+      </template>
       <template slot="btn">
         <!--        <perm label="tms-waybill-add">-->
         <!--          <el-button plain size="small" @click="showPart(0)">-->
@@ -32,6 +57,8 @@
         <!--            添加-->
         <!--          </el-button>-->
         <!--        </perm>-->
+
+
         <perm label="tms-waybill-verifyPass">
           <el-button plain size="small" @click="autoConfirmWayBill" v-if="filters.status==='-2'">
             <f-a class="icon-small" name="wave"></f-a>
@@ -176,8 +203,8 @@
               </div>
             </el-col>
             <el-col :span="4" class="R">
-              <div>
-                {{ item.carryType }}
+              <div :title="item.butt?'第三方承运-已对接':item.carryType?'第三方承运-未对接':'自行承运'">
+                {{ item.carryType ? '第三方承运' : '自行承运' }}
               </div>
             </el-col>
             <!--<el-col :span="5" class="R">-->
@@ -263,7 +290,7 @@
                 <div style="padding-top: 2px">
                   <perm label="tms-waybill-cancel" class="opera-btn">
                     <span @click.stop="cancelWayBill(item)"
-                          v-if="item.status === '-2'||item.status === '-1'||item.status === '0'">
+                          v-if="item.status === '-2'||item.status === '-1'||item.status === '0'||item.status === '1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
@@ -292,22 +319,25 @@
                     </span>
                 </perm>
                 <perm label="tms-waybill-suspend" class="opera-btn">
-                    <span @click.stop="untieWayBill(item)" v-if="item.status === '7'">
+                    <span @click.stop="untieWayBill(item)"
+                          v-if="item.status === '7' || (item.status === '2' && item.carryType === 1)">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
                       </a>中止
                     </span>
                 </perm>
                 <perm label="tms-waybill-shipment" class="opera-btn">
-                  <!-- 自行承运，待启运 -->
+                  <!-- 条件说明：自行承运，待启运，销售退货 -->
                   <span @click.stop="shipmentWayBill(item)"
-                        v-if="item.carryType === '0' && item.status === '1' && item.waybillType==='1-1'">
+                        v-if="item.carryType === 0 && item.status === '1' && item.waybillType==='1-1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-start"></i>
                       </a>启运销退运单
                     </span>
-                  <span @click.stop="shipmentWayBill(item)"
-                        v-if="item.carryType === '1' && item.status === '1' && !item.butt">
+
+                  <!-- 条件说明：第三方承运，待启运，未对接 -->
+                  <span @click.stop="showShipmentDialog(item.id)"
+                        v-if="item.carryType === 1 && item.status === '1' && !item.butt">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-start"></i>
                       </a>启运
@@ -399,6 +429,20 @@
       <map-path :formItem="formItem" :mapStyle="{height: bodyHeight}" vid="mapBigPath"
                 showPoint v-show="isShowMulBigMap"></map-path>
     </el-dialog>
+
+    <el-dialog :visible.sync="dialogFormVisible" center width="700px" :before-close="cancel">
+      <el-form ref="dialogForm" :model="dialogForm">
+        <el-form-item label="第三方承运单号" label-width="150px" prop="thirdNo"
+                      :rules="{required:true,message:'第三方承运单号不能为空',trigger:'blur'}">
+          <el-input v-model="dialogForm.thirdNo" type="text" placeholder="请输入第三方承运单号" autofocus
+                    style="width: 400px"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="shipmentThirdWayBill" :disabled="doing">确定</el-button>
+        <el-button @click="cancel">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -424,6 +468,13 @@ export default {
   mixins: [StatusMixin],
   data() {
     return {
+      doing: false,
+      dialogFormVisible: false,
+      dialogForm: {
+        id: '',
+        // 第三方承运单号
+        thirdNo: '',
+      },
       loadingData: false,
       activeStatus: 0,
       orderType: utils.wayBillType,
@@ -496,7 +547,8 @@ export default {
         endTime: '',
         packFlag: '',
         destinationAreaCode: '',
-        goodsTotalName: ''
+        goodsTotalName: '',
+        carryType: '',
       },
       isCheckAll: false,
       checkList: [],
@@ -510,7 +562,7 @@ export default {
     };
   },
   computed: {
-    bodyHeight: function () {
+    bodyHeight() {
       let height = parseInt(this.$store.state.bodyHeight, 10);
       return (height + 136) + 'px';
     },
@@ -532,7 +584,7 @@ export default {
   },
   watch: {
     filters: {
-      handler: function () {
+      handler() {
         this.getTmsWayBillPage(1);
       },
       deep: true
@@ -557,7 +609,7 @@ export default {
         }, 300);
       });
     },
-    exportSearchFile: function () {
+    exportSearchFile() {
       this.isLoading = true;
       this.$store.commit('initPrint', {
         isPrinting: true,
@@ -588,7 +640,7 @@ export default {
       });
     },
 
-    exportFile: function () {
+    exportFile() {
       if (!this.checkList.length) {
         this.$notify.warning({
           duration: 2000,
@@ -624,7 +676,7 @@ export default {
         });
       });
     },
-    packageWayBill: function (item) {
+    packageWayBill(item) {
       this.$confirm('确认对运单"' + item.waybillNumber + '进行打包操作"?', '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -647,7 +699,7 @@ export default {
 
       });
     },
-    autoWayBillList: function () {
+    autoWayBillList() {
       if (!this.checkList.length) {
         this.$notify.warning({
           duration: 2000,
@@ -661,14 +713,14 @@ export default {
         this.checkListPara = this.checkList.slice();
       });
     },
-    batchAutoWayBillList: function () {
+    batchAutoWayBillList() {
       this.showBatchAutoIndex = 0;
       this.currentBatchAutoPart = this.dialogBatchAutoComponents[0];
       this.$nextTick(() => {
         this.condition = Object.assign({}, this.filters);
       });
     },
-    batchConfirmWayBill: function () {
+    batchConfirmWayBill() {
       if (!this.checkList.length) {
         this.$notify.warning({
           duration: 2000,
@@ -682,7 +734,7 @@ export default {
         this.checkListPara = this.checkList.slice();
       });
     },
-    autoConfirmWayBill: function () {
+    autoConfirmWayBill() {
       this.$confirm('是否对状态为待确认的运单进行批量确认操作?', '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -719,7 +771,7 @@ export default {
 
       });
     },
-    confirm: function (item) {
+    confirm(item) {
       this.$confirm('确认运单"' + item.waybillNumber + '信息"?', '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -742,7 +794,7 @@ export default {
 
       });
     },
-    deliveryWayBill: function (item) {
+    deliveryWayBill(item) {
       this.$confirm('确认运单"' + item.waybillNumber + '"已送达?', '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -765,7 +817,7 @@ export default {
 
       });
     },
-    checkItem: function (item) {
+    checkItem(item) {
       // 单选
       item.isChecked = !item.isChecked;
       let index = this.checkList.indexOf(item);
@@ -804,35 +856,43 @@ export default {
         this.waybillIdList = [];
       }
     },
-    signWayBill: function (item) {
+    signWayBill(item) {
       this.showSignIndex = 0;
       this.currentSignPart = this.dialogSignComponents[0];
       this.$nextTick(() => {
         this.form = JSON.parse(JSON.stringify(item));
       });
     },
-    deliverDate: function (item) {
+    deliverDate(item) {
       this.showDeliverIndex = 0;
       this.currentDeliverPart = this.dialogDeliverComponents[0];
       this.$nextTick(() => {
         this.form = JSON.parse(JSON.stringify(item));
       });
     },
-    assessmentWayBill: function (item) {
+    assessmentWayBill(item) {
       this.showAssessmentIndex = 0;
       this.currentAssessmentPart = this.dialogAssessmentComponents[0];
       this.$nextTick(() => {
         this.form = JSON.parse(JSON.stringify(item));
       });
     },
-    untieWayBill: function (item) {
-      this.showUntieIndex = 0;
-      this.currentUntiePart = this.dialogUntieComponents[0];
-      this.$nextTick(() => {
-        this.form = JSON.parse(JSON.stringify(item));
-      });
+    untieWayBill(item) {
+      this.$confirm('是否确认中止', '', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.showUntieIndex = 0;
+        this.currentUntiePart = this.dialogUntieComponents[0];
+        this.$nextTick(() => {
+          this.form = JSON.parse(JSON.stringify(item));
+        });
+      }).catch(action => {
+        //取消不做额外处理
+      })
     },
-    shipmentWayBill: function (item) {
+    shipmentWayBill(item) {
       this.$confirm('确认启运销退运单"' + item.waybillNumber + '"?', '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -855,7 +915,40 @@ export default {
 
       });
     },
-    cancelWayBill: function (item) {
+    showShipmentDialog(id) {
+      this.dialogFormVisible = true;
+      this.dialogForm.id = id;
+    },
+    cancel() {
+      this.dialogFormVisible = false;
+      // 取消时除了把对话框隐藏起来，还需要清空校验，以免再次打开时，校验还在，不好看
+      this.$refs.dialogForm.clearValidate();
+    },
+    shipmentThirdWayBill() {
+      this.$refs.dialogForm.validate((valid) => {
+        if (!valid || this.doing) {
+          return;
+        }
+
+        this.doing = true;
+        TmsWayBill.shipmentThirdWayBill(this.dialogForm)
+          .then(() => {
+            this.$notify.success('启运成功');
+            this.getTmsWayBillPage(1);
+          })
+          .catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response.data.msg || '启运失败'
+            });
+          })
+          .finally(() => {
+            this.doing = false;
+          });
+      })
+
+    },
+    cancelWayBill(item) {
       this.$confirm('确认取消运单"' + item.waybillNumber + '"?', '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -886,7 +979,7 @@ export default {
     handleCurrentChange(val) {
       this.getTmsWayBillPage(val);
     },
-    searchResult: function (search) {
+    searchResult(search) {
       Object.assign(this.filters, search);
     },
     checkStatus(item, key) {
@@ -895,7 +988,7 @@ export default {
       this.checkList = [];
       this.checkListPara = [];
     },
-    changeStatus: function (item, key) {// 订单分类改变
+    changeStatus(item, key) {// 订单分类改变
       this.activeStatus = key;
       this.filters.status = item.status;
     },
@@ -912,7 +1005,7 @@ export default {
       this.showUntieIndex = -1;
       this.$router.push('/document/transport/list');
     },
-    getTmsWayBillPage: function (pageNo, isContinue = false) {
+    getTmsWayBillPage(pageNo, isContinue = false) {
       this.pager.currentPage = pageNo;
       let param = Object.assign({}, {
         pageNo: pageNo,
@@ -942,7 +1035,7 @@ export default {
       });
       this.queryStateNum(param);
     },
-    queryStateNum: function (params) {
+    queryStateNum(params) {
       TmsWayBill.queryStateNum(params).then(res => {
         let data = res.data;
         let count = 0;
@@ -978,7 +1071,7 @@ export default {
         ]
       };
     },
-    edit: function (item) {
+    edit(item) {
       this.currentItem = item;
       this.currentItemId = item.id;
       this.action = 'edit';
@@ -988,7 +1081,7 @@ export default {
         this.form = JSON.parse(JSON.stringify(item));
       });
     },
-    showInfo: function (item) {
+    showInfo(item) {
       this.currentItem = item;
       this.currentItemId = item.id;
       this.showInfoIndex = 0;
@@ -1006,7 +1099,42 @@ export default {
     autoSubmit() {
       this.checkList = [];
       this.checkListPara = [];
-    }
+    },
+    handleCommand(command) {
+      switch (command) {
+        // 导入物流信息
+        case 'a':
+          this.logisticsImport();
+          break;
+        // 下载物流模板
+        case 'b':
+          this.logisticsDownload();
+          break;
+        // 导入温度数据
+        case 'c':
+          this.temperatureImport();
+          break;
+        // 下载温度数据
+        case 'd':
+          this.temperatureImport();
+          break;
+        default:
+          console.warn('未知的指令：', command)
+          break
+      }
+    },
+    logisticsImport() {
+      this.$message.warning('功能开发中……');
+    },
+    logisticsDownload() {
+      this.$message.warning('功能开发中……');
+    },
+    temperatureImport() {
+      this.$message.warning('功能开发中……');
+    },
+    temperatureDownload() {
+      this.$message.warning('功能开发中……');
+    },
   }
 };
 </script>

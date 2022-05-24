@@ -425,7 +425,7 @@ export default {
     },
     getCarrierList(pageNo, keyWord = '') {
       const pageSize = 20;
-      this.$http.get('/carrier/findCarrierByPage', {params: {keyWord, pageNo, pageSize}})
+      this.$http.get('/carrier/findCarrierByPage', {params: {status: 2, keyWord, pageNo, pageSize}})
         .then(res => {
           const {list, totalPage} = res.data;
           this.carrierList = list;
@@ -492,15 +492,15 @@ export default {
         }
 
         this.doing = true;
-        if (this.auto){
+        if (this.auto) {
           this.autoHandle();
-        }else {
+        } else {
           this.batchHandle();
         }
       })
     },
     autoHandle() {
-      let param = Object.assign({}, this.filters,this.dialogForm);
+      let param = Object.assign({}, this.filters, this.dialogForm);
       TmsOrder.autoCreateWayBill(param).then(() => {
         this.doing = false;
         this.$notify.success({
@@ -508,7 +508,9 @@ export default {
           title: '成功',
           message: '已成功生成运单'
         });
+
         this.getTmsOrderPage(1);
+        this.resetRightBox();
       }).catch(error => {
         this.doing = false;
         this.$notify.error({
@@ -517,7 +519,7 @@ export default {
         });
       });
     },
-    batchHandle(){
+    batchHandle() {
       // 批量操作所有订单都是一样的,重新组装下参数
       const wayBillParams = this.checkListPara.map(item => {
         return {
@@ -658,6 +660,7 @@ export default {
       this.showWayBillPart = false;
       this.showSingleWayBillPart = false;
       this.showSplitOrderPart = false;
+      this.dialogFormVisible = false;
       this.dialogForm = {
         carryType: 0,
         carrierId: '',
@@ -773,7 +776,7 @@ export default {
       this.getTmsOrderPage(1);
     },
     carryTypeChangeHandle(val) {
-      if (val === 0){
+      if (val === 0) {
         // 如果是自行承运，去掉校验
         this.$refs.dialogForm.clearValidate();
       }

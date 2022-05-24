@@ -3,7 +3,6 @@ import axios from 'axios';
 import Vue from 'vue';
 import qs from 'qs';
 import * as Sentry from '@sentry/browser';
-import createSingleWayBill from '@/components/document/order/form/create-single-way-bill'
 
 export const http = axios.create({
   baseURL: process.env.VUE_APP_API,
@@ -120,8 +119,8 @@ export const TmsOrder = resource('/tms-order', http, {
   queryStateNum: (params) => {
     return http.get('/tms-order/count', {params});
   },
-  createWayBill: (params,single) => {
-    if (single){
+  createWayBill: (params, single) => {
+    if (single) {
       return http.put('/tms-order/list/generate/single', params);
     }
     return http.put('/tms-order/list/generate', params);
@@ -169,6 +168,9 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   },
   shipmentWayBill: (id) => {
     return http.put('/tms-waybill/' + id + '/shipment', {});
+  },
+  shipmentThirdWayBill: ({id, thirdNo}) => {
+    return http.put(`/tms-waybill/${id}/shipment-butt?thirdNo=${thirdNo}`);
   },
   untieWayBill: (id, obj) => {
     return http.put('/tms-waybill/' + id + '/suspend', obj);
@@ -362,7 +364,7 @@ export const StorageBin = {
 // 承运商相关的接口
 export const Carrier = {
   query: (params) => http.get('/carrier/findCarrierByPage', {params}),
-  count: (params) => http.get('/carrier/count',{params}),
+  count: (params) => http.get('/carrier/count', {params}),
   addSave: (params) => http.post('/carrier/addCarrier', params),
   editSave: (params) => http.post('/carrier/editCarrier', params),
 };
