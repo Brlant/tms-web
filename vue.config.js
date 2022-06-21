@@ -1,6 +1,5 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir);
@@ -13,19 +12,14 @@ module.exports = {
     https: false,
     hotOnly: false, disableHostCheck: true, proxy: {
       '/api': {
-        target: 'https://dev-tms.cdcerp.cn',
+        target: 'https://hw-test-tms.cdcerp.cn',
         changOrigin: true
       }
     }
   },
   transpileDependencies: ['@dtop'],
   configureWebpack: {
-    plugins: [new SentryWebpackPlugin({
-      include: './dist/static/map',
-      ignoreFile: '.sentrycliignore',
-      ignore: ['node_modules'],
-      configFile: 'sentry.properties'
-    }),
+    plugins: [
       new CopyWebpackPlugin([
         {
           from: path.resolve(__dirname, 'static'), to: 'static',
