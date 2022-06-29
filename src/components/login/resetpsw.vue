@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   body {
     background: #f5f5f5
   }
@@ -49,9 +49,9 @@
 </template>
 
 <script>
-  import {User} from '@/resources';
+import {User} from '@/resources';
 
-  export default {
+export default {
     name: 'resetpsw',
     data: function () {
       let checkPsw = (rule, value, callback) => {

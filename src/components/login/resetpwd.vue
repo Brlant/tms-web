@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../assets/scss/mixins";
 
   body {
@@ -65,9 +65,9 @@
 </template>
 
 <script>
-  import {http} from '@/resources';
+import {http} from '@/resources';
 
-  export default {
+export default {
     name: 'resetpwd',
     data: function () {
       let checkPasswd = (rule, value, callback) => {

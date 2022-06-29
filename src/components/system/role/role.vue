@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
 
 
   .margin-left {
@@ -204,12 +204,12 @@
   </div>
 </template>
 <script>
-  import {Access} from '@/resources';
-  import roleForm from './form/form.vue';
-  import roleMixin from '@/mixins/roleMixin';
-  import utils from '@/tools/utils';
+import {Access} from '@/resources';
+import roleForm from './form/form.vue';
+import roleMixin from '@/mixins/roleMixin';
+import utils from '@/tools/utils';
 
-  export default {
+export default {
     components: {roleForm},
     mixins: [roleMixin],
     data: function () {

@@ -19,9 +19,9 @@
   </el-form>
 </template>
 <script>
-  import {GoodsArea} from '@/resources';
+import {GoodsArea} from '@/resources';
 
-  export default {
+export default {
     data: function () {
       return {
         rules: {

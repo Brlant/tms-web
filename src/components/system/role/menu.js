@@ -399,14 +399,15 @@ export default [
         'parentId': 'tms-documents-info',
         'label': '运单管理',
         'sort': 2,
-        'children': [{
-          'id': 'tms-waybill-edit',
-          'parentId': 'tms-waybill-manager',
-          'label': '编辑运单',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        },
+        'children': [
+          {
+            'id': 'tms-waybill-edit',
+            'parentId': 'tms-waybill-manager',
+            'label': '编辑运单',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
           {
             'id': 'tms-waybill-quality-inspection',
             'parentId': 'tms-waybill-manager',
@@ -513,7 +514,56 @@ export default [
           }
         ],
         'leaf': false
-      }],
+      },
+      {
+        'id': 'transit-store-out',
+        'parentId': 'tms-documents-info',
+        'label': '中转出库',
+        'sort': 5,
+        'children': [
+          {
+          'id': 'transit-store-out-take-down',
+          'parentId': 'transit-store-out',
+          'label': '下架',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        },
+          {
+          'id': 'transit-store-out-view',
+          'parentId': 'transit-store-out',
+          'label': '查看',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }, {
+          'id': 'transit-store-out-packager',
+          'parentId': 'transit-store-out-manager',
+          'label': '出库',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }, {
+          'id': 'transit-store-out-review',
+          'parentId': 'transit-store-out-manager',
+          'label': '中转复核',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }, {
+          'id': 'transit-store-out-claim',
+          'parentId': 'transit-store-out-manager',
+          'label': '认领任务',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }, {
+          id: 'stock-out-full-assign-reviewer',
+          label: '指派操作人'
+        }],
+        'leaf': false
+      }
+    ],
     'leaf': false
   },
   // 任务作业

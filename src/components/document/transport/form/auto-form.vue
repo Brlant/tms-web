@@ -154,11 +154,11 @@
   </div>
 </template>
 <script>
-  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {CarArchives, TransportTask} from '@/resources';
-  import utils from '@/tools/utils';
+import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+import {CarArchives, TransportTask} from '@/resources';
+import utils from '@/tools/utils';
 
-  export default {
+export default {
     components: {TwoColumn},
     data () {
       return {
@@ -428,4 +428,3 @@
     }
   };
 </script>
-

@@ -336,11 +336,11 @@
   </dialog-template>
 </template>
 <script>
-  import {BaseInfo, TmsWayBill} from '@/resources';
-  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import MapLocation from '@/components/common/map-location';
+import {BaseInfo, TmsWayBill} from '@/resources';
+import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+import MapLocation from '@/components/common/map-location';
 
-  export default {
+export default {
     components: {TwoColumn, MapLocation},
     data() {
       return {

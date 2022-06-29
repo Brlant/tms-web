@@ -13,9 +13,9 @@
   </div>
 </template>
 <script>
-  import {AMapManager} from 'vue-amap';
+import {AMapManager} from 'vue-amap';
 
-  export default {
+export default {
     props: ['formItem'],
     data () {
       return {

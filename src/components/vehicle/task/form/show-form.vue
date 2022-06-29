@@ -300,12 +300,12 @@
   </dialog-template>
 </template>
 <script>
-  import {TmsLog, TransportTask} from '@/resources';
-  import TaskMap from './map-car-task';
-  import utils from '@/tools/utils';
-  import OmsCostTime from '@/components/common/timeCost.vue';
+import {TmsLog, TransportTask} from '@/resources';
+import TaskMap from './map-car-task';
+import utils from '@/tools/utils';
+import OmsCostTime from '@/components/common/timeCost.vue';
 
-  export default {
+export default {
     components: {TaskMap, OmsCostTime},
     data () {
       return {

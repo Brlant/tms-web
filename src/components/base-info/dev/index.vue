@@ -328,14 +328,14 @@
 
 </template>
 <script>
-  import {Dev, DevDetail, DevStore} from '@/resources';
-  import devForm from './form/dev.vue';
-  import devDetailForm from './form/dev-detail.vue';
-  import devStoreForm from './form/dev-store.vue';
-  import devDetailStatusLog from './form/dev-detail-status-log.vue';
-  import utils from '@/tools/utils';
+import {Dev, DevDetail, DevStore} from '@/resources';
+import devForm from './form/dev.vue';
+import devDetailForm from './form/dev-detail.vue';
+import devStoreForm from './form/dev-store.vue';
+import devDetailStatusLog from './form/dev-detail-status-log.vue';
+import utils from '@/tools/utils';
 
-  export default {
+export default {
     components: {devForm, devDetailForm, devStoreForm, devDetailStatusLog},
     props: {
       index: {

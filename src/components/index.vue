@@ -110,15 +110,15 @@
 </template>
 
 <script>
-  import AppHeader from './layout/app.header.vue';
-  import AppFooter from './layout/app.footer.vue';
-  import utils from '../tools/utils';
-  import attachmentDialog from './common/attachment/attachment.dialog.vue';
-  import {Auth} from '@/resources';
-  import printDialog from './common/print.loading.vue';
-  import QCodeDialog from './q-code/q-code-dialog';
+import AppHeader from './layout/app.header.vue';
+import AppFooter from './layout/app.footer.vue';
+import utils from '../tools/utils';
+import attachmentDialog from './common/attachment/attachment.dialog.vue';
+import {Auth} from '@/resources';
+import printDialog from './common/print.loading.vue';
+import QCodeDialog from './q-code/q-code-dialog';
 
-  export default {
+export default {
     data: () => ({
       transitionName: 'slide-left',
       toRoute: {},

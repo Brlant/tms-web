@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../assets/scss/mixins";
 
   body {
@@ -133,9 +133,9 @@
 </template>
 
 <script>
-  import {http, User} from '@/resources';
+import {http, User} from '@/resources';
 
-  const timeInterval = 60;
+const timeInterval = 60;
   let phoneReg = /^1[0-9]{10}$/;
   export default {
     name: 'forget',

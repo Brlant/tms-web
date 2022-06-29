@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   .el-form .el-select {
     display: block;
   }
@@ -38,9 +38,9 @@
 </template>
 
 <script>
-  import {Access, Department, User} from '@/resources';
+import {Access, Department, User} from '@/resources';
 
-  export default {
+export default {
     name: 'editForm',
     props: {
       formItem: {

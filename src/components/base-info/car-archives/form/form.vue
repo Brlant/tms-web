@@ -221,11 +221,11 @@
   </dialog-template>
 </template>
 <script>
-  import {BaseInfo, CarArchives, User} from '@/resources';
-  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import utils from '@/tools/utils';
+import {BaseInfo, CarArchives, User} from '@/resources';
+import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+import utils from '@/tools/utils';
 
-  export default {
+export default {
     components: {TwoColumn},
     data: function () {
       let checkPlateNumber = (rule, value, callback) => {

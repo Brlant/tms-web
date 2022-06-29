@@ -99,9 +99,7 @@ import ElForm from '../components/common/form/src/form.vue';
 import DialogTemplate from '@/components/common/dialog-template';
 import SearchTemplate from '@/components/common/search-template';
 
-import {
-  Pagination,Descriptions,DescriptionsItem,Link
-} from 'element-ui';
+import {Descriptions, DescriptionsItem, Link, Pagination} from 'element-ui';
 
 const tinyVue = [
   Pagination,

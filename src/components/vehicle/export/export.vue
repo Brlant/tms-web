@@ -133,10 +133,10 @@
   </el-form>
 </template>
 <script>
-  import {BaseInfo} from '@/resources.js';
-  import utils from '@/tools/utils';
+import {BaseInfo} from '@/resources.js';
+import utils from '@/tools/utils';
 
-  export default {
+export default {
     data: function () {
       return {
         searchCondition: {

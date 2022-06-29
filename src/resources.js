@@ -515,6 +515,76 @@ export const Goods = resource('/goods', http, {
   }
 });
 
+/**
+ * 入库作业
+ * @type {the}
+ */
+export const InWork = resource('/stock-in', http, {
+  queryOmsOrder(obj) { // 查询订单列表
+    return http.get('/order', {params: obj});
+  },
+  queryOrder(obj) { // 查询wms订单列表
+    return http.get('/stock-in/wms', {params: obj});
+  },
+  queryOrderExcepiton(obj) { // 查询wms异常订单列表
+    return http.get('/stock-in/wms/quality-exception', {params: obj});
+  },
+  queryOrderCount(obj) { // 查询订单数量
+    return http.get('/stock-in/task/count', {params: obj});
+  },
+  queryOrderDetail(id) { // 查询订单详细
+    return http.get(`/order/${id}`, {params: {lockFlag: false}});
+  },
+  allotPlace(orderId) { // 分配货位
+    return http.post(`/stock-in/${orderId}/batch/allot`);
+  },
+  queryOperator(obj) { // 查询操作员
+    return http.get('/stock-in/operator/', {params: obj});
+  },
+  queryOperatorOrders(obj) { // 查询操作员的任务
+    return http.get('/stock-in/operator/orders', {params: obj});
+  },
+  allotShelfMan(orderId, obj) { // 分配上架人
+    return http.put(`/stock-in/${orderId}/assign/putaway`, obj);
+  },
+  allotReviewer(orderId, obj) { // 分配复核人
+    return http.put(`/stock-in/${orderId}/assign/reviewer`, obj);
+  },
+  queryAvailableStore(obj) { // 查询可用的库位
+    return http.get('/stock-in/valid/store', {params: obj});
+  },
+  queryAssignStore(orderId) { // 查询已分配好的库位
+    return http.get(`/stock-in/${orderId}/pre-position`);
+  },
+  updateAssignStore(orderId, obj) { // 查询已分配好的库位
+    return http.put(`/stock-in/${orderId}/pre-position`, obj);
+  },
+  queryCodes(orderId) { // 查询编码
+    return http.get(`/stock-in/${orderId}/code`);
+  },
+  reviewScan(orderId, obj) { // 提交编码
+    return http.put(`/stock-in/${orderId}/review`, obj);
+  },
+  assignPlace(orderId) { // 通过复核，进入到分配货位
+    return http.put(`/stock-in/${orderId}/review/operate`);
+  },
+  onShelf(orderId) {
+    return http.put(`/stock-in/${orderId}/shelves`);
+  },
+  queryShelfGoodsDetail(orderId) {
+    return http.get(`/stock-in/${orderId}/shelves/navigation`);
+  },
+  claimReviewTack(orderId) {
+    return http.put(`/stock-in/${orderId}/claim/reviewer`);
+  },
+  claimShelfTack(orderId) {
+    return http.put(`/stock-in/${orderId}/claim/putaway`);
+  },
+  claimTack(orderId) {
+    return http.put(`/stock-in/${orderId}/claim`);
+  }
+});
+
 // 货主货品
 export const OrgGoods = resource('/org/goods', http, {
   queryOneGoods: (id) => {

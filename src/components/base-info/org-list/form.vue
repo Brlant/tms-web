@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../../assets/scss/mixins";
 
   $leftWidth: 200px;
@@ -270,13 +270,13 @@
 </template>
 
 <script>
-  /* eslint-disable object-shorthand */
-  import {BaseInfo, plateNumber, User} from '@/resources';
-  import utils from '@/tools/utils';
-  import omsUploadPicture from '@/components/common/upload/upload.picture.vue';
-  import axios from 'axios';
+/* eslint-disable object-shorthand */
+import {BaseInfo, plateNumber, User} from '@/resources';
+import utils from '@/tools/utils';
+import omsUploadPicture from '@/components/common/upload/upload.picture.vue';
+import axios from 'axios';
 
-  export default {
+export default {
     components: {
       omsUploadPicture
     },

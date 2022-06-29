@@ -22,10 +22,10 @@
   </div>
 </template>
 <script>
-  import {AMapManager} from 'vue-amap';
-  import MapMixin from '@/mixins/mapMixin';
+import {AMapManager} from 'vue-amap';
+import MapMixin from '@/mixins/mapMixin';
 
-  export default {
+export default {
     props: {
       formItem: Object,
       mapStyle: {

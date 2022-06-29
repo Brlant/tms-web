@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../../assets/scss/mixins";
 
   $leftWidth: 0;
@@ -119,10 +119,10 @@
   </div>
 </template>
 <script>
-  import utils from '@/tools/utils';
-  import {BaseInfo} from '@/resources';
+import utils from '@/tools/utils';
+import {BaseInfo} from '@/resources';
 
-  export default {
+export default {
     props: {
       data: {
         type: Object,

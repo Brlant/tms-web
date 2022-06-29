@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
 
   .R {
     word-wrap: break-word;
@@ -160,8 +160,8 @@
   </div>
 </template>
 <script>
-  import {BaseInfo, User} from '@/resources';
-  //  import detail from './detail.vue';
+import {BaseInfo, User} from '@/resources';
+//  import detail from './detail.vue';
 
   export default {
 //    components: {detail},

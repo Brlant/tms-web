@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../assets/scss/mixins";
 
   body {
@@ -75,11 +75,11 @@
 </template>
 
 <script>
-  import {Auth} from '@/resources';
-  import AppFooter from '../layout/app.footer.vue';
-  import {base64} from '@dtop/dtop-web-common';
+import {Auth} from '@/resources';
+import AppFooter from '../layout/app.footer.vue';
+import {base64} from '@dtop/dtop-web-common';
 
-  export default {
+export default {
     name: 'login',
     components: {AppFooter},
     data: () => {

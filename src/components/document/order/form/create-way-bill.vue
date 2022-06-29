@@ -186,11 +186,11 @@
   </div>
 </template>
 <script>
-  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TmsOrder} from '@/resources';
-  import MapPath from '../../common/map-list-new';
+import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+import {TmsOrder} from '@/resources';
+import MapPath from '../../common/map-list-new';
 
-  export default {
+export default {
     components: {TwoColumn, MapPath},
     data () {
       return {

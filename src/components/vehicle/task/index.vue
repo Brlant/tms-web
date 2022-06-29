@@ -92,7 +92,7 @@
           </div>
         </el-col>
       </el-row>
-      <div v-else="" class="order-list-body flex-list-dom">
+      <div v-else class="order-list-body flex-list-dom">
         <div class="order-list-item" v-for="item in dataList" @click="checkItem(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
@@ -284,19 +284,19 @@
   </div>
 </template>
 <script>
-  import utils from '@/tools/utils';
-  import SearchPart from './search';
-  import {http, TransportTask} from '@/resources';
-  import showForm from './form/show-form';
-  import adjustmentForm from './form/adjustment-form';
-  import StatusMixin from '@/mixins/statusMixin';
-  import editForm from './form/edit-form';
-  import Perm from '../../common/perm';
-  import TaskMap from './form/map-car-task';
-  import MapMultiple from './form/map-multiple';
-  import moment from 'moment';
+import utils from '@/tools/utils';
+import SearchPart from './search';
+import {http, TransportTask} from '@/resources';
+import showForm from './form/show-form';
+import adjustmentForm from './form/adjustment-form';
+import StatusMixin from '@/mixins/statusMixin';
+import editForm from './form/edit-form';
+import Perm from '../../common/perm';
+import TaskMap from './form/map-car-task';
+import MapMultiple from './form/map-multiple';
+import moment from 'moment';
 
-  export default {
+export default {
     components: {
       Perm,
       SearchPart,
@@ -842,4 +842,3 @@
     }
   };
 </script>
-

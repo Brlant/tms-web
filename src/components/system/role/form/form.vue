@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   $leftWidth: 200px;
   .content-part {
     .content-left {
@@ -98,10 +98,10 @@
   </div>
 </template>
 <script type="text/jsx">
-  import {Access} from '@/resources';
-  import roleMixin from '@/mixins/roleMixin';
+import {Access} from '@/resources';
+import roleMixin from '@/mixins/roleMixin';
 
-  export default {
+export default {
     props: {
       formItem: {
         type: Object,

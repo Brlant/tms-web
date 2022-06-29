@@ -33,10 +33,10 @@
   </div>
 </template>
 <script>
-  import {AMapManager} from 'vue-amap';
-  import MapMixin from '@/mixins/mapMixin';
+import {AMapManager} from 'vue-amap';
+import MapMixin from '@/mixins/mapMixin';
 
-  const StartIndex = 'StartIndex';
+const StartIndex = 'StartIndex';
   const CurrentIndex = 'CurrentIndex';
   const EndIndex = 'EndIndex';
   const markerIconLabel = {
