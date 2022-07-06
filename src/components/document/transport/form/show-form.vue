@@ -390,7 +390,7 @@ $labelWidth: 180px;
                       <TimelineItem color="green" v-if="log.statusName">
                         <i class="iconfont icon-home" slot="dot"></i>
                         <el-row class="tiny-timeline-content">
-                          <el-col :span="1">
+                          <el-col :span="2">
                             <strong style="font-size: 16px">{{ log.statusName }}</strong>
                           </el-col>
                           <el-col :span="10">
