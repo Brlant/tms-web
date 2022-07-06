@@ -290,7 +290,7 @@
                 <div style="padding-top: 2px">
                   <perm label="tms-waybill-cancel" class="opera-btn">
                     <span @click.stop="cancelWayBill(item)"
-                          v-if="item.status === '-2'||item.status === '-1'||item.status === '0'||(item.status === '1' && itme.carryType == '1')">
+                          v-if="item.status === '-2'||item.status === '-1'||item.status === '0'||(item.status === '1' && item.carryType == '1')">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
