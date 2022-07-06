@@ -933,6 +933,8 @@ export default {
         this.doing = true;
         TmsWayBill.shipmentThirdWayBill(this.dialogForm)
           .then(() => {
+            // 启运成功后需要关闭对话框
+            this.dialogFormVisible = false;
             this.$notify.success('启运成功');
             this.getTmsWayBillPage(1);
           })
