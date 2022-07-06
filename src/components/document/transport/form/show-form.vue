@@ -383,17 +383,17 @@ $labelWidth: 180px;
                 <div style="line-height: 30px;height: 30px">
                   <strong class="mr-10">运单号：{{ form.waybillNumber }}</strong>
                 </div>
-                <div>
+                <div style="padding: 20px 0">
                   <div v-show="logisticsList.length === 0" class="empty-info mini">暂无物流信息</div>
                   <Timeline>
                     <template v-for="(log,index) in logisticsList">
                       <TimelineItem color="green" v-if="log.statusName">
                         <i class="iconfont icon-home" slot="dot"></i>
                         <el-row class="tiny-timeline-content">
-                          <el-col :span="4">
-                            {{ log.statusName }}
+                          <el-col :span="1">
+                            <strong style="font-size: 16px">{{ log.statusName }}</strong>
                           </el-col>
-                          <el-col :span="18">
+                          <el-col :span="10">
                             <strong>{{ log.logisticsTime|time }}</strong>
                           </el-col>
                         </el-row>
@@ -405,7 +405,7 @@ $labelWidth: 180px;
                       </TimelineItem>
                       <TimelineItem color="grey" v-else>
                         <el-row class="tiny-timeline-content">
-                          <el-col :span="18">
+                          <el-col :span="10">
                             {{ log.logisticsTime|time }}
                           </el-col>
                         </el-row>
