@@ -306,6 +306,7 @@
           waybillType: '',
           shipmentWay: '',
           deliveryWay:'',
+          faceSheetNo:'',
           serviceType: '',
           senderId: '',
           receiverId: '',

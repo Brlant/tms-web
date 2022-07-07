@@ -165,6 +165,9 @@
       'searchCondition.shipmentWay': function () {
         this.search();
       },
+      'searchCondition.faceSheetNo': function () {
+        this.search();
+      },
       'searchCondition.deliveryWay': function () {
         this.search();
       },
