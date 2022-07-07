@@ -60,6 +60,8 @@
             <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime">
               {{form.updateTime|time}}
             </oms-col>
+            <oms-col label="面单号" :rowSpan="span" :value="form.faceSheetNo">
+            </oms-col>
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
