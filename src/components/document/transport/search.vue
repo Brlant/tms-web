@@ -63,22 +63,28 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="6">
+          <el-col :span="5">
             <oms-form-row label="目的地区域代码" :span="8">
               <oms-input v-model="searchCondition.destinationAreaCode" placeholder="请输入目的地区域代码"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <oms-form-row label="货品名称(模糊)" :span="8">
               <oms-input v-model="searchCondition.goodsTotalName" placeholder="请输入货品名称模糊查询"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <oms-form-row label="送达时限" :span="4">
               <el-date-picker v-model="deliveryDate" type="daterange" placeholder="请选择">
               </el-date-picker>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="4">
+            <oms-form-row label="面单号" :span="4">
+              <oms-input v-model="searchCondition.faceSheetNo" placeholder="请输入面单号"
+                         @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
           <el-col :span="4">
@@ -137,6 +143,7 @@
           waybillNumber: '',
           orderNo: '',
           tmsOrderNumber:'',
+          faceSheetNo:'',
           waybillType: '',
           shipmentWay: '',
           deliveryWay:'',
@@ -184,6 +191,9 @@
       'searchCondition.tmsOrderNumber': function () {
         this.search();
       },
+      'searchCondition.faceSheetNo': function () {
+        this.search();
+      },
       'searchCondition.senderId': function () {
         this.search();
       },
@@ -221,6 +231,7 @@
           serviceType: '',
           senderId: '',
           receiverId: '',
+          faceSheetNo:'',
           startTime: '',
           endTime: '',
           goodsTotalName: '',

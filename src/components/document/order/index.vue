@@ -9,6 +9,11 @@
       transform: translateY(-50%);
     }
   }
+  .tips{
+    color: #F56C6C;
+    width: 100%;
+    text-align: center;
+  }
 </style>
 <template>
   <div class="order-page">
@@ -224,6 +229,19 @@
       <map-path :activeNo="activeNo" :formItem="formItem" :mapStyle="{height: bodyHeight}" vid="mapBigPath"
                 v-show="isShowMulBigMap"></map-path>
     </el-dialog>
+        <!-- 面单号 -->
+<!-- <el-dialog :visible.sync="dialogFormVisible" center width="700px" :show-close="false" >
+          <el-form ref="surface" :model="surface">
+              <el-form-item label="面单号" label-width="100px">
+                          <oms-input v-model="surface.faceSheetNo" placeholder="请输入面单号"></oms-input>
+              </el-form-item>
+            <div class="tips">点击确认后，将自动生成运单</div>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="shipmentThirdWayBill('surface')" :disabled="doing">确定</el-button>
+            <el-button @click="cancel('surface')">取消</el-button>
+          </div>
+      </el-dialog> -->
   </div>
 </template>
 <script>
@@ -246,6 +264,8 @@
     mixins: [StatusMixin],
     data () {
       return {
+        doing:false, // 确定按钮loading
+        dialogFormVisible:false,  // 面单号弹窗
         loadingData: false,
         activeStatus: '0',
         orderType: utils.orderType,
@@ -286,6 +306,7 @@
           waybillType: '',
           shipmentWay: '',
           deliveryWay:'',
+          faceSheetNo:'',
           serviceType: '',
           senderId: '',
           receiverId: '',
@@ -294,6 +315,10 @@
           tmsOrderNumber:'',
           goodsTotalName:'',
           destinationAreaCode:''
+        },
+         // 面单号
+        surface:{
+          faceSheetNo:'',
         },
         isCheckAll: false,
         isLoading:false,
@@ -403,6 +428,15 @@
 
         });
       },
+      // 确定
+      // shipmentThirdWayBill(){
+
+      // },
+      // // 取消运单
+      // cancel(surface){
+      //   this.dialogFormVisible = false
+      //   this.$refs[surface].resetFields();
+      // },
       cancelOrder: function (item) {
         this.$confirm('确认取消订单"' + item.orderNo + '"?', '', {
           confirmButtonText: '确定',

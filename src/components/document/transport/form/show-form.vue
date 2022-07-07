@@ -49,6 +49,7 @@
                  <span v-for="order in form.orderNoList">{{order}}<span
                    v-if="form.orderNoList.indexOf(order)!==form.orderNoList.length-1">,</span></span>
             </oms-col>
+             <oms-col label="面单号" :rowSpan="span" :value="form.faceSheetNo"/>
             <oms-col label="运单类型" :rowSpan="span" :value="form.waybillType">
               <dict :dict-group="'bizType'" :dict-key="form.waybillType"></dict>
             </oms-col>

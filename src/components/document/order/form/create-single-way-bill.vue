@@ -64,6 +64,13 @@
               <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime">
                 {{form.updateTime|time}}
               </oms-col>
+               <el-row>
+                <el-col :span="12">
+                  <el-form-item label="面单号">
+                    <oms-input v-model="carryInfo.faceSheetNo" placeholder="请输入面单号"></oms-input>
+                  </el-form-item  >
+                </el-col>
+              </el-row>
             </div>
             <div class="hr mb-10 clearfix"></div>
           </div>
@@ -215,26 +222,42 @@
             }
           ]
         },
-        orderIdList: [],
+        wayBillParams: [],
         rules: {},
         currentOrder: {},
         activeId: '',
         doing: false
       };
     },
-    computed: {},
+    computed: {
+      carryInfo(){
+        if (this.activeId === '') {
+          return{
+            faceSheetNo:'',//面单号
+            orderId:'', // 订单id
+          }
+        }
+        return this.wayBillParams[this.activeId];
+      }
+    },
     props: ['checkList'],
     watch: {
       checkList: function (val) {
         this.dataList = val;
-        this.orderIdList = [];
+        this.wayBillParams = [];
         if (val.length) {
-          this.dataList.forEach(val => {
-            let index = this.orderIdList.indexOf(val.id);
-            if (index === -1) {
-              this.orderIdList.push(val.id);
-            }
-          });
+          // this.dataList.forEach(val => {
+          //   let index = this.orderIdList.indexOf(val.id);
+          //   if (index === -1) {
+          //     this.orderIdList.push(val.id);
+          //   }
+          // });
+          this.wayBillParams = this.dataList.map(data => {
+              return {
+                "faceSheetNo": data.faceSheetNo || '',
+                "orderId": data.id,
+              }
+            });
           this.showOrder(val[0], 0);
         }
       }
@@ -247,14 +270,15 @@
           type: 'warning'
         }).then(() => {
           this.doing = true;
-          TmsOrder.createSingleWayBill({orderIdList: this.orderIdList}).then(() => {
+          TmsOrder.createSingleWayBill({wayBillParams: this.wayBillParams}).then(() => {
             this.$notify.success({
               duration: 2000,
               title: '成功',
               message: '已成功生成运单'
             });
             this.doing = false;
-            this.$emit('change', this.orderIdList);
+            // this.$emit('change', this.orderIdList);
+            this.$emit('change');
             this.$emit('right-close');
           }).catch(error => {
             this.$notify.error({

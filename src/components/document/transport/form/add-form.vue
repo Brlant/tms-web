@@ -63,6 +63,9 @@
                            v-for="item in deliveryWayList"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="面单号" v-if="this.action === 'edit'">
+              <oms-input v-model="form.faceSheetNo" placeholder="请输入面单号"></oms-input>
+            </el-form-item>
             <!--<two-column>-->
             <!--<el-form-item slot="left" label="服务方式">-->
             <!--<el-select v-model="form.serviceType" placeholder="请选择服务方式" :clearable="true">-->
