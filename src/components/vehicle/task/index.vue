@@ -342,6 +342,7 @@
           carPlateNumber: '',
           waybillNo: '',
           tmsOrderNumber:'',
+          faceSheetNo:'',
           createStartTime: '',
           createEndTime: '',
           sStartTime: '',

@@ -10,6 +10,11 @@
     transform: translateY(-50%);
   }
 }
+  .tips{
+    color: #F56C6C;
+    width: 100%;
+    text-align: center;
+  }
 </style>
 <template>
   <div class="order-page">
@@ -234,7 +239,6 @@
       <map-path :activeNo="activeNo" :formItem="formItem" :mapStyle="{height: bodyHeight}" vid="mapBigPath"
                 v-show="isShowMulBigMap"></map-path>
     </el-dialog>
-
     <el-dialog :visible.sync="dialogFormVisible" center width="25%">
       <el-form ref="dialogForm" :model="dialogForm" :rules="dialogFormRules">
         <el-form-item label="承运类型" label-width="120px">
@@ -264,6 +268,19 @@
         <el-button @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
+        <!-- 面单号 -->
+<!-- <el-dialog :visible.sync="surfaceFormVisible" center width="700px" :show-close="false" >
+          <el-form ref="surface" :model="surface">
+              <el-form-item label="面单号" label-width="100px">
+                          <oms-input v-model="surface.faceSheetNo" placeholder="请输入面单号"></oms-input>
+              </el-form-item>
+            <div class="tips">点击确认后，将自动生成运单</div>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="shipmentThirdWayBill('surface')" :disabled="doing">确定</el-button>
+            <el-button @click="cancel('surface')">取消</el-button>
+          </div>
+      </el-dialog> -->
   </div>
 </template>
 <script>
@@ -279,93 +296,100 @@ import StatusMixin from '@/mixins/statusMixin';
 import Perm from '@/components/common/perm';
 import MapPath from '../common/map-list';
 
-export default {
-  components: {
-    Perm, SearchPart, addForm, wayBillForm, singleWayBillForm, MapPath
-  },
-  mixins: [StatusMixin],
-  data() {
-    return {
-      carrierList: [],
-      loadingData: false,
-      activeStatus: '0',
-      orderType: utils.orderType,
-      dataList: [],
-      showIndex: -1,
-      showInfoIndex: -1,
-      currentPart: null,
-      currentInfoPart: null,
-      currentWayBillPart: null,
-      currentSingleWayBillPart: null,
-      currentSplitOrderPart: null,
-      dialogComponents: {
-        0: addForm
-      },
-      dialogInfoComponents: {
-        0: showForm
-      },
-      dialogWayBillComponents: {
-        0: wayBillForm
-      },
-      dialogSingleWayBillComponents: {
-        0: singleWayBillForm
-      },
-      dialogSplitFormComponents: {
-        0: splitForm
-      },
-      pager: {
-        currentPage: 1,
-        count: 0,
-        pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
-        totalPage: 1
-      },
-      action: '',
-      form: {},
-      filters: {
-        status: 0,
-        orderNo: '',
-        waybillType: '',
-        shipmentWay: '',
-        deliveryWay: '',
-        serviceType: '',
-        senderId: '',
-        receiverId: '',
-        startTime: '',
-        endTime: '',
-        tmsOrderNumber: '',
-        goodsTotalName: '',
-        destinationAreaCode: ''
-      },
-      isCheckAll: false,
-      isLoading: false,
-      checkList: [],
-      checkListPara: [],
-      showWayBillPart: false,
-      showSingleWayBillPart: false,
-      showSplitOrderPart: false,
-      formItem: {},
-      activeNo: '',
-      isShowMulBigMap: false,
-      dialogFormVisible: false,
-      auto: false,//如果为true，表示自动生成运单
-      dialogForm: {
-        carryType: 0,
-        carrierId: '',
-      },
-      dialogFormRules: {
-        carrierId: {
-          trigger: 'change',
-          validator: (rules, value, cb) => {
-            if (this.dialogForm.carryType === 1 && !value) {
-              return cb(new Error('请选择第三方承运商'));
-            }
+  export default {
+    components: {
+      Perm, SearchPart, addForm, wayBillForm,singleWayBillForm, MapPath
+    },
+    mixins: [StatusMixin],
+    data () {
+      return {
+        doing:false, // 确定按钮loading
+        surfaceFormVisible:false,  // 面单号弹窗
+        carrierList: [],
+        loadingData: false,
+        activeStatus: '0',
+        orderType: utils.orderType,
+        dataList: [],
+        showIndex: -1,
+        showInfoIndex: -1,
+        currentPart: null,
+        currentInfoPart: null,
+        currentWayBillPart: null,
+        currentSingleWayBillPart: null,
+        currentSplitOrderPart: null,
+        dialogComponents: {
+          0: addForm
+        },
+        dialogInfoComponents: {
+          0: showForm
+        },
+        dialogWayBillComponents: {
+          0: wayBillForm
+        },
+        dialogSingleWayBillComponents: {
+          0: singleWayBillForm
+        },
+        dialogSplitFormComponents: {
+          0: splitForm
+        },
+        pager: {
+          currentPage: 1,
+          count: 0,
+          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
+          totalPage: 1
+        },
+        action: '',
+        form: {},
+        filters: {
+          status: 0,
+          orderNo: '',
+          waybillType: '',
+          shipmentWay: '',
+          deliveryWay:'',
+          faceSheetNo:'',
+          serviceType: '',
+          senderId: '',
+          receiverId: '',
+          startTime: '',
+          endTime: '',
+          tmsOrderNumber:'',
+          goodsTotalName:'',
+          destinationAreaCode:''
+        },
+         // 面单号
+        surface:{
+          faceSheetNo:'',
+        },
+        isCheckAll: false,
+        isLoading:false,
+        checkList: [],
+        checkListPara: [],
+        shoWayBillPart: false,
+        showSingleWayBillPart: false,
+        showSplitOrderPart: false,
+        formItem: {},
+        activeNo: '',
+        isShowMulBigMap: false,
+        dialogFormVisible: false,
+        auto: false,//如果为true，表示自动生成运单
+        dialogForm: {
+          carryType: 0,
+          carrierId: '',
+        },
+        dialogFormRules: {
+          carrierId: {
+            trigger: 'change',
+            validator: (rules, value, cb) => {
+              if (this.dialogForm.carryType === 1 && !value) {
+                return cb(new Error('请选择第三方承运商'));
+              }
 
-            return cb();
-          },
+              return cb();
+            },
+          }
         }
-      }
-    };
-  },
+      };
+    },
   computed: {
     bodyHeight() {
       let height = parseInt(this.$store.state.bodyHeight, 10);

@@ -538,6 +538,7 @@ export default {
         tmsOrderNumber: '',
         orderNo: '',
         waybillType: '',
+        faceSheetNo:'',
         shipmentWay: '',
         deliveryWay: '',
         serviceType: '',

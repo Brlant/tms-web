@@ -161,6 +161,13 @@
                   </div>
                 </template>
               </el-table-column>
+              <el-table-column prop="faceSheetNo" label="面单号" mix-width="110">
+                <template slot-scope=" scope">
+                  <div class="f-14">
+                    {{scope.row.faceSheetNo}}
+                  </div>
+                </template>
+              </el-table-column>
               <el-table-column prop="receiverName" label="发货单位" mix-width="110">
                 <template slot-scope=" scope">
                   <div class="f-14">

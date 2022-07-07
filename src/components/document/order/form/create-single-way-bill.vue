@@ -111,6 +111,13 @@ $labelWidth: 220px;
                   <template slot="prepend">¥</template>
                 </oms-input>
               </oms-col>
+               <el-row>
+                <el-col :span="12">
+                  <el-form-item label="面单号">
+                    <oms-input v-model="carryInfo.faceSheetNo" placeholder="请输入面单号"></oms-input>
+                  </el-form-item  >
+                </el-col>
+              </el-row>
             </div>
             <div class="hr mb-10 clearfix"></div>
           </div>
@@ -277,6 +284,7 @@ export default {
       if (this.activeId === '') {
         return {
           "orderId": "", //订单id
+          "faceSheetNo":"",//面单号
           "carryType": 0, //承运类型
           "carrierId": "", //承运商id
           "insure": false, //是否投保
@@ -296,6 +304,7 @@ export default {
         this.wayBillParams = this.dataList.map(data => {
           return {
             "orderId": data.id,
+            "faceSheetNo": data.faceSheetNo || '',
             "carryType": 0,
             "insure": false,
             "insureAmount": '',
