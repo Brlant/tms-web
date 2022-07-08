@@ -456,6 +456,14 @@ export default [
             'leaf': true
           },
           {
+            'id': 'tms-waybill-shipment-butt',
+            'parentId': 'tms-waybill-manager',
+            'label': '启运',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
             'id': 'tms-waybill-temperature-delete',
             'parentId': 'tms-waybill-manager',
             'label': '删除包装信息',
