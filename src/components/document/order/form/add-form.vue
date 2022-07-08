@@ -790,64 +790,69 @@ export default {
     },
     save(formName) {
       this.$refs[formName].validate((valid) => {
-        if (valid && this.doing === false) {
-          // 处理货品列表
-          if (this.form.goodsList) {
-            let goodsList = [];
-            this.form.goodsList.forEach(val => {
-              if (val.goodsName !== '' || val.specifications !== '' || val.weight !== '' || val.volume !== '' || val.code !== '') {
-                goodsList.push(val);
-              }
-            });
-            this.form.goodsList = goodsList;
-          }
+        if (!valid || this.doing === true) {
+          return;
+        }
 
-          if (this.form.receiverName === this.form.receiverId) {
-            // 如果id和名字是一样的说明是新增的单位，需要把id置空
-            this.form.receiverId = '';
-          }
+        // 处理货品列表
+        if (this.form.goodsList) {
+          let goodsList = [];
+          this.form.goodsList.forEach(val => {
+            if (val.goodsName !== '' || val.specifications !== '' || val.weight !== '' || val.volume !== '' || val.code !== '') {
+              goodsList.push(val);
+            }
+          });
+          this.form.goodsList = goodsList;
+        }
 
-          if (this.action === 'add') {
-            this.doing = true;
-            TmsOrder.save(this.form).then(res => {
-              this.$notify.success({
-                duration: 2000,
-                name: '成功',
-                message: '新增订单成功'
-              });
-              this.doing = false;
-              this.$emit('change', res.data);
-              this.$emit('right-close');
-            }).catch(error => {
-              this.$notify.error({
-                duration: 2000,
-                message: error.response && error.response.data && error.response.data.msg || '新增订单失败'
-              });
-              this.doing = false;
-            });
-          } else {
-            this.doing = true;
-            TmsOrder.update(this.form.id, this.form).then(res => {
-              this.$notify.success({
-                name: '成功',
-                message: '修改订单"' + this.form.orderNo + '"成功'
-              });
-              this.doing = false;
-              this.$emit('change', res.data);
-              this.$emit('right-close');
-            }).catch(error => {
-              this.$notify.error({
-                duration: 2000,
-                message: error.response && error.response.data && error.response.data.msg || '修改订单失败'
-              });
-              this.doing = false;
-            });
-          }
+        if (this.form.receiverName === this.form.receiverId) {
+          // 如果id和名字是一样的说明是新增的单位，需要把id置空
+          this.form.receiverId = 'new';
+        }
+
+        if (this.action === 'add') {
+          this.addHandle();
         } else {
-
+          this.editHandle();
         }
       });
-
+    },
+    addHandle() {
+      this.doing = true;
+      TmsOrder.save(this.form).then(res => {
+        this.$notify.success({
+          duration: 2000,
+          name: '成功',
+          message: '新增订单成功'
+        });
+        this.doing = false;
+        this.$emit('change', res.data);
+        this.$emit('right-close');
+      }).catch(error => {
+        this.$notify.error({
+          duration: 2000,
+          message: error.response && error.response.data && error.response.data.msg || '新增订单失败'
+        });
+        this.doing = false;
+      });
+    },
+    editHandle() {
+      this.doing = true;
+      TmsOrder.update(this.form.id, this.form).then(res => {
+        this.$notify.success({
+          name: '成功',
+          message: '修改订单"' + this.form.orderNo + '"成功'
+        });
+        this.doing = false;
+        this.$emit('change', res.data);
+        this.$emit('right-close');
+      }).catch(error => {
+        this.$notify.error({
+          duration: 2000,
+          message: error.response && error.response.data && error.response.data.msg || '修改订单失败'
+        });
+        this.doing = false;
+      });
     },
     // 发货单位变更时的处理
     senderChange(value) {
@@ -882,7 +887,7 @@ export default {
     // 收货单位变更时的处理
     receiverChange(value) {
       if (value === '') {
-        this.form.receiverId = '';
+        this.form.receiverId = 'new';
         this.form.receiverName = '';
         this.form.receiverProvinceCode = '';
         this.form.receiverCityCode = '';

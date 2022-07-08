@@ -22,7 +22,7 @@ $labelWidth: 180px;
 }
 
 .el-form-item {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 </style>
 <template>
@@ -384,35 +384,35 @@ $labelWidth: 180px;
                 <div style="line-height: 30px;height: 30px">
                   <strong class="mr-10">运单号：{{ form.waybillNumber }}</strong>
                 </div>
-                <div>
-                  <div v-show="logisticsInfoList.length === 0" class="empty-info mini">暂无物流信息</div>
+                <div style="padding: 20px 0">
+                  <div v-show="logisticsList.length === 0" class="empty-info mini">暂无物流信息</div>
                   <Timeline>
-                    <template v-for="(log,index) in logisticsInfoList">
-                      <TimelineItem color="green" v-if="log.showStatus">
+                    <template v-for="(log,index) in logisticsList">
+                      <TimelineItem color="green" v-if="log.statusName">
                         <i class="iconfont icon-home" slot="dot"></i>
                         <el-row class="tiny-timeline-content">
-                          <el-col :span="4">
-                            {{ log.statusName }}
+                          <el-col :span="2">
+                            <strong style="font-size: 16px">{{ log.statusName }}</strong>
                           </el-col>
-                          <el-col :span="18">
-                            <strong>{{ log.time }}</strong>
+                          <el-col :span="10">
+                            <strong>{{ log.logisticsTime|time }}</strong>
                           </el-col>
                         </el-row>
                         <el-row class="tiny-timeline-content">
                           <el-col :span="24">
-                            {{ log.content }}
+                            {{ log.logisticsDetail }}
                           </el-col>
                         </el-row>
                       </TimelineItem>
                       <TimelineItem color="grey" v-else>
                         <el-row class="tiny-timeline-content">
-                          <el-col :span="18">
-                            {{ log.time }}
+                          <el-col :span="10">
+                            {{ log.logisticsTime|time }}
                           </el-col>
                         </el-row>
                         <el-row class="tiny-timeline-content">
                           <el-col :span="24">
-                            {{ log.content }}
+                            {{ log.logisticsDetail }}
                           </el-col>
                         </el-row>
                       </TimelineItem>
@@ -516,7 +516,7 @@ export default {
       },
       rules: {},
       orderLogList: [],
-      logisticsInfoList: [],
+      logisticsList: [],
       loadingLog: false,
       attachmentList: [],
       attachmentIdList: [],
@@ -583,6 +583,9 @@ export default {
             this.assessAttachmentList = [];
             this.getAssessFileList();
           }
+
+          const waybillNo = this.form.waybillNumber;
+          this.getLogisticsList(waybillNo);
         });
       }
     }
@@ -844,7 +847,17 @@ export default {
     },
     close() {
       this.$emit('right-close');
+    },
+    // 获取物流信息（文字版）
+    getLogisticsList(waybillNo){
+      this.$http.get(`/logistics/queryTmsLogisticsByNo?waybillNo=${waybillNo}`)
+      .then(res=>{
+        this.logisticsList = res.data;
+      })
+      .catch(()=>{
+        // 不处理
+      })
     }
-  }
+  },
 };
 </script>
