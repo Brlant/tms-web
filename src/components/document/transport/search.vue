@@ -84,14 +84,14 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="elColSpan">
-            <oms-form-row label="目的地区域代码" :span="omsRowSpan">
+          <el-col :span="elColSpan5">
+            <oms-form-row label="目的地区域代码" :span="8">
               <oms-input v-model="searchCondition.destinationAreaCode" placeholder="请输入目的地区域代码"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
-          <el-col :span="elColSpan">
-            <oms-form-row label="货品名称(模糊)" :span="omsRowSpan">
+          <el-col :span="elColSpan5">
+            <oms-form-row label="货品名称(模糊)" :span="8">
               <oms-input v-model="searchCondition.goodsTotalName" placeholder="请输入货品名称模糊查询"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
@@ -100,6 +100,20 @@
             <oms-form-row label="送达时限" :span="omsRowSpan">
               <el-date-picker v-model="deliveryDate" type="daterange" placeholder="请选择">
               </el-date-picker>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="elColSpan4">
+            <oms-form-row label="面单号" :span="4">
+              <oms-input v-model="searchCondition.faceSheetNo" placeholder="请输入面单号"
+                         @keyup.native.enter="search"></oms-input>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="elColSpan4">
+            <oms-form-row label="状态" :span="6">
+              <el-radio-group v-model="searchCondition.packFlag" size="small">
+                <el-radio-button label="true">已打包</el-radio-button>
+                <el-radio-button label="false">未打包</el-radio-button>
+              </el-radio-group>
             </oms-form-row>
           </el-col>
         </el-row>
@@ -147,11 +161,14 @@ export default {
   data: function () {
     return {
       elColSpan: 6,
+      elColSpan5: 5,
+      elColSpan4: 4,
       omsRowSpan: 8,
       searchCondition: {
         waybillNumber: '',
         orderNo: '',
         tmsOrderNumber: '',
+        faceSheetNo:'',
         waybillType: '',
         shipmentWay: '',
         deliveryWay: '',
@@ -188,12 +205,24 @@ export default {
     }
   },
   watch: {
+    'searchCondition.waybillNumber': function () {
+        this.search();
+      },
     'searchCondition.carryType': function () {
       this.search();
     },
     'searchCondition.packFlag': function () {
       this.search();
     },
+    'searchCondition.orderNo': function () {
+        this.search();
+      },
+      'searchCondition.tmsOrderNumber': function () {
+        this.search();
+      },
+      'searchCondition.faceSheetNo': function () {
+        this.search();
+      },
     'searchCondition.senderId': function () {
       this.search();
     },
@@ -216,48 +245,49 @@ export default {
         this.searchCondition.startTime = '';
         this.searchCondition.endTime = '';
         this.$emit('search', this.searchCondition);
+        }
+      }
+    },
+    methods: {
+      reset () {
+        this.searchCondition = {
+          waybillNumber: '',
+          orderNo: '',
+          tmsOrderNumber:'',
+          waybillType: '',
+          shipmentWay: '',
+          deliveryWay:'',
+          serviceType: '',
+          senderId: '',
+          receiverId: '',
+          faceSheetNo:'',
+          startTime: '',
+          endTime: '',
+          goodsTotalName: '',
+          packFlag: '',
+          destinationAreaCode:''
+        };
+        this.deliveryDate = '';
+        this.$emit('search', this.searchCondition);
+      },
+      search () {
+        this.searchCondition.startTime = this.$formatAryTime(this.deliveryDate, 0, 'YYYY-MM-DD');
+        this.searchCondition.endTime = this.$formatAryTime(this.deliveryDate, 1, 'YYYY-MM-DD');
+        this.$emit('search', this.searchCondition);
+      },
+      isShow(val) {
+        this.showSearch = val;
+      },
+      filterSenderOrg: function (query) {// 过滤发货单位
+        BaseInfo.query({keyWord: query}).then(res => {
+          this.senderOrgList = res.data.list;
+        });
+      },
+      filterReceiverOrg: function (query) {// 过滤收货单位
+        BaseInfo.query({keyWord: query}).then(res => {
+          this.receiverOrgList = res.data.list;
+        });
       }
     }
-  },
-  methods: {
-    reset() {
-      this.searchCondition = {
-        waybillNumber: '',
-        orderNo: '',
-        tmsOrderNumber: '',
-        waybillType: '',
-        shipmentWay: '',
-        deliveryWay: '',
-        serviceType: '',
-        senderId: '',
-        receiverId: '',
-        startTime: '',
-        endTime: '',
-        goodsTotalName: '',
-        packFlag: '',
-        destinationAreaCode: ''
-      };
-      this.deliveryDate = '';
-      this.$emit('search', this.searchCondition);
-    },
-    search() {
-      this.searchCondition.startTime = this.$formatAryTime(this.deliveryDate, 0, 'YYYY-MM-DD');
-      this.searchCondition.endTime = this.$formatAryTime(this.deliveryDate, 1, 'YYYY-MM-DD');
-      this.$emit('search', this.searchCondition);
-    },
-    isShow(val) {
-      this.showSearch = val;
-    },
-    filterSenderOrg: function (query) {// 过滤发货单位
-      BaseInfo.query({keyWord: query}).then(res => {
-        this.senderOrgList = res.data.list;
-      });
-    },
-    filterReceiverOrg: function (query) {// 过滤收货单位
-      BaseInfo.query({keyWord: query}).then(res => {
-        this.receiverOrgList = res.data.list;
-      });
-    }
-  }
 };
 </script>

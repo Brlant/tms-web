@@ -27,28 +27,37 @@
     <search-part @search="searchResult">
 
       <template slot="pre-btn">
-        <!--        <perm label="tms-waybill-import">-->
-        <el-dropdown @command="handleCommand">
+        <el-dropdown>
           <el-button plain size="small">
             导入物流信息<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="a">导入物流信息</el-dropdown-item>
-            <el-dropdown-item command="b">下载物流模板</el-dropdown-item>
+            <el-dropdown-item>
+              <el-upload
+                ref="upload-logistics"
+                action="/api/logistics/import-logistics"
+                :on-success="uploadLogisticsSuccess"
+                :on-error="uploadLogisticsError"
+                :show-file-list="false"
+              >导入物流（文字版）信息
+              </el-upload>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-link href="/api/tms-waybill/download-tmslogistics" :underline="false">下载物流（文字版）模板</el-link>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <!--        </perm>-->
-        <!--        <perm label="tms-waybill-import">-->
-        <el-dropdown @command="handleCommand" class="ml-10">
+        <el-dropdown class="ml-10" v-show="false">
           <el-button plain size="small">
-            导入温度数据<i class="el-icon-arrow-down el-icon--right"></i>
+            导入温度（经纬度）数据<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="c">导入温度数据</el-dropdown-item>
-            <el-dropdown-item command="d">下载温度数据</el-dropdown-item>
+            <el-dropdown-item command="c">导入温度（经纬度）数据</el-dropdown-item>
+            <el-dropdown-item command="d">
+              <el-link href="/api/tms-waybill/downloadLLT">下载温度（经纬度）模板</el-link>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <!--        </perm>-->
       </template>
       <template slot="btn">
         <!--        <perm label="tms-waybill-add">-->
@@ -290,7 +299,7 @@
                 <div style="padding-top: 2px">
                   <perm label="tms-waybill-cancel" class="opera-btn">
                     <span @click.stop="cancelWayBill(item)"
-                          v-if="item.status === '-2'||item.status === '-1'||item.status === '0'||item.status === '1'">
+                          v-if="item.status === '-2'||item.status === '-1'||item.status === '0'||(item.status === '1' && item.carryType == '1')">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
@@ -538,6 +547,7 @@ export default {
         tmsOrderNumber: '',
         orderNo: '',
         waybillType: '',
+        faceSheetNo:'',
         shipmentWay: '',
         deliveryWay: '',
         serviceType: '',
@@ -933,6 +943,8 @@ export default {
         this.doing = true;
         TmsWayBill.shipmentThirdWayBill(this.dialogForm)
           .then(() => {
+            // 启运成功后需要关闭对话框
+            this.dialogFormVisible = false;
             this.$notify.success('启运成功');
             this.getTmsWayBillPage(1);
           })
@@ -1100,41 +1112,14 @@ export default {
       this.checkList = [];
       this.checkListPara = [];
     },
-    handleCommand(command) {
-      switch (command) {
-        // 导入物流信息
-        case 'a':
-          this.logisticsImport();
-          break;
-        // 下载物流模板
-        case 'b':
-          this.logisticsDownload();
-          break;
-        // 导入温度数据
-        case 'c':
-          this.temperatureImport();
-          break;
-        // 下载温度数据
-        case 'd':
-          this.temperatureImport();
-          break;
-        default:
-          console.warn('未知的指令：', command)
-          break
-      }
+    uploadLogisticsSuccess(response, file, fileList) {
+      console.log(response, file, fileList);
+      this.$message.success("导入成功！")
     },
-    logisticsImport() {
-      this.$message.warning('功能开发中……');
-    },
-    logisticsDownload() {
-      this.$message.warning('功能开发中……');
-    },
-    temperatureImport() {
-      this.$message.warning('功能开发中……');
-    },
-    temperatureDownload() {
-      this.$message.warning('功能开发中……');
-    },
+    uploadLogisticsError(response, file, fileList) {
+      console.error(response, file, fileList);
+      this.$message.success("导入失败！")
+    }
   }
 };
 </script>

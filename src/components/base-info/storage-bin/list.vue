@@ -250,15 +250,18 @@
             </el-table-column>
             <el-table-column label="操作">
               <template v-slot="{row,$index}">
-                <el-button type="text" v-if="row.storeStatus==1" @click="updateStatus(row,0,$index)">
+                <template v-if="row.storeStatus==1">
+                  <el-button type="text" @click="updateStatus(row,1,$index)">
+                    <i class="el-icon-success"> 启用</i>
+                  </el-button>
+                  <el-button type="text" @click="openEditPositionPage(row,$index)">
+                    <i class="el-icon-edit-outline"> 编辑</i>
+                  </el-button>
+                </template>
+                <el-button v-else type="text"  @click="updateStatus(row,0,$index)">
                   <i class="el-icon-t-forbidden"> 停用</i>
                 </el-button>
-                <el-button type="text" v-else @click="updateStatus(row,1,$index)">
-                  <i class="el-icon-success"> 启用</i>
-                </el-button>
-                <el-button type="text" @click="openEditPositionPage(row,$index)">
-                  <i class="el-icon-edit-outline"> 编辑</i>
-                </el-button>
+
               </template>
             </el-table-column>
           </el-table>

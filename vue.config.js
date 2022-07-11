@@ -20,7 +20,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: proxyTargets.hw,
+        target: proxyTargets.lxr,
         changOrigin: true
       }
     }

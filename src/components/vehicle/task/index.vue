@@ -342,6 +342,7 @@ export default {
           carPlateNumber: '',
           waybillNo: '',
           tmsOrderNumber:'',
+          faceSheetNo:'',
           createStartTime: '',
           createEndTime: '',
           sStartTime: '',

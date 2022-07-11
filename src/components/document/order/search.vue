@@ -13,7 +13,13 @@
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="4">
+            <oms-form-row label="面单号" :span="8">
+              <oms-input v-model="searchCondition.faceSheetNo" placeholder="请输入面单号"
+                         @keyup.native.enter="search"></oms-input>
+            </oms-form-row>
+          </el-col>
+          <el-col :span="5">
             <oms-form-row label="发货单位" :span="6">
               <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterSenderOrg"
                          :clearable="true"
@@ -31,7 +37,7 @@
               </el-select>
             </oms-form-row>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <oms-form-row label="收货单位" :span="6">
               <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterReceiverOrg"
                          :clearable="true"
@@ -49,7 +55,7 @@
               </el-select>
             </oms-form-row>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <oms-form-row label="送达时限" :span="4">
               <el-date-picker v-model="deliveryDate" type="daterange" placeholder="请选择">
               </el-date-picker>
@@ -114,6 +120,7 @@ export default {
           waybillType: '',
           shipmentWay: '',
           deliveryWay:'',
+          faceSheetNo:'',
           serviceType: '',
           senderId: '',
           receiverId: '',
@@ -158,6 +165,9 @@ export default {
       'searchCondition.shipmentWay': function () {
         this.search();
       },
+      'searchCondition.faceSheetNo': function () {
+        this.search();
+      },
       'searchCondition.deliveryWay': function () {
         this.search();
       },
@@ -178,6 +188,7 @@ export default {
           waybillType: '',
           shipmentWay: '',
           deliveryWay:'',
+          faceSheetNo:'',
           serviceType: '',
           senderId: '',
           receiverId: '',
