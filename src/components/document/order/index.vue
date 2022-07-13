@@ -364,7 +364,7 @@ import MapPath from '../common/map-list';
         isLoading:false,
         checkList: [],
         checkListPara: [],
-        shoWayBillPart: false,
+        showWayBillPart: false,
         showSingleWayBillPart: false,
         showSplitOrderPart: false,
         formItem: {},
