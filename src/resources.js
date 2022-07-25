@@ -201,6 +201,41 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   }
 });
 
+// 中转入库单
+export const TransferInOrder = {
+  // 查询列表
+  query: (params) => {
+    return http.get('/transfer-in-order', {params});
+  },
+  // 查询列表的状态数量
+  queryStateNum: (params) => {
+    return http.get('/transfer-in-order/count', {params});
+  },
+  // 查询详情
+  getDetails: (id) => {
+    return http.get(`/transfer-in-order/${id}`);
+  },
+  // 认领任务
+  claimTask: (id) => {
+    return http.put(`/transfer-in-order/claim-task/${id}`);
+  },
+  // 上架
+  shelves: (id,params) => {
+    return http.put(`/transfer-in-order/shelves/${id}`, {params});
+  },
+  // 指派上架人
+  assignedOnPeople: (id,params) => {
+    return http.put(`/transfer-in-order/assigned-on-people/${id}`, {params});
+  },
+  // 收货
+  receivingGoods: (id,params) => {
+    return http.put(`/transfer-in-order/receiving-goods/${id}`, {params});
+  },
+};
+
+// 中转出库单
+export const TransferOutOrder = resource('/transfer-in-order', http, {});
+
 // dev设备对象
 export const TempDev = resource('/ccsDevice', http, {
   queryStateNum: (params) => {
@@ -539,7 +574,7 @@ export const InWork = resource('/stock-in', http, {
     return http.post(`/stock-in/${orderId}/batch/allot`);
   },
   queryOperator(obj) { // 查询操作员
-    return http.get('/stock-in/operator/', {params: obj});
+    return http.get('/stock-in/operator', {params: obj});
   },
   queryOperatorOrders(obj) { // 查询操作员的任务
     return http.get('/stock-in/operator/orders', {params: obj});

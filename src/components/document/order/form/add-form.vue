@@ -178,49 +178,6 @@ $labelWidth: 180px;
                            placeholder="试试搜索：合肥"
                            :options="address"
                            filterable clearable></el-cascader>
-              <!--              <div style="display: inline-flex">
-                              <el-select class="mr-10" v-model="form.receiverProvinceCode" placeholder="请选择省" filterable
-                                         @change="provinceChange">
-                                <el-option-group
-                                  v-for="group in provinceOptions"
-                                  :key="group.label"
-                                  :label="group.label">
-                                  <el-option
-                                    v-for="item in group.options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                  </el-option>
-                                </el-option-group>
-                              </el-select>
-                              <el-select class="mr-10" v-model="form.receiverCityCode" placeholder="请选择市" filterable
-                                         @change="cityChange">
-                                <el-option-group
-                                  v-for="group in cityOptions"
-                                  :key="group.label"
-                                  :label="group.label">
-                                  <el-option
-                                    v-for="item in group.options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                  </el-option>
-                                </el-option-group>
-                              </el-select>
-                              <el-select v-model="form.receiverRegionCode" placeholder="请选择区" filterable @change="regionChange">
-                                <el-option-group
-                                  v-for="group in regionOptions"
-                                  :key="group.label"
-                                  :label="group.label">
-                                  <el-option
-                                    v-for="item in group.options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                  </el-option>
-                                </el-option-group>
-                              </el-select>
-                            </div>-->
             </el-form-item>
             <el-form-item label="具体地址" prop="receiverDetailAddr">
               <el-select filterable placeholder="请选择/输入具体的收货地址"
@@ -555,7 +512,7 @@ export default {
         return '';
       }
 
-      const pathLabels = nodes[0].pathLabels;
+      const pathLabels = nodes[0] ? nodes[0].pathLabels : [];
       return pathLabels.join('') + this.form.receiverDetailAddr;
     },
     // provinceOptions() {

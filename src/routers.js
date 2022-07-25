@@ -81,12 +81,12 @@ export const routes = [
             meta: {moduleId: 'document', title: '运单管理', perm: 'tms-waybill-query'}
           },
           {
-            path: '/warehouse/in/whole',
+            path: '/transit/store-in',
             component: () => import('./components/document/transit/store-in/index.vue'),
             meta: {moduleId: 'document', title: '中转入库', perm: 'transit-warehouse-in'}
           },
           {
-            path: '/warehouse/out/whole',
+            path: '/transit/store-out',
             component: () => import('./components/document/transit/store-out/index.vue'),
             meta: {moduleId: 'document', title: '中转出库', perm: 'transit-warehouse-out'}
           },

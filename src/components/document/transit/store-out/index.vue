@@ -189,7 +189,7 @@
                                 <i class="el-icon-user"></i>
                             </a>指派操作人
                             </span>
-                        </perm> 
+                        </perm>
                     </div>
                     <div>
                         <perm label="tms-waybill-edit">
@@ -294,13 +294,13 @@ import StatusMixin from '@/mixins/statusMixin';
 
 export default {
   components: {
-    SearchPart, 
+    SearchPart,
   },
   mixins: [StatusMixin],
   data() {
     return {
       doing: false,
-      dialogFormVisible: false, 
+      dialogFormVisible: false,
       increaseVisible:false,
       increaseForm: {  //新增查询的订单号
         id: '',
@@ -318,7 +318,7 @@ export default {
 
       loadingData: false,
       activeStatus: 0,
-      orderType: utils.warehouseOutType,
+      orderType: utils.transferOutType,
       dataList: [],
       showIndex: -1,
       showInfoIndex: -1,

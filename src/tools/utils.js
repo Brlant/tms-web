@@ -24,21 +24,22 @@ export default {
     9: {'title': '质量待评估', status: '5', num: ''},
     10: {'title': '已中止', status: '6', num: ''}
   },
-  warehouseInType: {
+  // 0--待收货，1--待分配上架人，2--待上架，4--已完成，-1--已取消
+  transferInType: {
     0: {'title': '所有', status: null, num: ''},
     1: {'title': '待收货', status: '0', num: ''},
     2: {'title': '待配上架人', status: '1', num: ''},
     3: {'title': '待上架', status: '2', num: ''},
     4: {'title': '已完成', status: '3', num: ''},
-    5: {'title': '已取消', status: '4', num: ''},
+    5: {'title': '已取消', status: '-1', num: ''},
   },
-  warehouseOutType: {
+  transferOutType: {
     0: {'title': '所有', status: null, num: ''},
     1: {'title': '待确认', status: '0', num: ''},
     2: {'title': '待配下架人', status: '1', num: ''},
     3: {'title': '待下架', status: '2', num: ''},
     4: {'title': '已完成', status: '3', num: ''},
-    5: {'title': '已取消', status: '4', num: ''},
+    5: {'title': '已取消', status: '-1', num: ''},
   },
   carTaskType: {
     0: {'title': '待确认', status: '0', num: ''},

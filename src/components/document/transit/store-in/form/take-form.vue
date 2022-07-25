@@ -13,12 +13,14 @@ $labelWidth: 180px;
     left: $labelWidth;
   }
 }
+
 .part-hj-box {
   border: 1px solid #eee;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
 }
+
 // .el-form-item {
 //   margin-bottom: 0px;
 // }
@@ -55,45 +57,36 @@ $labelWidth: 180px;
             <oms-col
               label="中转入库单号"
               :rowSpan="span"
-              :value="form.waybillNumber"
+              :value="form.transferInOrderNo"
             />
             <oms-col
               label="订单号"
               :rowSpan="span"
-              :value="form.waybillNumber"
+              :value="form.orderNo"
             />
             <oms-col
               label="运单号"
               :rowSpan="span"
-              :value="form.waybillNumber"
+              :value="form.waybillNo"
             />
-            <oms-col
-              label="运单类型"
-              :rowSpan="span"
-              :value="form.waybillNumber"
-            />
-            <oms-col
-              label="运输条件"
-              :rowSpan="span"
-              :value="form.waybillNumber"
-            />
-            <oms-col
-              label="发货方式"
-              :rowSpan="span"
-              :value="form.waybillNumber"
-            />
-            <oms-col label="货主" :rowSpan="span" :value="form.waybillNumber" />
+            <oms-col label="运单类型" :rowSpan="span" :value="form.waybillType">
+              <dict :dict-group="'bizType'" :dict-key="form.waybillType"></dict>
+            </oms-col>
+            <oms-col label="运输条件" :rowSpan="span" :value="form.shipmentWay">
+              <dict :dict-group="'transportationCondition'" :dict-key="form.shipmentWay"></dict>
+            </oms-col>
+            <oms-col label="发运方式" :rowSpan="span" :value="form.deliveryWay">
+              <dict :dict-group="'deliveryWay'" :dict-key="form.deliveryWay"></dict>
+            </oms-col>
+            <oms-col label="货主" :rowSpan="span" :value="form.orgName"/>
             <oms-col
               label="收货单位"
               :rowSpan="span"
-              :value="form.waybillNumber"
+              :value="form.receiverName"
             />
-            <div class="hr mb-10 clearfix"></div>
-            <!-- <oms-col label="运单状态" :rowSpan="span" :value="form.status">
-                {{ formatStatusTitle(form.status, orderType) }}
-                </oms-col> -->
           </div>
         </div>
+        <div class="hr mb-10 clearfix"></div>
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
@@ -108,32 +101,32 @@ $labelWidth: 180px;
             <oms-col
               label="货品名称"
               :rowSpan="span"
-              :value="form.waybillNumber"
+              :value="form.tmsGoodsTotalName"
             />
-            <oms-col label="总价" :rowSpan="span" :value="form.waybillNumber" />
+            <oms-col label="总价" :rowSpan="span" :value="form.goodsPrice"/>
             <oms-col
               label="整装箱数"
               :rowSpan="span"
-              :value="form.waybillNumber"
+              :value="form.wholeBoxCount"
             />
             <oms-col
               label="散装箱数"
               :rowSpan="span"
-              :value="form.waybillNumber"
+              :value="form.bulkBoxCount"
             />
             <oms-col
               label="重量kg"
               :rowSpan="span"
-              :value="form.waybillNumber"
+              :value="form.goodsWeight"
             />
             <oms-col
               label="体积m³"
               :rowSpan="span"
-              :value="form.waybillNumber"
+              :value="form.goodsVolume"
             />
-            <div class="hr mb-10 clearfix"></div>
           </div>
         </div>
+        <div class="hr mb-10 clearfix"></div>
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
@@ -148,30 +141,30 @@ $labelWidth: 180px;
             <oms-col
               label="货品名称"
               :rowSpan="span"
-              :value="form.waybillNumber"
+              :value="form.tmsGoodsTotalName"
             />
-            <oms-col label="总价" :rowSpan="span" :value="form.waybillNumber" />
+            <oms-col label="总价" :rowSpan="span" :value="form.goodsPrice"/>
             <div class="mb-10 clearfix"></div>
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="实收整装箱数" prop="wholeBoxCount">
                   <oms-input
-                    v-model="form.wholeBoxCount"
+                    v-model="form.actualWholeNum"
                     type="interge"
                     :min="0"
                     placeholder="请输入实收整装箱数"
-                    @blur="setWholeBoxCount(form.wholeBoxCount)"
+                    @blur="setWholeBoxCount(form.actualWholeNum)"
                   ></oms-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="实收散装箱数" prop="bulkBoxCount">
                   <oms-input
-                    v-model="form.bulkBoxCount"
+                    v-model="form.actualBulkNum"
                     type="interge"
                     :min="0"
                     placeholder="请输入实收散装箱数"
-                    @blur="setBulkBoxCount(form.bulkBoxCount)"
+                    @blur="setBulkBoxCount(form.actualBulkNum)"
                   ></oms-input>
                 </el-form-item>
               </el-col>
@@ -180,7 +173,7 @@ $labelWidth: 180px;
               <el-col :span="12">
                 <el-form-item label="重量kg">
                   <oms-input
-                    v-model="form.weight"
+                    v-model="form.goodsVolume"
                     :readonly="true"
                     type="text"
                   ></oms-input>
@@ -189,7 +182,7 @@ $labelWidth: 180px;
               <el-col :span="12">
                 <el-form-item label="体积m³">
                   <oms-input
-                    v-model="form.volume"
+                    v-model="form.goodsWeight"
                     :readonly="true"
                     type="text"
                   ></oms-input>
@@ -198,37 +191,35 @@ $labelWidth: 180px;
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-form-item label="是否合格" prop="broken">
-                  <!-- <el-radio v-model="form.broken" label="2">否</el-radio>
-                  <el-radio v-model="form.broken" label="1">是</el-radio> -->
-                  <el-radio-group v-model="form.broken">
-                    <el-radio  label="0">否</el-radio>
-                    <el-radio  label="1">是</el-radio>
+                <el-form-item label="是否破损" prop="damaged">
+                  <el-radio-group v-model="form.damaged">
+                    <el-radio label="0">否</el-radio>
+                    <el-radio label="1">是</el-radio>
                   </el-radio-group>
                 </el-form-item>
-                
+
               </el-col>
             </el-row>
-            <el-row v-if="form.broken == 1">
+            <el-row v-if="form.damaged == 1">
               <el-col :span="12">
-                <el-form-item label="破损整装箱数" prop="unWholeBoxCount">
+                <el-form-item label="破损整装箱数" prop="damagedWholeNum">
                   <oms-input
-                    v-model="form.unWholeBoxCount"
+                    v-model="form.damagedWholeNum"
                     type="interge"
                     :min="0"
                     placeholder="请输入破损整装箱数"
-                    @blur="setUnWholeBoxCount(form.unWholeBoxCount)"
+                    @blur="setUnWholeBoxCount(form.damagedWholeNum)"
                   ></oms-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="破损散装箱数" prop="unBulkBoxCount">
+                <el-form-item label="破损散装箱数" prop="damagedBulkNum">
                   <oms-input
-                    v-model="form.unBulkBoxCount"
+                    v-model="form.damagedBulkNum"
                     type="interge"
                     :min="0"
                     placeholder="请输入破损散装箱数"
-                    @blur="setUnWholeBoxCount(form.unBulkBoxCount)"
+                    @blur="setUnWholeBoxCount(form.damagedBulkNum)"
                   ></oms-input>
                 </el-form-item>
               </el-col>
@@ -236,7 +227,7 @@ $labelWidth: 180px;
             <el-row>
               <el-form-item label="备注">
                 <oms-input
-                  v-model="form.note"
+                  v-model="form.remarks"
                   type="textarea"
                   placeholder="请输入备注"
                 ></oms-input>
@@ -249,23 +240,25 @@ $labelWidth: 180px;
   </dialog-template>
 </template>
 <script>
-import { OmsAttachment, TmsWayBill } from "@/resources";
+import {OmsAttachment, TransferInOrder} from "@/resources";
 
 export default {
   data() {
     return {
       span: 8,
       pageSets: [
-        { name: "任务详情", key: 0 },
-        { name: "货品详情", key: 1 },
-        { name: "收货信息", key: 2 },
+        {name: "任务详情", key: 0},
+        {name: "货品详情", key: 1},
+        {name: "收货信息", key: 2},
       ],
       currentTab: {},
       form: {
         id: "",
         // attachmentIdList: [],
         qualityInspection: "",
-        broken: 0,
+        actualWholeNum: "",
+        actualBulkNum: "",
+        damaged: 0,
         wholeBoxCount: "",
         bulkBoxCount: "",
         goodsWeight: "",
@@ -292,8 +285,8 @@ export default {
             trigger: "blur",
           },
         ],
-        broken: [
-          { required: true, message: "请选择是否合格", trigger: "blur" },
+        damaged: [
+          {required: true, message: "请选择是否破损", trigger: "blur"},
         ],
         unWholeBoxCount: [
           {
@@ -312,29 +305,25 @@ export default {
           },
         ],
       },
-      // customerList: [],
-      // senderOrgList: [],
-      // receiverOrgList: [],
       attachmentList: [],
     };
   },
-  // computed: {
-  //   shipmentWayList() {
-  //     return this.$getDict('shipmentWayType');
-  //   },
-  //   typeList() {
-  //     return this.$getDict('transportationCondition');
-  //   },
-  //   serviceTypeList() {
-  //     return this.$getDict('serviceType');
-  //   }
-  // },
+  computed: {
+    shipmentWayList() {
+      return this.$getDict('shipmentWayType');
+    },
+    typeList() {
+      return this.$getDict('transportationCondition');
+    },
+    serviceTypeList() {
+      return this.$getDict('serviceType');
+    }
+  },
   props: ["formItem", "action"],
   watch: {
     formItem: function (val) {
       if (val.id) {
-        this.form = val;
-        this.getFileList();
+        this.getDetails(val.id);
       }
     },
   },
@@ -342,13 +331,6 @@ export default {
     setDoing(val) {
       this.doing = val;
     },
-    // changeFiles: function (fileList) {
-    //   let ids = [];
-    //   fileList.forEach(file => {
-    //     ids.push(file.attachmentId);
-    //   });
-    //   this.form.attachmentIdList = ids;
-    // },
     setWholeBoxCount(value) {
       if (!value || isNaN(value)) return;
       this.form.wholeBoxCount = parseInt(value, 10);
@@ -366,6 +348,11 @@ export default {
       this.form.unBulkBoxCount = parseInt(value, 10);
     },
     // 表单详情
+    getDetails(id) {
+      TransferInOrder.getDetails(id).then(res => {
+        this.form = res.data;
+      })
+    },
     getFileList: function () {
       if (!this.form.id) return;
       OmsAttachment.queryOneAttachmentList(this.form.id, "waybill-check").then(
@@ -388,40 +375,17 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log("校验成功");
+          TransferInOrder.claimTask(this.form.id).then(res => {
+            this.$notify.success("收货成功");
+          }).catch(err => {
+            this.$notify.error("收货失败：" + err.getMsg);
+          })
         } else {
           console.log("校验失败");
         }
-        // if (valid && this.doing === false) {
-        //   this.$confirm('确认保存运单"' + this.form.waybillNumber + '"的评估结果?', '', {
-        //     confirmButtonText: '确定',
-        //     cancelButtonText: '取消',
-        //     type: 'warning'
-        //   }).then(() => {
-        //     let tempForm = {
-        //       flag: this.form.qualityFlag === null ? false : this.form.qualityFlag,
-        //       qualityInspection: this.form.qualityInspection,
-        //       attachmentIdList: this.form.attachmentIdList
-        //     };
-        //     this.doing = true;
-        //     TmsWayBill.assessmentTmsWayBill(this.form.id, tempForm).then(res => {
-        //       this.$notify.success({
-        //         name: '成功',
-        //         message: '保存运单"' + this.form.waybillNumber + '"评估结果成功'
-        //       });
-        //       this.doing = false;
-        //       this.$emit('change', this.form);
-        //       this.$emit('right-close');
-        //     }).catch(error => {
-        //       this.$notify.error({
-        //         duration: 2000,
-        //         message: error.response && error.response.data && error.response.data.msg || '保存运单评估结果失败'
-        //       });
-        //       this.doing = false;
-        //     });
-        //   });
-        // }
       });
     },
+
   },
 };
 </script>
