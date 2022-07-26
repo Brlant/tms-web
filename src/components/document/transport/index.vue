@@ -305,6 +305,14 @@
                       </a>取消
                     </span>
                   </perm>
+                  <perm label="tms-waybill-edit">
+                    <span @click.stop="transferIn(item)"
+                          v-if="item.status === '-2'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-verifyPass"></i>
+                      </a>中转入库
+                    </span>
+                  </perm>
                   <perm label="tms-waybill-pack" class="opera-btn">
                     <span @click.stop="packageWayBill(item)" v-if="item.status === '-1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
@@ -457,7 +465,7 @@
 <script>
 import utils from '@/tools/utils';
 import SearchPart from './search';
-import {http, TmsWayBill} from '@/resources';
+import {http, TmsWayBill,TransferInOrder} from '@/resources';
 import addForm from './form/add-form.vue';
 import showForm from './form/show-form.vue';
 import signForm from './form/sign-form';
@@ -977,6 +985,25 @@ export default {
           this.$notify.error({
             duration: 2000,
             message: error.response && error.response.data && error.response.data.msg || '取消运单失败'
+          });
+        });
+      }).catch(() => {
+
+      });
+    },
+    transferIn(item){
+      this.$confirm('是否确认生成中转入库单?', '', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        TransferInOrder.generate(item.waybillNumber).then((res) => {
+          this.$notify.success('中转入库成功');
+          this.getTmsWayBillPage(1);
+        }).catch(error => {
+          this.$notify.error({
+            duration: 2000,
+            message: error.response && error.response.data && error.response.data.msg || '生成中转入库单失败'
           });
         });
       }).catch(() => {

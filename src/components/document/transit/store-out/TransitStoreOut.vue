@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
 .special-col {
   padding-left: 20px;
   position: relative;
@@ -184,7 +184,7 @@
               <div>
                 <div>
                   <perm label="tms-waybill-edit">
-                            <span @click.stop="onePerson(item)" >
+                            <span @click.stop="onePerson(item)">
                             <a class="btn-circle btn-opera">
                                 <i class="el-icon-user"></i>
                             </a>指派操作人
@@ -194,7 +194,7 @@
                 <div>
                   <perm label="tms-waybill-edit">
                             <span @click.stop="claimTask(item)">
-                            <a  class="btn-circle btn-opera">
+                            <a class="btn-circle btn-opera">
                                 <i class="el-icon-t-verifyPass"></i>
                             </a>认领任务
                             </span>
@@ -204,7 +204,7 @@
               <div>
                 <perm label="tms-waybill-edit">
                         <span @click.stop="outShelves(item)">
-                            <a  class="btn-circle btn-opera">
+                            <a class="btn-circle btn-opera">
                                 <i class="el-icon-full-screen"></i>
                             </a>下架
                         </span>
@@ -213,7 +213,7 @@
               <div>
                 <perm label="tms-waybill-edit">
                         <span @click.stop="outbound(item)">
-                            <a  class="btn-circle btn-opera">
+                            <a class="btn-circle btn-opera">
                                 <i class="el-icon-sold-out"></i>
                             </a>出库
                         </span>
@@ -234,25 +234,25 @@
       </el-pagination>
     </div>
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
-      <component :is="currentPart" :formItem="form"  @right-close="resetRightBox" @change="submit"/>
+      <component :is="currentPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
     <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
-      <component :is="currentInfoPart" :formItem="form"  @right-close="resetRightBox" @change="submit"/>
+      <component :is="currentInfoPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
     <!-- 详情 -->
-    <!-- <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+     <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="currentSignPart" :formItem="form"  @right-close="resetRightBox" @change="submit"/>
-    </page-right> -->
+    </page-right>
     <page-right :show="showDeliverIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
-      <component :is="currentDeliverPart" :formItem="form"  @right-close="resetRightBox" @change="submit"/>
+      <component :is="currentDeliverPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
 
     <!-- 新增订单号查询 -->
     <el-dialog :visible.sync="increaseVisible" center width="700px" :show-close="false" :before-close="cancel">
       <el-form ref="increaseForm" :model="increaseForm">
-        <el-form-item label="订单号" label-width="100px" prop="id"
+        <el-form-item label="订单号" label-width="100px" prop="orderNo"
                       :rules="{required:true,message:'订单号不能为空',trigger:'blur'}">
-          <el-input v-model="increaseForm.id" placeholder="请输入订单号"></el-input>
+          <el-input v-model="increaseForm.orderNo" placeholder="请输入订单号"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -285,7 +285,7 @@
 <script>
 import utils from '@/tools/utils';
 import SearchPart from './search';
-import {http, TmsWayBill} from '@/resources';
+import {TransferOutOrder} from '@/resources';
 import takeForm from './form/take-form.vue';
 import outShelvesForm from './form/outShelves-form.vue';
 import detailsForm from './form/details-form.vue';
@@ -294,16 +294,17 @@ import StatusMixin from '@/mixins/statusMixin';
 
 export default {
   components: {
-    SearchPart,
+    SearchPart, detailsForm
   },
   mixins: [StatusMixin],
   data() {
     return {
       doing: false,
       dialogFormVisible: false,
-      increaseVisible:false,
+      increaseVisible: false,
       increaseForm: {  //新增查询的订单号
         id: '',
+        orderNo: ''
       },
       dialogForm: { // 操作人
         id: '',
@@ -311,9 +312,9 @@ export default {
         thirdNo: '',
       },
       // 操作人下拉列表
-      operateList:[
-        {label:'A',value:'A'},
-        {label:'B',value:'B'}
+      operateList: [
+        {label: 'A', value: 'A'},
+        {label: 'B', value: 'B'}
       ],
 
       loadingData: false,
@@ -327,7 +328,7 @@ export default {
 
       currentPart: null,
       currentInfoPart: null,
-      // currentSignPart: null,
+      currentSignPart: null,
       currentDeliverPart: null,
       dialogComponents: {
         0: takeForm
@@ -335,9 +336,9 @@ export default {
       dialogInfoComponents: {
         0: outShelvesForm
       },
-      // dialogSignComponents: {
-      //   0: detailsForm
-      // },
+      dialogSignComponents: {
+        0: detailsForm
+      },
       dialogDeliverComponents: {
         0: addForm
       },
@@ -374,27 +375,8 @@ export default {
       formItem: {},  // 子组件传递数据
     };
   },
-  // computed: {
-  //   bodyHeight() {
-  //     let height = parseInt(this.$store.state.bodyHeight, 10);
-  //     return (height + 136) + 'px';
-  //   },
-  //   totalCount() {
-  //     let total = {
-  //       whole: 0,
-  //       buck: 0,
-  //       incubatorCount: 0,
-  //       preIncubatorCount: 0
-  //     };
-  //     this.dataList.forEach(i => {
-  //       total.whole += i.wholeBoxCount;
-  //       total.buck += i.bulkBoxCount;
-  //       total.incubatorCount += i.incubatorCount;
-  //       total.preIncubatorCount += i.preIncubatorCount;
-  //     });
-  //     return total;
-  //   }
-  // },
+  computed: {
+  },
   watch: {
     filters: {
       handler() {
@@ -409,7 +391,7 @@ export default {
   },
   methods: {
     // 新增
-    addNo(){
+    addNo() {
       this.increaseVisible = true
     },
     // 新增取消
@@ -419,36 +401,37 @@ export default {
       this.$refs.increaseForm.clearValidate();
     },
     // 新增确定
-    nextStep(){
+    nextStep() {
       this.increaseVisible = false
       this.showDeliverIndex = 0;
       this.currentDeliverPart = this.dialogDeliverComponents[0];
 
-      //     this.$refs.increaseForm.validate((valid) => {
-      //     if (!valid || this.doing) {
-      //       return;
-      //     }
-      //     this.doing = true;
-      //     TmsWayBill.receiptConfirm(this.increaseForm)
-      //       .then(() => {
-      //         // this.$notify.success('启运成功');
-      //         // this.getTmsWayBillPage(1);
-      //         // 打开新增详情
+      this.$refs.increaseForm.validate((valid) => {
+        if (!valid || this.doing) {
+          return;
+        }
 
-      //       })
-      //       .catch(error => {
-      //         this.$notify.error({
-      //           duration: 2000,
-      //           message: error.response.data.msg
-      //         });
-      //       })
-      //       .finally(() => {
-      //         this.doing = false;
-      //       });
-      //   })
+        this.doing = true;
+        TransferOutOrder.receiptConfirm(this.increaseForm)
+          .then(() => {
+            // this.$notify.success('启运成功');
+            // this.getTmsWayBillPage(1);
+            // 打开新增详情
+
+          })
+          .catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response.data.msg
+            });
+          })
+          .finally(() => {
+            this.doing = false;
+          });
+      })
     },
     // 取消
-    abolish(val){
+    abolish(val) {
       this.$confirm('是否确认取消?', '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -461,12 +444,12 @@ export default {
       });
     },
     // 指定上架人
-    onePerson(val){
+    onePerson(val) {
       this.dialogFormVisible = true
       // id
     },
     // 认领任务
-    claimTask(val){
+    claimTask(val) {
       this.$confirm('是否确认认领任务?', '', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -479,7 +462,7 @@ export default {
       });
     },
     // 出库
-    outbound(val){
+    outbound(val) {
       this.showIndex = 0;
       this.currentPart = this.dialogComponents[0];
       this.$nextTick(() => {
@@ -487,7 +470,7 @@ export default {
       });
     },
     // 下架
-    outShelves(val){
+    outShelves(val) {
       this.showInfoIndex = 0;
       this.currentInfoPart = this.dialogInfoComponents[0];
       this.$nextTick(() => {

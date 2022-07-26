@@ -215,6 +215,10 @@ export const TransferInOrder = {
   getDetails: (id) => {
     return http.get(`/transfer-in-order/${id}`);
   },
+  // 根据运单生成新增出库单
+  generate: (waybillNo) => {
+    return http.post(`/transfer-in-order?waybillNo=${waybillNo}`);
+  },
   // 认领任务
   claimTask: (id) => {
     return http.put(`/transfer-in-order/claim-task/${id}`);
@@ -234,7 +238,44 @@ export const TransferInOrder = {
 };
 
 // 中转出库单
-export const TransferOutOrder = resource('/transfer-in-order', http, {});
+export const TransferOutOrder = {
+  // 查询列表
+  query: (params) => {
+    return http.get('/transfer-out-order', {params});
+  },
+  // 查询列表的状态数量
+  queryStateNum: (params) => {
+    return http.get('/transfer-out-order/count', {params});
+  },
+  // 查询详情
+  getDetails: (id) => {
+    return http.get(`/transfer-out-order/${id}`);
+  },
+  // 判断订单是否存在
+  isExistOrder: (orderNo) => {
+    return http.get(`/transfer-out-order/is-exist-order?orderNo=${orderNo}`);
+  },
+  // 保存新增出库单
+  save: (data) => {
+    return http.post(`/transfer-out-order`, data);
+  },
+  // 指派下架人
+  assignedOnPeople: (params) => {
+    return http.put(`/transfer-out-order/assigned-shelves/${params.id}`, params);
+  },
+  // 认领任务
+  claimTask: (id) => {
+    return http.put(`/transfer-out-order/claim-task/${id}`);
+  },
+  // 下架
+  shelves: (params) => {
+    return http.put(`/transfer-out-order/unshelve/${params.id}`, params);
+  },
+  // 出库
+  receivingGoods: (id) => {
+    return http.put(`/transfer-out-order/outbound/${id}`);
+  },
+};
 
 // dev设备对象
 export const TempDev = resource('/ccsDevice', http, {
