@@ -1,760 +1,651 @@
-<style lang="scss" scoped>
+<style lang="scss">
+.special-col {
+  padding-left: 20px;
+  position: relative;
 
-  .wave-title {
-    margin-left: 5px;
-    font-size: 14px;
-    font-weight: normal;
+  .el-checkbox {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
   }
+}
 
-  .wms-btn-group {
-    margin-bottom: 10px;
-    overflow: hidden;
-  }
+.order-list-status-right {
+  justify-content: flex-end;
+}
 
-  .danger-row {
-    color: #ff3300;
-  }
-
-  .special-col {
-    padding-left: 20px;
-    position: relative;
-    .el-checkbox {
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-  }
+.order-list .order-list-header {
+  background: #dfebf8;
+  line-height: 15px;
+  padding: 10px 5px 10px 15px;
+  margin: 10px 0 5px 0;
+}
 </style>
 <template>
   <div class="order-page">
-    <div class="container">
+    <search-part @search="searchResult">
+      <template slot="btn">
+        <perm label="tms-order-add">
+          <el-button plain size="small" @click="addNo">
+            <f-a class="icon-small" name="plus"></f-a>
+            新增
+          </el-button>
+        </perm>
+      </template>
+    </search-part>
+    <el-row>
+      <el-col :span="16">
+        <div class="order-list-status " style="margin-bottom:20px">
+          <div class="status-item" v-show="key < 5"
+               :class="{'active':key==activeStatus}"
+               v-for="(item,key) in orderType"
+               :key="key"
+               @click="changeStatus(item,key)">
+            <div class="status-bg" :class="['b_color_'+key]"></div>
+            <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{ item.title }}<span
+              class="status-num">{{ item.num }}</span></div>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="order-list-status  order-list-status-right" style="margin-bottom:20px">
+          <div class="status-item" v-show="key > 4"
+               :class="{'active':key==activeStatus }"
+               v-for="(item,key) in orderType"
+               :key="key"
+               @click="changeStatus(item,key)">
+            <div class="status-bg" :class="['b_color_'+key]"></div>
+            <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{ item.title }}<span
+              class="status-num">{{ item.num }}</span></div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
 
-      <el-form v-show="showSearch" class="advanced-query-form" onsubmit="return false">
-        <el-row>
-          <el-col :span="8">
-            <oms-form-row label="货主订单编号" :span="6">
-              <oms-input type="text" v-model="searchCondition.orderNo" placeholder="请输入货主订单编号"></oms-input>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="货主" :span="5">
-              <org-select v-model="searchCondition.orgId" :list="orgList"
-                          :remoteMethod="filterCustomer" @change="orgChange"
-                          placeholder="请输入关键字搜索货主信息"></org-select>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="货主货品" :span="6">
-              <el-select v-model="searchCondition.orgGoodsId" filterable remote placeholder="请输入名称搜索货主货品"
-                         :remote-method="searchProduct" @click.native.once="searchProduct('')" :clearable="true"
-                         popper-class="good-selects">
-                <el-option v-for="item in orgGoodses" :key="item.orgGoodsDto.id"
-                           :label="item.orgGoodsDto.name"
-                           :value="item.orgGoodsDto.id">
-                  <div style="overflow: hidden">
-                    <span class="pull-left">{{item.orgGoodsDto.name}}</span>
-                  </div>
-                  <div style="overflow: hidden">
-                     <span class="pull-left">
-                         <el-tag class="el-tag-mini" type="danger" v-show="!item.orgGoodsDto.status">停用</el-tag>
-                      </span>
-                        <span class="select-other-info pull-left"><span
-                          v-show="item.orgGoodsDto.goodsNo">货品编号:</span>{{item.orgGoodsDto.goodsNo}}
-                        </span>
-                    <span class="select-other-info pull-left"><span
-                      v-show="item.orgGoodsDto.salesFirmName">供货单位:</span>{{ item.orgGoodsDto.salesFirmName }}
-                        </span>
-                  </div>
-                </el-option>
-              </el-select>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="货品主档" :span="6">
-              <goods-select placeholder="请输入名称搜索货品主档" :remote-method="filterGoods"
-                            v-model="searchCondition.goodsId" :list="goodsList"></goods-select>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row :span="6" label="货品主档(模糊)">
-              <oms-input v-model="searchCondition.goodsName" placeholder="请输入货品主档(模糊)" type="text"></oms-input>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="业务类型" :span="6">
-              <el-select type="text" v-model="searchCondition.bizType" placeholder="请选择业务类型">
-                <el-option :value="item.key" :key="item.key" :label="item.label"
-                           v-for="item in bizTypes"></el-option>
-              </el-select>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="去向单位" :span="6">
-              <div @click="isOrgListExist">
-                <org-select v-model="searchCondition.customerId" :list="customerList"
-                            :remoteMethod="filterOrg"
-                            placeholder="请输入关键字搜索去向单位"></org-select>
-              </div>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="去向订单号" :span="6">
-              <oms-input type="text" v-model="searchCondition.thirdPartyNumber" placeholder="请输入去向订单号"></oms-input>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row :span="8" label="去向单位区域代码">
-              <oms-input v-model="searchCondition.areaCode" placeholder="请输入去向单位区域代码" type="text"></oms-input>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row :span="6" label="物流方式">
-              <el-select type="text" v-model="searchCondition.transportationMeansId" placeholder="请选择物流方式">
-                <el-option :value="item.key" :key="item.key" :label="item.label"
-                           v-for="item in transportationMeansList"></el-option>
-              </el-select>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="出库完成时间" :span="6">
-              <el-date-picker
-                v-model="completeTime"
-                type="datetimerange"
-                :default-time="['00:00:00', '23:59:59']"
-                placeholder="请选择">
-              </el-date-picker>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row :span="4" label="下单时间">
-              <el-date-picker
-                v-model="createdTimes"
-                :default-time="['00:00:00', '23:59:59']"
-                placeholder="请选择下单时间"
-                type="datetimerange">
-              </el-date-picker>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="10">
-            <oms-form-row label="预计出库/送货/提货/发货时间" :span="10">
-              <el-col :span="24">
-                <el-date-picker
-                  v-model="expectedTime"
-                  type="daterange"
-                  placeholder="请选择日期" format="yyyy-MM-dd">
-                </el-date-picker>
-              </el-col>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="4">
-            <oms-form-row label="" :span="1">
-              <el-button type="primary" native-type="submit" @click="searchInOrder">查询</el-button>
-              <el-button native-type="reset" @click="resetSearchForm">重置</el-button>
-            </oms-form-row>
-          </el-col>
-        </el-row>
-      </el-form>
-      <status-list class="container" :activeStatus="activeStatus" :statusList="outType" :checkStatus="checkStatus">
-       <span class="btn-group-right">
-           <goods-switch></goods-switch>
-          <a href="#" class="btn-circle" @click.prevent="showSearch = !showSearch">
-              <i class="el-icon-t-search"></i>
-          </a>
-          <perm label="stock-out-wave-create" v-show="activeStatus === '1'" class="opera-btn">
-             <el-tooltip content="选择订单后，指定发波方式" effect="dark" placement="bottom">
-               <span @click="createWave" style="cursor:pointer"><a href="#" @click.prevent="" class="btn-circle"><i
-                 class="el-icon-t-wave"></i></a><span class="wave-title">指定发波</span></span>
-             </el-tooltip>
-          </perm>
-          <perm label="stock-out-wave-create" v-show="activeStatus === '1'" class="opera-btn">
-             <el-tooltip effect="dark" placement="bottom" content="根据当前的查询条件，自动将查询结果的所有订单合并发波">
-                <span @click="createLotWave" style="cursor:pointer"><a href="#" @click.prevent="" class="btn-circle"><i
-                  class="el-icon-t-batch-create"></i></a><span class="wave-title">自动发波</span></span>
-             </el-tooltip>
-          </perm>
-        </span>
-      </status-list>
-      <div class="order-list clearfix" style="margin-top: 20px">
+    <div class="order-list" style="margin-top: 20px">
+      <div class="flex-list-dom">
         <el-row class="order-list-header">
-          <el-col :span="5">
-            <el-checkbox @change="checkAll" v-model="isCheckAll" v-show="activeStatus === '1'"></el-checkbox>
-            货主/订单号
+          <el-col :span="2">
+            <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>
+            中转出库单号
           </el-col>
-          <el-col :span="2">业务类型</el-col>
-          <el-col :span="4">去向/订单号</el-col>
-          <el-col :span="6">物流</el-col>
-          <el-col :span="1">状态</el-col>
-          <el-col :span="4">时间</el-col>
+          <el-col :span="2">订单编号</el-col>
+          <el-col :span="2">运单编号</el-col>
+          <el-col :span="2">新建时间</el-col>
+          <el-col :span="2">类型</el-col>
+          <el-col :span="4">发货单位</el-col>
+          <el-col :span="4">收货单位</el-col>
+          <el-col :span="2">承运类型</el-col>
+          <el-col :span="2">状态</el-col>
           <el-col :span="2">操作</el-col>
         </el-row>
-        <el-row v-if="loadingData">
-          <el-col :span="24">
-            <oms-loading :loading="loadingData"></oms-loading>
-          </el-col>
-        </el-row>
-        <el-row v-else-if="orderList.length == 0">
-          <el-col :span="24">
-            <div class="empty-info">
-              暂无信息
-            </div>
-          </el-col>
-        </el-row>
-        <div v-else class="order-list-body flex-list-dom">
-          <div class="order-list-item" v-for="item in orderList"
-               :class="['status-'+filterListColor(item.wmsStatus),{'active':currentOrderId==item.id}]"
-               @click.prevent="currentOrderId = item.id;">
-            <el-row :class="formatExpectedTimeRowClass(item)">
-              <el-col :span="5" class="special-col">
-                <div class="el-checkbox-warp " @click.stop.prevent="checkItem(item)" v-show="activeStatus === '1'">
-                  <el-checkbox v-model="item.isChecked"></el-checkbox>
-                </div>
-                <div class="f-grey">
-                  {{item.orderNo }}
-                </div>
-                <div>
-                  {{item.orgName }}
-                </div>
-              </el-col>
-              <el-col :span="2">
-                <div>
-                  <dict :dict-group="'bizOutType'" :dict-key="item.bizType"></dict>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="f-grey" v-show="item.bizType ==='2-0'||item.bizType ==='2-1'">{{item.thirdPartyNumber }}
-                </div>
-                <div v-show="item.bizType ==='2-0'||item.bizType ==='2-1'">{{ item.customerName }}</div>
-              </el-col>
-              <el-col :span="6">
-                <div v-show="item.bizType !== '2-2' && item.bizType !== '2-4'">
-                  <div v-show="item.transportationMeansId">
-                    物流方式：
-                    <dict :dict-group="'outTransportMeans'" :dict-key="item.transportationMeansId"></dict>
-                  </div>
-                </div>
-                <div v-show="item.bizType !== '2-2' && item.bizType !== '2-4' ">仓库地址：{{ item.warehouseAddress}}</div>
-              </el-col>
-              <el-col :span="1" class="pt10">
-                <div>
-                  {{getOrderStatus(item)}}
-                  <el-tag type="warning" v-show="item.rushOrderFlag">急</el-tag>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div v-show="item.createTime">下单时间：{{item.createTime | time }}</div>
-                <div v-show="item.bizType !== '2-2' && item.bizType !== '2-4' && item.expectedTime">{{
-                  getTimeTitle(item)
-                  }}：{{ item.expectedTime | date }}
-                </div>
-                <div v-show="item.completeTime">出库完成：{{item.completeTime | time }}</div>
-              </el-col>
-              <el-col :span="2" class="opera-btn">
-                <div>
-                  <perm label="stock-out-reviewer">
-                    <span @click="showDetailPart=true" class="">
-                      <a href="#" class="btn-circle btn-opera" @click.prevent=""><i
-                        class="el-icon-t-detail"></i></a>查看详情
+      </div>
+      <el-row v-if="loadingData">
+        <el-col :span="24">
+          <oms-loading :loading="loadingData"></oms-loading>
+        </el-col>
+      </el-row>
+      <el-row v-else-if="dataList.length == 0">
+        <el-col :span="24">
+          <div class="empty-info">
+            暂无信息
+          </div>
+        </el-col>
+      </el-row>
+      <div v-else class="order-list-body flex-list-dom">
+        <div class="order-list-item" v-for="(item,index) in dataList" :key="index" @click="showInfo(item)"
+             :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
+          <el-row>
+            <el-col :span="2" class="special-col R">
+              <div @click.stop.prevent="checkItem(item)" class="el-checkbox-warp">
+                <el-checkbox v-model="item.isChecked"></el-checkbox>
+              </div>
+              <div>
+                {{ item.waybillNumber }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div v-show="item.waybillType">
+                <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
+              </div>
+              <div v-show="item.shipmentWay">
+                <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
+              </div>
+              <div v-show="item.deliveryWay">
+                <dict :dict-group="'deliveryWay'" :dict-key="item.deliveryWay"></dict>
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div>
+                {{ item.senderName }}
+              </div>
+              <div>
+                {{ item.senderAddress }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div>
+                {{ item.receiverName }}
+              </div>
+              <div>
+                {{ item.receiverAddress }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div :title="item.butt?'第三方承运-已对接':item.carryType?'第三方承运-未对接':'自行承运'">
+                {{ item.carryType ? '第三方承运' : '自行承运' }}
+              </div>
+            </el-col>
+            <!--<el-col :span="5" class="R">-->
+            <!--<div>-->
+            <!--{{item.receiverAddress}}-->
+            <!--</div>-->
+            <!--</el-col>-->
+            <el-col :span="4" class="R">
+              <div>
+                {{ item.wholeBoxCount }}
+              </div>
+            </el-col>
+            <el-col :span="4" class="R">
+              <div>
+                {{ item.bulkBoxCount }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div>
+                {{ item.incubatorCount }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div>
+                {{ item.preIncubatorCount }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="opera-btn">
+              <div>
+                <perm label="tms-waybill-edit">
+                    <span @click.stop="abolish(item)">
+                      <a class="btn-circle btn-opera">
+                        <i class="el-icon-t-forbidden"></i>
+                      </a>取消
                     </span>
+                </perm>
+              </div>
+              <!-- <div>
+                  <perm label="tms-waybill-edit">
+                  <span @click.stop="deliveryGoods(item)">
+                    <a class="btn-circle btn-opera">
+                      <i class="el-icon-truck"></i>
+                    </a>收货
+                  </span>
+                </perm>
+              </div> -->
+              <div>
+                <div>
+                  <perm label="tms-waybill-edit">
+                            <span @click.stop="onePerson(item)" >
+                            <a class="btn-circle btn-opera">
+                                <i class="el-icon-user"></i>
+                            </a>指派操作人
+                            </span>
                   </perm>
                 </div>
-                <!--<div style="margin-top: 5px">-->
-                <!--<perm label="stock-out-transport" style="margin-top: 8px">-->
-                <!--<span @click="transportation(item)" class="" v-show="item.wmsStatus === '10'">-->
-                <!--<a href="#" class="btn-circle btn-opera" @click.prevent=""><i-->
-                <!--class="el-icon-t-affirm"></i></a>开始运输-->
-                <!--</span>-->
-                <!--</perm>-->
-                <!--</div>-->
-                <!--<div style="margin-top: 5px">-->
-                <!--<perm label="stock-out-sign-in" style="margin-top: 8px">-->
-                <!--<span @click="sign(item)" class="" v-show="item.wmsStatus === '11'">-->
-                <!--<a href="#" class="btn-circle btn-opera" @click.prevent=""><i-->
-                <!--class="el-icon-t-affirm"></i></a>签收-->
-                <!--</span>-->
-                <!--</perm>-->
-                <!--</div>-->
-              </el-col>
-            </el-row>
-            <order-goods-info :order-item="item"></order-goods-info>
-            <div class="order-list-item-bg"></div>
-          </div>
+                <div>
+                  <perm label="tms-waybill-edit">
+                            <span @click.stop="claimTask(item)">
+                            <a  class="btn-circle btn-opera">
+                                <i class="el-icon-t-verifyPass"></i>
+                            </a>认领任务
+                            </span>
+                  </perm>
+                </div>
+              </div>
+              <div>
+                <perm label="tms-waybill-edit">
+                        <span @click.stop="outShelves(item)">
+                            <a  class="btn-circle btn-opera">
+                                <i class="el-icon-full-screen"></i>
+                            </a>下架
+                        </span>
+                </perm>
+              </div>
+              <div>
+                <perm label="tms-waybill-edit">
+                        <span @click.stop="outbound(item)">
+                            <a  class="btn-circle btn-opera">
+                                <i class="el-icon-sold-out"></i>
+                            </a>出库
+                        </span>
+                </perm>
+              </div>
+            </el-col>
+          </el-row>
+          <div class="order-list-item-bg"></div>
         </div>
       </div>
     </div>
-    <div class="text-center"
-         v-show="(orderList.length || pager.currentPage !== 1) && !loadingData && this.filters.wmsStatus !== '0' ">
-      <el-cu-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                        :current-page="pager.currentPage"
-                        :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
-                        layout="sizes, prev, pager, next, jumper"
-                        :total="pager.count">
-      </el-cu-pagination>
+    <div class="text-center" v-show="dataList.length && !loadingData">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                     :current-page="pager.currentPage"
+                     :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
+                     layout="total, sizes, prev, pager, next, jumper"
+                     :total="pager.count">
+      </el-pagination>
     </div>
-    <page-right :show="shoWavePart" @right-close="resetRightBox" :css="{'width':'1200px','padding':0}"
-                partClass="pr-no-animation">
-      <wave-info :checkList="checkListPara" @close="resetRightBox"></wave-info>
+    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentPart" :formItem="form"  @right-close="resetRightBox" @change="submit"/>
     </page-right>
-    <page-right :show="showDetailPart" @right-close="resetRightBox" :css="{'width':'1200px','padding':0}"
-                partClass="pr-no-animation">
-      <detail :orderId="currentOrderId" @close="resetRightBox" @refresh="refreshInfo"></detail>
+    <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentInfoPart" :formItem="form"  @right-close="resetRightBox" @change="submit"/>
     </page-right>
+    <!-- 详情 -->
+    <!-- <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentSignPart" :formItem="form"  @right-close="resetRightBox" @change="submit"/>
+    </page-right> -->
+    <page-right :show="showDeliverIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentDeliverPart" :formItem="form"  @right-close="resetRightBox" @change="submit"/>
+    </page-right>
+
+    <!-- 新增订单号查询 -->
+    <el-dialog :visible.sync="increaseVisible" center width="700px" :show-close="false" :before-close="cancel">
+      <el-form ref="increaseForm" :model="increaseForm">
+        <el-form-item label="订单号" label-width="100px" prop="id"
+                      :rules="{required:true,message:'订单号不能为空',trigger:'blur'}">
+          <el-input v-model="increaseForm.id" placeholder="请输入订单号"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="nextStep" :disabled="doing">下一步</el-button>
+        <el-button @click="noIncrease">取消</el-button>
+      </div>
+    </el-dialog>
+    <!-- 操作人 -->
+    <el-dialog :visible.sync="dialogFormVisible" center width="700px" :show-close="false" :before-close="cancel">
+      <el-form ref="operatorForm" :model="dialogForm">
+        <el-form-item label="操作人" label-width="100px" prop="thirdNo"
+                      :rules="{required:true,message:'操作人不能为空',trigger:'change'}">
+          <el-select v-model="dialogForm.thirdNo" placeholder="请选择操作人">
+            <el-option
+              v-for="item in operateList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="shipmentThirdWayBill" :disabled="doing">确定</el-button>
+        <el-button @click="cancel">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import utils from '@/tools/utils';
-import waveInfo from './wave-info.vue';
-import detail from './detail/index.vue';
-import {BaseInfo, Goods, http, LogisticsCenter, OrgGoods, outWork, Wave} from '@/resources';
+import SearchPart from './search';
+import {http, TmsWayBill} from '@/resources';
+import takeForm from './form/take-form.vue';
+import outShelvesForm from './form/outShelves-form.vue';
+import detailsForm from './form/details-form.vue';
+import addForm from './form/add-form.vue';
+import StatusMixin from '@/mixins/statusMixin';
 
 export default {
-    components: {
-      waveInfo, detail
-    },
-    data() {
-      return {
-        activeStatus: '0', // 当前状态
-        loadingData: true,
-        shoWavePart: false, // 是否显示批次信息
-        showDetailPart: false,
-        showSearch: false,
-        outType: utils.outType || {},
-        orderList: [],
-        currentOrderId: '',
-        createdTimes:'',
-        checkList: [], // 选中的订单列表
-        checkListPara: [], // 传入波次的订单列表
-        isCheckAll: false,
-        pager: {
-          currentPage: 1,
-          count: 0,
-          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10
-        },
-        filters: {
-          type: 1,
-          wmsStatus: null,
-          deleteFlag: false,
-          orgId: '',
-          orderNo: '',
-          bizType: '',
-          goodsId: '',
-          goodsName:'',
-          orgGoodsId: '',
-          transportationMeansId: '',
-          customerId: '',
-          thirdPartyNumber: '',
-          logisticsProviderName: '',
-          searchType: 1,
-          expectedStartTime: '',
-          expectedEndTime: '',
-          completeStartTime: '',
-          completeEndTime: '',
-          areaCode:'',
-          createStartTime: '',
-          createEndTime: ''
-        },
-        searchCondition: {
-          orgId: '',
-          orderNo: '',
-          goodsId: '',
-          goodsName:'',
-          orgGoodsId: '',
-          bizType: '',
-          logisticsProviderName: '',
-          expectedStartTime: '',
-          expectedEndTime: '',
-          completeStartTime: '',
-          completeEndTime: '',
-          transportationMeansId: '',
-          customerId: '',
-          thirdPartyNumber: '',
-          areaCode:'',
-          createStartTime: '',
-          createEndTime: ''
-        },
-        expectedTime: '',
-        completeTime: '',
-        LogisticsCenter: [], // 物流中心
-        orgList: [], // 查询 货主列表
-        customerList: [], // 来源单位列表
-        logisticsList: [], // 物流商列表
-        orgGoodses: [],
-        goodsList: []
-      };
-    },
-    computed: {
-      transportationMeansList() {
-        return this.$getDict('outTransportMeans');
+  components: {
+    SearchPart,
+  },
+  mixins: [StatusMixin],
+  data() {
+    return {
+      doing: false,
+      dialogFormVisible: false,
+      increaseVisible:false,
+      increaseForm: {  //新增查询的订单号
+        id: '',
       },
-      bizTypes: function () {
-        return this.$getDict('bizOutType');
+      dialogForm: { // 操作人
+        id: '',
+        // 第三方承运单号
+        thirdNo: '',
       },
-      isShowGoodsList() {
-        return this.$store.state.isShowGoodsList;
-      }
-    },
-    mounted() {
-      this.getOrders(1);
-    },
-    watch: {
+      // 操作人下拉列表
+      operateList:[
+        {label:'A',value:'A'},
+        {label:'B',value:'B'}
+      ],
+
+      loadingData: false,
+      activeStatus: 0,
+      orderType: utils.transferOutType,
+      dataList: [],
+      showIndex: -1,
+      showInfoIndex: -1,
+      showSignIndex: -1,
+      showDeliverIndex: -1,
+
+      currentPart: null,
+      currentInfoPart: null,
+      // currentSignPart: null,
+      currentDeliverPart: null,
+      dialogComponents: {
+        0: takeForm
+      },
+      dialogInfoComponents: {
+        0: outShelvesForm
+      },
+      // dialogSignComponents: {
+      //   0: detailsForm
+      // },
+      dialogDeliverComponents: {
+        0: addForm
+      },
+      pager: {
+        currentPage: 1,
+        count: 0,
+        pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
+        totalPage: 1
+      },
+      // action: '',
+      form: {},
       filters: {
-        handler: function () {
-          this.getOrders(1);
-        },
-        deep: true
+        status: null,
+        waybillNumber: '',
+        tmsOrderNumber: '',
+        orderNo: '',
+        waybillType: '',
+        shipmentWay: '',
+        deliveryWay: '',
+        serviceType: '',
+        senderId: '',
+        receiverId: '',
+        startTime: '',
+        endTime: '',
+        packFlag: '',
+        destinationAreaCode: '',
+        goodsTotalName: '',
+        carryType: '',
       },
-      isShowGoodsList() {
-        this.getOrders(1);
+      isCheckAll: false,
+      checkList: [],
+      waybillIdList: [], // 勾选数组
+      // condition: {},
+      formItem: {},  // 子组件传递数据
+    };
+  },
+  // computed: {
+  //   bodyHeight() {
+  //     let height = parseInt(this.$store.state.bodyHeight, 10);
+  //     return (height + 136) + 'px';
+  //   },
+  //   totalCount() {
+  //     let total = {
+  //       whole: 0,
+  //       buck: 0,
+  //       incubatorCount: 0,
+  //       preIncubatorCount: 0
+  //     };
+  //     this.dataList.forEach(i => {
+  //       total.whole += i.wholeBoxCount;
+  //       total.buck += i.bulkBoxCount;
+  //       total.incubatorCount += i.incubatorCount;
+  //       total.preIncubatorCount += i.preIncubatorCount;
+  //     });
+  //     return total;
+  //   }
+  // },
+  watch: {
+    filters: {
+      handler() {
+        this.getTmsWayBillPage(1);
+      },
+      deep: true
+    }
+  },
+  mounted() {
+    console.log('中转出库')
+    this.getTmsWayBillPage(1);
+  },
+  methods: {
+    // 新增
+    addNo(){
+      this.increaseVisible = true
+    },
+    // 新增取消
+    noIncrease() {
+      this.increaseVisible = false;
+      // 取消时除了把对话框隐藏起来，还需要清空校验，以免再次打开时，校验还在，不好看
+      this.$refs.increaseForm.clearValidate();
+    },
+    // 新增确定
+    nextStep(){
+      this.increaseVisible = false
+      this.showDeliverIndex = 0;
+      this.currentDeliverPart = this.dialogDeliverComponents[0];
+
+      //     this.$refs.increaseForm.validate((valid) => {
+      //     if (!valid || this.doing) {
+      //       return;
+      //     }
+      //     this.doing = true;
+      //     TmsWayBill.receiptConfirm(this.increaseForm)
+      //       .then(() => {
+      //         // this.$notify.success('启运成功');
+      //         // this.getTmsWayBillPage(1);
+      //         // 打开新增详情
+
+      //       })
+      //       .catch(error => {
+      //         this.$notify.error({
+      //           duration: 2000,
+      //           message: error.response.data.msg
+      //         });
+      //       })
+      //       .finally(() => {
+      //         this.doing = false;
+      //       });
+      //   })
+    },
+    // 取消
+    abolish(val){
+      this.$confirm('是否确认取消?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 确认取消
+
+      }).catch(() => {
+
+      });
+    },
+    // 指定上架人
+    onePerson(val){
+      this.dialogFormVisible = true
+      // id
+    },
+    // 认领任务
+    claimTask(val){
+      this.$confirm('是否确认认领任务?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 确认认领
+
+      }).catch(() => {
+
+      });
+    },
+    // 出库
+    outbound(val){
+      this.showIndex = 0;
+      this.currentPart = this.dialogComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(val));
+      });
+    },
+    // 下架
+    outShelves(val){
+      this.showInfoIndex = 0;
+      this.currentInfoPart = this.dialogInfoComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(val));
+      });
+    },
+    // 详情
+    // showInfo(val){
+    //     this.showSignIndex = 0;
+    //     this.currentSignPart = this.dialogSignComponents[0];
+    //     this.$nextTick(() => {
+    //         this.form = JSON.parse(JSON.stringify(val));
+    //     });
+    // },
+    checkItem(item) {
+      // 单选
+      item.isChecked = !item.isChecked;
+      let index = this.checkList.indexOf(item);
+      let idIndex = this.waybillIdList.indexOf(item.id);
+      if (item.isChecked) {
+        if (index === -1) {
+          this.checkList.push(item);
+        }
+        if (idIndex === -1) {
+          this.waybillIdList.push(item.id);
+        }
+      } else {
+        this.checkList.splice(index, 1);
+        this.waybillIdList.splice(idIndex, 1);
       }
     },
-    methods: {
-      refreshInfo(){
-        this.getOrders(this.pager.currentPage);
-      },
-      handleSizeChange(val) {
-        this.pager.pageSize = val;
-        window.localStorage.setItem('currentPageSize', val);
-        this.getOrders(1);
-      },
-      handleCurrentChange(val) {
-        this.getOrders(val);
-      },
-      formatExpectedTimeRowClass(item) {
-        let now = this.$moment(new Date()).format('YYYY-MM-DD');
-        if (this.judgeExpectedTime(item.expectedTime, item.wmsStatus, now)) {
-          return 'danger-row';
-        }
-      },
-      judgeExpectedTime(date, state, now) {
-        let expectedTime = this.$moment(new Date(date)).format('YYYY-MM-DD');
-        if (expectedTime === now && (state === '6' || state === '7' || state === '10')) {
-          return true;
-        }
-        return false;
-      },
-      restParams() {
-        this.checkList = [];
-        this.checkListPara = [];
-        this.isCheckAll = false;
-      },
-      getOrders(pageNo) { // 从oms中查询订单
-        // if (pageNo === 1) {
-        //   this.pager.count = 0;
-        // }
-        this.pager.currentPage = pageNo;
-        this.restParams();
-        let params = Object.assign({}, {
-          pageNo: pageNo,
-          pageSize: this.pager.pageSize,
-          logisticsCentreId: window.localStorage.getItem('logisticsCentreId')
-        }, this.filters);
-        params.isShowDetail = !!JSON.parse(window.localStorage.getItem('isShowGoodsList'));
-        this.loadingData = true;
-        let nowTime = Date.now();
-        this.nowTime = nowTime;
-        Wave.queryOmsOrder(params).then(res => {
-          if (this.nowTime > nowTime) return;
-          res.data.list.forEach(item => {
-            item.isChecked = false;
-          });
-          this.orderList = res.data.list;
-
-          let now = this.$moment(new Date()).format('YYYY-MM-DD');
-          let me = this;
-          let temp = this.orderList.filter(
-            function (item) {
-              return me.judgeExpectedTime(item.expectedTime, item.wmsStatus, now);
-            }
-          );
-          if (temp && temp.length !== 0) {
-            let temp2 = me.orderList.filter(
-              function (item) {
-                return !(me.judgeExpectedTime(item.expectedTime, item.wmsStatus, now));
-              }
-            );
-            this.orderList = temp.concat(temp2);
-          }
-          // 设置分页数
-          this.pager.count = this.pager.currentPage * this.pager.pageSize + (this.orderList.length === this.pager.pageSize ? 1 : 0);
-          this.loadingData = false;
-        });
-        this.queryOrderCount();
-      },
-      queryOrderCount() {
-        let params = JSON.parse(JSON.stringify(this.filters));
-        params.wmsStatus = null;
-        params.logisticsCentreId = window.localStorage.getItem('logisticsCentreId');
-        outWork.queryOrderCount(params).then(res => {
-          this.outType[0].num = res.data['all'];
-          this.outType[1].num = res.data['create-wave'];
-          this.outType[2].num = res.data['pending-pick'];
-          // this.outType[3].num = res.data['pending-review'];
-          // this.outType[4].num = res.data['pending-package'];
-          this.outType[5].num = res.data['pending-transport'];
-          this.outType[6].num = res.data['pending-sign'];
-          this.outType[7].num = res.data['completed'];
-          this.outType[9].num = res.data['canceled'];
-        });
-      },
-      resetRightBox: function () { // 重置弹出窗
-        if (this.shoWavePart) {
-          this.getOrders(this.pager.currentPage);
-          this.restParams();
-        }
-        this.shoWavePart = false;
-        this.showDetailPart = false;
-      },
-      createWave() { // 创建波次
-        if (!this.checkList.length) {
-          this.$notify.warning({
-            message: '请选择订单'
-          });
-          return;
-        }
-        this.shoWavePart = true;
-        this.checkListPara = this.checkList.slice();
-      },
-      createLotWave() {
-        this.$confirm('是否自动发波', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let obj = {
-            logisticsCentreId: window.localStorage.getItem('logisticsCentreId') || ''
-          };
-          let object = Object.assign({}, obj, this.searchCondition);
-          this.$store.commit('initPrint', {isPrinting: true, text: '正在处理中'});
-          http.post('/wave-task', object).then(() => {
-            this.$notify.success({
-              message: '自动发波成功'
-            });
-            this.$store.commit('initPrint', {isPrinting: false, text: '正在处理中'});
-            this.getOrders(this.pager.currentPage);
-          }).catch(error => {
-            this.$store.commit('initPrint', {isPrinting: false, text: '正在处理中'});
-            this.$notify.error({
-              message: error.response && error.response.data && error.response.data.msg || '自动发波失败'
-            });
-          });
-        });
-      },
-      getTimeTitle: function (item) {
-        return item.transportationMeansId === '0'
-          ? item.bizType === '2-1' ? '预计出库' : '预计送货'
-          : item.transportationMeansId === '1' ? '预计提货'
-            : item.transportationMeansId === '2' ? '预计发货'
-              : item.transportationMeansId === '3' ? '预计完成' : '';
-      },
-
-      checkItem(item) { // 单选
-        item.isChecked = !item.isChecked;
-        let index = this.checkList.indexOf(item);
-        if (item.isChecked) {
+    checkAll() {
+      // 全选反选
+      if (this.isCheckAll) {
+        this.dataList.forEach(item => {
+          item.isChecked = true;
+          let index = this.checkList.indexOf(item);
           if (index === -1) {
             this.checkList.push(item);
           }
-        } else {
-          this.checkList.splice(index, 1);
-        }
-      },
-      checkAll() { // 全选
-        if (this.isCheckAll) {
-          this.orderList.forEach(item => {
-            item.isChecked = true;
-            let index = this.checkList.indexOf(item);
-            if (index === -1) {
-              this.checkList.push(item);
-            }
-          });
-        } else {
-          this.orderList.forEach(item => {
-            item.isChecked = false;
-          });
-          this.checkList = [];
-        }
-      },
-      checkStatus(item, key) {
-        this.activeStatus = key;
-        this.filters.wmsStatus = item.state ? item.state : null;
-      },
-      filterGoods(query) {
-        Goods.query({keyWord: query, deleteFlag: false}).then(res => {
-          this.goodsList = res.data.list;
-        });
-      },
-      searchProduct(query) {
-        this.orgGoodses = [];
-        if (!this.searchCondition.orgId) {
-          this.$notify.info({
-            message: '请选择货主'
-          });
-          return;
-        }
-        let params = Object.assign({}, {
-          orgId: this.searchCondition.orgId,
-          keyWord: query
-        });
-        OrgGoods.query(params).then(res => {
-          this.orgGoodses = res.data.list;
-        });
-      },
-      filterLogisticsCenter: function () {// 过滤物流中心
-        let param = {
-          deleteFlag: false
-        };
-        LogisticsCenter.query(param).then(res => {
-          this.LogisticsCenter = res.data;
-        });
-      },
-      filterCustomer: function (query) {// 过滤客户
-        BaseInfo.query({keyWord: query, type: 0}).then(res => {
-          this.orgList = res.data.list;
-        });
-      },
-      filterOrg: function (query) {// 过滤供货商
-        let orgId = this.searchCondition.orgId;
-        if (!orgId) {
-          this.searchCondition.customerId = '';
-          this.customerList = [];
-          return;
-        }
-        BaseInfo.queryOrgByReation(orgId, {keyWord: query}).then(res => {
-          this.customerList = res.data;
-        });
-      },
-      filterLogistics: function (query) {// 过滤物流提供方
-        let orgId = this.searchCondition.orgId;
-        if (!orgId) {
-          this.searchCondition.logisticsProviderName = '';
-          this.logisticsList = [];
-          return;
-        }
-        BaseInfo.queryOrgByValidReation(orgId, {keyWord: query, relation: '3'}).then(res => {
-          this.logisticsList = res.data;
-        });
-      },
-      isOrgListExist() {
-        if (!this.searchCondition.orgId) {
-          this.$notify.info({
-            duration: 2000,
-            message: '请先选择货主'
-          });
-          return;
-        }
-        if (this.customerList.length === 0) {
-          this.$notify.info({
-            duration: 2000,
-            message: '货主无来源单位'
-          });
-        }
-      },
-      orgChange: function () {
-        this.searchCondition.customerId = '';
-        this.customerList = [];
-        this.filterOrg();
-        this.filterLogistics();
-      },
-      searchInOrder: function () {// 搜索
-        this.searchCondition.expectedStartTime = this.$formatAryTime(this.expectedTime, 0, 'YYYY-MM-DD');
-        this.searchCondition.expectedEndTime = this.$formatAryTime(this.expectedTime, 1, 'YYYY-MM-DD');
-        this.searchCondition.completeStartTime = this.$formatAryTime(this.completeTime, 0);
-        this.searchCondition.completeEndTime = this.$formatAryTime(this.completeTime, 1);
-        this.searchCondition.createStartTime = this.$formatAryTime(this.createdTimes, 0, 'YYYY-MM-DD HH:mm:ss');
-        this.searchCondition.createEndTime = this.$formatAryTime(this.createdTimes, 1, 'YYYY-MM-DD HH:mm:ss');
-        Object.assign(this.filters, this.searchCondition);
-      },
-      formatTimeAry(times, index, str) {
-        if (!times) return '';
-        return this.formatTime(times[index], str);
-      },
-      formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
-        return time ? this.$moment(time).format(str) : '';
-      },
-      resetSearchForm: function () {// 重置表单
-        let temp = {
-          orgId: '',
-          goodsId: '',
-          goodsName:'',
-          orgGoodsId: '',
-          orderNo: '',
-          bizType: '',
-          logisticsProviderName: '',
-          expectedStartTime: '',
-          expectedEndTime: '',
-          completeStartTime: '',
-          completeEndTime: '',
-          transportationMeansId: '',
-          customerId: '',
-          thirdPartyNumber: '',
-          areaCode:'',
-          createStartTime: '',
-          createEndTime: ''
-        };
-        this.expectedTime = '';
-        this.completeTime = '';
-        this.createdTimes='';
-        if (this.isSupplierOrOrg) {
-          temp.orgId = this.$route.params.id;
-        }
-        Object.assign(this.searchCondition, temp);
-        Object.assign(this.filters, temp);
-        this.orgChange();
-      },
-      getOrderStatus: function (order) { // 获取订单状态
-        let state = '';
-        for (let key in this.outType) {
-          if (order.wmsStatus === this.outType[key].state) {
-            state = this.outType[key].title;
+          let idIndex = this.waybillIdList.indexOf(item.id);
+          if (idIndex === -1) {
+            this.waybillIdList.push(item.id);
           }
-        }
-        return state;
-      },
-      filterListColor: function (index) {// 过滤左边列表边角颜色
-        let status = -1;
-        for (let key in this.outType) {
-          if (this.outType[key].state === index) {
-            status = key;
-          }
-        }
-        return status;
-      },
-      transportation(item) {
-        this.$confirm('是否确认运输', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          http.put(`/order-status/${item.id}/distribution`).then(() => {
-            this.$notify.success({
-              message: '确认运输成功'
-            });
-            this.resetRightBox();
-          }).catch(error => {
-            this.$notify.error({
-              message: error.response && error.response.data && error.response.data.msg || '确认运输失败'
-            });
-          });
         });
-      },
-      sign(item) {
-        this.$confirm('是否确认签收', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          http.put(`/order-status/${item.id}/sign`).then(() => {
-            this.$notify.success({
-              message: '签收成功'
-            });
-            this.resetRightBox();
-          }).catch(error => {
-            this.$notify.error({
-              message: error.response && error.response.data && error.response.data.msg || '签收失败'
-            });
-          });
+      } else {
+        this.dataList.forEach(item => {
+          item.isChecked = false;
         });
+        this.checkList = [];
+        this.waybillIdList = [];
       }
-    }
-  };
+    },
+    // 收货取消
+    cancel() {
+      this.dialogFormVisible = false;
+      // 取消时除了把对话框隐藏起来，还需要清空校验，以免再次打开时，校验还在，不好看
+      this.$refs.dialogForm.clearValidate();
+    },
+    // 收货确认
+    shipmentThirdWayBill() {
+      this.$refs.dialogForm.validate((valid) => {
+        if (!valid || this.doing) {
+          return;
+        }
+        this.doing = true;
+        TmsWayBill.shipmentThirdWayBill(this.dialogForm)
+          .then(() => {
+            this.$notify.success('启运成功');
+            this.getTmsWayBillPage(1);
+          })
+          .catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response.data.msg || '启运失败'
+            });
+          })
+          .finally(() => {
+            this.doing = false;
+          });
+      })
+
+    },
+    // 分页
+    handleSizeChange(val) {
+      this.pager.pageSize = val;
+      window.localStorage.setItem('currentPageSize', val);
+      this.getTmsWayBillPage(1);
+    },
+    handleCurrentChange(val) {
+      this.getTmsWayBillPage(val);
+    },
+    // 搜索
+    searchResult(search) {
+      Object.assign(this.filters, search);
+    },
+    changeStatus(item, key) {// 订单分类改变 (tab切换)
+      this.activeStatus = key;
+      this.filters.status = item.status;
+    },
+    // 右弹窗关闭（x）
+    resetRightBox() {
+      this.showIndex = -1;
+      this.showInfoIndex = -1;
+      // this.shoWayBillPart = false;
+      this.showSignIndex = -1;
+      this.showDeliverIndex = -1;
+    },
+    // 列表
+    getTmsWayBillPage(pageNo, isContinue = false) {
+      this.pager.currentPage = pageNo;
+      let param = Object.assign({}, {
+        pageNo: pageNo,
+        pageSize: this.pager.pageSize
+      }, this.filters);
+      if (this.isCheckAll) {
+        this.isCheckAll = false;
+      }
+      this.loadingData = true;
+      // 清空勾选列表
+      this.checkList = [];
+      // this.checkListPara = [];
+      let nowTime = Date.now();
+      this.nowTime = nowTime;
+      TmsWayBill.query(param).then(res => {
+        if (this.nowTime > nowTime) return;
+        res.data.list.forEach(val => {
+          val.isChecked = false;
+        });
+        if (isContinue) {
+          this.dataList = this.showTypeList.concat(res.data.list);
+        } else {
+          this.dataList = res.data.list;
+        }
+        this.pager.count = res.data.count;
+        this.loadingData = false;
+      });
+      this.queryStateNum(param);
+    },
+    // tab下面的数量
+    queryStateNum(params) {
+      TmsWayBill.queryStateNum(params).then(res => {
+        let data = res.data;
+        let count = 0;
+        Object.keys(data).map(k => (count += data[k]));
+        this.orderType[0].num = count;
+        this.orderType[1].num = data['pend-confirm'];
+        this.orderType[2].num = data['pend-package'];
+        this.orderType[3].num = data['pend-choose-car'];
+        this.orderType[4].num = data['pend-shipment'];
+        this.orderType[5].num = data['pend-delivery'];
+        this.orderType[6].num = data['pend-sign'];
+        this.orderType[7].num = data['complete'];
+        this.orderType[8].num = data['canceled'];
+        this.orderType[9].num = data['pend-check'];
+        this.orderType[10].num = data['suspend'];
+      });
+    },
+  }
+};
 </script>

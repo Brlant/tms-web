@@ -297,7 +297,7 @@
                   </perm>
                 </div>
                 <div style="padding-top: 2px">
-                  <perm label="tms-waybill-cancel" class="opera-btn">
+                  <perm label="tms-waybill-receiptCancel" class="opera-btn">
                     <span @click.stop="cancelWayBill(item)"
                           v-if="item.status === '-2'||item.status === '-1'||item.status === '0'||(item.status === '1' && item.carryType == '1')">
                       <a @click.pervent="" class="btn-circle btn-opera">
@@ -440,7 +440,7 @@
     </el-dialog>
 
     <el-dialog :visible.sync="dialogFormVisible" center width="700px" :before-close="cancel">
-      <el-form ref="dialogForm" :model="dialogForm">
+      <el-form ref="operatorForm" :model="dialogForm">
         <el-form-item label="第三方承运单号" label-width="150px" prop="thirdNo"
                       :rules="{required:true,message:'第三方承运单号不能为空',trigger:'blur'}">
           <el-input v-model="dialogForm.thirdNo" type="text" placeholder="请输入第三方承运单号" autofocus

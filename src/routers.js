@@ -82,7 +82,7 @@ export const routes = [
           },
           {
             path: '/transit/store-in',
-            component: () => import('./components/document/transit/store-in/index.vue'),
+            component: () => import('./components/document/transit/store-in/TransitStoreIn.vue'),
             meta: {moduleId: 'document', title: '中转入库', perm: 'transit-warehouse-in'}
           },
           {

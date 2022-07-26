@@ -21,13 +21,11 @@ $labelWidth: 180px;
   margin-bottom: 20px;
 }
 
-// .el-form-item {
-//   margin-bottom: 0px;
-// }
 ::v-deep .hide .el-input__inner {
   border: 0;
 }
 </style>
+
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
     <template slot="title">收货</template>
@@ -150,7 +148,7 @@ $labelWidth: 180px;
                 <el-form-item label="实收整装箱数" prop="wholeBoxCount">
                   <oms-input
                     v-model="form.actualWholeNum"
-                    type="interge"
+                    type="integer"
                     :min="0"
                     placeholder="请输入实收整装箱数"
                     @blur="setWholeBoxCount(form.actualWholeNum)"
@@ -161,7 +159,7 @@ $labelWidth: 180px;
                 <el-form-item label="实收散装箱数" prop="bulkBoxCount">
                   <oms-input
                     v-model="form.actualBulkNum"
-                    type="interge"
+                    type="integer"
                     :min="0"
                     placeholder="请输入实收散装箱数"
                     @blur="setBulkBoxCount(form.actualBulkNum)"
@@ -193,8 +191,8 @@ $labelWidth: 180px;
               <el-col :span="24">
                 <el-form-item label="是否破损" prop="damaged">
                   <el-radio-group v-model="form.damaged">
-                    <el-radio label="0">否</el-radio>
-                    <el-radio label="1">是</el-radio>
+                    <el-radio :label="false">否</el-radio>
+                    <el-radio :label="true">是</el-radio>
                   </el-radio-group>
                 </el-form-item>
 
@@ -205,10 +203,10 @@ $labelWidth: 180px;
                 <el-form-item label="破损整装箱数" prop="damagedWholeNum">
                   <oms-input
                     v-model="form.damagedWholeNum"
-                    type="interge"
+                    type="integer"
                     :min="0"
                     placeholder="请输入破损整装箱数"
-                    @blur="setUnWholeBoxCount(form.damagedWholeNum)"
+                    @blur="setDamagedWholeBoxCount(form.damagedWholeNum)"
                   ></oms-input>
                 </el-form-item>
               </el-col>
@@ -216,10 +214,10 @@ $labelWidth: 180px;
                 <el-form-item label="破损散装箱数" prop="damagedBulkNum">
                   <oms-input
                     v-model="form.damagedBulkNum"
-                    type="interge"
+                    type="integer"
                     :min="0"
                     placeholder="请输入破损散装箱数"
-                    @blur="setUnWholeBoxCount(form.damagedBulkNum)"
+                    @blur="setDamagedWholeBoxCount(form.damagedBulkNum)"
                   ></oms-input>
                 </el-form-item>
               </el-col>
@@ -253,19 +251,58 @@ export default {
       ],
       currentTab: {},
       form: {
-        id: "",
-        // attachmentIdList: [],
-        qualityInspection: "",
-        actualWholeNum: "",
-        actualBulkNum: "",
-        damaged: 0,
-        wholeBoxCount: "",
-        bulkBoxCount: "",
-        goodsWeight: "",
-        goodsVolume: "",
-        unWholeBoxCount: "",
-        unBulkBoxCount: "",
-        note: "",
+        id: 0,
+        transferInOrderNo: '',
+        transferInStatus: '',
+        createTime: '',
+        storeCode: '',
+        damaged: false,
+        actualWholeNum: 0,
+        actualBulkNum: 0,
+        damagedWholeNum: 0,
+        damagedBulkNum: 0,
+        warehousingWholeNum: 0,
+        warehousingBulkNum: 0,
+        wholeTraceCodes: '',
+        bulkTraceCodes: '',
+        orderNo: '',
+        waybillNo: '',
+        waybillType: '',
+        shipmentWay: '',
+        deliveryWay: '',
+        carrierId: '',
+        carrierName: '',
+        carryType: 0,
+        orgId: '',
+        orgName: '',
+        senderId: '',
+        senderName: '',
+        senderContact: '',
+        senderContactPhone: '',
+        receiverId: '',
+        receiverName: '',
+        receiverContact: '',
+        receiverContractPhone: '',
+        goodsWeight: 0.00,
+        goodsVolume: 0.00,
+        wholeBoxCount: 0,
+        bulkBoxCount: 0,
+        goodsPrice: 0.00,
+        tmsGoodsTotalName: '',
+        senderProvinceCode: '',
+        senderCityCode: '',
+        senderRegionCode: '',
+        senderDetailAddr: '',
+        receiverProvinceCode: '',
+        receiverCityCode: '',
+        receiverRegionCode: '',
+        receiverDetailAddr: '',
+        enabledStockWholeBoxCount: 0,
+        enabledStockBulkBoxCount: 0,
+        operatorId: '',
+        operatorName: '',
+        operatorStatus: '',
+        remarks: ''
       },
       doing: false,
       rules: {
@@ -288,7 +325,7 @@ export default {
         damaged: [
           {required: true, message: "请选择是否破损", trigger: "blur"},
         ],
-        unWholeBoxCount: [
+        damagedWholeBoxCount: [
           {
             required: true,
             type: "integer",
@@ -296,7 +333,7 @@ export default {
             trigger: "blur",
           },
         ],
-        unBulkBoxCount: [
+        damagedBulkBoxCount: [
           {
             required: true,
             type: "integer",
@@ -304,8 +341,7 @@ export default {
             trigger: "blur",
           },
         ],
-      },
-      attachmentList: [],
+      }
     };
   },
   computed: {
@@ -328,9 +364,6 @@ export default {
     },
   },
   methods: {
-    setDoing(val) {
-      this.doing = val;
-    },
     setWholeBoxCount(value) {
       if (!value || isNaN(value)) return;
       this.form.wholeBoxCount = parseInt(value, 10);
@@ -339,32 +372,19 @@ export default {
       if (!value || isNaN(value)) return;
       this.form.bulkBoxCount = parseInt(value, 10);
     },
-    setUnWholeBoxCount(value) {
+    setDamagedWholeBoxCount(value) {
       if (!value || isNaN(value)) return;
-      this.form.unWholeBoxCount = parseInt(value, 10);
+      this.form.damagedWholeBoxCount = parseInt(value, 10);
     },
-    setUnBulkBoxCount(value) {
+    setdamagedBulkBoxCount(value) {
       if (!value || isNaN(value)) return;
-      this.form.unBulkBoxCount = parseInt(value, 10);
+      this.form.damagedBulkNum = parseInt(value, 10);
     },
     // 表单详情
     getDetails(id) {
       TransferInOrder.getDetails(id).then(res => {
         this.form = res.data;
       })
-    },
-    getFileList: function () {
-      if (!this.form.id) return;
-      OmsAttachment.queryOneAttachmentList(this.form.id, "waybill-check").then(
-        (res) => {
-          this.attachmentList = res.data;
-          let ids = [];
-          this.attachmentList.forEach((file) => {
-            ids.push(file.attachmentId);
-          });
-          this.form.attachmentIdList = ids;
-        }
-      );
     },
     //   切换
     selectTab(item) {
@@ -373,19 +393,22 @@ export default {
     //   保存
     save(formName) {
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log("校验成功");
-          TransferInOrder.claimTask(this.form.id).then(res => {
-            this.$notify.success("收货成功");
-          }).catch(err => {
-            this.$notify.error("收货失败：" + err.getMsg);
-          })
-        } else {
-          console.log("校验失败");
+        if (!valid) {
+          return;
         }
+
+        TransferInOrder.receivingGoods(this.form)
+          .then(res => {
+            this.$notify.success("收货成功");
+            this.$emit('right-close');
+            this.$emit('change');
+          })
+          .catch(err => {
+            console.log(err);
+            this.$notify.error(err.response.data.msg || '收货失败');
+          })
       });
     },
-
   },
 };
 </script>

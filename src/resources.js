@@ -220,16 +220,16 @@ export const TransferInOrder = {
     return http.put(`/transfer-in-order/claim-task/${id}`);
   },
   // 上架
-  shelves: (id,params) => {
-    return http.put(`/transfer-in-order/shelves/${id}`, {params});
+  shelves: (params) => {
+    return http.put(`/transfer-in-order/shelves/${params.id}`, params);
   },
   // 指派上架人
-  assignedOnPeople: (id,params) => {
-    return http.put(`/transfer-in-order/assigned-on-people/${id}`, {params});
+  assignedOnPeople: (params) => {
+    return http.put(`/transfer-in-order/assigned-on-people/${params.id}`, params);
   },
   // 收货
-  receivingGoods: (id,params) => {
-    return http.put(`/transfer-in-order/receiving-goods/${id}`, {params});
+  receivingGoods: (params) => {
+    return http.put(`/transfer-in-order/receiving-goods/${params.id}`, params);
   },
 };
 

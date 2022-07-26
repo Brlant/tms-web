@@ -258,7 +258,7 @@
                   </perm>
                 </div>
                 <!--                <div>-->
-                <!--                  <perm label="stock-in-assign-store"> &lt;!&ndash;stock-in-cancel&ndash;&gt;-->
+                <!--                  <perm label="stock-in-assign-store"> &lt;!&ndash;stock-in-receiptCancel&ndash;&gt;-->
                 <!--                    <span v-show="item.status < 5  " @click.stop="closeTask(item)">-->
                 <!--                    <a href="#" class="btn-circle btn-opera" @click.prevent=""><i-->
                 <!--                      class="el-icon-circle-close"></i></a>-->

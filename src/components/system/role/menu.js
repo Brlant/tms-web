@@ -352,7 +352,7 @@ export default [
             'leaf': true
           },
           {
-            'id': 'tms-order-cancel',
+            'id': 'tms-order-receiptCancel',
             'parentId': 'tms-order-manager',
             'label': '取消订单',
             'sort': null,
@@ -489,7 +489,7 @@ export default [
             'leaf': true
           },
           {
-            'id': 'tms-waybill-cancel',
+            'id': 'tms-waybill-receiptCancel',
             'parentId': 'tms-waybill-manager',
             'label': '取消运单',
             'sort': null,
@@ -743,7 +743,7 @@ export default [
             'leaf': true
           },
           {
-            'id': 'tms-task-car-task-cancel',
+            'id': 'tms-task-car-task-receiptCancel',
             'parentId': 'tms-task-car-task',
             'label': '取消出车任务',
             'sort': null,

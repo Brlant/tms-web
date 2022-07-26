@@ -1,534 +1,536 @@
-<style lang="scss" scoped>
+<style lang="scss">
+.special-col {
+  padding-left: 20px;
+  position: relative;
 
-  .i-bg {
-    display: inline-block;
-    background: #eee;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 35px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+  .el-checkbox {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
   }
+}
 
-  .order-list-item {
-    cursor: pointer;
-  }
+.order-list-status-right {
+  justify-content: flex-end;
+}
+
+.order-list .order-list-header {
+  background: #dfebf8;
+  line-height: 15px;
+  padding: 10px 5px 10px 15px;
+  margin: 10px 0 5px 0;
+}
 </style>
 <template>
   <div class="order-page">
-    <div class="container">
-
-      <el-form v-show="showSearch" class="advanced-query-form" onsubmit="return false">
-        <el-row>
-          <el-col :span="8">
-            <oms-form-row label="货主" :span="5">
-              <org-select v-model="searchCondition.orgId" :list="orgList"
-                          :remoteMethod="filterCustomer" @change="orgChange"
-                          placeholder="请输入关键字搜索货主信息"></org-select>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="货主订单号" :span="6">
-              <oms-input type="text" v-model="searchCondition.orderNo" placeholder="请输入货主订单号"></oms-input>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="业务类型" :span="6">
-              <el-select type="text" v-model="searchCondition.bizType" placeholder="请选择业务类型">
-                <el-option :value="item.key" :key="item.key" :label="item.label"
-                           v-for="item in bizTypes">
-                </el-option>
-              </el-select>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="物流方式" :span="5">
-              <el-select type="text" v-model="searchCondition.transportationMeansId" placeholder="请选择物流方式">
-                <el-option :value="item.key" :key="item.key" :label="item.label"
-                           v-for="item in transportationMeansList"></el-option>
-              </el-select>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="来源单位" :span="6">
-              <div @click="isOrgListExist">
-                <org-select v-model="searchCondition.supplierId" :list="customerList"
-                            :remoteMethod="filterOrg"
-                            placeholder="请输入关键字搜索来源单位"></org-select>
-              </div>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="8">
-            <oms-form-row label="来源订单号" :span="6">
-              <oms-input type="text" v-model="searchCondition.thirdPartyNumber" placeholder="请输入来源订单号"></oms-input>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="9">
-            <oms-form-row label="预计入库/拟退货时间" :span="8">
-              <el-col :span="24">
-                <el-date-picker
-                  v-model="expectedTime"
-                  type="daterange"
-                  placeholder="请选择" format="yyyy-MM-dd">
-                </el-date-picker>
-              </el-col>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="9">
-            <oms-form-row label="上架时间" :span="5">
-              <el-col :span="24">
-                <el-date-picker
-                  v-model="completeTime"
-                  type="datetimerange"
-                  :default-time="['00:00:00', '23:59:59']"
-                  placeholder="请选择">
-                </el-date-picker>
-              </el-col>
-            </oms-form-row>
-          </el-col>
-          <el-col :span="6">
-            <oms-form-row label="" :span="3">
-              <el-button type="primary" native-type="submit" @click="searchInOrder">查询</el-button>
-              <el-button native-type="reset" @click="resetSearchForm">重置</el-button>
-            </oms-form-row>
-          </el-col>
-        </el-row>
-      </el-form>
-      <status-list class="container" :activeStatus="activeStatus" :statusList="orgType" :checkStatus="checkStatus">
-        <span class="btn-group-right">
-          <goods-switch></goods-switch>
-          <a href="#" class="btn-circle" @click.stop.prevent="showSearch = !showSearch">
-              <i class="el-icon-t-search"></i>
-          </a>
-        </span>
-      </status-list>
-      <div class="order-list" style="margin-top: 20px">
-        <el-row class="order-list-header">
-          <el-col :span="4">货主/订单号</el-col>
-          <el-col :span="2">业务类型</el-col>
-          <el-col :span="6">来源/订单号</el-col>
-          <el-col :span="4">物流</el-col>
-          <el-col :span="3">状态</el-col>
-          <el-col :span="5">时间</el-col>
-          <!--<el-col :span="3">操作</el-col>-->
-        </el-row>
-        <el-row v-if="loadingData">
-          <el-col :span="24">
-            <oms-loading :loading="loadingData"></oms-loading>
-          </el-col>
-        </el-row>
-        <el-row v-else-if="orderList.length == 0">
-          <el-col :span="24">
-            <div class="empty-info">
-              暂无信息
-            </div>
-          </el-col>
-        </el-row>
-        <div v-else class="order-list-body flex-list-dom">
-          <div class="order-list-item" v-for="item in orderList"
-               :class="['status-'+(parseInt(item.wmsStatus, 10)+1) ,{'active':currentOrderId==item.id}]"
-               @click="showDetail(item)">
-            <el-row>
-              <el-col :span="4">
-                <div class="f-grey">
-                  {{item.orderNo }}
-                </div>
-                <div>
-                  {{item.orgName }}
-                </div>
-              </el-col>
-              <el-col :span="2">
-                <div>
-                  <dict :dict-group="'bizInType'" :dict-key="item.bizType"></dict>
-                </div>
-              </el-col>
-              <el-col :span="6">
-                <div class="f-grey" v-show="item.bizType ==='1-0'||item.bizType ==='1-1'">{{item.thirdPartyNumber }}
-                </div>
-                <div v-show="item.bizType ==='1-0'||item.bizType ==='1-1'">{{item.supplierName }}</div>
-              </el-col>
-              <el-col :span="4">
-                <div v-show="item.bizType !== '1-2'">
-                  <div v-show="item.transportationMeansId">
-                    物流方式：
-                    <dict :dict-group="'transportationMeans'" :dict-key="item.transportationMeansId"></dict>
-                  </div>
-                </div>
-                <div v-show="item.transportationMeansId === '1'||item.transportationMeansId === '3'  ">
-                  <span v-show="item.logisticsProviderName"> 物流商：{{ item.logisticsProviderName}}</span>
-                </div>
-                <div v-show="item.transportationMeansId === '2'">
-                  <span v-show="item.transportationAddress">
-                      提货地址：{{ item.pickUpWarehouseAddress}}
-                  </span>
-                </div>
-              </el-col>
-              <el-col :span="3">
-                <div>
-                  {{getOrderStatus(item)}}
-                  <el-tag type="warning" v-show="item.rushOrderFlag">急</el-tag>
-                </div>
-              </el-col>
-              <el-col :span="5">
-
-                <div v-show="item.bizType !== '1-2' ">
-                  <span v-show="item.bizType === '1-1' && item.expectedTime"
-                        style="letter-spacing:0.5em;margin-right: -0.5em">拟退货：</span>
-                  <span v-show="item.bizType !== '1-1' && item.expectedTime">预计入库：</span>{{ item.expectedTime | date}}
-                </div>
-                <div>
-                  <span v-show="item.completeTime">上架：</span>{{item.completeTime | minute }}
-                </div>
-              </el-col>
-            </el-row>
-            <order-goods-info :order-item="item"></order-goods-info>
-            <div class="order-list-item-bg"></div>
+    <search-part @search="searchResult">
+    </search-part>
+    <el-row>
+      <el-col :span="16">
+        <div class="order-list-status " style="margin-bottom:20px;">
+          <div class="status-item" v-show="key < 5"
+               :class="{'active':key==activeStatus}"
+               v-for="(item,key) in transferInType"
+               :key="key"
+               @click="changeStatus(item,key)">
+            <div class="status-bg" :class="['b_color_'+key]"></div>
+            <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{ item.title }}<span
+              class="status-num">{{ item.num }}</span></div>
           </div>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="order-list-status  order-list-status-right" style="margin-bottom:20px">
+          <div class="status-item" v-show="key > 4"
+               :class="{'active':key==activeStatus }"
+               v-for="(item,key) in transferInType"
+               :key="key"
+               @click="changeStatus(item,key)">
+            <div class="status-bg" :class="['b_color_'+key]"></div>
+            <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{ item.title }}<span
+              class="status-num">{{ item.num }}</span></div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+
+    <div class="order-list" style="margin-top: 20px">
+      <div class="flex-list-dom">
+        <el-row class="order-list-header">
+          <el-col :span="2">
+            <!--            <el-checkbox @change="checkAll" v-model="isCheckAll"></el-checkbox>-->
+            中转入库单号
+          </el-col>
+          <el-col :span="2">订单编号</el-col>
+          <el-col :span="2">运单编号</el-col>
+          <el-col :span="2">新建时间</el-col>
+          <el-col :span="2">类型</el-col>
+          <el-col :span="4">发货单位</el-col>
+          <el-col :span="4">收货单位</el-col>
+          <el-col :span="2">承运类型</el-col>
+          <el-col :span="2">状态</el-col>
+          <el-col :span="2">操作</el-col>
+        </el-row>
+      </div>
+      <el-row v-if="loadingData">
+        <el-col :span="24">
+          <oms-loading :loading="loadingData"></oms-loading>
+        </el-col>
+      </el-row>
+      <el-row v-else-if="dataList.length == 0">
+        <el-col :span="24">
+          <div class="empty-info">
+            暂无信息
+          </div>
+        </el-col>
+      </el-row>
+      <div v-else class="order-list-body flex-list-dom">
+        <div class="order-list-item" v-for="(item,index) in dataList" :key="index" @click="showInfo(item)"
+             :class="[formatRowClass(item.status, transferInType) ,{'active':currentItemId===item.id}]">
+          <el-row>
+            <el-col :span="2" class="R">
+              <!--              <div @click.stop.prevent="checkItem(item)" class="el-checkbox-warp">-->
+              <!--                <el-checkbox v-model="item.isChecked"></el-checkbox>-->
+              <!--              </div>-->
+              <div>
+                {{ item.transferInOrderNo }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div>
+                {{ item.orderNo }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div>
+                {{ item.waybillNo }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div>
+                {{ item.createTime|time }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div v-show="item.waybillType">
+                <dict :dict-group="'bizType'" :dict-key="item.waybillType"></dict>
+              </div>
+              <div v-show="item.shipmentWay">
+                <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
+              </div>
+              <div v-show="item.deliveryWay">
+                <dict :dict-group="'deliveryWay'" :dict-key="item.deliveryWay"></dict>
+              </div>
+            </el-col>
+            <el-col :span="4" class="R">
+              <div>
+                {{ item.senderName }}
+              </div>
+              <div>
+                {{ item.senderAddress }}
+              </div>
+            </el-col>
+            <el-col :span="4" class="R">
+              <div>
+                {{ item.receiverName }}
+              </div>
+              <div>
+                {{ item.receiverAddress }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <div :title="item.butt?'第三方承运-已对接':item.carryType?'第三方承运-未对接':'自行承运'">
+                {{ item.carryType ? '第三方承运' : '自行承运' }}
+              </div>
+            </el-col>
+            <el-col :span="2" class="R">
+              <el-tag v-if="item.transferInStatus === '0'">待收货</el-tag>
+              <el-tag type="warning" v-else-if="item.transferInStatus === '1'">待分配上架人</el-tag>
+              <el-tag type="info" v-else-if="item.transferInStatus === '2'">待上架</el-tag>
+              <el-tag type="success" v-else-if="item.transferInStatus === '4'">已完成</el-tag>
+              <el-tag type="danger" v-else-if="item.transferInStatus === '-1'">已取消</el-tag>
+              <el-tag v-else>-</el-tag>
+            </el-col>
+            <el-col :span="2" class="opera-btn">
+              <div v-show="item.transferInStatus === '0'">
+                <perm label="tms-waybill-edit">
+                    <span @click.stop="deliveryGoods(item)">
+                      <a class="btn-circle btn-opera">
+                        <i class="el-icon-truck"></i>
+                      </a>收货
+                    </span>
+                </perm>
+              </div>
+              <div v-show="item.transferInStatus === '1'">
+                <perm label="tms-waybill-edit">
+                            <span @click.stop="onePerson(item)">
+                            <a class="btn-circle btn-opera">
+                                <i class="el-icon-user"></i>
+                            </a>指派上架人
+                            </span>
+                </perm>
+              </div>
+              <div v-show="item.operatorStatus !== '1' && (item.transferInStatus === '1' || item.transferInStatus === '2')">
+                <perm label="tms-waybill-edit">
+                            <span @click.stop="claimTask(item)">
+                            <a class="btn-circle btn-opera">
+                                <i class="el-icon-t-verifyPass"></i>
+                            </a>认领任务
+                            </span>
+                </perm>
+              </div>
+              <div v-show="item.transferInStatus === '2'">
+                <perm label="tms-waybill-edit">
+                        <span @click.stop="shelves(item)">
+                            <a class="btn-circle btn-opera">
+                                <i class="el-icon-sell"></i>
+                            </a>上架
+                        </span>
+                </perm>
+              </div>
+            </el-col>
+          </el-row>
+          <div class="order-list-item-bg"></div>
         </div>
       </div>
     </div>
-    <div class="text-center" v-show="(orderList.length || pager.currentPage !== 1) && !loadingData">
-
-      <el-cu-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                        :current-page="pager.currentPage"
-                        :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
-                        layout="sizes, prev, pager, next, jumper"
-                        :total="pager.count">
-      </el-cu-pagination>
+    <div class="text-center" v-show="dataList.length && !loadingData">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                     :current-page="pager.currentPage"
+                     :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
+                     layout="total, sizes, prev, pager, next, jumper"
+                     :total="pager.count">
+      </el-pagination>
     </div>
-    <page-right :show=" showPartIndex === '5'" @right-close="resetRightBox" :css="{'width':'1200px','padding':0}"
-                partClass="pr-no-animation">
-      <detail @close="resetRightBox" :orderId="currentOrderId" :showPartIndex="showPartIndex"></detail>
+    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
     </page-right>
+    <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentInfoPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
+    </page-right>
+    <page-right :show="showSignIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
+      <component :is="currentSignPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
+    </page-right>
+
+    <!-- 指派上架人 -->
+    <el-dialog :visible.sync="operatorFormVisible" center width="700px"
+               :show-close="false"
+               :before-close="assignedOnPeopleCancel">
+      <el-form ref="operatorForm" :model="operatorForm">
+        <el-form-item label="操作人" label-width="100px" prop="operatorId"
+                      :rules="{required:true,message:'操作人不能为空',trigger:'change'}">
+          <el-select v-model="operatorForm.operatorId" placeholder="请选择操作人"
+                     remote :remote-method="queryOperator"
+                     filterable>
+            <el-option
+              v-for="item in operators"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="assignedOnPeopleConfirm" :disabled="doing">确定</el-button>
+        <el-button @click="assignedOnPeopleCancel">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import utils from '@/tools/utils';
-import detail from './detail/index.vue';
-import {BaseInfo, InWork} from '@/resources';
+import SearchPart from './search';
+import {InWork, TransferInOrder} from '@/resources';
+import takeForm from './form/take-form.vue';
+import shelvesForm from './form/shelves-form.vue';
+import detailsForm from './form/details-form.vue';
+import StatusMixin from '@/mixins/statusMixin';
 
 export default {
-    components: {
-      detail
-    },
-    data() {
-      return {
-        activeStatus: 0, // 当前状态
-        loadingData: true,
-        showPartIndex: '', // 是否显示确认
-        showSearch: false,
-        orgType: utils.inType,
-        orderList: [],
-        currentOrderId: '',
-        pager: {
-          currentPage: 1,
-          count: 0,
-          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10
-        },
-        filters: {
-          searchType: 1,
-          type: 0,
-          state: 4,
-          wmsStatus: null,
-          deleteFlag: false,
-          orgId: '',
-          orderNo: '',
-          bizType: '',
-          logisticsProviderName: '',
-          expectedStartTime: '',
-          expectedEndTime: '',
-          completeStartTime: '',
-          completeEndTime: '',
-          transportationMeansId: '',
-          supplierId: '',
-          thirdPartyNumber: ''
-        },
-        searchCondition: {
-          orgId: '',
-          orderNo: '',
-          bizType: '',
-          logisticsProviderName: '',
-          expectedStartTime: '',
-          expectedEndTime: '',
-          completeStartTime: '',
-          completeEndTime: '',
-          transportationMeansId: '',
-          supplierId: '',
-          thirdPartyNumber: ''
-        },
-        expectedTime: '',
-        completeTime: '',
-        orgList: [], // 查询 货主列表
-        customerList: [], // 来源单位列表
-        logisticsList: [] // 物流商列表
-      };
-    },
-    mounted() {
-      this.getOrders(1);
-    },
-    computed: {
-      transportationMeansList: function () {
-        return this.$getDict('transportationMeans');
+  components: {
+    SearchPart,
+  },
+  mixins: [StatusMixin],
+  data() {
+    return {
+      doing: false,
+      operatorFormVisible: false,
+      //   操作人
+      operatorForm: {
+        id: '',
+        // 操作人的id
+        operatorId: '',
       },
-      bizTypes: function () {
-        return this.$getDict('bizInType');
+      //   操作人下拉框
+      operators: [],
+
+      loadingData: false,
+      activeStatus: 0,
+      transferInType: utils.transferInType,
+      dataList: [],
+      showIndex: -1,
+      showInfoIndex: -1,
+      showSignIndex: -1,
+
+      currentPart: null,
+      currentInfoPart: null,
+      currentSignPart: null,
+
+      dialogComponents: {
+        0: takeForm
       },
-      isShowGoodsList() {
-        return this.$store.state.isShowGoodsList;
-      }
-    },
-    watch: {
+      dialogInfoComponents: {
+        0: shelvesForm
+      },
+      dialogSignComponents: {
+        0: detailsForm
+      },
+      pager: {
+        currentPage: 1,
+        count: 0,
+        pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
+        totalPage: 1
+      },
+      //   action: '',
+      form: {},
+      // 筛选条件
       filters: {
-        handler: function () {
-          this.getOrders(1);
-        },
-        deep: true
+        transferInStatus: null,
+        createTime1: '',
+        createTime2: '',
+        transferInOrderNo: '',
+        orderNo: '',
+        waybillNo: '',
+        senderId: '',
+        receiverId: '',
+        carryType: ''
       },
-      isShowGoodsList() {
-        this.getOrders(1);
+      isCheckAll: false,  // 全选
+      checkList: [],   // 已勾选的列表
+      //   checkListPara: [],
+      waybillIdList: [],
+      formItem: {}, // 组件传递的数据
+    };
+  },
+  watch: {
+    // 筛选条件更改刷新列表
+    filters: {
+      handler() {
+        this.getTransferInOrderPage(1);
+      },
+      deep: true
+    }
+  },
+  mounted() {
+    this.getTransferInOrderPage(1);
+    this.queryOperator('');
+  },
+  methods: {
+    queryOperator(keyword) { // 查询操作人员列表
+      InWork.queryOperator({
+        keyWord: keyword,
+        pageSize: 10
+      })
+        .then(res => {
+          this.operators = res.data.list;
+
+          if (!this.operators.length) {
+            this.activeId = '';
+            this.operatorName = '';
+            return;
+          }
+
+          this.activeId = this.operators[0].id;
+          this.operatorName = this.operators[0].name;
+        })
+        .catch((err) => {
+          console.error(`查询操作人，接口异常：`, err);
+        });
+    },
+    // 指定上架人
+    onePerson(val) {
+      this.operatorFormVisible = true;
+      this.operatorForm.id = val.id;
+    },
+    // 认领任务
+    claimTask(val) {
+      this.$confirm('是否确认认领任务?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 确认认领
+        TransferInOrder.claimTask(val.id).then(res => {
+          this.$notify.success("认领成功");
+          this.getTransferInOrderPage(1);
+        }).catch(err => {
+          this.$notify.error(err.response.data.msg || '认领失败');
+        })
+      }).catch(() => {
+        console.log("认领任务已取消……");
+      });
+    },
+    // 收货
+    deliveryGoods(val) {
+      this.showIndex = 0;
+      this.currentPart = this.dialogComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(val));
+      });
+    },
+    // 上架
+    shelves(val) {
+      this.showInfoIndex = 0;
+      this.currentInfoPart = this.dialogInfoComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(val));
+      });
+    },
+    // 详情
+    showInfo(val) {
+      this.showSignIndex = 0;
+      this.currentSignPart = this.dialogSignComponents[0];
+      this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(val));
+      });
+    },
+    checkItem(item) {
+      // 单选
+      item.isChecked = !item.isChecked;
+      let index = this.checkList.indexOf(item);
+      let idIndex = this.waybillIdList.indexOf(item.id);
+      if (item.isChecked) {
+        if (index === -1) {
+          this.checkList.push(item);
+        }
+        if (idIndex === -1) {
+          this.waybillIdList.push(item.id);
+        }
+      } else {
+        this.checkList.splice(index, 1);
+        this.waybillIdList.splice(idIndex, 1);
       }
     },
-    methods: {
-      handleSizeChange(val) {
-        this.pager.pageSize = val;
-        window.localStorage.setItem('currentPageSize', val);
-        this.getOrders(1);
-      },
-      handleCurrentChange(val) {
-        this.getOrders(val);
-      },
-      resetRightBox: function () { // 重置弹出窗
-        // this.currentOrderId = '';
-        if (this.showPartIndex !== '5') {
-          this.getOrders(this.pager.currentPage);
-        }
-        this.showPartIndex = '';
-      },
-      transformStatus(orderId) {
-        this.orderList.forEach(i => {
-          if (i.id === orderId) {
-            i.wmsStatus = (parseInt(i.wmsStatus, 10) + 1).toString();
+    checkAll() {
+      // 全选 反选
+      if (this.isCheckAll) {
+        this.dataList.forEach(item => {
+          item.isChecked = true;
+          let index = this.checkList.indexOf(item);
+          if (index === -1) {
+            this.checkList.push(item);
+          }
+          let idIndex = this.waybillIdList.indexOf(item.id);
+          if (idIndex === -1) {
+            this.waybillIdList.push(item.id);
           }
         });
-        this.resetRightBox();
-      },
-      checkStatus(item, key) {
-        this.activeStatus = key;
-        this.filters.wmsStatus = item.state;
-      },
-      showDetail(item) {
-        this.currentOrderId = item.id;
-        this.showPartIndex = '5';
-      },
-      showRightPart: function (item) {
-        this.currentOrderId = item.id;
-        this.$nextTick(() => {
-          this.showPartIndex = item.wmsStatus;
+      } else {
+        this.dataList.forEach(item => {
+          item.isChecked = false;
         });
-      },
-      claimTack(item) {
-        this.currentOrderId = item.id;
-        this.$confirm('是否认领任务', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          InWork.claimReviewTack(item.id).then(() => {
-            this.$notify.success({
-              message: '认领任务成功'
-            });
-            this.resetRightBox();
-          }).catch(error => {
-            this.$notify.error({
-              message: error.response && error.response.data && error.response.data.msg || '认领任务失败'
-            });
-          });
-        });
-      },
-      claimShelfTack(item) {
-        this.currentOrderId = item.id;
-        this.$confirm('是否认领任务', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          InWork.claimShelfTack(item.id).then(() => {
-            this.$notify.success({
-              message: '认领任务成功'
-            });
-            this.resetRightBox();
-          }).catch(error => {
-            this.$notify.error({
-              message: error.response && error.response.data && error.response.data.msg || '认领任务失败'
-            });
-          });
-        });
-      },
-      claimAutoTack(item) {
-        this.currentOrderId = item.id;
-        this.$confirm('是否一键认领任务', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          InWork.claimTack(item.id).then(() => {
-            this.$notify.success({
-              message: '一键认领任务成功'
-            });
-            this.resetRightBox();
-          }).catch(error => {
-            this.$notify.error({
-              message: error.response && error.response.data && error.response.data.msg || '一键认领任务失败'
-            });
-          });
-        });
-      },
-      onShelf(item) {
-        this.currentOrderId = item.id;
-        this.$confirm('是否确认上架', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          InWork.onShelf(item.id).then(res => {
-            this.$notify.success({
-              message: '确认上架成功'
-            });
-            this.resetRightBox();
-          }).catch(error => {
-            this.$notify.error({
-              message: error.response && error.response.data && error.response.data.msg || '确认上架失败'
-            });
-          });
-        });
-      },
-      getOrders(pageNo) { // 从oms中查询订单
-        // if (pageNo === 1) {
-        //   this.pager.count = 0;
-        // }
-        this.pager.currentPage = pageNo;
-        let params = Object.assign({}, {
-          pageNo: pageNo,
-          pageSize: this.pager.pageSize,
-          logisticsCentreId: window.localStorage.getItem('logisticsCentreId')
-        }, this.filters);
-        params.isShowDetail = !!JSON.parse(window.localStorage.getItem('isShowGoodsList'));
-        this.loadingData = true;
-        let nowTime = Date.now();
-        this.nowTime = nowTime;
-        InWork.queryOmsOrder(params).then(res => {
-          if (this.nowTime > nowTime) return;
-          res.data.list.forEach(item => {
-            item.isChecked = false;
-          });
-          this.orderList = res.data.list;
-          // 设置分页数
-          this.pager.count = this.pager.currentPage * this.pager.pageSize + (this.orderList.length === this.pager.pageSize ? 1 : 0);
-          this.loadingData = false;
-        });
-        this.queryOrderCount();
-      },
-      queryOrderCount() {
-        let params = JSON.parse(JSON.stringify(this.filters));
-        params.wmsStatus = null;
-        params.logisticsCentreId = window.localStorage.getItem('logisticsCentreId');
-        InWork.queryOrderCount(params).then(res => {
-          this.orgType[0].num = res.data['all'];
-          this.orgType[1].num = res.data['task-execute'];
-          this.orgType[2].num = res.data['completed'];
-        });
-      },
-      getOrderStatus: function (order) { // 获取订单状态
-        let orgTypeItem = this.orgType[parseInt(order.wmsStatus, 10) + 1];
-        return orgTypeItem && orgTypeItem.title || '';
-      },
-      filterCustomer: function (query) {// 过滤客户
-        BaseInfo.query({keyWord: query, type: 0}).then(res => {
-          this.orgList = res.data.list;
-        });
-      },
-      filterOrg: function (query) {// 过滤供货商
-        let orgId = this.searchCondition.orgId;
-        if (!orgId) {
-          this.searchCondition.supplierId = '';
-          this.customerList = [];
-          return;
-        }
-        BaseInfo.queryOrgByReation(orgId, {keyWord: query}).then(res => {
-          this.customerList = res.data;
-        });
-      },
-      filterLogistics: function (query) {// 过滤物流提供方
-        let orgId = this.searchCondition.orgId;
-        if (!orgId) {
-          this.searchCondition.logisticsProviderName = '';
-          this.logisticsList = [];
-          return;
-        }
-        BaseInfo.queryOrgByValidReation(orgId, {keyWord: query, relation: '3'}).then(res => {
-          this.logisticsList = res.data;
-        });
-      },
-      orgChange: function () {
-        this.searchCondition.supplierId = '';
-        this.customerList = [];
-        this.filterOrg();
-        this.filterLogistics();
-      },
-      searchInOrder: function () {// 搜索
-        this.searchCondition.expectedStartTime = this.$formatAryTime(this.expectedTime, 0, 'YYYY-MM-DD');
-        this.searchCondition.expectedEndTime = this.$formatAryTime(this.expectedTime, 1, 'YYYY-MM-DD');
-        this.searchCondition.completeStartTime = this.$formatAryTime(this.completeTime, 0);
-        this.searchCondition.completeEndTime = this.$formatAryTime(this.completeTime, 1);
-        Object.assign(this.filters, this.searchCondition);
-      },
-      formatTimeAry(times, index, str) {
-        if (!times) return '';
-        return this.formatTime(times[index], str);
-      },
-      formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
-        return time ? this.$moment(time).format(str) : '';
-      },
-      resetSearchForm: function () {// 重置表单
-        let temp = {
-          orgId: '',
-          orderNo: '',
-          bizType: '',
-          logisticsProviderName: '',
-          expectedStartTime: '',
-          expectedEndTime: '',
-          completeStartTime: '',
-          completeEndTime: '',
-          transportationMeansId: '',
-          supplierId: '',
-          thirdPartyNumber: ''
-        };
-        this.expectedTime = '';
-        this.completeTime = '';
-        if (this.isSupplierOrOrg) {
-          temp.orgId = this.$route.params.id;
-        }
-        Object.assign(this.searchCondition, temp);
-        Object.assign(this.filters, temp);
-        this.orgChange();
-      },
-      isOrgListExist: function () {
-        if (!this.searchCondition.orgId) {
-          this.$notify.info({
-            duration: 2000,
-            message: '请先选择货主'
-          });
-          return;
-        }
-        if (this.customerList.length === 0) {
-          this.$notify.info({
-            duration: 2000,
-            message: '货主无来源单位'
-          });
-        }
+        this.checkList = [];
+        this.waybillIdList = [];
       }
-    }
-  };
+    },
+    // 指派上架人取消
+    assignedOnPeopleCancel() {
+      this.operatorFormVisible = false;
+      // 取消时除了把对话框隐藏起来，还需要清空校验，以免再次打开时，校验还在，不好看
+      this.$refs.operatorForm.clearValidate();
+    },
+    // 指派上架人确认
+    assignedOnPeopleConfirm() {
+      this.$refs.operatorForm.validate((valid) => {
+        if (!valid || this.doing) {
+          return;
+        }
+
+        this.doing = true;
+        TransferInOrder.assignedOnPeople(this.operatorForm)
+          .then((res) => {
+            this.$notify.success(res.data);
+            this.getTransferInOrderPage(1);
+           this.assignedOnPeopleCancel();
+          })
+          .catch(error => {
+            console.log(`TransferInOrder.assignedOnPeople.catch: `,error);
+            this.$notify.error({
+              duration: 2000,
+              message: error.response.data.msg || '指派失败'
+            });
+          })
+          .finally(() => {
+            this.doing = false;
+          });
+      })
+    },
+    // 分页
+    handleSizeChange(val) {
+      this.pager.pageSize = val;
+      window.localStorage.setItem('currentPageSize', val);
+      this.getTransferInOrderPage(1);
+    },
+    handleCurrentChange(val) {
+      this.getTransferInOrderPage(val);
+    },
+    // 搜索
+    searchResult(search) {
+      Object.assign(this.filters, search);
+    },
+    changeStatus(item, key) {// 订单分类改变 (tab切换)
+      this.activeStatus = key;
+      this.filters.transferInStatus = item.status;
+    },
+    // 右弹窗关闭（x）
+    resetRightBox() {
+      this.showIndex = -1;
+      this.showInfoIndex = -1;
+      this.showSignIndex = -1;
+    },
+    // 页面列表
+    getTransferInOrderPage(pageNo, isContinue = false) {
+      this.pager.currentPage = pageNo;
+      let param = Object.assign({}, {
+        pageNo: pageNo,
+        pageSize: this.pager.pageSize
+      }, this.filters);
+      if (this.isCheckAll) {
+        this.isCheckAll = false;
+      }
+      this.loadingData = true;
+      // 列表接口
+      TransferInOrder.query(param).then(res => {
+        if (isContinue) {
+          this.dataList = this.showTypeList.concat(res.data.list);
+        } else {
+          this.dataList = res.data.list;
+        }
+
+        this.pager.count = res.data.count;
+        this.loadingData = false;
+      });
+
+      this.queryStateNum(param);
+    },
+    // 每个tab下的数量
+    queryStateNum(params) {
+      TransferInOrder.queryStateNum(params).then(res => {
+        let data = res.data;
+        this.transferInType[0].num = data['all'];
+        this.transferInType[1].num = data['pend-receipt'] || 0;
+        this.transferInType[2].num = data['pend-assigned'] || 0;
+        this.transferInType[3].num = data['pend-up'] || 0;
+        this.transferInType[4].num = data['complete'] || 0;
+        this.transferInType[5].num = data['canceled'] || 0;
+      });
+    },
+    // 右侧弹窗提交刷新列表
+    submit() {
+      this.getTransferInOrderPage(1);
+    },
+  }
+};
 </script>

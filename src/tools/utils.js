@@ -30,7 +30,7 @@ export default {
     1: {'title': '待收货', status: '0', num: ''},
     2: {'title': '待配上架人', status: '1', num: ''},
     3: {'title': '待上架', status: '2', num: ''},
-    4: {'title': '已完成', status: '3', num: ''},
+    4: {'title': '已完成', status: '4', num: ''},
     5: {'title': '已取消', status: '-1', num: ''},
   },
   transferOutType: {
@@ -38,8 +38,9 @@ export default {
     1: {'title': '待确认', status: '0', num: ''},
     2: {'title': '待配下架人', status: '1', num: ''},
     3: {'title': '待下架', status: '2', num: ''},
-    4: {'title': '已完成', status: '3', num: ''},
-    5: {'title': '已取消', status: '-1', num: ''},
+    4: {'title': '待出库', status: '3', num: ''},
+    5: {'title': '已完成', status: '4', num: ''},
+    6: {'title': '已取消', status: '-1', num: ''},
   },
   carTaskType: {
     0: {'title': '待确认', status: '0', num: ''},

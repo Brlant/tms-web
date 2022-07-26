@@ -262,7 +262,7 @@
     </el-dialog>
     <!-- 操作人 -->
     <el-dialog :visible.sync="dialogFormVisible" center width="700px" :show-close="false" :before-close="cancel">
-      <el-form ref="dialogForm" :model="dialogForm">
+      <el-form ref="operatorForm" :model="dialogForm">
         <el-form-item label="操作人" label-width="100px" prop="thirdNo"
                       :rules="{required:true,message:'操作人不能为空',trigger:'change'}">
                     <el-select v-model="dialogForm.thirdNo" placeholder="请选择操作人">
@@ -429,7 +429,7 @@ export default {
     //       return;
     //     }
     //     this.doing = true;
-    //     TmsWayBill.shipmentThirdWayBill(this.increaseForm)
+    //     TmsWayBill.receiptConfirm(this.increaseForm)
     //       .then(() => {
     //         // this.$notify.success('启运成功');
     //         // this.getTmsWayBillPage(1);
