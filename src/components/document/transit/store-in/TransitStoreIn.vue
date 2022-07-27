@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
 .special-col {
   padding-left: 20px;
   position: relative;
@@ -47,7 +47,7 @@
                v-for="(item,key) in transferInType"
                :key="key"
                @click="changeStatus(item,key)">
-            <div class="status-bg" :class="['b_color_'+key]"></div>
+            <div class="status-bg" :class="['b_color_'+7]"></div>
             <div><i class="el-icon-caret-right" v-if="key==activeStatus"></i>{{ item.title }}<span
               class="status-num">{{ item.num }}</span></div>
           </div>
@@ -146,7 +146,7 @@
             </el-col>
             <el-col :span="2" class="R">
               <el-tag v-if="item.transferInStatus === '0'">待收货</el-tag>
-              <el-tag type="warning" v-else-if="item.transferInStatus === '1'">待分配上架人</el-tag>
+              <el-tag type="warning" v-else-if="item.transferInStatus === '1'">待配上架人</el-tag>
               <el-tag type="info" v-else-if="item.transferInStatus === '2'">待上架</el-tag>
               <el-tag type="success" v-else-if="item.transferInStatus === '4'">已完成</el-tag>
               <el-tag type="danger" v-else-if="item.transferInStatus === '-1'">已取消</el-tag>
@@ -250,7 +250,7 @@ import StatusMixin from '@/mixins/statusMixin';
 
 export default {
   components: {
-    SearchPart,
+    SearchPart,detailsForm
   },
   mixins: [StatusMixin],
   data() {
@@ -372,8 +372,8 @@ export default {
         console.log("认领任务已取消……");
       });
     },
-    // 收货
-    deliveryGoods(val) {
+    // 出库
+    outStore(val) {
       this.showIndex = 0;
       this.currentPart = this.dialogComponents[0];
       this.$nextTick(() => {
@@ -515,7 +515,7 @@ export default {
 
       this.queryStateNum(param);
     },
-    // 每个tab下的数量
+    // 查询状态数量
     queryStateNum(params) {
       TransferInOrder.queryStateNum(params).then(res => {
         let data = res.data;

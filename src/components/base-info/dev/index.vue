@@ -191,7 +191,7 @@
                 </el-col>
                 <el-col :span="18" class="text-right ">
                   <el-button-group>
-                    <el-button :plain="true" @click="searchInOrder" native-type="submit">查询</el-button>
+                    <el-button :plain="true" @click="searchInOrder" native-type="rightChangeHandle">查询</el-button>
                     <el-button @click="resetSearchForm" native-type="reset">重置</el-button>
                     <el-button @click="batchUpdateStatus" native-type="reset">批量修改状态</el-button>
                     <el-button :disabled="isLoading" :plain="true" @click="exportFile">

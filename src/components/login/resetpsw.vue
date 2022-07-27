@@ -38,7 +38,7 @@
           <oms-input v-model="user.password2" type="password"></oms-input>
         </el-form-item>
         <el-form-item label-width="80px">
-          <el-button type="primary" @click="done" style="display:block;width:100%;" native-type="submit">
+          <el-button type="primary" @click="done" style="display:block;width:100%;" native-type="rightChangeHandle">
             {{btnString}}
           </el-button>
 

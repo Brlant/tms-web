@@ -59,7 +59,7 @@
       <div class="btn-submit-save">
         <div>
           <el-button type="primary" style="width: 100px;margin-bottom: 10px" @click="onSubmit('roleform')"
-                     native-type="submit" :disabled="doing">保存
+                     native-type="rightChangeHandle" :disabled="doing">保存
           </el-button>
         </div>
         <div>

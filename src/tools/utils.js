@@ -12,7 +12,7 @@ export default {
     5: {'title': '已取消', status: '5', num: ''}
   },
   wayBillType: {
-    0: {'title': '所有', status: null, num: ''},
+    0: {'title': '所有', status: '', num: ''},
     1: {'title': '待确认', status: '-2', num: ''},
     2: {'title': '待打包', status: '-1', num: ''},
     3: {'title': '待派车', status: '0', num: ''},
@@ -25,23 +25,23 @@ export default {
     10: {'title': '已中止', status: '6', num: ''}
   },
   // 0--待收货，1--待分配上架人，2--待上架，4--已完成，-1--已取消
-  transferInType: {
-    0: {'title': '所有', status: null, num: ''},
-    1: {'title': '待收货', status: '0', num: ''},
-    2: {'title': '待配上架人', status: '1', num: ''},
-    3: {'title': '待上架', status: '2', num: ''},
-    4: {'title': '已完成', status: '4', num: ''},
-    5: {'title': '已取消', status: '-1', num: ''},
-  },
-  transferOutType: {
-    0: {'title': '所有', status: null, num: ''},
-    1: {'title': '待确认', status: '0', num: ''},
-    2: {'title': '待配下架人', status: '1', num: ''},
-    3: {'title': '待下架', status: '2', num: ''},
-    4: {'title': '待出库', status: '3', num: ''},
-    5: {'title': '已完成', status: '4', num: ''},
-    6: {'title': '已取消', status: '-1', num: ''},
-  },
+  transferInType: [
+    {'title': '所有', status: '', num: ''},
+    {'title': '待收货', status: '0', num: ''},
+    {'title': '待配上架人', status: '1', num: ''},
+    {'title': '待上架', status: '2', num: ''},
+    {'title': '已完成', status: '4', num: ''},
+    {'title': '已取消', status: '-1', num: ''},
+  ],
+  transferOutType: [
+    {'title': '所有', status: '', num: ''},
+    {'title': '待确认', status: '0', num: ''},
+    {'title': '待配下架人', status: '1', num: ''},
+    {'title': '待下架', status: '2', num: ''},
+    {'title': '待出库', status: '3', num: ''},
+    {'title': '已完成', status: '4', num: ''},
+    {'title': '已取消', status: '-1', num: ''},
+  ],
   carTaskType: {
     0: {'title': '待确认', status: '0', num: ''},
     1: {'title': '待开始', status: '1', num: ''},
@@ -70,9 +70,9 @@ export default {
   formatAddressByType,
   /**
    * 实时动态强制更改用户录入
-   * @param th
+   * @param val
    */
-  format2DecimalPoint (val) {
+  format2DecimalPoint(val) {
     let th = val.toString();
     const regStrs = [
       ['^0(\\d+)$', '$1'], // 禁止录入整数部分两位以上，但首位为0
@@ -91,83 +91,46 @@ export default {
     return th;
   },
   /**
-   * 录入完成后，输入模式失去焦点后对录入进行判断并强制更改，并对小数点进行0补全
-   * @param th
+   * 数字格式化，保留两位小数
+   * @param strVal input中的值，string类型
    */
-  autoCompleteDecimalPoint: function (val) {
-    if (!val) {
-      return 0;
+  autoformatDecimalPoint: function (strVal) {
+    if (!strVal){
+      return '0.00';
     }
-    let v = val.toString();
-    v = v.replace(/[^0-9\.]*/g, '');
-    if (v === '') {
-      v = '0.00';
-    } else if (v === '0') {
-      v = '0.00';
-    } else if (v === '0.') {
-      v = '0.00';
-    } else if (/^0+\d+\.?\d*.*$/.test(v)) {
-      v = v.replace(/^0+(\d+\.?\d*).*$/, '$1');
-    } else if (/^0\.\d$/.test(v)) {
-      v = v + '0';
-    } else if (!/^\d+\.\d{2}$/.test(v)) {
-      if (/^\d+\.\d{2}.+/.test(v)) {
-        v = v.replace(/^(\d+\.\d{2}).*$/, '$1');
-      } else if (/^\d+$/.test(v)) {
-        v = v + '.00';
-      } else if (/^\d+\.$/.test(v)) {
-        v = v + '00';
-      } else if (/^\d+\.\d$/.test(v)) {
-        v = v + '0';
-      } else if (/^[^\d]+\d+\.?\d*$/.test(v)) {
-        v = v.replace(/^[^\d]+(\d+\.?\d*)$/, '$1');
-      } else if (/\d+/.test(v)) {
-        v = v.replace(/^[^\d]*(\d+\.?\d*).*$/, '$1');
-      } else if (/^0+\d+\.?\d*$/.test(v)) {
-        v = v.replace(/^0+(\d+\.?\d*)$/, '$1');
+
+    strVal = strVal + '';
+    strVal = strVal.replace(/[^0-9\\.]*/g, '');
+    if (strVal === '') {
+      strVal = '0.00';
+    } else if (strVal === '0') {
+      strVal = '0.00';
+    } else if (strVal === '0.') {
+      strVal = '0.00';
+    } else if (/^0+\d+\.?\d*.*$/.test(strVal)) {
+      strVal = strVal.replace(/^0+(\d+\.?\d*).*$/, '$1');
+    } else if (/^0\.\d$/.test(strVal)) {
+      strVal = strVal + '0';
+    } else if (!/^\d+\.\d{2}$/.test(strVal)) {
+      if (/^\d+\.\d{2}.+/.test(strVal)) {
+        strVal = strVal.replace(/^(\d+\.\d{2}).*$/, '$1');
+      } else if (/^\d+$/.test(strVal)) {
+        strVal = strVal + '.00';
+      } else if (/^\d+\.$/.test(strVal)) {
+        strVal = strVal + '00';
+      } else if (/^\d+\.\d$/.test(strVal)) {
+        strVal = strVal + '0';
+      } else if (/^[^\d]+\d+\.?\d*$/.test(strVal)) {
+        strVal = strVal.replace(/^[^\d]+(\d+\.?\d*)$/, '$1');
+      } else if (/\d+/.test(strVal)) {
+        strVal = strVal.replace(/^[^\d]*(\d+\.?\d*).*$/, '$1');
+      } else if (/^0+\d+\.?\d*$/.test(strVal)) {
+        strVal = strVal.replace(/^0+(\d+\.?\d*)$/, '$1');
       } else {
-        v = '0.00';
+        strVal = '0.00';
       }
     }
-    return parseFloat(v);
-  },
-  /**
-   * 录入完成后，输入模式失去焦点后对录入进行判断并强制更改，并对小数点进行0补全
-   * @param th
-   */
-  autoformatDecimalPoint: function (v) {
-    v = v + '';
-    v = v.replace(/[^0-9\.]*/g, '');
-    if (v === '') {
-      v = '0.00';
-    } else if (v === '0') {
-      v = '0.00';
-    } else if (v === '0.') {
-      v = '0.00';
-    } else if (/^0+\d+\.?\d*.*$/.test(v)) {
-      v = v.replace(/^0+(\d+\.?\d*).*$/, '$1');
-    } else if (/^0\.\d$/.test(v)) {
-      v = v + '0';
-    } else if (!/^\d+\.\d{2}$/.test(v)) {
-      if (/^\d+\.\d{2}.+/.test(v)) {
-        v = v.replace(/^(\d+\.\d{2}).*$/, '$1');
-      } else if (/^\d+$/.test(v)) {
-        v = v + '.00';
-      } else if (/^\d+\.$/.test(v)) {
-        v = v + '00';
-      } else if (/^\d+\.\d$/.test(v)) {
-        v = v + '0';
-      } else if (/^[^\d]+\d+\.?\d*$/.test(v)) {
-        v = v.replace(/^[^\d]+(\d+\.?\d*)$/, '$1');
-      } else if (/\d+/.test(v)) {
-        v = v.replace(/^[^\d]*(\d+\.?\d*).*$/, '$1');
-      } else if (/^0+\d+\.?\d*$/.test(v)) {
-        v = v.replace(/^0+(\d+\.?\d*)$/, '$1');
-      } else {
-        v = '0.00';
-      }
-    }
-    return v;
+    return strVal;
   },
   toDecimal2: function (x) {
     return Math.floor(x * 1000 + 1) / 1000;
@@ -205,7 +168,7 @@ export default {
     }
     return label;
   },
-  download (src, fileName) {
+  download(src, fileName) {
     let $a = document.createElement('a');
     $a.setAttribute('href', src);
     $a.setAttribute('download', fileName);
@@ -244,26 +207,26 @@ export default {
       // });
     });
   },
-  getPos (e) {//这是一个 获取鼠标位置的函数
-    let oEvent = e || event;
+  getPos(e) {//这是一个 获取鼠标位置的函数
+    let oEvent = e || window.MouseEvent;
     return {
       x: oEvent.clientX + document.documentElement.scrollLeft || document.body.scrollLeft,
       y: oEvent.clientY + document.documentElement.scrollTop || document.body.scrollTop
     };
   },
-  bindKeyUpEnterEvent (callback) {
+  bindKeyUpEnterEvent(callback) {
     document.onkeydown = e => {
-      let event = e || window.event;
-      if (event.keyCode === 13) {
+      let event = e || window.KeyboardEvent;
+      if (event.key === 'Enter') {
         callback();
       }
     };
   },
-  formatTimeAry (times, index, str) {
+  formatTimeAry(times, index, str) {
     if (!times) return;
     return this.formatTime(times[index], str);
   },
-  formatTime (time, str = 'YYYY-MM-DD HH:mm:ss') {
+  formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
     return time ? moment(time).format(str) : '';
   }
 

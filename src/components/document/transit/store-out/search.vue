@@ -12,13 +12,13 @@
         <el-row>
           <el-col :span="elColSpan">
             <oms-form-row label="新建时间" :span="omsRowSpan">
-              <el-date-picker v-model="deliveryDate" type="daterange" placeholder="请选择">
+              <el-date-picker v-model="createTime" type="daterange" placeholder="请选择">
               </el-date-picker>
             </oms-form-row>
           </el-col>
           <el-col :span="elColSpan">
-            <oms-form-row label="中转出库单号" :span="omsRowSpan">
-              <oms-input v-model="searchCondition.waybillNumber" placeholder="请输入中转出库单号"
+            <oms-form-row label="中转入库单号" :span="omsRowSpan">
+              <oms-input v-model="searchCondition.transferOutOrderNo" placeholder="请输入中转入库单号"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
@@ -30,7 +30,7 @@
           </el-col>
           <el-col :span="elColSpan">
             <oms-form-row label="运单号" :span="omsRowSpan">
-              <oms-input v-model="searchCondition.tmsOrderNumber" placeholder="请输入运单号"
+              <oms-input v-model="searchCondition.waybillNo" placeholder="请输入运单号"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
@@ -94,11 +94,11 @@ export default {
       elColSpan: 6,
       omsRowSpan: 8,
       searchCondition: {
-        startTime: '',
-        endTime: '', // 新建时间
-        waybillNumber: '', // 中转出库单号
+        createTime1: '',
+        createTime2: '', // 新建时间
+        transferOutOrderNo: '',  // 中转入库单号
         orderNo: '',// 订单号
-        tmsOrderNumber: '',// 运单号
+        waybillNo: '',  // 运单号
         senderId: '', // 发货单位
         receiverId: '',// 收货单位
         carryType: ''// 承运类型
@@ -107,23 +107,10 @@ export default {
       list: [],
       senderOrgList: [],   // 发货单位数组
       receiverOrgList: [],  //收货单位数组
-      deliveryDate: []  // 新建时间
+      createTime: []  // 新建时间
     };
   },
-  // computed: {
-  //   typeList() {
-  //     return this.$getDict('bizType');
-  //   },
-  //   deliveryWayList() {
-  //     return this.$getDict('deliveryWay');
-  //   },
-  //   shipmentWayList() {
-  //     return this.$getDict('transportationCondition');
-  //   },
-  //   serviceTypeList() {
-  //     return this.$getDict('serviceType');
-  //   }
-  // },
+
   watch: {
     'searchCondition.carryType': function () {
       this.search();
@@ -143,12 +130,12 @@ export default {
     'searchCondition.waybillNumber': function () {
       this.search();
     },
-    'deliveryDate': function (val) {
+    'createTime': function (val) {
       if (val) {
         this.search();
       } else {
-        this.searchCondition.startTime = '';
-        this.searchCondition.endTime = '';
+        this.searchCondition.createTime1 = '';
+        this.searchCondition.createTime2 = '';
         this.$emit('search', this.searchCondition);
       }
     }
@@ -156,21 +143,22 @@ export default {
   methods: {
     reset() {
       this.searchCondition = {
-        startTime: '',
-        endTime: '',
+        createTime1: '',
+        createTime2: '',
         waybillNumber: '',
         orderNo: '',
         tmsOrderNumber: '',
         senderId: '',
         receiverId: '',
         carryType: ''
-      },
-      this.deliveryDate = '';
+      };
+
+      this.createTime = '';
       this.$emit('search', this.searchCondition);
     },
     search() {
-      this.searchCondition.startTime = this.$formatAryTime(this.deliveryDate, 0, 'YYYY-MM-DD');
-      this.searchCondition.endTime = this.$formatAryTime(this.deliveryDate, 1, 'YYYY-MM-DD');
+      this.searchCondition.createTime1 = this.$formatAryTime(this.createTime, 0, 'YYYY-MM-DD 00:00:00');
+      this.searchCondition.createTime2 = this.$formatAryTime(this.createTime, 1, 'YYYY-MM-DD 23:59:59');
       this.$emit('search', this.searchCondition);
     },
     isShow(val) {

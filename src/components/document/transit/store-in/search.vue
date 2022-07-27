@@ -110,20 +110,7 @@ export default {
       createTime: []  // 新建时间
     };
   },
-  // computed: {
-  //   typeList() {  // 运单类型
-  //     return this.$getDict('bizType');
-  //   },
-  //   deliveryWayList() { // 发运方式
-  //     return this.$getDict('deliveryWay');
-  //   },
-  //   shipmentWayList() { // 运输条件
-  //     return this.$getDict('transportationCondition');
-  //   },
-  //   serviceTypeList() { // 服务方式
-  //     return this.$getDict('serviceType');
-  //   }
-  // },
+
   watch: {
     'searchCondition.carryType': function () {
       this.search();

@@ -260,7 +260,7 @@
                        v-model="form.remarks"></oms-input>
           </el-form-item>
           <!--<el-form-item label-width="140px">-->
-          <!--<el-button type="primary" @click="onSubmit('baseform')" native-type="submit">保存</el-button>-->
+          <!--<el-button type="primary" @click="onSubmit('baseform')" native-type="rightChangeHandle">保存</el-button>-->
           <!--<el-button @click="doClose">取消</el-button>-->
           <!--</el-form-item>-->
         </el-form>

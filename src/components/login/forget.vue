@@ -85,7 +85,7 @@
 
             <el-button-group style="width: 100%;margin-top:20px">
 
-              <el-button type="primary" @click="resetPass" style="width:50%;" native-type="submit" :disabled="loading">
+              <el-button type="primary" @click="resetPass" style="width:50%;" native-type="rightChangeHandle" :disabled="loading">
                 重置密码
               </el-button>
               <el-button style="width:50%;">
@@ -118,7 +118,7 @@
 
             <el-button-group style="width: 100%;margin-top:20px">
 
-              <el-button type="primary" @click="done" style="width:50%;" native-type="submit" :disabled="loading">
+              <el-button type="primary" @click="done" style="width:50%;" native-type="rightChangeHandle" :disabled="loading">
                 {{btnString}}
               </el-button>
               <el-button style="width:50%;" @click="$router.push('/login')">

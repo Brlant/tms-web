@@ -260,7 +260,7 @@ export const TransferOutOrder = {
     return http.post(`/transfer-out-order`, data);
   },
   // 指派下架人
-  assignedOnPeople: (params) => {
+  assignedShelves: (params) => {
     return http.put(`/transfer-out-order/assigned-shelves/${params.id}`, params);
   },
   // 认领任务
@@ -272,7 +272,7 @@ export const TransferOutOrder = {
     return http.put(`/transfer-out-order/unshelve/${params.id}`, params);
   },
   // 出库
-  receivingGoods: (id) => {
+  outbound: (id) => {
     return http.put(`/transfer-out-order/outbound/${id}`);
   },
 };
