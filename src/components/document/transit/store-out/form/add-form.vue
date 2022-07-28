@@ -74,7 +74,7 @@ $labelWidth: 180px;
                   <el-radio v-model="formData.butt" :label="true">是</el-radio>
                   <el-radio v-model="formData.butt" :label="false">否</el-radio>
               </el-form-item> -->
-              <el-form-item slot="left" label="承运类型" prop="carryType" required>
+              <el-form-item slot="left" label="承运类型" prop="carryType">
                 <el-radio v-model="form.carryType" :label="0">自行承运</el-radio>
                 <el-radio v-model="form.carryType" :label="1">第三方承运</el-radio>
               </el-form-item>
@@ -127,15 +127,28 @@ $labelWidth: 180px;
                            v-for="item in deliveryWayList"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="发货单位">
-              <oms-input v-model="form.orderNo" placeholder="请输入发货单位"></oms-input>
+            <el-form-item label="发货单位" prop="senderId">
+              <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索发货单位" :remote-method="filterSenderOrg"
+                         :clearable="true"
+                         v-model="form.senderId" popperClass="good-selects">
+                <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in senderOrgList">
+                  <div style="overflow: hidden">
+                    <span class="pull-left" style="clear: right">{{org.name}}</span>
+                  </div>
+                  <div style="overflow: hidden">
+                    <span class="select-other-info pull-left">
+                      <span>系统代码:</span>{{org.manufacturerCode}}
+                    </span>
+                  </div>
+                </el-option>
+              </el-select>
             </el-form-item>
             <two-column>
-              <el-form-item slot="left" label="发货联系人" prop="waybillType">
+              <el-form-item slot="left" label="发货联系人" prop="senderContact">
                 <oms-input v-model="form.senderContact" placeholder="请输入发货联系人"></oms-input>
               </el-form-item>
-              <el-form-item slot="right" label="电话" prop="phone">
-                <oms-input v-model="form.senderContactPhone" placeholder="请输入电话"></oms-input>
+              <el-form-item slot="right" label="发货联系电话" prop="senderContactPhone">
+                <oms-input v-model="form.senderContactPhone" placeholder="请输入发货联系电话"></oms-input>
               </el-form-item>
             </two-column>
             <two-column>
@@ -172,11 +185,11 @@ $labelWidth: 180px;
               </el-select>
             </el-form-item>
             <two-column>
-              <el-form-item slot="left" label="收货联系人" prop="waybillType">
-                <oms-input v-model="form.waybillType" placeholder="请输入收货联系人"></oms-input>
+              <el-form-item slot="left" label="收货联系人" prop="receiverContact">
+                <oms-input v-model="form.receiverContact" placeholder="请输入收货联系人"></oms-input>
               </el-form-item>
-              <el-form-item slot="right" label="收货联系电话" prop="phone">
-                <oms-input v-model="form.phone" placeholder="请输入收货联系电话"></oms-input>
+              <el-form-item slot="right" label="收货联系电话" prop="receiverContractPhone">
+                <oms-input v-model="form.receiverContractPhone" placeholder="请输入收货联系电话"></oms-input>
               </el-form-item>
             </two-column>
 
