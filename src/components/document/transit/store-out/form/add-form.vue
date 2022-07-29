@@ -70,10 +70,6 @@ $labelWidth: 180px;
               </el-select>
             </el-form-item>
             <two-column>
-              <!-- <el-form-item label="是否对接" prop="butt" required>
-                  <el-radio v-model="formData.butt" :label="true">是</el-radio>
-                  <el-radio v-model="formData.butt" :label="false">否</el-radio>
-              </el-form-item> -->
               <el-form-item slot="left" label="承运类型" prop="carryType">
                 <el-radio v-model="form.carryType" :label="0">自行承运</el-radio>
                 <el-radio v-model="form.carryType" :label="1">第三方承运</el-radio>
@@ -94,10 +90,6 @@ $labelWidth: 180px;
               </el-form-item>
             </two-column>
             <two-column>
-              <!-- <el-form-item label="是否对接" prop="butt" required>
-                  <el-radio v-model="formData.butt" :label="true">是</el-radio>
-                  <el-radio v-model="formData.butt" :label="false">否</el-radio>
-              </el-form-item> -->
               <el-form-item slot="left" label="是否投保" prop="insure">
                 <el-radio-group v-model="form.insure" size="mini">
                   <el-radio :label="false">否</el-radio>
@@ -122,14 +114,24 @@ $labelWidth: 180px;
           </div>
           <div class="content">
             <el-form-item label="货主">
-              <el-select placeholder="请选择货主" v-model="form.deliveryWay" disabled>
-                <el-option :label="item.label" :value="item.key" :key="item.key"
-                           v-for="item in deliveryWayList"></el-option>
+              <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索货主" :remote-method="filterCustomer"
+                         :clearable="true" disabled
+                         v-model="form.orgId" popperClass="good-selects">
+                <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in customerList">
+                  <div style="overflow: hidden">
+                    <span class="pull-left" style="clear: right">{{ org.name }}</span>
+                  </div>
+                  <div style="overflow: hidden">
+                    <span class="select-other-info pull-left">
+                      <span>系统代码:</span>{{ org.manufacturerCode }}
+                    </span>
+                  </div>
+                </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="发货单位" prop="senderId">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索发货单位" :remote-method="filterSenderOrg"
-                         :clearable="true"
+                         :clearable="true" @change="senderChange"
                          v-model="form.senderId" popperClass="good-selects">
                 <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in senderOrgList">
                   <div style="overflow: hidden">
@@ -405,7 +407,8 @@ export default {
         return '';
       }
 
-      const pathLabels = nodes[0].pathLabels;
+      const pathLabels = nodes[0] && nodes[0].pathLabels;
+      if (!pathLabels) return "";
       return pathLabels.join('') + this.form.senderDetailAddr;
     },
     // 收货地址：省市区+详细地址
@@ -451,14 +454,18 @@ export default {
   watch: {
     formItem(val) {
       this.form = val;
-      this.senderOptions = [];
-      this.receiverOptions = [];
       this.customerList = [];
       this.senderOrgList = [];
       this.receiverOrgList = [];
 
+      this.filterCustomer(this.form.orgName);
+      this.filterSenderOrg(this.form.senderName);
+      this.filterReceiverOrg(this.form.receiverName);
       this.$nextTick(() => {
-        this.$refs.form.clearValidate();
+        this.senderOptions = [];
+        this.receiverOptions = [];
+        this.addrHandel();
+        this.$refs.form && this.$refs.form.clearValidate();
       });
     },
     senderOptions(val) {

@@ -153,13 +153,7 @@
               </div>
             </el-col>
             <el-col :span="2" class="R">
-              <el-tag v-if="item.transferOutStatus === '0'" color="#00CCFF">待确认</el-tag>
-              <el-tag v-else-if="item.transferOutStatus === '1'" color="#FF9933">待配下架人</el-tag>
-              <el-tag v-else-if="item.transferOutStatus === '2'" color="#CCCC66">待下架</el-tag>
-              <el-tag v-else-if="item.transferOutStatus === '3'" color="#00CC99">待出库</el-tag>
-              <el-tag v-else-if="item.transferOutStatus === '4'" color="#66CCFF">已完成</el-tag>
-              <el-tag v-else-if="item.transferOutStatus === '-1'" color="#CC6666">已取消</el-tag>
-              <el-tag v-else>--</el-tag>
+             <div>{{item.transferOutStatusName}}</div>
             </el-col>
             <el-col :span="2" class="opera-btn">
               <div v-show="item.transferOutStatus === '0'">
@@ -192,7 +186,7 @@
               </div>
               <div v-show="item.transferOutStatus === '2'">
                 <perm label="tms-waybill-edit">
-                        <span @click.stop="unShelves(item)">
+                        <span @click.stop="unshelve(item)">
                             <a class="btn-circle btn-opera">
                                 <i class="el-icon-full-screen"></i>
                             </a>下架
@@ -226,7 +220,7 @@
       <component :is="taskFormComp" :formItem="form" @right-close="resetRightBox" @change="rightChangeHandle"/>
     </page-right>
     <page-right :show="showIndex === 1" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
-      <component :is="outShelvesFormComp" :formItem="form" @right-close="resetRightBox" @change="rightChangeHandle"/>
+      <component :is="unshelveFormComp" :formItem="form" @right-close="resetRightBox" @change="rightChangeHandle"/>
     </page-right>
     <page-right :show="showIndex === 2" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
       <component :is="detailsFormComp" :formItem="form" @right-close="resetRightBox" @change="rightChangeHandle"/>
@@ -280,7 +274,7 @@ import utils from '@/tools/utils';
 import SearchPart from './search';
 import {InWork, TransferOutOrder} from '@/resources';
 import TakeForm from './form/take-form.vue';
-import OutShelvesForm from './form/outShelves-form.vue';
+import UnshelveForm from './form/unshelve-form.vue';
 import DetailsForm from './form/details-form.vue';
 import AddForm from './form/add-form.vue';
 import StatusMixin from '@/mixins/statusMixin';
@@ -318,7 +312,7 @@ export default {
       // 0-认领任务，1-下架，2-详情，3-新增
       showIndex: -1,
       taskFormComp: null,
-      outShelvesFormComp: null,
+      unshelveFormComp: null,
       detailsFormComp: null,
 
       pager: {
@@ -331,7 +325,7 @@ export default {
       form: {},
       // 筛选条件
       filters: {
-        transferOutStatus: null,
+        transferOutStatus: '',
         createTime1: '',
         createTime2: '',
         transferOutOrderNo: '',
@@ -431,9 +425,9 @@ export default {
       });
     },
     // 下架
-    unShelves(item) {
+    unshelve(item) {
       this.showIndex = 1;
-      this.outShelvesFormComp = OutShelvesForm;
+      this.unshelveFormComp = UnshelveForm;
       this.$nextTick(() => {
         this.form = JSON.parse(JSON.stringify(item));
       });
@@ -552,10 +546,11 @@ export default {
       // 列表接口
       TransferOutOrder.query(param).then(res => {
         if (isContinue) {
-          this.dataList = this.showTypeList.concat(res.data.list);
+          this.dataList = this.dataList.concat(res.data.list);
         } else {
           this.dataList = res.data.list;
         }
+
         this.pager.count = res.data.count;
         this.loadingData = false;
       });

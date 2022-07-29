@@ -141,15 +141,16 @@ export default {
     return {
       span: 8,
       pageSets: [
-        {name: '任务详情', key: ''},
-        {name: '库位信息', key: 1},
-        {name: '上架详情', key: 2}
+            {name: '任务详情', key: 0},
+            {name: '库位码', key: 1},
+            {name: '下架详情', key: 2}
       ],
       currentTab: {},
       form: {
         id: '',
         transferInOrderNo: '',
         transferInStatus: '',
+        transferInStatusName: '',
         createTime: '',
         storeCode: '',
         damaged: false,
@@ -173,12 +174,14 @@ export default {
         orgName: '',
         senderId: '',
         senderName: '',
+        senderAddress: '',
         senderContact: '',
         senderContactPhone: '',
         receiverId: '',
         receiverName: '',
         receiverContact: '',
         receiverContractPhone: '',
+        receiverAddress: '',
         goodsWeight: '',
         goodsVolume: '',
         wholeBoxCount: '',
@@ -204,19 +207,7 @@ export default {
       rules: {
         storeCode: [
           {required: true, message: '库位码不能为空', trigger: 'blur'}
-        ],
-        warehousingWholeNum: [
-          {required: true, message: '入库整装箱数不能为空', trigger: 'blur'}
-        ],
-        warehousingBulkNum: [
-          {required: true, message: '入库散装箱数不能为空', trigger: 'blur'}
-        ],
-        wholeTraceCodes: [
-          {required: true, message: '扫描整装箱码不能为空', trigger: 'blur'}
-        ],
-        bulkTraceCodes: [
-          {required: true, message: '扫描散装箱码不能为空', trigger: 'blur'}
-        ],
+        ]
       },
     };
   },
@@ -232,7 +223,7 @@ export default {
     setDoing(val) {
       this.doing = val;
     },
-    // 表单详情
+    // 详情
     getDetails(id) {
       TransferInOrder.getDetails(id).then(res => {
         this.form = res.data;

@@ -145,12 +145,13 @@
               </div>
             </el-col>
             <el-col :span="2" class="R">
-              <el-tag v-if="item.transferInStatus === '0'">待收货</el-tag>
-              <el-tag type="warning" v-else-if="item.transferInStatus === '1'">待配上架人</el-tag>
-              <el-tag type="info" v-else-if="item.transferInStatus === '2'">待上架</el-tag>
-              <el-tag type="success" v-else-if="item.transferInStatus === '4'">已完成</el-tag>
-              <el-tag type="danger" v-else-if="item.transferInStatus === '-1'">已取消</el-tag>
-              <el-tag v-else>-</el-tag>
+<!--              <el-tag v-if="item.transferInStatus === '0'">待收货</el-tag>-->
+<!--              <el-tag type="warning" v-else-if="item.transferInStatus === '1'">待配上架人</el-tag>-->
+<!--              <el-tag type="info" v-else-if="item.transferInStatus === '2'">待上架</el-tag>-->
+<!--              <el-tag type="success" v-else-if="item.transferInStatus === '4'">已完成</el-tag>-->
+<!--              <el-tag type="danger" v-else-if="item.transferInStatus === '-1'">已取消</el-tag>-->
+<!--              <el-tag v-else>-</el-tag>-->
+              <div>{{item.transferInStatusName}}</div>
             </el-col>
             <el-col :span="2" class="opera-btn">
               <div v-show="item.transferInStatus === '0'">
@@ -294,10 +295,12 @@ export default {
         totalPage: 1
       },
       //   action: '',
-      form: {},
+      form: {
+
+      },
       // 筛选条件
       filters: {
-        transferInStatus: null,
+        transferInStatus: '',
         createTime1: '',
         createTime2: '',
         transferInOrderNo: '',

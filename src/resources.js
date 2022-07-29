@@ -268,7 +268,7 @@ export const TransferOutOrder = {
     return http.put(`/transfer-out-order/claim-task/${id}`);
   },
   // 下架
-  shelves: (params) => {
+  unshelve: (params) => {
     return http.put(`/transfer-out-order/unshelve/${params.id}`, params);
   },
   // 出库
