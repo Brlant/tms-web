@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   .el-form .el-select {
     display: block;
   }
@@ -43,9 +43,9 @@
 </template>
 
 <script type="text/jsx">
-  import {TransportBlacklist} from '@/resources';
+import {TransportBlacklist} from '@/resources';
 
-  export default {
+export default {
     name: 'editForm',
     props: {
       formItem: {

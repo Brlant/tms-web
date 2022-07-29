@@ -297,12 +297,20 @@
                   </perm>
                 </div>
                 <div style="padding-top: 2px">
-                  <perm label="tms-waybill-cancel" class="opera-btn">
+                  <perm label="tms-waybill-receiptCancel" class="opera-btn">
                     <span @click.stop="cancelWayBill(item)"
                           v-if="item.status === '-2'||item.status === '-1'||item.status === '0'||(item.status === '1' && item.carryType == '1')">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
+                    </span>
+                  </perm>
+                  <perm label="tms-waybill-edit">
+                    <span @click.stop="transferIn(item)"
+                          v-if="item.status === '-2'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-t-verifyPass"></i>
+                      </a>中转入库
                     </span>
                   </perm>
                   <perm label="tms-waybill-pack" class="opera-btn">
@@ -440,7 +448,7 @@
     </el-dialog>
 
     <el-dialog :visible.sync="dialogFormVisible" center width="700px" :before-close="cancel">
-      <el-form ref="dialogForm" :model="dialogForm">
+      <el-form ref="operatorForm" :model="dialogForm">
         <el-form-item label="第三方承运单号" label-width="150px" prop="thirdNo"
                       :rules="{required:true,message:'第三方承运单号不能为空',trigger:'blur'}">
           <el-input v-model="dialogForm.thirdNo" type="text" placeholder="请输入第三方承运单号" autofocus
@@ -457,7 +465,7 @@
 <script>
 import utils from '@/tools/utils';
 import SearchPart from './search';
-import {http, TmsWayBill} from '@/resources';
+import {http, TmsWayBill,TransferInOrder} from '@/resources';
 import addForm from './form/add-form.vue';
 import showForm from './form/show-form.vue';
 import signForm from './form/sign-form';
@@ -977,6 +985,25 @@ export default {
           this.$notify.error({
             duration: 2000,
             message: error.response && error.response.data && error.response.data.msg || '取消运单失败'
+          });
+        });
+      }).catch(() => {
+
+      });
+    },
+    transferIn(item){
+      this.$confirm('是否确认生成中转入库单?', '', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        TransferInOrder.generate(item.waybillNumber).then((res) => {
+          this.$notify.success('中转入库成功');
+          this.getTmsWayBillPage(1);
+        }).catch(error => {
+          this.$notify.error({
+            duration: 2000,
+            message: error.response && error.response.data && error.response.data.msg || '生成中转入库单失败'
           });
         });
       }).catch(() => {

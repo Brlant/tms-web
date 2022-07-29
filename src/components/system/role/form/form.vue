@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   $leftWidth: 200px;
   .content-part {
     .content-left {
@@ -59,7 +59,7 @@
       <div class="btn-submit-save">
         <div>
           <el-button type="primary" style="width: 100px;margin-bottom: 10px" @click="onSubmit('roleform')"
-                     native-type="submit" :disabled="doing">保存
+                     native-type="rightChangeHandle" :disabled="doing">保存
           </el-button>
         </div>
         <div>
@@ -98,10 +98,10 @@
   </div>
 </template>
 <script type="text/jsx">
-  import {Access} from '@/resources';
-  import roleMixin from '@/mixins/roleMixin';
+import {Access} from '@/resources';
+import roleMixin from '@/mixins/roleMixin';
 
-  export default {
+export default {
     props: {
       formItem: {
         type: Object,

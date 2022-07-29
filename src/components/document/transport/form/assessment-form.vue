@@ -52,9 +52,9 @@
   </dialog-template>
 </template>
 <script>
-  import {OmsAttachment, TmsWayBill} from '@/resources';
+import {OmsAttachment, TmsWayBill} from '@/resources';
 
-  export default {
+export default {
     data() {
       return {
         list: [],

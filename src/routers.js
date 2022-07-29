@@ -79,7 +79,17 @@ export const routes = [
             path: '/document/transport/:id',
             component: () => import('./components/document/transport/index.vue'),
             meta: {moduleId: 'document', title: '运单管理', perm: 'tms-waybill-query'}
-          }
+          },
+          {
+            path: '/transit/store-in',
+            component: () => import('./components/document/transit/store-in/TransitStoreIn.vue'),
+            meta: {moduleId: 'document', title: '中转入库', perm: 'transit-warehouse-in'}
+          },
+          {
+            path: '/transit/store-out',
+            component: () => import('./components/document/transit/store-out/TransitStoreOut.vue'),
+            meta: {moduleId: 'document', title: '中转出库', perm: 'transit-warehouse-out'}
+          },
         ]
       },
       {

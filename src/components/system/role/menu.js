@@ -352,7 +352,7 @@ export default [
             'leaf': true
           },
           {
-            'id': 'tms-order-cancel',
+            'id': 'tms-order-receiptCancel',
             'parentId': 'tms-order-manager',
             'label': '取消订单',
             'sort': null,
@@ -399,14 +399,15 @@ export default [
         'parentId': 'tms-documents-info',
         'label': '运单管理',
         'sort': 2,
-        'children': [{
-          'id': 'tms-waybill-edit',
-          'parentId': 'tms-waybill-manager',
-          'label': '编辑运单',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        },
+        'children': [
+          {
+            'id': 'tms-waybill-edit',
+            'parentId': 'tms-waybill-manager',
+            'label': '编辑运单',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
           {
             'id': 'tms-waybill-quality-inspection',
             'parentId': 'tms-waybill-manager',
@@ -488,7 +489,7 @@ export default [
             'leaf': true
           },
           {
-            'id': 'tms-waybill-cancel',
+            'id': 'tms-waybill-receiptCancel',
             'parentId': 'tms-waybill-manager',
             'label': '取消运单',
             'sort': null,
@@ -513,7 +514,138 @@ export default [
           }
         ],
         'leaf': false
-      }],
+      },
+      {
+        'id': 'transit-store-out',
+        'parentId': 'tms-documents-info',
+        'label': '中转出库',
+        'sort': 4,
+        'children': [
+          {
+          'id': 'transit-store-out-take-down',
+          'parentId': 'transit-store-out',
+          'label': '下架',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        },
+        {
+          'id': 'transit-warehouse-out',
+          'parentId': 'transit-store-out',
+          'label': '查看出库列表',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        },
+          {
+          'id': 'transit-store-out-view',
+          'parentId': 'transit-store-out',
+          'label': '查看',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }, {
+          'id': 'transit-store-out-packager',
+          'parentId': 'transit-store-out',
+          'label': '出库',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }, {
+          'id': 'transit-store-out-review',
+          'parentId': 'transit-store-out',
+          'label': '中转复核',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }, {
+          'id': 'transit-store-out-claim',
+          'parentId': 'transit-store-out',
+          'label': '认领任务',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }, {
+          'id': 'stock-out-full-assign-reviewer',
+          'parentId': 'transit-store-out',
+          'label': '指派操作人',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }],
+        'leaf': false
+      },
+      {
+        'id': 'transit-store-in',
+        'parentId': 'tms-documents-info',
+        'label': '中转入库',
+        'sort': 3,
+        'children': [
+          {
+          'id': 'transit-store-in-take-down',
+          'parentId': 'transit-store-in',
+          'label': '下架',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        },
+        {
+          'id': 'transit-warehouse-in',
+          'parentId': 'transit-store-in',
+          'label': '查询出库列表',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        },
+          {
+          'id': 'transit-store-in-view',
+          'parentId': 'transit-store-in',
+          'label': '查看',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        },
+        {
+          'id': 'transit-store-in-increase',
+          'parentId': 'transit-store-in',
+          'label': '新增',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        },
+        {
+          'id': 'transit-store-in-view',
+          'parentId': 'transit-store-in',
+          'label': '取消',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        },
+         {
+          'id': 'transit-store-in-packager',
+          'parentId': 'transit-store-in',
+          'label': '出库',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }, {
+          'id': 'transit-store-in-claim',
+          'parentId': 'transit-store-in',
+          'label': '认领任务',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }, {
+          'id': 'stock-in-full-assign-reviewer',
+          'parentId': 'transit-store-in',
+          'label': '指派操作人',
+          'sort': null,
+          'children': null,
+          'leaf': true
+        }],
+        'leaf': false
+      },
+    ],
     'leaf': false
   },
   // 任务作业
@@ -611,7 +743,7 @@ export default [
             'leaf': true
           },
           {
-            'id': 'tms-task-car-task-cancel',
+            'id': 'tms-task-car-task-receiptCancel',
             'parentId': 'tms-task-car-task',
             'label': '取消出车任务',
             'sort': null,

@@ -16,11 +16,11 @@
   </div>
 </template>
 <script>
-  import {AMapManager} from 'vue-amap';
-  import iconFont from '@/../static/fonts/iconfont';
-  import MapMixin from '@/mixins/mapMixin';
+import {AMapManager} from 'vue-amap';
+import iconFont from '@/../static/fonts/iconfont';
+import MapMixin from '@/mixins/mapMixin';
 
-  export default {
+export default {
     data () {
       return {
         amapManager: new AMapManager(),

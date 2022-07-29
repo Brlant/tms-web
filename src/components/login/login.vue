@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../assets/scss/mixins";
 
   body {
@@ -61,7 +61,7 @@
           </el-form-item>
 
           <el-form-item label-width="80px">
-            <el-button type="primary" @click="done" style="display:block;width:100%;" native-type="submit">
+            <el-button type="primary" @click="done" style="display:block;width:100%;" native-type="rightChangeHandle">
               {{btnString}} <i class="el-icon-loading" v-show="loading"></i></el-button>
 
           </el-form-item>
@@ -75,11 +75,11 @@
 </template>
 
 <script>
-  import {Auth} from '@/resources';
-  import AppFooter from '../layout/app.footer.vue';
-  import {base64} from '@dtop/dtop-web-common';
+import {Auth} from '@/resources';
+import AppFooter from '../layout/app.footer.vue';
+import {base64} from '@dtop/dtop-web-common';
 
-  export default {
+export default {
     name: 'login',
     components: {AppFooter},
     data: () => {

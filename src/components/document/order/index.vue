@@ -170,7 +170,7 @@
                   </perm>
                 </div>
                 <div style="padding-top: 2px">
-                  <perm label="tms-order-cancel" class="opera-btn btn-line-block">
+                  <perm label="tms-order-receiptCancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelOrder(item)" v-if="activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
@@ -240,7 +240,7 @@
                 v-show="isShowMulBigMap"></map-path>
     </el-dialog>
     <el-dialog :visible.sync="dialogFormVisible" center width="25%">
-      <el-form ref="dialogForm" :model="dialogForm" :rules="dialogFormRules">
+      <el-form ref="operatorForm" :model="dialogForm" :rules="dialogFormRules">
         <el-form-item label="承运类型" label-width="120px">
           <el-radio-group v-model="dialogForm.carryType" size="mini" @change="carryTypeChangeHandle">
             <el-radio :label="0">自行承运</el-radio>
@@ -277,8 +277,8 @@
             <div class="tips">点击确认后，将自动生成运单</div>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="shipmentThirdWayBill('surface')" :disabled="doing">确定</el-button>
-            <el-button @click="cancel('surface')">取消</el-button>
+            <el-button type="primary" @click="receiptConfirm('surface')" :disabled="doing">确定</el-button>
+            <el-button @click="receiptCancel('surface')">取消</el-button>
           </div>
       </el-dialog> -->
   </div>
@@ -364,7 +364,7 @@ import MapPath from '../common/map-list';
         isLoading:false,
         checkList: [],
         checkListPara: [],
-        shoWayBillPart: false,
+        showWayBillPart: false,
         showSingleWayBillPart: false,
         showSplitOrderPart: false,
         formItem: {},

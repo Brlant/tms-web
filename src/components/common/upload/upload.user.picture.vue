@@ -41,10 +41,10 @@
 </style>
 
 <script>
-  import {http, OmsAttachment} from '@/resources';
-  import OmsElUpload from './upload/src/index.vue';
+import {http, OmsAttachment} from '@/resources';
+import OmsElUpload from './upload/src/index.vue';
 
-  export default {
+export default {
     props: ['photoUrl', 'formData'],
     components: {
       OmsElUpload
@@ -135,4 +135,3 @@
     }
   };
 </script>
-

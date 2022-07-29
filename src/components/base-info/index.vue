@@ -5,10 +5,9 @@
 </template>
 
 <script>
-  import {routes} from '../../routers';
-  import {Access} from '@/resources';
+import {routes} from '../../routers';
 
-  export default {
+export default {
     data: function () {
       return {};
     },
@@ -66,5 +65,3 @@
 
   };
 </script>
-
-

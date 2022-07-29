@@ -65,9 +65,9 @@
   </div>
 </template>
 <script>
-  import {OmsAttachment} from '@/resources';
+import {OmsAttachment} from '@/resources';
 
-  export default {
+export default {
     data () {
       return {
         object: {

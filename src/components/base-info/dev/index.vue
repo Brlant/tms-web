@@ -191,7 +191,7 @@
                 </el-col>
                 <el-col :span="18" class="text-right ">
                   <el-button-group>
-                    <el-button :plain="true" @click="searchInOrder" native-type="submit">查询</el-button>
+                    <el-button :plain="true" @click="searchInOrder" native-type="rightChangeHandle">查询</el-button>
                     <el-button @click="resetSearchForm" native-type="reset">重置</el-button>
                     <el-button @click="batchUpdateStatus" native-type="reset">批量修改状态</el-button>
                     <el-button :disabled="isLoading" :plain="true" @click="exportFile">
@@ -328,14 +328,14 @@
 
 </template>
 <script>
-  import {Dev, DevDetail, DevStore} from '@/resources';
-  import devForm from './form/dev.vue';
-  import devDetailForm from './form/dev-detail.vue';
-  import devStoreForm from './form/dev-store.vue';
-  import devDetailStatusLog from './form/dev-detail-status-log.vue';
-  import utils from '@/tools/utils';
+import {Dev, DevDetail, DevStore} from '@/resources';
+import devForm from './form/dev.vue';
+import devDetailForm from './form/dev-detail.vue';
+import devStoreForm from './form/dev-store.vue';
+import devDetailStatusLog from './form/dev-detail-status-log.vue';
+import utils from '@/tools/utils';
 
-  export default {
+export default {
     components: {devForm, devDetailForm, devStoreForm, devDetailStatusLog},
     props: {
       index: {

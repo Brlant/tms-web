@@ -37,9 +37,9 @@
   </dialog-template>
 </template>
 <script>
-  import {TmsWayBill} from '@/resources';
+import {TmsWayBill} from '@/resources';
 
-  export default {
+export default {
     data () {
       return {
         pageSets: [],

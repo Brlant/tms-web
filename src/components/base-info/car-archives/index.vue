@@ -301,13 +301,13 @@
 
 </template>
 <script>
-  import {CarArchives, TransportBlacklist} from '@/resources';
-  import editForm from './form/form.vue';
-  import blackForm from './form/blacklist';
-  import goodsRow from './goods.row';
-  import Perm from '../../common/perm';
+import {CarArchives, TransportBlacklist} from '@/resources';
+import editForm from './form/form.vue';
+import blackForm from './form/blacklist';
+import goodsRow from './goods.row';
+import Perm from '../../common/perm';
 
-  export default {
+export default {
     components: {
       Perm,
       editForm, goodsRow

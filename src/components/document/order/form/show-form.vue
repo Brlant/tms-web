@@ -248,13 +248,13 @@
   </dialog-template>
 </template>
 <script>
-  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TmsLog, TmsOrder} from '@/resources';
-  import MapPath from '../../common/map-list';
-  import utils from '@/tools/utils';
-  import OmsCostTime from '@/components/common/timeCost.vue';
+import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+import {TmsLog, TmsOrder} from '@/resources';
+import MapPath from '../../common/map-list';
+import utils from '@/tools/utils';
+import OmsCostTime from '@/components/common/timeCost.vue';
 
-  export default {
+export default {
     components: {TwoColumn, MapPath, OmsCostTime},
     data () {
       return {

@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
 
 
   .d-table-right {
@@ -161,12 +161,12 @@
 
 </template>
 <script>
-  import {BaseInfo} from '@/resources';
-  import baseForm from './form.vue';
-  import utils from '@/tools/utils';
-  import Detail from './detail';
+import {BaseInfo} from '@/resources';
+import baseForm from './form.vue';
+import utils from '@/tools/utils';
+import Detail from './detail';
 
-  export default {
+export default {
     components: {
       baseForm,
       Detail

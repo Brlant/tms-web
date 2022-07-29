@@ -111,13 +111,9 @@ $labelWidth: 220px;
                   <template slot="prepend">¥</template>
                 </oms-input>
               </oms-col>
-               <el-row>
-                <el-col :span="12">
-                  <el-form-item label="面单号">
-                    <oms-input v-model="carryInfo.faceSheetNo" placeholder="请输入面单号"></oms-input>
-                  </el-form-item  >
-                </el-col>
-              </el-row>
+              <oms-col label="面单号" :rowSpan="span" :value="1">
+                <oms-input model="text" v-model="carryInfo.faceSheetNo" min="0" placeholder="请输入面单号"></oms-input>
+              </oms-col>
             </div>
             <div class="hr mb-10 clearfix"></div>
           </div>

@@ -45,9 +45,9 @@
   </div>
 </template>
 <script>
-  import {DevDetail} from '@/resources';
+import {DevDetail} from '@/resources';
 
-  export default {
+export default {
     data: function () {
       return {
         form: this.formItem,

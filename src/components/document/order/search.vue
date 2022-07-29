@@ -110,9 +110,9 @@
   </search-template>
 </template>
 <script>
-  import {BaseInfo} from '@/resources';
+import {BaseInfo} from '@/resources';
 
-  export default {
+export default {
     data: function () {
       return {
         searchCondition: {

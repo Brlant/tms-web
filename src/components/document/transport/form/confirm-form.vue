@@ -230,11 +230,11 @@
   </div>
 </template>
 <script>
-  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TmsWayBill} from '@/resources';
-  import MapPath from '../../common/map-path-new';
+import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+import {TmsWayBill} from '@/resources';
+import MapPath from '../../common/map-path-new';
 
-  export default {
+export default {
     components: {TwoColumn, MapPath},
     data () {
       return {

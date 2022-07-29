@@ -9,10 +9,10 @@
   </div>
 </template>
 <script>
-  import ajax from './ajax';
-  import UploadDragger from './upload-dragger.vue';
+import ajax from './ajax';
+import UploadDragger from './upload-dragger.vue';
 
-  export default {
+export default {
     inject: ['uploader'],
     components: {
       UploadDragger

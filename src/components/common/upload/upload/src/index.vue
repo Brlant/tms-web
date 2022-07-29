@@ -40,12 +40,12 @@
 </template>
 
 <script>
-  import UploadList from './upload-list';
-  import Upload from './upload';
-  import ElProgress from 'element-ui/lib/progress';
-  import Migrating from 'element-ui/lib/mixins/migrating';
+import UploadList from './upload-list';
+import Upload from './upload';
+import ElProgress from 'element-ui/lib/progress';
+import Migrating from 'element-ui/lib/mixins/migrating';
 
-  function noop () {
+function noop () {
   }
 
   export default {

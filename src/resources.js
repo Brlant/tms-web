@@ -201,6 +201,82 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   }
 });
 
+// 中转入库单
+export const TransferInOrder = {
+  // 查询列表
+  query: (params) => {
+    return http.get('/transfer-in-order', {params});
+  },
+  // 查询列表的状态数量
+  queryStateNum: (params) => {
+    return http.get('/transfer-in-order/count', {params});
+  },
+  // 查询详情
+  getDetails: (id) => {
+    return http.get(`/transfer-in-order/${id}`);
+  },
+  // 根据运单生成新增出库单
+  generate: (waybillNo) => {
+    return http.post(`/transfer-in-order?waybillNo=${waybillNo}`);
+  },
+  // 认领任务
+  claimTask: (id) => {
+    return http.put(`/transfer-in-order/claim-task/${id}`);
+  },
+  // 上架
+  shelves: (params) => {
+    return http.put(`/transfer-in-order/shelves/${params.id}`, params);
+  },
+  // 指派上架人
+  assignedOnPeople: (params) => {
+    return http.put(`/transfer-in-order/assigned-on-people/${params.id}`, params);
+  },
+  // 收货
+  receivingGoods: (params) => {
+    return http.put(`/transfer-in-order/receiving-goods/${params.id}`, params);
+  },
+};
+
+// 中转出库单
+export const TransferOutOrder = {
+  // 查询列表
+  query: (params) => {
+    return http.get('/transfer-out-order', {params});
+  },
+  // 查询列表的状态数量
+  queryStateNum: (params) => {
+    return http.get('/transfer-out-order/count', {params});
+  },
+  // 查询详情
+  getDetails: (id) => {
+    return http.get(`/transfer-out-order/${id}`);
+  },
+  // 判断订单是否存在
+  isExistOrder: (orderNo) => {
+    return http.get(`/transfer-out-order/is-exist-order?orderNo=${orderNo}`);
+  },
+  // 保存新增出库单
+  save: (data) => {
+    return http.post(`/transfer-out-order`, data);
+  },
+  // 指派下架人
+  assignedShelves: (params) => {
+    return http.put(`/transfer-out-order/assigned-shelves/${params.id}`, params);
+  },
+  // 认领任务
+  claimTask: (id) => {
+    return http.put(`/transfer-out-order/claim-task/${id}`);
+  },
+  // 下架
+  unshelve: (params) => {
+    return http.put(`/transfer-out-order/unshelve/${params.id}`, params);
+  },
+  // 出库
+  outbound: (id) => {
+    return http.put(`/transfer-out-order/outbound/${id}`);
+  },
+};
+
 // dev设备对象
 export const TempDev = resource('/ccsDevice', http, {
   queryStateNum: (params) => {
@@ -512,6 +588,76 @@ export const DictGroup = resource('/dictGroup', http, {
 export const Goods = resource('/goods', http, {
   getGoodsDetail: (id) => {
     return http.get('/goods/' + id);
+  }
+});
+
+/**
+ * 入库作业
+ * @type {the}
+ */
+export const InWork = resource('/stock-in', http, {
+  queryOmsOrder(obj) { // 查询订单列表
+    return http.get('/order', {params: obj});
+  },
+  queryOrder(obj) { // 查询wms订单列表
+    return http.get('/stock-in/wms', {params: obj});
+  },
+  queryOrderExcepiton(obj) { // 查询wms异常订单列表
+    return http.get('/stock-in/wms/quality-exception', {params: obj});
+  },
+  queryOrderCount(obj) { // 查询订单数量
+    return http.get('/stock-in/task/count', {params: obj});
+  },
+  queryOrderDetail(id) { // 查询订单详细
+    return http.get(`/order/${id}`, {params: {lockFlag: false}});
+  },
+  allotPlace(orderId) { // 分配货位
+    return http.post(`/stock-in/${orderId}/batch/allot`);
+  },
+  queryOperator(obj) { // 查询操作员
+    return http.get('/stock-in/operator', {params: obj});
+  },
+  queryOperatorOrders(obj) { // 查询操作员的任务
+    return http.get('/stock-in/operator/orders', {params: obj});
+  },
+  allotShelfMan(orderId, obj) { // 分配上架人
+    return http.put(`/stock-in/${orderId}/assign/putaway`, obj);
+  },
+  allotReviewer(orderId, obj) { // 分配复核人
+    return http.put(`/stock-in/${orderId}/assign/reviewer`, obj);
+  },
+  queryAvailableStore(obj) { // 查询可用的库位
+    return http.get('/stock-in/valid/store', {params: obj});
+  },
+  queryAssignStore(orderId) { // 查询已分配好的库位
+    return http.get(`/stock-in/${orderId}/pre-position`);
+  },
+  updateAssignStore(orderId, obj) { // 查询已分配好的库位
+    return http.put(`/stock-in/${orderId}/pre-position`, obj);
+  },
+  queryCodes(orderId) { // 查询编码
+    return http.get(`/stock-in/${orderId}/code`);
+  },
+  reviewScan(orderId, obj) { // 提交编码
+    return http.put(`/stock-in/${orderId}/review`, obj);
+  },
+  assignPlace(orderId) { // 通过复核，进入到分配货位
+    return http.put(`/stock-in/${orderId}/review/operate`);
+  },
+  onShelf(orderId) {
+    return http.put(`/stock-in/${orderId}/shelves`);
+  },
+  queryShelfGoodsDetail(orderId) {
+    return http.get(`/stock-in/${orderId}/shelves/navigation`);
+  },
+  claimReviewTack(orderId) {
+    return http.put(`/stock-in/${orderId}/claim/reviewer`);
+  },
+  claimShelfTack(orderId) {
+    return http.put(`/stock-in/${orderId}/claim/putaway`);
+  },
+  claimTack(orderId) {
+    return http.put(`/stock-in/${orderId}/claim`);
   }
 });
 

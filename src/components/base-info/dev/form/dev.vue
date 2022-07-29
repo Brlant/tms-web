@@ -76,10 +76,10 @@
   </el-form>
 </template>
 <script>
-  import {Dev} from '@/resources';
-  import utils from '@/tools/utils';
+import {Dev} from '@/resources';
+import utils from '@/tools/utils';
 
-  export default {
+export default {
     data: function () {
       return {
         rules: {

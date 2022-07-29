@@ -1,4 +1,3 @@
-<!--suppress JSUnresolvedFunction -->
 <style lang="scss" scoped>
 $labelWidth: 180px;
 .content-part {
@@ -178,49 +177,6 @@ $labelWidth: 180px;
                            placeholder="试试搜索：合肥"
                            :options="address"
                            filterable clearable></el-cascader>
-              <!--              <div style="display: inline-flex">
-                              <el-select class="mr-10" v-model="form.receiverProvinceCode" placeholder="请选择省" filterable
-                                         @change="provinceChange">
-                                <el-option-group
-                                  v-for="group in provinceOptions"
-                                  :key="group.label"
-                                  :label="group.label">
-                                  <el-option
-                                    v-for="item in group.options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                  </el-option>
-                                </el-option-group>
-                              </el-select>
-                              <el-select class="mr-10" v-model="form.receiverCityCode" placeholder="请选择市" filterable
-                                         @change="cityChange">
-                                <el-option-group
-                                  v-for="group in cityOptions"
-                                  :key="group.label"
-                                  :label="group.label">
-                                  <el-option
-                                    v-for="item in group.options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                  </el-option>
-                                </el-option-group>
-                              </el-select>
-                              <el-select v-model="form.receiverRegionCode" placeholder="请选择区" filterable @change="regionChange">
-                                <el-option-group
-                                  v-for="group in regionOptions"
-                                  :key="group.label"
-                                  :label="group.label">
-                                  <el-option
-                                    v-for="item in group.options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                  </el-option>
-                                </el-option-group>
-                              </el-select>
-                            </div>-->
             </el-form-item>
             <el-form-item label="具体地址" prop="receiverDetailAddr">
               <el-select filterable placeholder="请选择/输入具体的收货地址"
@@ -393,12 +349,7 @@ export default {
   data() {
     return {
       address: utils.address,
-      // provinces: utils.address,
-      // cities: [],
-      // regions: [],
       addressList: [],
-      list: [],
-      times: [],
       pageSets: [
         {name: '基本信息', key: 0},
         {name: '发货信息', key: 1},
@@ -555,36 +506,9 @@ export default {
         return '';
       }
 
-      const pathLabels = nodes[0].pathLabels;
+      const pathLabels = nodes[0] ? nodes[0].pathLabels : [];
       return pathLabels.join('') + this.form.receiverDetailAddr;
     },
-    // provinceOptions() {
-    //   return [{
-    //     label: '常用省份',
-    //     options: []
-    //   }, {
-    //     label: '全部省份',
-    //     options: this.provinces
-    //   }]
-    // },
-    // cityOptions() {
-    //   return [{
-    //     label: '常用城市',
-    //     options: []
-    //   }, {
-    //     label: '全部城市',
-    //     options: this.cities
-    //   }]
-    // },
-    // regionOptions() {
-    //   return [{
-    //     label: '常用区/县',
-    //     options: []
-    //   }, {
-    //     label: '全部区/县',
-    //     options: this.regions
-    //   }]
-    // },
     deliveryWayList() {
       return this.$getDict('deliveryWay');
     },
@@ -674,10 +598,6 @@ export default {
     receiverAddress(val) {
       this.form.receiverAddress = val;
     }
-    // 监听收货单位变化
-    // "form.receiverId": function (val) {
-    //   this.receiverChange(val);
-    // }
   },
   methods: {
     addrHandel() {
@@ -703,29 +623,7 @@ export default {
         this.form.receiverRegionCode
       ];
     },
-    // provinceChange(val) {
-    //   for (const item of this.provinces) {
-    //     if (item.value === val) {
-    //       this.cities = item.children;
-    //       break;
-    //     }
-    //   }
-    // },
-    // cityChange(val) {
-    //   for (const item of this.cities) {
-    //     if (item.value === val) {
-    //       this.regions = item.children;
-    //       break;
-    //     }
-    //   }
-    // },
-    // regionChange(val) {
-    //   for (const item of this.regions) {
-    //     if (item.value === val) {
-    //       break;
-    //     }
-    //   }
-    // },
+
     remove(item) {
       let index = this.form.goodsList.indexOf(item);
       // 移除删除项
@@ -958,5 +856,5 @@ export default {
   mounted() {
     // this.filterReceiverOrg('');
   }
-};
+}
 </script>

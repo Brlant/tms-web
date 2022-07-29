@@ -81,9 +81,9 @@
   </dialog-template>
 </template>
 <script>
-  import {TmsOrder} from '@/resources';
+import {TmsOrder} from '@/resources';
 
-  export default {
+export default {
     data () {
       return {
         list: [],

@@ -115,10 +115,9 @@
   </search-template>
 </template>
 <script>
-  import {BaseInfo,GoodsArea} from '@/resources';
-  import utils from '@/tools/utils';
+import {BaseInfo, GoodsArea} from '@/resources';
 
-  export default {
+export default {
     data: function () {
       return {
         searchCondition: {
