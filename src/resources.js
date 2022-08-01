@@ -275,6 +275,10 @@ export const TransferOutOrder = {
   outbound: (id) => {
     return http.put(`/transfer-out-order/outbound/${id}`);
   },
+  // 取消
+  cancel: (id) => {
+    return http.put(`/transfer-out-order/cancel/${id}`);
+  },
 };
 
 // dev设备对象

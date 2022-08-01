@@ -731,6 +731,7 @@ import MapPath from '../common/map-list';
         this.orderType[3].num = data['pend-sign'];
         this.orderType[4].num = data['complete'];
         this.orderType[5].num = data['canceled'];
+        this.orderType[6].num = data['pend-transfer'];
       });
     },
     showPart(index) {

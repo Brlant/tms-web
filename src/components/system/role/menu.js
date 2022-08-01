@@ -306,6 +306,50 @@ export default [
     ],
     'leaf': false
   },
+  // 库存管理
+  {
+    'id': 'tms-stock-manager',
+    'parentId': null,
+    'label': '库存管理',
+    'sort': 1,
+    'children': [
+      {
+        'id': 'tms-transfer-stock',
+        'parentId': 'tms-stock-manager',
+        'label': '库存管理',
+        'sort': 1,
+        'children': [
+          {
+            'id': 'tms-transfer-stock-list',
+            'parentId': 'tms-transfer-stock',
+            'label': '查询列表',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+        ],
+        'leaf': false
+      },
+      {
+        'id': 'tms-store-stock',
+        'parentId': 'tms-base-info',
+        'label': '库位库存',
+        'sort': 2,
+        'children': [
+          {
+            'id': 'tms-store-stock-list',
+            'parentId': 'tms-store-stock',
+            'label': '查询列表',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+        ],
+        'leaf': false
+      },
+    ],
+    'leaf': false
+  },
   // 单据管理
   {
     'id': 'tms-documents-info',
@@ -511,138 +555,128 @@ export default [
             'sort': null,
             'children': null,
             'leaf': true
-          }
+          },
+          {
+            'id': 'tms-waybill-transfer-in',
+            'parentId': 'tms-waybill-manager',
+            'label': '中转入库',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
         ],
         'leaf': false
       },
       {
-        'id': 'transit-store-out',
-        'parentId': 'tms-documents-info',
-        'label': '中转出库',
-        'sort': 4,
-        'children': [
-          {
-          'id': 'transit-store-out-take-down',
-          'parentId': 'transit-store-out',
-          'label': '下架',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        },
-        {
-          'id': 'transit-warehouse-out',
-          'parentId': 'transit-store-out',
-          'label': '查看出库列表',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        },
-          {
-          'id': 'transit-store-out-view',
-          'parentId': 'transit-store-out',
-          'label': '查看',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        }, {
-          'id': 'transit-store-out-packager',
-          'parentId': 'transit-store-out',
-          'label': '出库',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        }, {
-          'id': 'transit-store-out-review',
-          'parentId': 'transit-store-out',
-          'label': '中转复核',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        }, {
-          'id': 'transit-store-out-claim',
-          'parentId': 'transit-store-out',
-          'label': '认领任务',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        }, {
-          'id': 'stock-out-full-assign-reviewer',
-          'parentId': 'transit-store-out',
-          'label': '指派操作人',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        }],
-        'leaf': false
-      },
-      {
-        'id': 'transit-store-in',
+        'id': 'tms-transfer-in',
         'parentId': 'tms-documents-info',
         'label': '中转入库',
         'sort': 3,
         'children': [
           {
-          'id': 'transit-store-in-take-down',
-          'parentId': 'transit-store-in',
-          'label': '下架',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        },
-        {
-          'id': 'transit-warehouse-in',
-          'parentId': 'transit-store-in',
-          'label': '查询出库列表',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        },
+            'id': 'tms-transfer-in-view',
+            'parentId': 'tms-transfer-in',
+            'label': '查看',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
           {
-          'id': 'transit-store-in-view',
-          'parentId': 'transit-store-in',
-          'label': '查看',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        },
-        {
-          'id': 'transit-store-in-increase',
-          'parentId': 'transit-store-in',
-          'label': '新增',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        },
-        {
-          'id': 'transit-store-in-view',
-          'parentId': 'transit-store-in',
-          'label': '取消',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        },
-         {
-          'id': 'transit-store-in-packager',
-          'parentId': 'transit-store-in',
-          'label': '出库',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        }, {
-          'id': 'transit-store-in-claim',
-          'parentId': 'transit-store-in',
-          'label': '认领任务',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        }, {
-          'id': 'stock-in-full-assign-reviewer',
-          'parentId': 'transit-store-in',
-          'label': '指派操作人',
-          'sort': null,
-          'children': null,
-          'leaf': true
-        }],
+            'id': 'tms-transfer-in-assign-person',
+            'parentId': 'tms-transfer-in',
+            'label': '指派上架人',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-transfer-in-receipt-goods',
+            'parentId': 'tms-transfer-in',
+            'label': '收货',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-transfer-in-claim-task',
+            'parentId': 'tms-transfer-in',
+            'label': '认领任务',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-transfer-in-shelves',
+            'parentId': 'tms-transfer-in',
+            'label': '上架',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+        ],
+        'leaf': false
+      },
+      {
+        'id': 'tms-transfer-out',
+        'parentId': 'tms-documents-info',
+        'label': '中转出库',
+        'sort': 4,
+        'children': [
+          {
+            'id': 'tms-transfer-out-save',
+            'parentId': 'tms-transfer-out',
+            'label': '保存',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          }, {
+            'id': 'tms-transfer-out-view',
+            'parentId': 'tms-transfer-out',
+            'label': '查看',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-transfer-out-assign-operator',
+            'parentId': 'tms-transfer-out',
+            'label': '指派操作人',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          }, {
+            'id': 'tms-transfer-out-claim-task',
+            'parentId': 'tms-transfer-out',
+            'label': '认领任务',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-transfer-out-unshelve',
+            'parentId': 'tms-transfer-out',
+            'label': '下架',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-transfer-out-outbound',
+            'parentId': 'tms-transfer-out',
+            'label': '出库',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-transfer-out-cancel',
+            'parentId': 'tms-transfer-out',
+            'label': '取消',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+        ],
         'leaf': false
       },
     ],

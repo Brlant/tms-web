@@ -134,6 +134,23 @@ export const routes = [
         ]
       },
       {
+        path: '/stock-manager',
+        component: () => import('./components/common/parent-route.vue'),
+        meta: {moduleId: 'stock-manager', title: '库存管理', icon: 'basic', perm: 'tms-stock-manager'},
+        children: [
+          {
+            path: '/stock-manager/stock',
+            component: () => import('./components/stock-manager/StockManager'),
+            meta: {moduleId: 'stock-manager', title: '库存管理', perm: 'tms-business-unit-query'}
+          },
+          {
+            path: '/stock-manager/store',
+            component: () => import('./components/stock-manager/StoreStock'),
+            meta: {moduleId: 'stock-manager', title: '库位库存', perm: 'tms-business-unit-query'}
+          },
+        ]
+      },
+      {
         path: '/permission',
         component: () => import('./components/system/index.vue'),
         meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'system-config'},

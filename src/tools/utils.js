@@ -3,52 +3,53 @@ import moment from 'moment';
 
 export default {
   address: Address.value,
-  orderType: [
-    {title: '待生成运单', status: '0', num: ''},
-    {title: '待派车', status: '1', num: ''},
-    {title: '待启运', status: '2', num: ''},
-    {title: '待送达', status: '3', num: ''},
-    {title: '已完成', status: '4', num: ''},
-    {title: '已取消', status: '5', num: ''}
-  ],
-  wayBillType: [
-   {title: '所有', status: '', num: ''},
-   {title: '待确认', status: '-2', num: ''},
-   {title: '待打包', status: '-1', num: ''},
-   {title: '待派车', status: '0', num: ''},
-   {title: '待启运', status: '1', num: ''},
-   {title: '待送达', status: '2', num: ''},
-   {title: '待完成', status: '7', num: ''},
-   {title: '已完成', status: '3', num: ''},
-   {title: '已取消', status: '4', num: ''},
-   {title: '质量待评估', status: '5', num: ''},
-    {title: '已中止', status: '6', num: ''}
-  ],
+  orderType: {
+    0: {title: '待生成运单', status: '0', num: ''},
+    1: {title: '待派车', status: '1', num: ''},
+    2: {title: '待启运', status: '2', num: ''},
+    3: {title: '待送达', status: '3', num: ''},
+    4: {title: '已完成', status: '4', num: ''},
+    5: {title: '已取消', status: '5', num: ''},
+    6: {title: '待中转', status: '6', num: ''},
+  },
+  wayBillType: {
+    0: {title: '所有', status: '', num: ''},
+    1: {title: '待确认', status: '-2', num: ''},
+    2: {title: '待打包', status: '-1', num: ''},
+    3: {title: '待派车', status: '0', num: ''},
+    4: {title: '待启运', status: '1', num: ''},
+    5: {title: '待送达', status: '2', num: ''},
+    6: {title: '待完成', status: '7', num: ''},
+    7: {title: '已完成', status: '3', num: ''},
+    8: {title: '已取消', status: '4', num: ''},
+    9: {title: '质量待评估', status: '5', num: ''},
+    10: {title: '已中止', status: '6', num: ''}
+  },
   // 0--待收货，1--待分配上架人，2--待上架，4--已完成，-1--已取消
-  transferInType: [
-    {title: '所有', status: '', num: ''},
-    {title: '待收货', status: '0', num: ''},
-    {title: '待配上架人', status: '1', num: ''},
-    {title: '待上架', status: '2', num: ''},
-    {title: '已完成', status: '4', num: ''},
-    {title: '已取消', status: '-1', num: ''},
-  ],
-  transferOutType: [
-    {title: '所有', status: '', num: ''},
-    {title: '待确认', status: '0', num: ''},
-    {title: '待配下架人', status: '1', num: ''},
-    {title: '待下架', status: '2', num: ''},
-    {title: '待出库', status: '3', num: ''},
-    {title: '已完成', status: '4', num: ''},
-    {title: '已取消', status: '-1', num: ''},
-  ],
-  carTaskType: [
-    {title: '待确认', status: '0', num: ''},
-    {title: '待开始', status: '1', num: ''},
-    {title: '待结束', status: '2', num: ''},
-    {title: '已完成', status: '3', num: ''},
-    {title: '已取消', status: '4', num: ''}
-  ],
+  transferInType: {
+    0: {title: '所有', status: null, num: ''},
+    1: {title: '待收货', status: '0', num: ''},
+    2: {title: '待配上架人', status: '1', num: ''},
+    3: {title: '待上架', status: '2', num: ''},
+    4: {title: '已完成', status: '4', num: ''},
+    5: {title: '已取消', status: '-1', num: ''},
+  },
+  transferOutType: {
+    0: {title: '所有', status: null, num: ''},
+    1: {title: '待确认', status: '0', num: ''},
+    2: {title: '待配下架人', status: '1', num: ''},
+    3: {title: '待下架', status: '2', num: ''},
+    4: {title: '待出库', status: '3', num: ''},
+    5: {title: '已完成', status: '4', num: ''},
+    6: {title: '已取消', status: '-1', num: ''},
+  },
+  carTaskType: {
+    0: {title: '待确认', status: '0', num: ''},
+    1: {title: '待开始', status: '1', num: ''},
+    2: {title: '待结束', status: '2', num: ''},
+    3: {title: '已完成', status: '3', num: ''},
+    4: {title: '已取消', status: '4', num: ''}
+  },
   /**
    * 格式化包装层级, 支持1到99级
    * @param index
@@ -228,8 +229,5 @@ export default {
   },
   formatTime(time, str = 'YYYY-MM-DD HH:mm:ss') {
     return time ? moment(time).format(str) : '';
-  },
-  getStatusName(status, statusTypes) {
-    return statusTypes.filter(s => s.status === status).map(s => s.title);
   }
 };
