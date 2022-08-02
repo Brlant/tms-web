@@ -4,10 +4,10 @@
     <header>
       <el-form ref="searchForm" v-model="searchForm" inline>
         <el-form-item label="订单号">
-          <el-input v-model="searchForm.orderNo" placeholder="请输入订单号"></el-input>
+          <el-input v-model="searchForm.orderNo" placeholder="请输入订单号" clearable></el-input>
         </el-form-item>
         <el-form-item label="运单号">
-          <el-input v-model="searchForm.orderNo" placeholder="请输入运单号"></el-input>
+          <el-input v-model="searchForm.waybillNo" placeholder="请输入运单号" clearable></el-input>
         </el-form-item>
         <el-form-item label="发货单位">
           <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterSenderOrg"
@@ -42,7 +42,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="货品名称">
-          <el-input v-model="searchForm.goodsName" placeholder="请输入货品名称"></el-input>
+          <el-input v-model="searchForm.goodsName" placeholder="请输入货品名称" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
@@ -54,25 +54,29 @@
     <!--  列表-->
     <main>
       <el-table :data="dataList" border>
-        <el-table-column label="订单号" prop="orderNo"></el-table-column>
-        <el-table-column label="运单号" prop="waybillNo"></el-table-column>
-        <el-table-column label="中转入库单号" prop="transferInOrderNo"></el-table-column>
-        <el-table-column label="货主" prop="orgName"></el-table-column>
-        <el-table-column label="发货单位" prop="senderName"></el-table-column>
-        <el-table-column label="收货单位" prop="receiverName"></el-table-column>
-        <el-table-column label="货品名称" prop="goodsName"></el-table-column>
-        <el-table-column label="收货时间" prop="receiptGoodsTime"></el-table-column>
-        <el-table-column label="上架时间" prop="shelvesTime"></el-table-column>
+        <el-table-column label="订单号" align="center" prop="orderNo"></el-table-column>
+        <el-table-column label="运单号" align="center" prop="waybillNo"></el-table-column>
+        <el-table-column label="中转入库单号" align="center" prop="transferInOrderNo"></el-table-column>
+        <el-table-column label="货主" align="center" prop="orgName"></el-table-column>
+        <el-table-column label="发货单位" align="center" prop="senderName"></el-table-column>
+        <el-table-column label="收货单位" align="center" prop="receiverName"></el-table-column>
+        <el-table-column label="货品名称" align="center" prop="goodsName"></el-table-column>
+        <el-table-column label="收货时间" align="center" prop="receiptGoodsTime"></el-table-column>
+        <el-table-column label="上架时间" align="center" prop="shelvesTime" width="180">
+          <template v-slot="{row}">
+            {{ row.shelvesTime|time }}
+          </template>
+        </el-table-column>
         <el-table-column label="可用" align="center">
-          <el-table-column label="整装箱数" prop="enabledWholeBoxCount"></el-table-column>
-          <el-table-column label="散装箱数" prop="enabledBulkBoxCount"></el-table-column>
+          <el-table-column label="整装箱数" align="center" prop="enabledWholeBoxCount"></el-table-column>
+          <el-table-column label="散装箱数" align="center" prop="enabledBulkBoxCount"></el-table-column>
         </el-table-column>
         <el-table-column label="锁定" align="center">
-          <el-table-column label="整装箱数" prop="lockWholeBoxCount"></el-table-column>
-          <el-table-column label="整装箱数" prop="lockBulkBoxCount"></el-table-column>
+          <el-table-column label="整装箱数" align="center" prop="lockWholeBoxCount"></el-table-column>
+          <el-table-column label="整装箱数" align="center" prop="lockBulkBoxCount"></el-table-column>
         </el-table-column>
-        <el-table-column label="重量" prop="weight"></el-table-column>
-        <el-table-column label="体积" prop="volume"></el-table-column>
+        <el-table-column label="重量" align="center" prop="weight"></el-table-column>
+        <el-table-column label="体积" align="center" prop="volume"></el-table-column>
       </el-table>
     </main>
 
@@ -128,8 +132,8 @@ export default {
       this.queryList();
     },
     queryList() {
-      let params = Object.assign(this.searchForm, this.page)
-      this.$http.get('/transfer-store-stock')
+      let params = Object.assign(this.searchForm, this.page);
+      this.$http.get('/transfer-store-stock',{params})
         .then(res => {
           this.dataList = res.data.list;
           this.page.count = res.data.count;
@@ -164,5 +168,11 @@ export default {
 </script>
 
 <style scoped>
+header {
+  background-color: #fff;
+  padding-left: 22px;
+  padding-top: 22px;
+  margin: 15px 0;
+}
 
 </style>

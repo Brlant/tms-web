@@ -83,12 +83,12 @@ export const routes = [
           {
             path: '/transit/store-in',
             component: () => import('./components/document/transit/store-in/TransitStoreIn.vue'),
-            meta: {moduleId: 'document', title: '中转入库', perm: 'transit-warehouse-in'}
+            meta: {moduleId: 'document', title: '中转入库', perm: 'tms-transfer-in'}
           },
           {
             path: '/transit/store-out',
             component: () => import('./components/document/transit/store-out/TransitStoreOut.vue'),
-            meta: {moduleId: 'document', title: '中转出库', perm: 'transit-warehouse-out'}
+            meta: {moduleId: 'document', title: '中转出库', perm: 'tms-transfer-out'}
           },
         ]
       },

@@ -366,11 +366,11 @@ export default {
   methods: {
     setWholeBoxCount(value) {
       if (!value || isNaN(value)) return;
-      this.form.wholeBoxCount = parseInt(value, 10);
+      this.form.actualWholeNum = parseInt(value, 10);
     },
     setBulkBoxCount(value) {
       if (!value || isNaN(value)) return;
-      this.form.bulkBoxCount = parseInt(value, 10);
+      this.form.actualBulkNum = parseInt(value, 10);
     },
     setDamagedWholeBoxCount(value) {
       if (!value || isNaN(value)) return;

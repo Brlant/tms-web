@@ -420,7 +420,7 @@ export default {
 
       });
     },
-    // 取消中转出库单
+    // 取消
     cancelTransferOutOrder(item) {
       this.$confirm('是否确认取消?', '', {
         confirmButtonText: '确认',

@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
 .special-col {
   padding-left: 20px;
   position: relative;
@@ -240,7 +240,7 @@
                 v-show="isShowMulBigMap"></map-path>
     </el-dialog>
     <el-dialog :visible.sync="dialogFormVisible" center width="25%">
-      <el-form ref="operatorForm" :model="dialogForm" :rules="dialogFormRules">
+      <el-form ref="dialogForm" :model="dialogForm" :rules="dialogFormRules">
         <el-form-item label="承运类型" label-width="120px">
           <el-radio-group v-model="dialogForm.carryType" size="mini" @change="carryTypeChangeHandle">
             <el-radio :label="0">自行承运</el-radio>

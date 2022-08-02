@@ -165,7 +165,7 @@
               </div>
               <div v-show="item.transferInStatus === '1'">
                 <perm label="tms-waybill-edit">
-                            <span @click.stop="onePerson(item)">
+                            <span @click.stop="assignPerson(item)">
                             <a class="btn-circle btn-opera">
                                 <i class="el-icon-user"></i>
                             </a>指派上架人
@@ -251,7 +251,7 @@ import StatusMixin from '@/mixins/statusMixin';
 
 export default {
   components: {
-    SearchPart,detailsForm
+    SearchPart
   },
   mixins: [StatusMixin],
   data() {
@@ -353,7 +353,7 @@ export default {
         });
     },
     // 指定上架人
-    onePerson(val) {
+    assignPerson(val) {
       this.operatorFormVisible = true;
       this.operatorForm.id = val.id;
     },
@@ -376,7 +376,7 @@ export default {
       });
     },
     // 出库
-    outStore(val) {
+    deliveryGoods(val) {
       this.showIndex = 0;
       this.currentPart = this.dialogComponents[0];
       this.$nextTick(() => {
