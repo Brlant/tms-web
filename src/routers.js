@@ -83,12 +83,12 @@ export const routes = [
           {
             path: '/transit/store-in',
             component: () => import('./components/document/transit/store-in/TransitStoreIn.vue'),
-            meta: {moduleId: 'document', title: '中转入库', perm: 'transit-warehouse-in'}
+            meta: {moduleId: 'document', title: '中转入库', perm: 'tms-transfer-in'}
           },
           {
             path: '/transit/store-out',
             component: () => import('./components/document/transit/store-out/TransitStoreOut.vue'),
-            meta: {moduleId: 'document', title: '中转出库', perm: 'transit-warehouse-out'}
+            meta: {moduleId: 'document', title: '中转出库', perm: 'tms-transfer-out'}
           },
         ]
       },
@@ -131,6 +131,23 @@ export const routes = [
             meta: {moduleId: 'base-info', title: '仓位档案', perm: 'tms-storage-bin-query'},
             children: []
           }
+        ]
+      },
+      {
+        path: '/stock-manager',
+        component: () => import('./components/common/parent-route.vue'),
+        meta: {moduleId: 'stock-manager', title: '库存管理', icon: 'basic', perm: 'tms-stock-manager'},
+        children: [
+          {
+            path: '/stock-manager/stock',
+            component: () => import('./components/stock-manager/StockManager'),
+            meta: {moduleId: 'stock-manager', title: '库存管理', perm: 'tms-business-unit-query'}
+          },
+          {
+            path: '/stock-manager/store',
+            component: () => import('./components/stock-manager/StoreStock'),
+            meta: {moduleId: 'stock-manager', title: '库位库存', perm: 'tms-business-unit-query'}
+          },
         ]
       },
       {

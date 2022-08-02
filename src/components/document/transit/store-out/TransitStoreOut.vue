@@ -153,12 +153,12 @@
               </div>
             </el-col>
             <el-col :span="2" class="R">
-             <div>{{item.transferOutStatusName}}</div>
+              <div>{{ item.transferOutStatusName }}</div>
             </el-col>
             <el-col :span="2" class="opera-btn">
               <div v-show="item.transferOutStatus === '0'">
                 <perm label="tms-waybill-edit">
-                    <span @click.stop="abolish(item)">
+                    <span @click.stop="cancelTransferOutOrder(item)">
                       <a class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
@@ -262,7 +262,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer">
         <el-button type="primary" @click="assignedShelvesConfirm" :disabled="doing">确定</el-button>
         <el-button @click="assignedShelvesCancel">取消</el-button>
       </div>
@@ -273,7 +273,6 @@
 import utils from '@/tools/utils';
 import SearchPart from './search';
 import {InWork, TransferOutOrder} from '@/resources';
-import TakeForm from './form/take-form.vue';
 import UnshelveForm from './form/unshelve-form.vue';
 import DetailsForm from './form/details-form.vue';
 import AddForm from './form/add-form.vue';
@@ -402,8 +401,6 @@ export default {
     },
     // 出库
     outbound(item) {
-      this.showIndex = 0;
-      this.taskFormComp = TakeForm;
       this.$confirm('是否确认出库?', '', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
@@ -413,8 +410,28 @@ export default {
         TransferOutOrder.outbound(item.id)
           .then(res => {
             this.$notify.success("出库成功");
-            this.$emit('right-close');
-            this.$emit('change');
+            this.getTransferOutOrderPage(1);
+          })
+          .catch(err => {
+            console.log(err);
+            this.$notify.error(err.response.data.msg || '出库失败');
+          })
+      }).catch(() => {
+
+      });
+    },
+    // 取消
+    cancelTransferOutOrder(item) {
+      this.$confirm('是否确认取消?', '', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 确认出库
+        TransferOutOrder.cancel(item.id)
+          .then(res => {
+            this.$notify.success("取消成功");
+            this.getTransferOutOrderPage(1);
           })
           .catch(err => {
             console.log(err);

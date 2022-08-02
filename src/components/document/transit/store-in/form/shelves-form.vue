@@ -141,9 +141,9 @@ export default {
     return {
       span: 8,
       pageSets: [
-            {name: '任务详情', key: 0},
-            {name: '库位码', key: 1},
-            {name: '下架详情', key: 2}
+        {name: '任务详情', key: 0},
+        {name: '库位码', key: 1},
+        {name: '上架详情', key: 2}
       ],
       currentTab: {},
       form: {

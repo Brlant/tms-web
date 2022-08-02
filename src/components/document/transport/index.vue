@@ -47,14 +47,23 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-dropdown class="ml-10" v-show="false">
+        <el-dropdown class="ml-10">
           <el-button plain size="small">
             导入温度（经纬度）数据<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="c">导入温度（经纬度）数据</el-dropdown-item>
-            <el-dropdown-item command="d">
-              <el-link href="/api/tms-waybill/downloadLLT">下载温度（经纬度）模板</el-link>
+            <el-dropdown-item>
+              <el-upload
+                ref="upload-logistics"
+                action="/api/tms-waybill/uploadLLT"
+                :on-success="uploadLogisticsSuccess"
+                :on-error="uploadLogisticsError"
+                :show-file-list="false"
+              >导入温度（经纬度）数据
+              </el-upload>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-link href="/api/tms-waybill/downloadLLT" :underline="false">下载温度（经纬度）模板</el-link>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -305,7 +314,7 @@
                       </a>取消
                     </span>
                   </perm>
-                  <perm label="tms-waybill-edit">
+                  <perm label="tms-waybill-transfer-in">
                     <span @click.stop="transferIn(item)"
                           v-if="item.status === '-2'">
                       <a @click.pervent="" class="btn-circle btn-opera">

@@ -75,7 +75,9 @@ $labelWidth: 220px;
               <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime">
                 {{ form.updateTime|time }}
               </oms-col>
-
+              <oms-col label="面单号" :rowSpan="span" :value="1">
+                <oms-input model="text" v-model="carryInfo.faceSheetNo" min="0" placeholder="请输入面单号"></oms-input>
+              </oms-col>
               <oms-col label="承运类型" :rowSpan="span" :value="1">
                 <el-radio-group v-model="carryInfo.carryType" size="mini">
                   <el-radio :label="0">自行承运</el-radio>
@@ -110,9 +112,6 @@ $labelWidth: 220px;
                            @blur="insureAmountFormat">
                   <template slot="prepend">¥</template>
                 </oms-input>
-              </oms-col>
-              <oms-col label="面单号" :rowSpan="span" :value="1">
-                <oms-input model="text" v-model="carryInfo.faceSheetNo" min="0" placeholder="请输入面单号"></oms-input>
               </oms-col>
             </div>
             <div class="hr mb-10 clearfix"></div>
