@@ -226,7 +226,7 @@
       <component :is="detailsFormComp" :formItem="form" @right-close="resetRightBox" @change="rightChangeHandle"/>
     </page-right>
     <page-right :show="showIndex === 3" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
-      <add-form :formItem="form" action="add" @change="rightChangeHandle"/>
+      <component :is="addFormComp" :formItem="form" action="add" @change="rightChangeHandle"/>
     </page-right>
 
     <!-- 校验订单号的对话框 -->
@@ -280,7 +280,6 @@ import StatusMixin from '@/mixins/statusMixin';
 
 export default {
   components: {
-    AddForm,
     SearchPart
   },
   mixins: [StatusMixin],
@@ -313,6 +312,7 @@ export default {
       taskFormComp: null,
       unshelveFormComp: null,
       detailsFormComp: null,
+      addFormComp: null,
 
       pager: {
         currentPage: 1,
@@ -623,6 +623,7 @@ export default {
             this.showIndex = 3;
             // 设置表单数据，新增中转出库单时需要从订单里面代入一些初始化的数据，这些数据在订单校验成功后返回，即res.data
             this.form = res.data;
+            this.addFormComp = AddForm;
           })
           .catch(error => {
             this.$notify.error(error.response.data.msg || "校验订单接口异常");

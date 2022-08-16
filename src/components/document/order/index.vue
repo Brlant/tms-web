@@ -729,9 +729,9 @@ import MapPath from '../common/map-list';
         this.orderType[1].num = data['pend-choose-car'];
         this.orderType[2].num = data['pend-shipment'];
         this.orderType[3].num = data['pend-sign'];
-        this.orderType[4].num = data['complete'];
-        this.orderType[5].num = data['canceled'];
-        this.orderType[6].num = data['pend-transfer'];
+        this.orderType[4].num = data['pend-transfer'];
+        this.orderType[5].num = data['complete'];
+        this.orderType[6].num = data['canceled'];
       });
     },
     showPart(index) {

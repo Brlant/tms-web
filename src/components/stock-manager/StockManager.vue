@@ -42,7 +42,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="货品名称">
-          <el-input v-model="searchForm.goodsName" placeholder="请输入货品名称" clearable></el-input>
+          <el-input v-model="searchForm.goodsTotalName" placeholder="请输入货品名称" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
@@ -60,7 +60,7 @@
         <el-table-column label="货主" align="center" prop="orgName"></el-table-column>
         <el-table-column label="发货单位" align="center" prop="senderName"></el-table-column>
         <el-table-column label="收货单位" align="center" prop="receiverName"></el-table-column>
-        <el-table-column label="货品名称" align="center" prop="goodsName"></el-table-column>
+        <el-table-column label="货品名称" align="center" prop="goodsTotalName"></el-table-column>
         <el-table-column label="收货时间" align="center" prop="receiptGoodsTime"></el-table-column>
         <el-table-column label="上架时间" align="center" prop="shelvesTime" width="180">
           <template v-slot="{row}">
@@ -104,7 +104,7 @@ export default {
         waybillNo: '',
         senderId: '',
         receiverId: '',
-        goodsName: '',
+        goodsTotalName: '',
       },
       page: {
         pageNo: 1,
