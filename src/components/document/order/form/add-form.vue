@@ -785,7 +785,7 @@ export default {
     // 收货单位变更时的处理
     receiverChange(value) {
       if (value === '') {
-        this.form.receiverId = 'new';
+        this.form.receiverId = '';
         this.form.receiverName = '';
         this.form.receiverProvinceCode = '';
         this.form.receiverCityCode = '';

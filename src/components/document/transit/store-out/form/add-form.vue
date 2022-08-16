@@ -24,7 +24,7 @@ $labelWidth: 180px;
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
-    <template slot="title">{{ showTitle }}订单</template>
+    <template slot="title">{{ showTitle }}中转出库单</template>
     <template slot="btn">
       <el-button plain @click="save('form')" :disabled="doing">保存</el-button>
     </template>
@@ -409,6 +409,7 @@ export default {
 
       const pathLabels = nodes[0] && nodes[0].pathLabels;
       if (!pathLabels) return "";
+
       return pathLabels.join('') + this.form.senderDetailAddr;
     },
     // 收货地址：省市区+详细地址
@@ -454,13 +455,11 @@ export default {
   watch: {
     formItem(val) {
       this.form = val;
-      this.customerList = [];
-      this.senderOrgList = [];
-      this.receiverOrgList = [];
 
       this.filterCustomer(this.form.orgName);
       this.filterSenderOrg(this.form.senderName);
       this.filterReceiverOrg(this.form.receiverName);
+
       this.$nextTick(() => {
         this.senderOptions = [];
         this.receiverOptions = [];
@@ -654,7 +653,7 @@ export default {
     // 收货单位变更时的处理
     receiverChange(value) {
       if (value === '') {
-        this.form.receiverId = 'new';
+        this.form.receiverId = '';
         this.form.receiverName = '';
         this.form.receiverProvinceCode = '';
         this.form.receiverCityCode = '';

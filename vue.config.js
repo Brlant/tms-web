@@ -8,6 +8,7 @@ function resolve(dir) {
 // 代理的目标地址集合
 const proxyTargets = {
   hw: "https://hw-test-tms.cdcerp.cn",  // 华为云环境
+  sh: "https://sh-tms.cdcerp.cn",       // sh环境
   lxr: "http://192.168.5.10:8081",      // 先锐本地
   yj: "http://192.168.5.111:8081",      // 本地
 };
@@ -20,7 +21,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: proxyTargets.yj,
+        target: proxyTargets.sh,
         changOrigin: true
       }
     }

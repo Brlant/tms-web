@@ -8,9 +8,10 @@ export default {
     1: {title: '待派车', status: '1', num: ''},
     2: {title: '待启运', status: '2', num: ''},
     3: {title: '待送达', status: '3', num: ''},
-    4: {title: '已完成', status: '4', num: ''},
-    5: {title: '已取消', status: '5', num: ''},
-    6: {title: '待中转', status: '6', num: ''},
+    4: {title: '待中转', status: '6', num: ''},
+    5: {title: '已完成', status: '4', num: ''},
+    6: {title: '已取消', status: '5', num: ''},
+
   },
   wayBillType: {
     0: {title: '所有', status: '', num: ''},

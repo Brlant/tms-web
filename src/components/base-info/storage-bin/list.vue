@@ -250,7 +250,7 @@
             </el-table-column>
             <el-table-column label="操作">
               <template v-slot="{row,$index}">
-                <template v-if="row.storeStatus==1">
+                <template v-if="row.storeStatus==0">
                   <el-button type="text" @click="updateStatus(row,1,$index)">
                     <i class="el-icon-success"> 启用</i>
                   </el-button>
