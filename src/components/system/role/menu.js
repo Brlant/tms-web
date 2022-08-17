@@ -715,6 +715,14 @@ export default [
         'leaf': true
       },
       {
+        'id': 'tms-car-status',
+        'parentId': 'tms-task-manager',
+        'label': '车辆状态',
+        'sort': 3,
+        'children': null,
+        'leaf': true
+      },
+      {
         'id': 'tms-task-car-task',
         'parentId': 'tms-task-manager',
         'label': '出车任务',
