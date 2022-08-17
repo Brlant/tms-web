@@ -1,7 +1,7 @@
 {
   "name": "tms-admin",
   "description": "TMS前台",
-  "version": "1.12.0",
+  "version": "5.0.4",
   "author": "Hulk <jayzch@qq.com>",
   "private": true,
   "scripts": {
@@ -16,7 +16,7 @@
     "@sentry/integrations": "^5.19.0",
     "axios": "^0.16.1",
     "babel-polyfill": "^6.26.0",
-    "element-ui": "^2.13.2",
+    "element-ui": "2.15.8",
     "js-base64": "^2.6.2",
     "moment": "^2.27.0",
     "npm": "^5.10.0",
