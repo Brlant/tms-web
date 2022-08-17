@@ -65,7 +65,7 @@ export const routes = [
           }, {
             path: '/vehicle/status',
             component: () => import('./components/vehicle/archives/VehicleArchivesList.vue'),
-            meta: {moduleId: 'vehicle', title: '车辆状态', perm: 'tms-carmap-scan'}
+            meta: {moduleId: 'vehicle', title: '车辆状态', perm: 'tms-car-status'}
           }
         ]
       },
