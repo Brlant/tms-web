@@ -381,7 +381,23 @@ export default [{
     'sort': 3,
     'children': null,
     'leaf': true
-  }, {
+  },  {
+    'id': 'tms-car-state',
+    'parentId': 'tms-task-manager',
+    'label': '车辆状态',
+    'sort': 3,
+    'children': [
+      {
+        'id': 'tms-task-car-task-confirm',
+        'parentId': 'tms-task-car-task',
+        'label': '保存运输详情',
+        'sort': null,
+        'children': null,
+        'leaf': true
+      },
+    ],
+    'leaf': true
+  },{
     'id': 'tms-task-car-task',
     'parentId': 'tms-task-manager',
     'label': '出车任务',
