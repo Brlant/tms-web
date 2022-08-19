@@ -420,6 +420,18 @@ $labelWidth: 180px;
                   </Timeline>
                 </div>
               </el-tab-pane>
+              <el-tab-pane label="温度数据" name="temperature">
+                <div style="line-height: 30px;height: 30px">
+                  <strong class="mr-10">运单号：{{ form.waybillNumber }}</strong>
+                </div>
+                 <div>
+                    <div v-show="handOverList.length">
+                        <chart-line-hand ref="vhDevTempLineHand" class="mt-10" :dataList="handOverList"
+                                        :devInfo="devInfo"></chart-line-hand>
+                    </div>
+                    <div v-show="!handOverList.length">暂无数据</div>
+                 </div>
+              </el-tab-pane>
             </el-tabs>
           </div>
         </div>
@@ -488,12 +500,13 @@ import Perm from '@/components/common/perm';
 import OmsCostTime from '@/components/common/timeCost.vue';
 import Show3dData from './show-3d-data';
 import MapLocation from '@/components/common/map-location';
+import ChartLineHand from '../chat/chart-line-hand';
 
 export default {
   components: {
     Perm,
     OmsCol,
-    TwoColumn, MapPath, attachmentLists, OmsCostTime, Show3dData,
+    TwoColumn, MapPath, attachmentLists, OmsCostTime, Show3dData, ChartLineHand,
     MapLocation
   },
   data() {
@@ -517,6 +530,8 @@ export default {
       rules: {},
       orderLogList: [],
       logisticsList: [],
+      handOverList:[],
+      devInfo:{},
       loadingLog: false,
       attachmentList: [],
       attachmentIdList: [],
@@ -586,6 +601,8 @@ export default {
 
           const waybillNo = this.form.waybillNumber;
           this.getLogisticsList(waybillNo);
+          this.getWaybillData(waybillNo)
+          this.getHandoverData(waybillNo)
         });
       }
     }
@@ -856,6 +873,24 @@ export default {
       })
       .catch(()=>{
         // 不处理
+      })
+    },
+    getWaybillData(waybillNo){
+      this.$http.get(`tms-waybill/${waybillNo}/waybill`)
+      .then(res=>{
+        this.devInfo = res.data
+      })
+    },
+    getHandoverData(waybillNo){
+      this.$http.get(`tms-waybill/handover-data/${waybillNo}`)
+      .then(res=>{
+        res.data.forEach(item => {
+          item.dataDtoList.forEach(i => {
+            let collectionTime = this.$moment(i.collectionTime).format('YYYY-MM-DD HH:mm');
+            i.collectionTime = this.$moment(collectionTime).valueOf();
+          })
+        });
+        this.handOverList = res.data;
       })
     }
   },
