@@ -91,7 +91,7 @@ $labelWidth: 180px;
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="库位码" prop="storeCode">
-                  <oms-input v-model="form.storeCode" type="text" placeholder="请输入实收整装箱数"></oms-input>
+                  <oms-input v-model="form.storeCode" type="text" placeholder="请输入库位码"></oms-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -240,7 +240,14 @@ export default {
           return;
         }
 
-        TransferInOrder.shelves(this.form)
+        TransferInOrder.shelves(this.form.id, {
+          storeCode: this.form.storeCode,
+          warehousingWholeNum: this.form.warehousingWholeNum,
+          warehousingBulkNum: this.form.warehousingBulkNum,
+          wholeTraceCodes: this.form.wholeTraceCodes,
+          bulkTraceCodes: this.form.bulkTraceCodes,
+          waybillNo: this.form.waybillNo,
+        })
           .then(res => {
             this.$notify.success("上架成功");
             this.$emit('right-close');
