@@ -613,17 +613,22 @@ export default {
           return;
         }
 
+
+
         this.doing = true;
         TransferOutOrder.isExistOrder(this.increaseForm.orderNo)
           .then((res) => {
             // 隐藏订单号的对话框,清空订单号
             this.increaseVisible = false;
             this.increaseForm.orderNo = '';
+
             // 显示新增的表单
             this.showIndex = 3;
-            // 设置表单数据，新增中转出库单时需要从订单里面代入一些初始化的数据，这些数据在订单校验成功后返回，即res.data
-            this.form = res.data;
             this.addFormComp = AddForm;
+            this.$nextTick(()=>{
+              // 设置表单数据，新增中转出库单时需要从订单里面代入一些初始化的数据，这些数据在订单校验成功后返回，即res.data
+              this.form = res.data;
+            })
           })
           .catch(error => {
             this.$notify.error(error.response.data.msg || "校验订单接口异常");
