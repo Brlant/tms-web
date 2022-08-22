@@ -108,14 +108,6 @@
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
-          <el-col :span="elColSpan4">
-            <oms-form-row label="状态" :span="6">
-              <el-radio-group v-model="searchCondition.packFlag" size="small">
-                <el-radio-button label="true">已打包</el-radio-button>
-                <el-radio-button label="false">未打包</el-radio-button>
-              </el-radio-group>
-            </oms-form-row>
-          </el-col>
         </el-row>
         <el-row v-show="showSearch">
           <el-col :span="elColSpan">

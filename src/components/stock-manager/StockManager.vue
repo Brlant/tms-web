@@ -61,8 +61,12 @@
         <el-table-column label="发货单位" align="center" prop="senderName"></el-table-column>
         <el-table-column label="收货单位" align="center" prop="receiverName"></el-table-column>
         <el-table-column label="货品名称" align="center" prop="goodsTotalName"></el-table-column>
-        <el-table-column label="收货时间" align="center" prop="receiptGoodsTime"></el-table-column>
-        <el-table-column label="上架时间" align="center" prop="shelvesTime" width="180">
+        <el-table-column label="收货时间" align="center" width="180">
+          <template v-slot="{row}">
+            {{ row.receiptGoodsTime|time }}
+          </template>
+        </el-table-column>
+        <el-table-column label="上架时间" align="center" width="180">
           <template v-slot="{row}">
             {{ row.shelvesTime|time }}
           </template>

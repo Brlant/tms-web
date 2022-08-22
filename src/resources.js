@@ -224,8 +224,8 @@ export const TransferInOrder = {
     return http.put(`/transfer-in-order/claim-task/${id}`);
   },
   // 上架
-  shelves: (params) => {
-    return http.put(`/transfer-in-order/shelves/${params.id}`, params);
+  shelves: (id,params) => {
+    return http.put(`/transfer-in-order/shelves/${id}`, params);
   },
   // 指派上架人
   assignedOnPeople: (params) => {

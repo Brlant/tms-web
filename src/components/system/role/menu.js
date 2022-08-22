@@ -533,7 +533,7 @@ export default [
             'leaf': true
           },
           {
-            'id': 'tms-waybill-receiptCancel',
+            'id': 'tms-waybill-cancel',
             'parentId': 'tms-waybill-manager',
             'label': '取消运单',
             'sort': null,

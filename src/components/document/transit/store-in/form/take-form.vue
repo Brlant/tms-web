@@ -145,7 +145,7 @@ $labelWidth: 180px;
             <div class="mb-10 clearfix"></div>
             <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="实收整装箱数" prop="wholeBoxCount">
+                <el-form-item label="实收整装箱数" prop="actualWholeNum">
                   <oms-input
                     v-model="form.actualWholeNum"
                     type="integer"
@@ -156,7 +156,7 @@ $labelWidth: 180px;
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="实收散装箱数" prop="bulkBoxCount">
+                <el-form-item label="实收散装箱数" prop="actualBulkNum">
                   <oms-input
                     v-model="form.actualBulkNum"
                     type="integer"
@@ -306,7 +306,7 @@ export default {
       },
       doing: false,
       rules: {
-        wholeBoxCount: [
+        actualWholeNum: [
           {
             required: true,
             type: "integer",
@@ -314,7 +314,7 @@ export default {
             trigger: "blur",
           },
         ],
-        bulkBoxCount: [
+        actualBulkNum: [
           {
             required: true,
             type: "integer",
@@ -384,6 +384,8 @@ export default {
     getDetails(id) {
       TransferInOrder.getDetails(id).then(res => {
         this.form = res.data;
+        this.form.actualWholeNum = res.data.wholeBoxCount;
+        this.form.actualBulkNum = res.data.bulkBoxCount;
       })
     },
     //   切换
