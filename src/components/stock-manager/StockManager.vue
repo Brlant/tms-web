@@ -2,14 +2,14 @@
   <div>
     <!--筛选-->
     <header>
-      <el-form ref="searchForm" v-model="searchForm" inline>
-        <el-form-item label="订单号">
+      <el-form ref="searchForm" :model="searchForm" inline>
+        <el-form-item label="订单号" prop="orderNo">
           <el-input v-model="searchForm.orderNo" placeholder="请输入订单号" clearable></el-input>
         </el-form-item>
-        <el-form-item label="运单号">
+        <el-form-item label="运单号" prop="waybillNo">
           <el-input v-model="searchForm.waybillNo" placeholder="请输入运单号" clearable></el-input>
         </el-form-item>
-        <el-form-item label="发货单位">
+        <el-form-item label="发货单位" prop="senderId">
           <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterSenderOrg"
                      :clearable="true"
                      v-model="searchForm.senderId" popperClass="good-selects">
@@ -25,7 +25,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="收货单位">
+        <el-form-item label="收货单位" prop="receiverId">
           <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterReceiverOrg"
                      :clearable="true"
                      v-model="searchForm.receiverId" popperClass="good-selects">
@@ -41,7 +41,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="货品名称">
+        <el-form-item label="货品名称" prop="goodsTotalName">
           <el-input v-model="searchForm.goodsTotalName" placeholder="请输入货品名称" clearable></el-input>
         </el-form-item>
         <el-form-item>
