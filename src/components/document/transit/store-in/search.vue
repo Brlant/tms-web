@@ -145,9 +145,11 @@ export default {
       this.searchCondition = {
         createTime1: '',
         createTime2: '',
+        transferInOrderNo:'',
         waybillNumber: '',
         orderNo: '',
         tmsOrderNumber: '',
+        waybillNo:'',
         senderId: '',
         receiverId: '',
         carryType: ''
