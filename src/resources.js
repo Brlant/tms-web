@@ -449,15 +449,6 @@ export const Carrier = {
   editSave: (params) => http.post('/carrier/editCarrier', params),
 };
 
-// 车辆状态相关的接口
-export const VehicleArchives = {
-  query: (params) => http.get('/car-state', {params}),
-  count: (params) => http.get('/car-state/count', {params}),
-  details: (params) => http.get('/car-change', {params}),
-  saveTransRecord: (id,carState) => http.post('/car-state', {id,carState}),
-  exportExcel: (params) => http.get('/car-state/export', {params}),
-};
-
 // dev设备对象
 export const Dev = resource('/dev', http, {});
 
