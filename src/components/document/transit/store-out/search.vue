@@ -56,18 +56,11 @@
           </el-col>
           <el-col :span="elColSpan">
             <oms-form-row label="收货单位" :span="omsRowSpan">
-              <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterReceiverOrg"
+              <el-select filterable remote placeholder="名称/拼音" :remote-method="filterReceiverOrg"
                          :clearable="true"
                          v-model="searchCondition.receiverId" popperClass="good-selects">
-                <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
-                  <div style="overflow: hidden">
-                    <span class="pull-left" style="clear: right">{{ org.name }}</span>
-                  </div>
-                  <div style="overflow: hidden">
-                    <span class="select-other-info pull-left">
-                      <span>系统代码:</span>{{ org.manufacturerCode }}
-                    </span>
-                  </div>
+                <el-option :value="org.receiverId" :key="org.receiverId" :label="org.receiverName"
+                           v-for="org in receiverOrgList">
                 </el-option>
               </el-select>
             </oms-form-row>
@@ -169,11 +162,22 @@ export default {
         this.senderOrgList = res.data.list;
       });
     },
-    filterReceiverOrg: function (query) {// 过滤收货单位
-      BaseInfo.query({keyWord: query}).then(res => {
-        this.receiverOrgList = res.data.list;
-      });
-    }
+    // 过滤收货单位
+    filterReceiverOrg: function (receiverName, pageNo = 1, pageSize = 100) {
+      this.$http.get('/receiver', {params: {receiverName, pageNo, pageSize}})
+        .then(res => {
+          const {totalPage, list} = res.data;
+          if (pageNo == 1) {
+            this.receiverOrgList = list;
+          } else {
+            this.receiverOrgList = this.receiverOrgList.concat(list);
+          }
+
+          if (totalPage > pageNo) {
+            this.filterReceiverOrg(receiverName, pageNo++);
+          }
+        });
+    },
   }
 };
 </script>
