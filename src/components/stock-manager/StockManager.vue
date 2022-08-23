@@ -26,18 +26,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="收货单位" prop="receiverId">
-          <el-select filterable remote placeholder="名称/拼音/系统代码" :remote-method="filterReceiverOrg"
+          <el-select filterable remote placeholder="名称/拼音" :remote-method="filterReceiverOrg"
                      :clearable="true"
                      v-model="searchForm.receiverId" popperClass="good-selects">
-            <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in receiverOrgList">
-              <div style="overflow: hidden">
-                <span class="pull-left" style="clear: right">{{ org.name }}</span>
-              </div>
-              <div style="overflow: hidden">
-                    <span class="select-other-info pull-left">
-                      <span>系统代码:</span>{{ org.manufacturerCode }}
-                    </span>
-              </div>
+            <el-option :value="org.receiverId" :key="org.receiverId" :label="org.receiverName"
+                       v-for="org in receiverOrgList">
             </el-option>
           </el-select>
         </el-form-item>
@@ -53,7 +46,10 @@
 
     <!--  列表-->
     <main>
-      <el-table :data="dataList" border>
+      <el-table :data="dataList" border
+                show-summary
+                :summary-method="getSummaries"
+                style="width: 100%">
         <el-table-column label="订单号" align="center" prop="orderNo"></el-table-column>
         <el-table-column label="运单号" align="center" prop="waybillNo"></el-table-column>
         <el-table-column label="中转入库单号" align="center" prop="transferInOrderNo"></el-table-column>
@@ -79,8 +75,16 @@
           <el-table-column label="整装箱数" align="center" prop="lockWholeBoxCount"></el-table-column>
           <el-table-column label="整装箱数" align="center" prop="lockBulkBoxCount"></el-table-column>
         </el-table-column>
-        <el-table-column label="重量" align="center" prop="weight"></el-table-column>
-        <el-table-column label="体积" align="center" prop="volume"></el-table-column>
+        <el-table-column label="重量" align="center" prop="weight">
+          <template v-slot="{row}">
+            {{ !row.weight ? '' : row.weight.toFixed(2) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="体积" align="center" prop="volume">
+          <template v-slot="{row}">
+            {{ !row.volume ? '' : row.volume.toFixed(2) }}
+          </template>
+        </el-table-column>
       </el-table>
     </main>
 
@@ -137,7 +141,7 @@ export default {
     },
     queryList() {
       let params = Object.assign(this.searchForm, this.page);
-      this.$http.get('/transfer-store-stock',{params})
+      this.$http.get('/transfer-store-stock', {params})
         .then(res => {
           this.dataList = res.data.list;
           this.page.count = res.data.count;
@@ -151,10 +155,21 @@ export default {
         this.senderOrgList = res.data.list;
       });
     },
-    filterReceiverOrg: function (query) {// 过滤收货单位
-      BaseInfo.query({keyWord: query}).then(res => {
-        this.receiverOrgList = res.data.list;
-      });
+    // 过滤收货单位
+    filterReceiverOrg: function (receiverName, pageNo = 1, pageSize = 100) {
+      this.$http.get('/receiver', {params: {receiverName, pageNo, pageSize}})
+        .then(res => {
+          const {totalPage, list} = res.data;
+          if (pageNo == 1) {
+            this.receiverOrgList = list;
+          } else {
+            this.receiverOrgList = this.receiverOrgList.concat(list);
+          }
+
+          if (totalPage > pageNo) {
+            this.filterReceiverOrg(receiverName, pageNo++);
+          }
+        });
     },
     handleSizeChange(val) {
       this.page.pageSize = val;
@@ -164,6 +179,41 @@ export default {
       this.page.pageNo = val;
       this.queryList();
     },
+    getSummaries(param) {
+      const {columns, data} = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计';
+          return;
+        }
+
+        if (index < 9) {
+          sums[index] = '--';
+          return;
+        }
+
+        const values = data.map(item => Number(item[column.property]));
+        if (!values.every(value => isNaN(value))) {
+          let val = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          if (index > 12) {
+            val = val.toFixed(2);
+          }
+          sums[index] = val;
+        } else {
+          sums[index] = 'N/A';
+        }
+      });
+
+      return sums;
+    }
   },
   mounted() {
     this.queryList();
