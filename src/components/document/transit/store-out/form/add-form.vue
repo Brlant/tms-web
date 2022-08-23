@@ -135,11 +135,11 @@ $labelWidth: 180px;
                          v-model="form.senderId" popperClass="good-selects">
                 <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in senderOrgList">
                   <div style="overflow: hidden">
-                    <span class="pull-left" style="clear: right">{{org.name}}</span>
+                    <span class="pull-left" style="clear: right">{{ org.name }}</span>
                   </div>
                   <div style="overflow: hidden">
                     <span class="select-other-info pull-left">
-                      <span>系统代码:</span>{{org.manufacturerCode}}
+                      <span>系统代码:</span>{{ org.manufacturerCode }}
                     </span>
                   </div>
                 </el-option>
@@ -266,10 +266,10 @@ $labelWidth: 180px;
             </two-column>
             <two-column>
               <el-form-item slot="left" label="重量kg">
-                <oms-input v-model="form.goodsWeight" :disabled="true" placeholder=""></oms-input>
+                <oms-input v-model="form.outboundGoodsWeight" :disabled="true" placeholder=""></oms-input>
               </el-form-item>
               <el-form-item slot="right" label="体积m³">
-                <oms-input v-model="form.goodsVolume" :disabled="true" placeholder=""></oms-input>
+                <oms-input v-model="form.outboundGoodsVolume" :disabled="true" placeholder=""></oms-input>
               </el-form-item>
             </two-column>
             <two-column>
@@ -277,7 +277,7 @@ $labelWidth: 180px;
                 <oms-input v-model="form.tmsGoodsTotalName" :disabled="true" placeholder=""></oms-input>
               </el-form-item>
               <el-form-item slot="right" label="总价">
-                <oms-input v-model="form.goodsPrice" :disabled="true" placeholder=""></oms-input>
+                <oms-input v-model="form.outboundGoodsPrice" :disabled="true" placeholder=""></oms-input>
               </el-form-item>
             </two-column>
           </div>
@@ -308,6 +308,18 @@ export default {
       carrierList: [],
       form: {
         senderAddress: '',
+        goodsWeight: '',
+        goodsVolume: '',
+        goodsPrice: '',
+        wholeBoxCount: '',
+        bulkBoxCount: '',
+        outboundWholeBoxCount: '',
+        outboundBulkBoxCount: '',
+        // 出库的重量和体积，需要动态计算
+        outboundGoodsWeight: '',
+        outboundGoodsVolume: '',
+        outboundGoodsPrice: '',
+
         orgName: '',
         senderName: '',
         pickUpTime: '',
@@ -449,7 +461,13 @@ export default {
         title = '修改';
       }
       return title;
-    }
+    },
+    boxCount() {
+      return this.form.wholeBoxCount + this.form.bulkBoxCount;
+    },
+    outboundBoxCount() {
+      return this.form.outboundWholeBoxCount + this.form.outboundBulkBoxCount;
+    },
   },
   props: ['formItem', 'action'],
   watch: {
@@ -499,6 +517,13 @@ export default {
     },
     receiverAddress(val) {
       this.form.receiverAddress = val;
+    },
+    // 当出库的整件箱数或散件箱数发生变化时，对应的重量、体积、价格需要按比例重新计算
+    "form.outboundWholeBoxCount": function () {
+      this.recalculateOut();
+    },
+    "form.outboundBulkBoxCount": function () {
+      this.recalculateOut();
     }
   },
   methods: {
@@ -737,6 +762,23 @@ export default {
     insureAmountFormat() {// 格式化单价，保留两位小数
       this.form.insureAmount = utils.autoformatDecimalPoint(this.form.insureAmount);
     },
+    // 当出库的整件箱数或散件箱数发生变化时，对应的重量、体积、价格需要按比例重新计算
+    recalculateOut() {
+      if (this.boxCount == 0) {
+        // 避免出现除0异常
+        return;
+      }
+
+      // 先计算原始比例
+      const wb = this.form.goodsWeight / this.boxCount;
+      const vb = this.form.goodsVolume / this.boxCount;
+      const pb = this.form.goodsPrice / this.boxCount;
+
+      // 再根据比例和新的数量计算新的重量、体积、价格
+      this.form.outboundGoodsWeight = wb * this.outboundBoxCount;
+      this.form.outboundGoodsVolume = vb * this.outboundBoxCount;
+      this.form.outboundGoodsPrice = pb * this.outboundBoxCount;
+    }
   },
   filters: {
     transName(val) {
