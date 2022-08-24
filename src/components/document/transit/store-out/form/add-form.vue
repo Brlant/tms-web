@@ -463,10 +463,10 @@ export default {
       return title;
     },
     boxCount() {
-      return this.form.wholeBoxCount + this.form.bulkBoxCount;
+      return parseInt(this.form.wholeBoxCount) + parseInt(this.form.bulkBoxCount);
     },
     outboundBoxCount() {
-      return this.form.outboundWholeBoxCount + this.form.outboundBulkBoxCount;
+      return parseInt(this.form.outboundWholeBoxCount) + parseInt(this.form.outboundBulkBoxCount);
     },
   },
   props: ['formItem', 'action'],
@@ -607,6 +607,16 @@ export default {
 
           if (totalPage > pageNo) {
             this.filterReceiverOrg(receiverName, pageNo++);
+            return;
+          }
+
+          debugger
+          const none = this.receiverOrgList.findIndex(org=>org.receiverId = this.form.receiverId) == -1;
+          if (none){
+            this.receiverOrgList.push({
+              receiverId:this.form.receiverId,
+              receiverName:this.form.receiverName,
+            })
           }
         })
     },
@@ -769,15 +779,10 @@ export default {
         return;
       }
 
-      // 先计算原始比例
-      const wb = this.form.goodsWeight / this.boxCount;
-      const vb = this.form.goodsVolume / this.boxCount;
-      const pb = this.form.goodsPrice / this.boxCount;
-
       // 再根据比例和新的数量计算新的重量、体积、价格
-      this.form.outboundGoodsWeight = wb * this.outboundBoxCount;
-      this.form.outboundGoodsVolume = vb * this.outboundBoxCount;
-      this.form.outboundGoodsPrice = pb * this.outboundBoxCount;
+      this.form.outboundGoodsWeight = this.form.goodsWeight / this.boxCount * this.outboundBoxCount;
+      this.form.outboundGoodsVolume = this.form.goodsVolume / this.boxCount * this.outboundBoxCount;
+      this.form.outboundGoodsPrice = this.form.goodsPrice / this.boxCount * this.outboundBoxCount;
     }
   },
   filters: {

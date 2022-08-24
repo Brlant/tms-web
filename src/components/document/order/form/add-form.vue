@@ -680,6 +680,17 @@ export default {
 
           if (totalPage > pageNo) {
             this.filterReceiverOrg(receiverName, pageNo++);
+            return;
+          }
+
+
+          const none = this.receiverOrgList.findIndex(org=>org.receiverId = this.form.receiverId) == -1;
+          if (none){
+            debugger
+            this.receiverOrgList.push({
+              receiverId:this.form.receiverId,
+              receiverName:this.form.receiverName,
+            })
           }
         })
     },
