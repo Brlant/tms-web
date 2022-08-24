@@ -173,7 +173,7 @@ $labelWidth: 180px;
               <el-col :span="12">
                 <el-form-item label="重量kg">
                   <oms-input
-                    v-model="form.goodsVolume"
+                    v-model="form.goodsWeight"
                     :readonly="true"
                     type="text"
                   ></oms-input>
@@ -182,7 +182,7 @@ $labelWidth: 180px;
               <el-col :span="12">
                 <el-form-item label="体积m³">
                   <oms-input
-                    v-model="form.goodsWeight"
+                    v-model="form.goodsVolume"
                     :readonly="true"
                     type="text"
                   ></oms-input>
