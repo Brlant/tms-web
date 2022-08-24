@@ -37,17 +37,17 @@
               </el-select>
             </oms-form-row>
           </el-col>
-          <el-col :span="5">
-            <oms-form-row label="收货单位" :span="6">
-              <el-select filterable remote placeholder="名称/拼音" :remote-method="filterReceiverOrg"
-                         :clearable="true"
-                         v-model="searchCondition.receiverId" popperClass="good-selects">
-                <el-option :value="org.receiverId" :key="org.receiverId" :label="org.receiverName"
-                           v-for="org in receiverOrgList">
-                </el-option>
-              </el-select>
-            </oms-form-row>
-          </el-col>
+<!--          <el-col :span="5">-->
+<!--            <oms-form-row label="收货单位" :span="6">-->
+<!--              <el-select filterable remote placeholder="名称/拼音" :remote-method="filterReceiverOrg"-->
+<!--                         :clearable="true"-->
+<!--                         v-model="searchCondition.receiverId" popperClass="good-selects">-->
+<!--                <el-option :value="org.receiverId" :key="org.receiverId" :label="org.receiverName"-->
+<!--                           v-for="org in receiverOrgList">-->
+<!--                </el-option>-->
+<!--              </el-select>-->
+<!--            </oms-form-row>-->
+<!--          </el-col>-->
           <el-col :span="6">
             <oms-form-row label="送达时限" :span="4">
               <el-date-picker v-model="deliveryDate" type="daterange" placeholder="请选择">
