@@ -108,7 +108,7 @@ $labelWidth: 220px;
                 </el-radio-group>
               </oms-col>
               <oms-col label="投保金额（元）" :rowSpan="span" :value="1" v-show="carryInfo.insure">
-                <oms-input model="text" v-model="carryInfo.insureAmount" min="0" placeholder="请输入投保金额,最多保留两位小数"
+                <oms-input model="text" v-model="carryInfo.insureAmount" :min="0" :max="99999999.99" placeholder="请输入投保金额,最多保留两位小数"
                            @blur="insureAmountFormat">
                   <template slot="prepend">¥</template>
                 </oms-input>
@@ -340,6 +340,14 @@ export default {
         // 没填写投保金额
         if (item.insure && !item.insureAmount) {
           this.$notify.warning("包含必填项未填写");
+          error = true;
+          break;
+        }
+
+        // 没填写投保金额
+        if (item.insure && item.insureAmount >99999999.99) {
+          this.$notify.warning("投保金额最多99999999.99元");
+          this.carryInfo.insureAmount = 99999999.99;
           error = true;
           break;
         }

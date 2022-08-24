@@ -10,7 +10,7 @@ const proxyTargets = {
   hw: "https://hw-test-tms.cdcerp.cn",  // 华为云环境
   sh: "https://sh-tms.cdcerp.cn",       // sh环境
   lxr: "http://192.168.5.10:8081",      // 先锐本地
-  yj: "http://192.168.5.111:8081",      // 本地
+  yj: "http://localhost:8081",      // 本地
 };
 module.exports = {
   devServer: {

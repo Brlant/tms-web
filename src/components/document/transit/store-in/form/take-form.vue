@@ -61,7 +61,9 @@ $labelWidth: 180px;
               label="订单号"
               :rowSpan="span"
               :value="form.orderNo"
-            />
+            >
+              <div style="word-break: break-all;">{{form.orderNo}}</div>
+            </oms-col>
             <oms-col
               label="运单号"
               :rowSpan="span"
