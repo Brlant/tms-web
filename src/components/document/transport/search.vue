@@ -48,17 +48,17 @@
               </el-select>
             </oms-form-row>
           </el-col>
-          <el-col :span="elColSpan">
-            <oms-form-row label="收货单位" :span="omsRowSpan">
-              <el-select filterable remote placeholder="名称/拼音" :remote-method="filterReceiverOrg"
-                         :clearable="true"
-                         v-model="searchCondition.receiverId" popperClass="good-selects">
-                <el-option :value="org.receiverId" :key="org.receiverId" :label="org.receiverName"
-                           v-for="org in receiverOrgList">
-                </el-option>
-              </el-select>
-            </oms-form-row>
-          </el-col>
+<!--          <el-col :span="elColSpan">-->
+<!--            <oms-form-row label="收货单位" :span="omsRowSpan">-->
+<!--              <el-select filterable remote placeholder="名称/拼音" :remote-method="filterReceiverOrg"-->
+<!--                         :clearable="true"-->
+<!--                         v-model="searchCondition.receiverId" popperClass="good-selects">-->
+<!--                <el-option :value="org.receiverId" :key="org.receiverId" :label="org.receiverName"-->
+<!--                           v-for="org in receiverOrgList">-->
+<!--                </el-option>-->
+<!--              </el-select>-->
+<!--            </oms-form-row>-->
+<!--          </el-col>-->
           <el-col :span="elColSpan">
             <oms-form-row label="承运类型" :span="omsRowSpan">
               <el-select v-model="searchCondition.carryType" placeholder="请选择承运类型" clearable>

@@ -42,7 +42,14 @@ $labelWidth: 180px;
           <div class="content">
             <oms-col label="中转入库单号" :rowSpan="span" :value="form.transferInOrderNo"/>
             <div class=" clearfix"></div>
-            <oms-col label="订单号" :rowSpan="span" :value="form.orderNo"/>
+            <oms-col
+              label="订单号"
+              :rowSpan="span"
+              :value="form.orderNo"
+            >
+              <div style="word-break: break-all;">{{form.orderNo}}</div>
+            </oms-col>
+            <div class=" clearfix"></div>
             <oms-col label="运单号" :rowSpan="span" :value="form.waybillNo"/>
 
             <oms-col label="运单类型" :rowSpan="span" :value="form.waybillType">

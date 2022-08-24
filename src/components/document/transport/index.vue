@@ -372,7 +372,7 @@
               </div>
               <div>
                 <!--<perm label="tms-waybill-sign" class="opera-btn">-->
-                <span @click.stop="deliveryWayBill(item)" v-if="item.status === '2'">
+                <span @click.stop="deliveryWayBill(item)" v-if="item.status === '2' && item.carryType != 1">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-basic"></i>
                       </a>运单送达
