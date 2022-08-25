@@ -135,6 +135,8 @@ export default {
       currentTab: {},
       form: {
         id: 0,
+        outboundWholeBoxCount: '',
+        outboundBulkBoxCount: '',
         inStoreName: '',
         inStoreAreaName: '',
         inStorePointName: '',
@@ -217,6 +219,8 @@ export default {
     getDetails(id) {
       TransferOutOrder.getDetails(id).then(res => {
         this.form = res.data;
+        this.form.outboundWholeBoxCount = res.data.wholeBoxCount;
+        this.form.outboundBulkBoxCount = res.data.bulkBoxCount;
       })
     },
     //   切换
