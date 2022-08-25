@@ -538,17 +538,21 @@ export default {
         this.form.receiverDetailAddr = receiverAddress;
       }
 
-      this.senderOptions = [
-        this.form.senderProvinceCode,
-        this.form.senderCityCode,
-        this.form.senderRegionCode
-      ];
+      if (this.form.senderRegionCode){
+        this.senderOptions = [
+          this.form.senderProvinceCode,
+          this.form.senderCityCode,
+          this.form.senderRegionCode
+        ];
+      }
 
-      this.receiverOptions = [
-        this.form.receiverProvinceCode,
-        this.form.receiverCityCode,
-        this.form.receiverRegionCode
-      ];
+      if (this.form.receiverRegionCode){
+        this.receiverOptions = [
+          this.form.receiverProvinceCode,
+          this.form.receiverCityCode,
+          this.form.receiverRegionCode
+        ];
+      }
     },
 
     remove(item) {
@@ -610,8 +614,7 @@ export default {
             return;
           }
 
-          debugger
-          const none = this.receiverOrgList.findIndex(org=>org.receiverId = this.form.receiverId) == -1;
+          const none = this.receiverOrgList.findIndex(org=>org.receiverId == this.form.receiverId) == -1;
           if (none){
             this.receiverOrgList.push({
               receiverId:this.form.receiverId,
