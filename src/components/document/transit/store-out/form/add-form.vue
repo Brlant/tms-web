@@ -783,9 +783,13 @@ export default {
       }
 
       // 再根据比例和新的数量计算新的重量、体积、价格
-      this.form.outboundGoodsWeight = this.form.goodsWeight / this.boxCount * this.outboundBoxCount;
-      this.form.outboundGoodsVolume = this.form.goodsVolume / this.boxCount * this.outboundBoxCount;
-      this.form.outboundGoodsPrice = this.form.goodsPrice / this.boxCount * this.outboundBoxCount;
+      const outboundGoodsWeight = this.form.goodsWeight / this.boxCount * this.outboundBoxCount;
+      const outboundGoodsVolume = this.form.goodsVolume / this.boxCount * this.outboundBoxCount;
+      const outboundGoodsPrice = this.form.goodsPrice / this.boxCount * this.outboundBoxCount;
+
+      this.form.outboundGoodsWeight = outboundGoodsWeight.toFixed(6);
+      this.form.outboundGoodsVolume = outboundGoodsVolume.toFixed(6);
+      this.form.outboundGoodsPrice = outboundGoodsPrice.toFixed(6);
     }
   },
   filters: {
