@@ -96,7 +96,7 @@ $labelWidth: 180px;
               {{ pageSets[1].name }}</h3>
           </div>
           <div class="content">
-            <oms-col label="库位码" :rowSpan="span" :value="form.storeCode"/>
+            <oms-col label="库位码" :rowSpan="span" :value="form.inStorePointCode"/>
             <div class="hr mb-10 clearfix"></div>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default {
         transferOutStatus: '',
         transferOutStatusName: '',
         createTime: '',
-        storeCode: '',
+        inStorePointCode: '',
         damaged: false,
         actualWholeNum: 0,
         actualBulkNum: 0,
