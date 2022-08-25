@@ -45,9 +45,9 @@
   </search-template>
 </template>
 <script>
-  import {User} from '@/resources';
+import {User} from '@/resources';
 
-  export default {
+export default {
     data: function () {
       return {
         searchCondition: {

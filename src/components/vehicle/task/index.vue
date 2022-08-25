@@ -14,7 +14,7 @@
   <div class="order-page">
     <search-part @search="searchResult" ref="search">
       <template slot="btn">
-        <perm label="tms-task-car-task-cancel">
+        <perm label="tms-task-car-task-receiptCancel">
           <el-button plain size="small" @click="batchCancel" v-if="activeStatus==='0'">
             <f-a class="icon-small" name="forbidden"></f-a>
             批量取消
@@ -92,7 +92,7 @@
           </div>
         </el-col>
       </el-row>
-      <div v-else="" class="order-list-body flex-list-dom">
+      <div v-else class="order-list-body flex-list-dom">
         <div class="order-list-item" v-for="item in dataList" @click="checkItem(item)"
              :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
           <el-row>
@@ -185,7 +185,7 @@
                         <i class="el-icon-t-search"></i>
                       </a>查看
                     </span>
-                  <perm label="tms-task-car-task-cancel" class="opera-btn btn-line-block">
+                  <perm label="tms-task-car-task-receiptCancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelTask(item)" v-if="item.status==='1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
@@ -229,7 +229,7 @@
                       </a>编辑
                     </span>
                   </perm>
-                  <perm label="tms-task-car-task-cancel" class="opera-btn btn-line-block">
+                  <perm label="tms-task-car-task-receiptCancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelTask(item)" v-if="item.status==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
@@ -284,19 +284,19 @@
   </div>
 </template>
 <script>
-  import utils from '@/tools/utils';
-  import SearchPart from './search';
-  import {http, TransportTask} from '@/resources';
-  import showForm from './form/show-form';
-  import adjustmentForm from './form/adjustment-form';
-  import StatusMixin from '@/mixins/statusMixin';
-  import editForm from './form/edit-form';
-  import Perm from '../../common/perm';
-  import TaskMap from './form/map-car-task';
-  import MapMultiple from './form/map-multiple';
-  import moment from 'moment';
+import utils from '@/tools/utils';
+import SearchPart from './search';
+import {http, TransportTask} from '@/resources';
+import showForm from './form/show-form';
+import adjustmentForm from './form/adjustment-form';
+import StatusMixin from '@/mixins/statusMixin';
+import editForm from './form/edit-form';
+import Perm from '../../common/perm';
+import TaskMap from './form/map-car-task';
+import MapMultiple from './form/map-multiple';
+import moment from 'moment';
 
-  export default {
+export default {
     components: {
       Perm,
       SearchPart,
@@ -843,4 +843,3 @@
     }
   };
 </script>
-

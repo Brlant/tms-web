@@ -186,11 +186,11 @@
   </div>
 </template>
 <script>
-  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TmsOrder} from '@/resources';
-  import MapPath from '../../common/map-list-new';
+import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+import {TmsOrder} from '@/resources';
+import MapPath from '../../common/map-list-new';
 
-  export default {
+export default {
     components: {TwoColumn, MapPath},
     data () {
       return {
@@ -244,31 +244,7 @@
     },
     methods: {
       createWayBill: function () {
-        this.$confirm('确认生成运单?', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.doing = true;
-          TmsOrder.createWayBill({orderIdList: this.orderIdList}).then(() => {
-            this.$notify.success({
-              duration: 2000,
-              title: '成功',
-              message: '已成功生成运单'
-            });
-            this.doing = false;
-            this.$emit('change', this.orderIdList);
-            this.$emit('right-close');
-          }).catch(error => {
-            this.$notify.error({
-              duration: 2000,
-              message: error.response && error.response.data && error.response.data.msg || '生成运单失败'
-            });
-            this.doing = false;
-          });
-        }).catch(() => {
-
-        });
+        this.$emit('wayBillShow');
       },
       showOrder: function (item, index) {
         if (item.id) {

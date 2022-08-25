@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
 
 
   .el-form .el-select {
@@ -179,12 +179,12 @@
 
 </template>
 <script>
-  import {Department, User} from '../../../resources';
-  import editForm from './form/form.vue';
-  import departmentForm from './form/department.vue';
-  import bgBox from '../../common/bgbox.vue';
+import {Department, User} from '../../../resources';
+import editForm from './form/form.vue';
+import departmentForm from './form/department.vue';
+import bgBox from '../../common/bgbox.vue';
 
-  export default {
+export default {
     components: {
       editForm, bgBox, departmentForm
     },

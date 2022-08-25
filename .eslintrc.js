@@ -18,7 +18,8 @@ module.exports = {
     'indent': 0,
     'no-unused-vars': 0,
     'no-useless-escape': 0,
-    'no-empty': 0
+    'no-empty': 0,
+    'no-mixed-spaces-and-tabs':0
   },
   parserOptions: {
     parser: 'babel-eslint'

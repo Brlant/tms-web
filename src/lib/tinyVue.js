@@ -45,7 +45,6 @@ import Loading from 'element-ui/lib/loading';
 import Icon from 'element-ui/lib/icon';
 import Row from 'element-ui/lib/row';
 import Col from 'element-ui/lib/col';
-// import Upload from 'element-ui/lib/upload';
 import Progress from 'element-ui/lib/progress';
 import Spinner from 'element-ui/lib/spinner';
 import Message from 'element-ui/lib/message';
@@ -99,12 +98,12 @@ import ElForm from '../components/common/form/src/form.vue';
 import DialogTemplate from '@/components/common/dialog-template';
 import SearchTemplate from '@/components/common/search-template';
 
-import {
-  Pagination
-} from 'element-ui';
+import {Descriptions, DescriptionsItem, Link, Pagination} from 'element-ui';
+import ELUpload from 'element-ui/lib/upload'
 
 const tinyVue = [
   Pagination,
+  Descriptions,DescriptionsItem,
   CuPagination,
   Dialog,
   Autocomplete,
@@ -194,7 +193,9 @@ const tinyVue = [
   DialogTemplate,
   SearchTemplate,
   Scrollbar,
-  compressedImg
+  compressedImg,
+  Link,
+  ELUpload
 ];
 
 const install = function (Vue, opts = {}) {

@@ -23,9 +23,9 @@
   </el-form>
 </template>
 <script>
-  import {Department} from '@/resources';
+import {Department} from '@/resources';
 
-  export default {
+export default {
     data: function () {
       let checkEmail = (rule, value, callback) => {
         if (value === '') {

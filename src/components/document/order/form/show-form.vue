@@ -1,27 +1,29 @@
 <style lang="scss" scoped>
-  $labelWidth: 180px;
-  .content-part {
-    .content-left {
-      width: $labelWidth;
-    }
-    .content-right {
-      > h3 {
-        left: $labelWidth;
-      }
+$labelWidth: 180px;
+.content-part {
+  .content-left {
+    width: $labelWidth;
+  }
+
+  .content-right {
+    > h3 {
       left: $labelWidth;
     }
-  }
 
-  .part-hj-box {
-    border: 1px solid #eee;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
+    left: $labelWidth;
   }
+}
 
-  .el-form-item {
-    margin-bottom: 0px;
-  }
+.part-hj-box {
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.el-form-item {
+  margin-bottom: 0px;
+}
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
@@ -35,12 +37,12 @@
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
-              {{pageSets[0].name}}</h3>
+              {{ pageSets[0].name }}</h3>
           </div>
           <div class="content">
             <oms-col label="订单号" :rowSpan="span" :value="form.orderNo"/>
             <oms-col label="订单状态" :rowSpan="span" :value="form.status">
-              {{formatStatusTitle(form.status, orderType)}}
+              {{ formatStatusTitle(form.status, orderType) }}
             </oms-col>
             <oms-col label="订单类型" :rowSpan="span" :value="form.waybillType">
               <dict :dict-group="'bizType'" :dict-key="form.waybillType"></dict>
@@ -54,11 +56,11 @@
             <oms-col label="委托单号" :rowSpan="span" :value="form.tmsOrderNumber"/>
             <oms-col label="创建人" :rowSpan="span" :value="form.creatorName"/>
             <oms-col label="创建时间" :rowSpan="span" :value="form.createTime">
-              {{form.createTime|time}}
+              {{ form.createTime|time }}
             </oms-col>
             <oms-col label="修改人" :rowSpan="span" :value="form.updateName"/>
             <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime">
-              {{form.updateTime|time}}
+              {{ form.updateTime|time }}
             </oms-col>
             <oms-col label="面单号" :rowSpan="span" :value="form.faceSheetNo">
             </oms-col>
@@ -69,7 +71,7 @@
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
-              {{pageSets[1].name}}</h3>
+              {{ pageSets[1].name }}</h3>
           </div>
           <div class="content">
             <oms-col label="货主" :rowSpan="span" :value="form.orgName"/>
@@ -84,7 +86,7 @@
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
-              {{pageSets[2].name}}</h3>
+              {{ pageSets[2].name }}</h3>
           </div>
           <div class="content">
             <oms-col label="收货联系人" :rowSpan="span" :value="form.receiverContact"/>
@@ -98,25 +100,25 @@
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">
-              {{pageSets[3].name}}</h3>
+              {{ pageSets[3].name }}</h3>
           </div>
           <div class="content">
             <oms-col label="整装箱数" :rowSpan="span" :value="form.wholeBoxCount" isShow="true"/>
             <oms-col label="散装箱数" :rowSpan="span" :value="form.bulkBoxCount" isShow="true"/>
             <!--<oms-col label="包件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>-->
             <oms-col label="声明价格" :rowSpan="span" :value="form.goodsPrice" isShow="true">
-              <span v-if="form.goodsPrice">¥</span> {{form.goodsPrice}}
+              <span v-if="form.goodsPrice">¥</span> {{ form.goodsPrice }}
             </oms-col>
             <oms-col label="重量" :rowSpan="span" :value="form.goodsWeight" isShow="true">
-              {{form.goodsWeight}} <span v-if="form.goodsWeight">kg</span>
+              {{ form.goodsWeight }} <span v-if="form.goodsWeight">kg</span>
             </oms-col>
             <oms-col label="体积" :rowSpan="span" :value="form.goodsVolume" isShow="true">
-              {{form.goodsVolume}} <span v-if="form.goodsVolume">m³</span>
+              {{ form.goodsVolume }} <span v-if="form.goodsVolume">m³</span>
             </oms-col>
             <el-col :span="24">
               <div>
                 <oms-row label="货品名称" :span="4">
-                  <slot>{{form.goodsTotalName}}</slot>
+                  <slot>{{ form.goodsTotalName }}</slot>
                 </oms-row>
               </div>
             </el-col>
@@ -127,11 +129,11 @@
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">
-              {{pageSets[4].name}}</h3>
+              {{ pageSets[4].name }}</h3>
           </div>
           <div class="content">
-            <oms-col label="提货时间" :rowSpan="span" :value="form.pickUpTime">{{form.pickUpTime|date}}</oms-col>
-            <oms-col label="送达时限" :rowSpan="span" :value="form.deliveryTime">{{form.deliveryTime|date}}</oms-col>
+            <oms-col label="提货时间" :rowSpan="span" :value="form.pickUpTime">{{ form.pickUpTime|date }}</oms-col>
+            <oms-col label="送达时限" :rowSpan="span" :value="form.deliveryTime">{{ form.deliveryTime|date }}</oms-col>
             <oms-col :rowSpan="span" :value="form.provenance | formatAddress" label="始发地"/>
             <oms-col :rowSpan="span" :value="form.destination | formatAddress" label="目的地"/>
             <oms-col label="备注" :rowSpan="span" :value="form.remark"/>
@@ -142,7 +144,7 @@
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[5].key === currentTab.key}">
-              {{pageSets[5].name}}</h3>
+              {{ pageSets[5].name }}</h3>
           </div>
           <div class="content">
             <el-table class="border-black" :data="form.goodsList" border style="width: 100%">
@@ -168,16 +170,16 @@
               </el-table-column>
               <el-table-column prop="goodsCount" label="数量" width="60">
                 <template slot-scope="scope">
-                  {{scope.row.goodsCount}}
+                  {{ scope.row.goodsCount }}
                 </template>
               </el-table-column>
               <el-table-column prop="weight" label="重量/体积" width="120">
                 <template slot-scope="scope">
                   <div>
-                    {{scope.row.weight}} kg
+                    {{ scope.row.weight }} kg
                   </div>
                   <div>
-                    {{scope.row.volume}} m³
+                    {{ scope.row.volume }} m³
                   </div>
                 </template>
               </el-table-column>
@@ -190,7 +192,7 @@
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[6].key === currentTab.key}">
-              {{pageSets[6].name}}</h3>
+              {{ pageSets[6].name }}</h3>
           </div>
           <div class="content">
             <map-path :formItem="formItem" :showBigMap="showBigMap"></map-path>
@@ -200,7 +202,7 @@
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[7].key === currentTab.key}">
-              {{pageSets[7].name}}</h3>
+              {{ pageSets[7].name }}</h3>
           </div>
           <div class="content">
             <div v-if="loadingLog">
@@ -218,18 +220,18 @@
                 <template v-for="(log,index) in orderLogList">
                   <TimelineItem color="green" v-if="log.showDate">
                     <i class="iconfont icon-home" slot="dot"></i>
-                    <h3><span>{{log.dateWeek}}</span></h3>
+                    <h3><span>{{ log.dateWeek }}</span></h3>
                   </TimelineItem>
                   <TimelineItem color="grey">
                     <el-row class="tiny-timeline-content">
                       <el-col :span="4">
-                        <div>{{log.time}}</div>
+                        <div>{{ log.time }}</div>
                       </el-col>
-                      <el-col :span="18"><strong>{{log.title}}</strong>
+                      <el-col :span="18"><strong>{{ log.title }}</strong>
                         <el-tooltip class="item" effect="dark"
                                     :content="log.operatorOrgName ? log.operatorOrgName : '平台用户' "
                                     placement="right" v-show="log.operatorName">
-                          <span class="font-gray">[{{log.operatorName}}]</span>
+                          <span class="font-gray">[{{ log.operatorName }}]</span>
                         </el-tooltip>
                       </el-col>
                     </el-row>
@@ -248,117 +250,117 @@
   </dialog-template>
 </template>
 <script>
-  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-  import {TmsLog, TmsOrder} from '@/resources';
-  import MapPath from '../../common/map-list';
-  import utils from '@/tools/utils';
-  import OmsCostTime from '@/components/common/timeCost.vue';
+import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+import {TmsLog, TmsOrder} from '@/resources';
+import MapPath from '../../common/map-list';
+import utils from '@/tools/utils';
+import OmsCostTime from '@/components/common/timeCost.vue';
 
-  export default {
-    components: {TwoColumn, MapPath, OmsCostTime},
-    data () {
-      return {
-        span: 7,
-        list: [],
-        times: [],
-        orderType: utils.orderType,
-        pageSets: [
-          {name: '基本信息', key: 0},
-          {name: '发货信息', key: 1},
-          {name: '收货信息', key: 2},
-          {name: '货品信息', key: 3},
-          {name: '其他信息', key: 4},
-          {name: '货品列表', key: 5},
-          {name: '派送信息', key: 6},
-          {name: '操作日志', key: 7}
-        ],
-        orderLogList: [],
-        loadingLog: false,
-        currentTab: {},
-        form: {
-          goodsList: [
-            {
-              goodsName: '',
-              specifications: '',
-              weight: '',
-              volume: '',
-              code: ''
-            }
-          ]
-        },
-        rules: {}
-      };
-    },
-    computed: {},
-    props: ['formItem', 'showBigMap'],
-    watch: {
-      formItem: function (val) {
-        if (val.id) {
-          TmsOrder.getOneTmsOrder(val.id).then(res => {
-            this.form = res.data;
-            // 查询日志信息
-            this.queryLog(val.id);
-          });
-        }
-      }
-    },
-    methods: {
-      formatGoodsPackage: function (item) {
-        if (item) {
-          return '包装：' + item.goodsLength + 'cm' + ' x ' + item.goodsWidth + 'cm' + ' x ' + item.goodsHeight + 'cm';
-        }
-      },
-      queryLog: function (id) {
-        if (!id) return;
-        this.loadingLog = true;
-        let params = Object.assign({}, {
-          pageNo: 1,
-          pageSize: 100,
-          objId: id,
-          objType: 'tms-order'
-        });
-        TmsLog.queryLog(params).then(res => {
-          let dateArr = [];
-          res.data.list.forEach(item => {
-            let time = this.$moment(item.time);// .format('YYYY年MM月DD日/dddd');
-            item.dateWeek = time.format('YYYY年MM月DD日 dddd');
-            item.time = time.format('HH:mm:ss');
-            if (dateArr.includes(item.dateWeek)) {
-              item.showDate = false;
-            } else {
-              dateArr.push(item.dateWeek);
-              item.showDate = true;
-            }
-          });
-          this.orderLogList = res.data.list;
-          this.loadingLog = false;
-        }).catch(error => {
-          this.loadingLog = false;
-        });
-      },
-      formatStatusTitle (status, statusType) {
-        let title = '';
-        Object.keys(statusType).forEach(k => {
-          if (status === null) {
-            if (statusType[k].status === status) {
-              title = statusType[k].title;
-            }
-          } else {
-            let s1 = Number(statusType[k].status);
-            let s2 = Number(status);
-            if (s1 === s2) {
-              title = statusType[k].title;
-            }
+export default {
+  components: {TwoColumn, MapPath, OmsCostTime},
+  data() {
+    return {
+      span: 7,
+      list: [],
+      times: [],
+      orderType: utils.orderType,
+      pageSets: [
+        {name: '基本信息', key: 0},
+        {name: '发货信息', key: 1},
+        {name: '收货信息', key: 2},
+        {name: '货品信息', key: 3},
+        {name: '其他信息', key: 4},
+        {name: '货品列表', key: 5},
+        {name: '派送信息', key: 6},
+        {name: '操作日志', key: 7}
+      ],
+      orderLogList: [],
+      loadingLog: false,
+      currentTab: {},
+      form: {
+        goodsList: [
+          {
+            goodsName: '',
+            specifications: '',
+            weight: '',
+            volume: '',
+            code: ''
           }
+        ]
+      },
+      rules: {}
+    };
+  },
+  computed: {},
+  props: ['formItem', 'showBigMap'],
+  watch: {
+    formItem: function (val) {
+      if (val.id) {
+        TmsOrder.getOneTmsOrder(val.id).then(res => {
+          this.form = res.data;
+          // 查询日志信息
+          this.queryLog(val.id);
         });
-        return title;
-      },
-      selectTab (item) {
-        this.currentTab = item;
-      },
-      close () {
-        this.$emit('right-close');
       }
     }
-  };
+  },
+  methods: {
+    formatGoodsPackage: function (item) {
+      if (item) {
+        return '包装：' + item.goodsLength + 'cm' + ' x ' + item.goodsWidth + 'cm' + ' x ' + item.goodsHeight + 'cm';
+      }
+    },
+    queryLog: function (id) {
+      if (!id) return;
+      this.loadingLog = true;
+      let params = Object.assign({}, {
+        pageNo: 1,
+        pageSize: 100,
+        objId: id,
+        objType: 'tms-order'
+      });
+      TmsLog.queryLog(params).then(res => {
+        let dateArr = [];
+        res.data.list.forEach(item => {
+          let time = this.$moment(item.time);// .format('YYYY年MM月DD日/dddd');
+          item.dateWeek = time.format('YYYY年MM月DD日 dddd');
+          item.time = time.format('HH:mm:ss');
+          if (dateArr.includes(item.dateWeek)) {
+            item.showDate = false;
+          } else {
+            dateArr.push(item.dateWeek);
+            item.showDate = true;
+          }
+        });
+        this.orderLogList = res.data.list;
+        this.loadingLog = false;
+      }).catch(error => {
+        this.loadingLog = false;
+      });
+    },
+    formatStatusTitle(status, statusType) {
+      let title = '';
+      Object.keys(statusType).forEach(k => {
+        if (status === null) {
+          if (statusType[k].status === status) {
+            title = statusType[k].title;
+          }
+        } else {
+          let s1 = Number(statusType[k].status);
+          let s2 = Number(status);
+          if (s1 === s2) {
+            title = statusType[k].title;
+          }
+        }
+      });
+      return title;
+    },
+    selectTab(item) {
+      this.currentTab = item;
+    },
+    close() {
+      this.$emit('right-close');
+    }
+  }
+};
 </script>

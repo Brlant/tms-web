@@ -26,9 +26,9 @@
   </div>
 </template>
 <script>
-  import MapMixin from '@/mixins/mapMixin';
+import MapMixin from '@/mixins/mapMixin';
 
-  export default {
+export default {
     props: {
       waybillList: {
         type: Array,

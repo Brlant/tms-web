@@ -30,11 +30,11 @@
   </div>
 </template>
 <script>
-  import AsyncValidator from 'async-validator';
-  import emitter from 'element-ui/lib/mixins/emitter';
-  import {getPropByPath, noop} from 'element-ui/lib/utils/util';
+import AsyncValidator from 'async-validator';
+import emitter from 'element-ui/lib/mixins/emitter';
+import {getPropByPath, noop} from 'element-ui/lib/utils/util';
 
-  export default {
+export default {
     name: 'ElFormItem',
 
     componentName: 'ElFormItem',

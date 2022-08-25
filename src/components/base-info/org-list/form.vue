@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../../assets/scss/mixins";
 
   $leftWidth: 200px;
@@ -260,7 +260,7 @@
                        v-model="form.remarks"></oms-input>
           </el-form-item>
           <!--<el-form-item label-width="140px">-->
-          <!--<el-button type="primary" @click="onSubmit('baseform')" native-type="submit">保存</el-button>-->
+          <!--<el-button type="primary" @click="onSubmit('baseform')" native-type="rightChangeHandle">保存</el-button>-->
           <!--<el-button @click="doClose">取消</el-button>-->
           <!--</el-form-item>-->
         </el-form>
@@ -270,13 +270,13 @@
 </template>
 
 <script>
-  /* eslint-disable object-shorthand */
-  import {BaseInfo, plateNumber, User} from '@/resources';
-  import utils from '@/tools/utils';
-  import omsUploadPicture from '@/components/common/upload/upload.picture.vue';
-  import axios from 'axios';
+/* eslint-disable object-shorthand */
+import {BaseInfo, plateNumber, User} from '@/resources';
+import utils from '@/tools/utils';
+import omsUploadPicture from '@/components/common/upload/upload.picture.vue';
+import axios from 'axios';
 
-  export default {
+export default {
     components: {
       omsUploadPicture
     },

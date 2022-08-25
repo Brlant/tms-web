@@ -13,10 +13,10 @@
   </div>
 </template>
 <script>
-  import {AMapManager} from 'vue-amap';
-  import CarImg from '@/assets/img/car.png';
+import {AMapManager} from 'vue-amap';
+import CarImg from '@/assets/img/car.png';
 
-  export default {
+export default {
     props: ['formItem'],
     data () {
       return {

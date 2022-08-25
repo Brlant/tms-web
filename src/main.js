@@ -15,6 +15,8 @@ import utils from './tools/utils';
 import * as Sentry from '@sentry/browser';
 import * as Integrations from '@sentry/integrations';
 
+// import './mock'
+
 init(Vue);
 Vue.use(require('vue-moment'), {moment});
 Vue.use(tinyVue);
@@ -113,4 +115,8 @@ Vue.prototype.$scrollLoadingData = function (event) {
 
 Vue.prototype.$formatAryTime = function (ary, index, str = 'YYYY-MM-DD HH:mm:ss') {
   return Array.isArray(ary) && ary[index] ? this.$moment(ary[index]).format(str) : '';
+};
+
+Vue.prototype.$formatPhotoUrl = function (item) {
+  return item.orgGoodsDto.photoUrl || item.orgGoodsDto.goodsDto.photo;
 };

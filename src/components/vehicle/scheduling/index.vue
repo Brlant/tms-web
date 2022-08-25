@@ -73,11 +73,11 @@
   </div>
 </template>
 <script>
-  import SearchPart from './search';
-  import {TransportTask} from '@/resources';
-  import StatusMixin from '@/mixins/statusMixin';
+import SearchPart from './search';
+import {TransportTask} from '@/resources';
+import StatusMixin from '@/mixins/statusMixin';
 
-  export default {
+export default {
     components: {
       SearchPart
     },
@@ -174,4 +174,3 @@
     }
   };
 </script>
-

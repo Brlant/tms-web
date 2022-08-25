@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../../assets/scss/mixins";
 
   .d-table {
@@ -284,15 +284,15 @@
   </div>
 </template>
 <script>
-  import SearchPart from './search';
-  import Icon from '@/assets/img/marker.png';
-  import IconActive from '@/assets/img/marker_active.png';
-  import {TransportTask} from '@/resources';
-  import deliveryForm from './delivery-form';
-  import utils from '@/tools/utils';
-  import batchAutoForm from '@/components/document/transport/form/auto-form';
+import SearchPart from './search';
+import Icon from '@/assets/img/marker.png';
+import IconActive from '@/assets/img/marker_active.png';
+import {TransportTask} from '@/resources';
+import deliveryForm from './delivery-form';
+import utils from '@/tools/utils';
+import batchAutoForm from '@/components/document/transport/form/auto-form';
 
-  export default {
+export default {
     components: {
       SearchPart
     },

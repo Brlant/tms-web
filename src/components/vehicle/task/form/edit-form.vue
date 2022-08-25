@@ -190,10 +190,10 @@
   </dialog-template>
 </template>
 <script>
-  import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
-  import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
+import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
+import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
 
-  export default {
+export default {
     components: {TwoColumn},
     data() {
       return {

@@ -79,36 +79,75 @@ export const routes = [
             path: '/document/transport/:id',
             component: () => import('./components/document/transport/index.vue'),
             meta: {moduleId: 'document', title: '运单管理', perm: 'tms-waybill-query'}
+          },
+          {
+            path: '/transit/store-in',
+            component: () => import('./components/document/transit/store-in/TransitStoreIn.vue'),
+            meta: {moduleId: 'document', title: '中转入库', perm: 'tms-transfer-in'}
+          },
+          {
+            path: '/transit/store-out',
+            component: () => import('./components/document/transit/store-out/TransitStoreOut.vue'),
+            meta: {moduleId: 'document', title: '中转出库', perm: 'tms-transfer-out'}
+          },
+        ]
+      },
+      {
+        path: '/base-info',
+        component: () => import('./components/base-info/index.vue'),
+        meta: {moduleId: 'base-info', title: '基础信息', icon: 'basic', perm: 'tms-base-info'},
+        children: [
+          {
+            path: '/base-info/org-list',
+            component: () => import('./components/base-info/org-list/list.vue'),
+            meta: {moduleId: 'base-info', title: '业务单位', perm: 'tms-business-unit-query'}
+          },
+          {
+            path: '/base-info/car-archives',
+            component: () => import('./components/base-info/car-archives/index.vue'),
+            meta: {moduleId: 'base-info', title: '车辆档案', perm: 'tms-car-archives-watch'}
+          },
+          {
+            path: '/base-info/packaging-consumables',
+            component: () => import('./components/base-info/dev/index.vue'),
+            meta: {moduleId: 'base-info', title: '包装耗材', perm: 'tms-car-archives-watch'},
+            children: []
+          },
+          {
+            path: '/base-info/goods-area',
+            component: () => import('./components/base-info/goods-area/list.vue'),
+            meta: {moduleId: 'base-info', title: '集货区管理', perm: 'tms-goods-area-query'},
+            children: []
+          },
+          {
+            path: '/base-info/carrier',
+            component: () => import('./components/base-info/carrier/CarrierList.vue'),
+            meta: {moduleId: 'base-info', title: '第三方承运商管理', perm: 'tms-carrier-query'},
+            children: []
+          },
+          {
+            path: '/base-info/storage-bin',
+            component: () => import('./components/base-info/storage-bin/list.vue'),
+            meta: {moduleId: 'base-info', title: '仓位档案', perm: 'tms-storage-bin-query'},
+            children: []
           }
         ]
       },
       {
-        path: '/baseInfo',
-        component: () => import('./components/base-info/index.vue'),
-        meta: {moduleId: 'baseInfo', title: '基础信息', icon: 'basic', perm: 'tms-base-info'},
+        path: '/stock-manager',
+        component: () => import('./components/common/parent-route.vue'),
+        meta: {moduleId: 'stock-manager', title: '库存管理', icon: 'basic', perm: 'tms-stock-manager'},
         children: [
           {
-            path: '/baseInfo/org-list',
-            component: () => import('./components/base-info/org-list/list.vue'),
-            meta: {moduleId: 'baseInfo', title: '业务单位', perm: 'tms-business-unit-query'}
+            path: '/stock-manager/stock',
+            component: () => import('./components/stock-manager/StockManager'),
+            meta: {moduleId: 'stock-manager', title: '库存管理', perm: 'tms-business-unit-query'}
           },
           {
-            path: '/baseInfo/car-archives',
-            component: () => import('./components/base-info/car-archives/index.vue'),
-            meta: {moduleId: 'baseInfo', title: '车辆档案', perm: 'tms-car-archives-watch'}
+            path: '/stock-manager/store',
+            component: () => import('./components/stock-manager/StoreStock'),
+            meta: {moduleId: 'stock-manager', title: '库位库存', perm: 'tms-business-unit-query'}
           },
-          {
-            path: '/baseInfo/packaging-consumables',
-            component: () => import('./components/base-info/dev/index.vue'),
-            meta: {moduleId: 'baseInfo', title: '包装耗材', perm: 'tms-car-archives-watch'},
-            children: []
-          },
-          {
-            path: '/baseInfo/goods-area',
-            component: () => import('./components/base-info/goods-area/list.vue'),
-            meta: {moduleId: 'baseInfo', title: '集货区管理', perm: 'tms-goods-area-query'},
-            children: []
-          }
         ]
       },
       {

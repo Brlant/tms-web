@@ -40,10 +40,9 @@
   </el-form>
 </template>
 <script>
-  import {DevDetail, DevStore} from '@/resources';
-  //  import utils from '../../../tools/utils';
+import {DevDetail, DevStore} from '@/resources';
 
-  export default {
+export default {
     data: function () {
       return {
         rules: {

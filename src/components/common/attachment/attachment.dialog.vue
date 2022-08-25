@@ -161,10 +161,10 @@
   </el-dialog>
 </template>
 <script>
-  import {http} from '@/resources';
-  import utils from '@/tools/utils';
+import {http} from '@/resources';
+import utils from '@/tools/utils';
 
-  export default {
+export default {
     data() {
       return {
         dialogVisible: false,

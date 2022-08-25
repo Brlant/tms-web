@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../assets/scss/mixins";
 
   body {
@@ -53,7 +53,7 @@
           </el-form-item>
 
           <el-form-item label-width="80px">
-            <el-button type="warning" @click="done" style="display:block;width:100%;" native-type="submit">
+            <el-button type="warning" @click="done" style="display:block;width:100%;" native-type="rightChangeHandle">
               {{btnString}}
             </el-button>
 
@@ -65,9 +65,9 @@
 </template>
 
 <script>
-  import {http} from '@/resources';
+import {http} from '@/resources';
 
-  export default {
+export default {
     name: 'resetpwd',
     data: function () {
       let checkPasswd = (rule, value, callback) => {

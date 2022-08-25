@@ -28,11 +28,11 @@
 </template>
 
 <script>
-  import {http, OmsAttachment} from '@/resources';
-  import UploadList from './upload.file.list.vue';
-  import OmsElUpload from './upload/src/index.vue';
+import {OmsAttachment} from '@/resources';
+import UploadList from './upload.file.list.vue';
+import OmsElUpload from './upload/src/index.vue';
 
-  export default {
+export default {
     name: 'omsUpload',
     components: {
       OmsElUpload,

@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   .el-form .el-select {
     display: block;
   }
@@ -30,7 +30,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label-width="100px">
-        <el-button type="primary" @click="onSubmit('accountform')" native-type="submit" :disabled="doing">保存</el-button>
+        <el-button type="primary" @click="onSubmit('accountform')" native-type="rightChangeHandle" :disabled="doing">保存</el-button>
         <el-button @click="doClose">取消</el-button>
       </el-form-item>
     </el-form>
@@ -38,9 +38,9 @@
 </template>
 
 <script>
-  import {Access, Department, User} from '@/resources';
+import {Access, Department, User} from '@/resources';
 
-  export default {
+export default {
     name: 'editForm',
     props: {
       formItem: {

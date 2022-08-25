@@ -200,10 +200,10 @@
   </dialog-template>
 </template>
 <script>
-  import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
-  import utils from '@/tools/utils';
+import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
+import utils from '@/tools/utils';
 
-  export default {
+export default {
     data () {
       return {
         rules: {
