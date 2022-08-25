@@ -17,8 +17,8 @@
             </oms-form-row>
           </el-col>
           <el-col :span="elColSpan">
-            <oms-form-row label="中转入库单号" :span="omsRowSpan">
-              <oms-input v-model="searchCondition.transferOutOrderNo" placeholder="请输入中转入库单号"
+            <oms-form-row label="中转出库单号" :span="omsRowSpan">
+              <oms-input v-model="searchCondition.transferOutOrderNo" placeholder="请输入中转出库单号"
                          @keyup.native.enter="search"></oms-input>
             </oms-form-row>
           </el-col>
