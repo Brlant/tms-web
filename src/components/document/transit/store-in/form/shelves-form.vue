@@ -73,7 +73,7 @@ $labelWidth: 180px;
             <oms-col label="散装箱数" :rowSpan="span" :value="form.bulkBoxCount"/>
             <oms-col label="实收整装箱数" :rowSpan="span" :value="form.actualWholeNum"/>
             <oms-col label="实收散装箱数" :rowSpan="span" :value="form.actualBulkNum"/>
-            <oms-col label="破损散装箱数" :rowSpan="span" :value="form.damagedWholeNum"/>
+            <oms-col label="破损整装箱数" :rowSpan="span" :value="form.damagedWholeNum"/>
             <oms-col label="破损散装箱数" :rowSpan="span" :value="form.damagedBulkNum"/>
             <div class="mb-10 clearfix"></div>
             <el-row>
