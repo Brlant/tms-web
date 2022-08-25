@@ -25,15 +25,15 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="收货单位" prop="receiverId">
-          <el-select filterable remote placeholder="名称/拼音" :remote-method="filterReceiverOrg"
-                     :clearable="true"
-                     v-model="searchForm.receiverId" popperClass="good-selects">
-            <el-option :value="org.receiverId" :key="org.receiverId" :label="org.receiverName"
-                       v-for="org in receiverOrgList">
-            </el-option>
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="收货单位" prop="receiverId">-->
+<!--          <el-select filterable remote placeholder="名称/拼音" :remote-method="filterReceiverOrg"-->
+<!--                     :clearable="true"-->
+<!--                     v-model="searchForm.receiverId" popperClass="good-selects">-->
+<!--            <el-option :value="org.receiverId" :key="org.receiverId" :label="org.receiverName"-->
+<!--                       v-for="org in receiverOrgList">-->
+<!--            </el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item label="货品名称" prop="goodsTotalName">
           <el-input v-model="searchForm.goodsTotalName" placeholder="请输入货品名称" clearable></el-input>
         </el-form-item>

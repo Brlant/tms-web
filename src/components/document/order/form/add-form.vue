@@ -487,6 +487,7 @@ export default {
         return '';
       }
 
+      // debugger;
       const pathLabels = nodes[0].pathLabels;
       return pathLabels.join('') + this.form.senderDetailAddr;
     },
@@ -552,6 +553,8 @@ export default {
         if (val.id) {
           TmsOrder.getOneTmsOrder(val.id).then(res => {
             this.form = res.data;
+            this.form.provenance = utils.formatAddress(...this.form.provenance.split('/'));
+            this.form.destination = utils.formatAddress(...this.form.destination.split('/'));
             this.filterCustomer(this.form.orgName);
             this.filterSenderOrg(this.form.senderName);
             this.filterReceiverOrg(this.form.receiverName);
@@ -611,17 +614,22 @@ export default {
         this.form.receiverDetailAddr = receiverAddress;
       }
 
-      this.senderOptions = [
-        this.form.senderProvinceCode,
-        this.form.senderCityCode,
-        this.form.senderRegionCode
-      ];
+      if (this.form.senderRegionCode) {
+        this.senderOptions = [
+          this.form.senderProvinceCode,
+          this.form.senderCityCode,
+          this.form.senderRegionCode
+        ];
+      }
 
-      this.receiverOptions = [
-        this.form.receiverProvinceCode,
-        this.form.receiverCityCode,
-        this.form.receiverRegionCode
-      ];
+      if (this.form.receiverRegionCode) {
+        this.receiverOptions = [
+          this.form.receiverProvinceCode,
+          this.form.receiverCityCode,
+          this.form.receiverRegionCode
+        ];
+      }
+
     },
 
     remove(item) {
@@ -684,12 +692,11 @@ export default {
           }
 
 
-          const none = this.receiverOrgList.findIndex(org=>org.receiverId = this.form.receiverId) == -1;
-          if (none){
-            debugger
+          const none = this.receiverOrgList.findIndex(org => org.receiverId == this.form.receiverId) == -1;
+          if (none) {
             this.receiverOrgList.push({
-              receiverId:this.form.receiverId,
-              receiverName:this.form.receiverName,
+              receiverId: this.form.receiverId,
+              receiverName: this.form.receiverName,
             })
           }
         })
