@@ -35,8 +35,8 @@
           </div>
           <div class="content">
             <el-form-item label="拆分数量">
-              <oms-input type="number" v-model.number="splitCount" min="0" placeholder="请输入拆分运单数量"
-                         @change="setSplitCount"></oms-input>
+              <el-input type="number" v-model.number="splitCount" min="0" :max="form.goodsList.length" placeholder="请输入拆分运单数量"
+                         @change="setSplitCount"></el-input>
             </el-form-item>
           </div>
           <div class="hr mb-10"></div>
@@ -115,9 +115,14 @@ export default {
     },
     methods: {
       setSplitCount: function () {
-        let index = this.splitCount;
+        let goodsLength = this.form.goodsList.length;
+        if (goodsLength < this.splitCount){
+          this.splitCount = goodsLength;
+          this.$notify.warning(`该订单最多只能拆成${goodsLength}个运单`);
+        }
+
         this.splitList = [];
-        for (let i = 0; i < index; i++) {
+        for (let i = 0; i < goodsLength; i++) {
           let count = i + 1;
           this.splitList.push({name: '运单' + count, value: count});
         }
@@ -136,8 +141,16 @@ export default {
         }
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
+
             // 处理货品列表
             if (this.form.goodsList) {
+              let goodsLength = this.form.goodsList.length;
+              if (goodsLength < this.splitCount){
+                this.splitCount = goodsLength;
+                this.$notify.warning(`该订单最多只能拆成${goodsLength}个运单`);
+                return;
+              }
+
               let goodsList = [];
               this.form.goodsList.forEach(val => {
                 if (val.goodsName !== '' || val.specifications !== '' || val.weight !== '' || val.volume !== '' || val.code !== '') {
