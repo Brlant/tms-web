@@ -396,7 +396,7 @@ export default [
             'leaf': true
           },
           {
-            'id': 'tms-order-receiptCancel',
+            'id': 'tms-order-cancel',
             'parentId': 'tms-order-manager',
             'label': '取消订单',
             'sort': null,
