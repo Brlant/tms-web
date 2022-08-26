@@ -170,7 +170,7 @@
                   </perm>
                 </div>
                 <div style="padding-top: 2px">
-                  <perm label="tms-order-receiptCancel" class="opera-btn btn-line-block">
+                  <perm label="tms-order-cancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelOrder(item)" v-if="activeStatus==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
