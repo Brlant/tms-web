@@ -249,7 +249,7 @@
             </el-col>
             <el-col :span="1" class="R">
               <div>
-                {{ item.preIncubatorCount }}
+                {{item.preIncubatorCount}}
               </div>
             </el-col>
             <el-col :span="1" class="R">
@@ -484,6 +484,20 @@
   </div>
 </template>
 <script>
+import utils from '@/tools/utils';
+import SearchPart from './search';
+import {http, TmsWayBill} from '@/resources';
+import addForm from './form/add-form.vue';
+import showForm from './form/show-form.vue';
+import signForm from './form/sign-form';
+import deliverForm from './form/deliver-form';
+import untieForm from './form/untie-form';
+import assessmentForm from './form/assessment-form';
+import StatusMixin from '@/mixins/statusMixin';
+import confirmForm from './form/confirm-form';
+import autoForm from './form/auto-form';
+import batchAutoForm from './form/batch-auto-form';
+import MapPath from './form/map-path';
 import utils from '@/tools/utils';
 import SearchPart from './search';
 import {http, TmsWayBill,TransferInOrder} from '@/resources';
