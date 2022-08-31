@@ -730,7 +730,7 @@ export default [
           },
         ],
         'leaf': true
-      }
+      },
       {
         'id': 'tms-task-car-task',
         'parentId': 'tms-task-manager',
