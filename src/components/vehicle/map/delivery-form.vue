@@ -42,6 +42,9 @@
                          v-model="form.carId" popperClass="good-selects" @clear="clearCarInfo">
                 <el-option :value="car.carDto.id" :key="car.carDto.id" :label="car.carDto.plateNumber"
                            v-for="car in carList">
+                  <span style="float: left">{{ car.carDto.plateNumber }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">
+                   {{ carStatusList[car.carDto.carState || 0].title }}</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -220,6 +223,15 @@ export default {
         list: [],
         times: [],
         carList: [],
+        // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废
+        carStatusList: [
+          {title: '', status: ''},
+          {title: '运输', status: 1},
+          {title: '空闲', status: 2},
+          {title: '维修', status: 3},
+          {title: '停用', status: 4},
+          {title: '报废', status: 5},
+        ],
         carInfo: {},
         form: {
           driveId: '',
