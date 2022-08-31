@@ -15,55 +15,55 @@
   <div>
     <!-- 搜索条件 -->
     <div class="search-form">
-     <el-row>
-      <el-col :span="24">
-        <el-form :inline="true" :model="searchParams">
-          <el-form-item label="最后更新时间">
-            <el-date-picker v-model="lastUpdateTime" type="datetimerange"
-                            placeholder="请选择最后更新时间" clearable>
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item label="车辆归属公司">
-            <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索归属公司" :remote-method="filterCustomer"
-                       :clearable="true"
-                       v-model="searchParams.ascriptionCompany" popperClass="good-selects" style="width: 100%">
-              <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in customerList">
-                <div style="overflow: hidden">
-                  <span class="pull-left" style="clear: right">{{ org.name }}</span>
-                </div>
-                <div style="overflow: hidden">
+      <el-row>
+        <el-col :span="24">
+          <el-form :inline="true" :model="searchParams">
+            <el-form-item label="最后更新时间">
+              <el-date-picker v-model="lastUpdateTime" type="datetimerange"
+                              placeholder="请选择最后更新时间" clearable>
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="车辆归属公司">
+              <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索归属公司" :remote-method="filterCustomer"
+                         :clearable="true"
+                         v-model="searchParams.ascriptionCompany" popperClass="good-selects" style="width: 100%">
+                <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in customerList">
+                  <div style="overflow: hidden">
+                    <span class="pull-left" style="clear: right">{{ org.name }}</span>
+                  </div>
+                  <div style="overflow: hidden">
                     <span class="select-other-info pull-left">
                       <span>系统代码:</span>{{ org.manufacturerCode }}
                     </span>
-                </div>
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="车牌号码">
-            <el-input v-model="searchParams.plateNumber" placeholder="请输入车牌号码" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="车辆当前司机">
-            <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索司机" :remote-method="filterUser"
-                       :clearable="true"
-                       v-model="searchParams.currentDriver" popperClass="good-selects">
-              <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
-                <div style="overflow: hidden">
-                  <span class="pull-left" style="clear: right">{{ user.name }}</span>
-                  <span class="pull-right">
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="车牌号码">
+              <el-input v-model="searchParams.plateNumber" placeholder="请输入车牌号码" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="车辆当前司机">
+              <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索司机" :remote-method="filterUser"
+                         :clearable="true"
+                         v-model="searchParams.currentDriver" popperClass="good-selects">
+                <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
+                  <div style="overflow: hidden">
+                    <span class="pull-left" style="clear: right">{{ user.name }}</span>
+                    <span class="pull-right">
                         {{ user.companyDepartmentName }}
                       </span>
-                </div>
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item class="pull-right">
-            <el-button type="primary" @click="query">查询</el-button>
-            <el-button @click="resetForm">重置</el-button>
-            <el-button @click="exportExcel">导出</el-button>
-          </el-form-item>
-        </el-form>
-      </el-col>
-     </el-row>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item class="pull-right">
+              <el-button type="primary" @click="query" :disabled="doing">查询</el-button>
+              <el-button @click="resetForm">重置</el-button>
+              <el-button @click="exportExcel">导出</el-button>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
     </div>
 
     <!-- 状态以及状态数量的展示，支持状态切换 -->
@@ -99,10 +99,10 @@
     <div style="margin: 30px 0;">
       <el-table :data="list" style="width: 100%">
         <el-table-column type="index" label="" width="50"/>
-<!--        <el-table-column-->
-<!--          type="selection"-->
-<!--          width="55">-->
-<!--        </el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          type="selection"-->
+        <!--          width="55">-->
+        <!--        </el-table-column>-->
         <el-table-column prop="plateNumber" label="车牌号"/>
         <el-table-column prop="ascriptionCompanyName" label="车辆归属公司"/>
         <el-table-column prop="currentDriverName" label="司机"/>
@@ -129,11 +129,10 @@
         </el-table-column>
         <el-table-column label="操作">
           <template v-slot="{row,$index}">
-            <el-link
-              :underline="false"
+            <el-button type="text"
               @click="viewTransDetails(row)">
               <i class="el-icon-t-detail">运输记录详情</i>
-            </el-link>
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -213,7 +212,7 @@ export default {
 
       return {
         ...this.searchParams,
-        pageNo, pageSize,carState
+        pageNo, pageSize, carState
       };
     }
   },
@@ -223,6 +222,7 @@ export default {
       this.getList(1);
     },
     resetForm() {
+      // 清空查询表单
       this.searchParams = {
         startDate: '',//最后更新时间的开始时间
         endDate: '',//最后更新时间的结束时间
@@ -230,6 +230,10 @@ export default {
         plateNumber: '',//车牌号
         currentDriver: '',//车辆当前司机
       };
+
+      // 清空最后更新时间
+      this.lastUpdateTime = [];
+      this.query();
     },
     // 查看运输详情
     viewTransDetails(row) {
@@ -243,7 +247,7 @@ export default {
         text: '正在导出中……'
       });
 
-      VehicleArchives.exportExcel({...this.searchParams,carState:this.activeStatus})
+      VehicleArchives.exportExcel({...this.searchParams, carState: this.activeStatus})
         .then(res => {
           utils.download(res.data.path, '车辆状态');
           this.$store.commit('initPrint', {
@@ -278,12 +282,15 @@ export default {
           this.page.count = count;
           this.updateCount(count);
           this.getCount();
-        }).catch((error) => {
-        // 接口异常时打印错误信息，方便排查问题
-        // console.error('/carrier/findCarrierByPage：', {...error});
-      }).finally(() => {
-        this.doing = false;
-      });
+        })
+        .catch((error) => {
+          this.$notify.error("接口异常");
+          // 接口异常时打印错误信息，方便排查问题
+          console.error('/carrier/findCarrierByPage：', {...error});
+        })
+        .finally(() => {
+          this.doing = false;
+        });
     },
     rightClose() {
       // 右侧关闭时，不显示
@@ -292,7 +299,6 @@ export default {
 
     },
     rightChange() {
-      debugger
       this.getList(1);
       this.rightClose();
     },

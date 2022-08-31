@@ -21,7 +21,7 @@ module.exports = {
     hotOnly: false, disableHostCheck: true, proxy: {
       '/api': {
         // target: 'https://hw-test-tms.cdcerp.cn',
-        target: proxyTargets.sh,
+        target: proxyTargets.lxr,
         changOrigin: true
       }
     }

@@ -172,6 +172,7 @@ export default {
   watch: {
     carState(val) {
       if (val.id) {
+        this.page.pageNo = 1;
         this.form = val;
         this.getDetails(val.id);
       }
@@ -189,10 +190,11 @@ export default {
     // 分页处理
     handleSizeChange(val) {
       this.page.pageSize = val;
-      this.getList(this.page.pageNo);
+      this.getDetails(this.form.id);
     },
     handleCurrentChange(val) {
-      this.getList(val);
+      this.page.pageNo = val;
+      this.getDetails(this.form.id);
     },
     // 切换
     selectTab(item) {
