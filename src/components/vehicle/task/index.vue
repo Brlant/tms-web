@@ -14,7 +14,7 @@
   <div class="order-page">
     <search-part @search="searchResult" ref="search">
       <template slot="btn">
-        <perm label="tms-task-car-task-receiptCancel">
+        <perm label="tms-task-car-task-cancel">
           <el-button plain size="small" @click="batchCancel" v-if="activeStatus==='0'">
             <f-a class="icon-small" name="forbidden"></f-a>
             批量取消
@@ -185,7 +185,7 @@
                         <i class="el-icon-t-search"></i>
                       </a>查看
                     </span>
-                  <perm label="tms-task-car-task-receiptCancel" class="opera-btn btn-line-block">
+                  <perm label="tms-task-car-task-cancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelTask(item)" v-if="item.status==='1'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
@@ -229,7 +229,7 @@
                       </a>编辑
                     </span>
                   </perm>
-                  <perm label="tms-task-car-task-receiptCancel" class="opera-btn btn-line-block">
+                  <perm label="tms-task-car-task-cancel" class="opera-btn btn-line-block">
                     <span @click.stop="cancelTask(item)" v-if="item.status==='0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>

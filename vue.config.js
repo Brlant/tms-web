@@ -8,8 +8,9 @@ function resolve(dir) {
 // 代理的目标地址集合
 const proxyTargets = {
   sh: "https://sh-tms.cdcerp.cn", // 测试环境
+  un: "https://un-tms.cdcerp.cn", // 测试环境
   lxr: "http://192.168.5.10:8081", // 先锐本地
-  yj: "http://127.0.0.1:8015", // 本地
+  local: "http://127.0.0.1:8081", // 本地
   xwc:'http://192.168.5.213:8081'  // 夏文超
 };
 
@@ -22,7 +23,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: proxyTargets.sh,
+        target: proxyTargets.un,
         changOrigin: true
       }
     }

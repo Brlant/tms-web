@@ -794,7 +794,7 @@ export default [
             'leaf': true
           },
           {
-            'id': 'tms-task-car-task-receiptCancel',
+            'id': 'tms-task-car-task-cancel',
             'parentId': 'tms-task-car-task',
             'label': '取消出车任务',
             'sort': null,
