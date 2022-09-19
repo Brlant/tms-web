@@ -342,6 +342,7 @@
 import {BaseInfo, TmsWayBill} from '@/resources';
 import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
 import MapLocation from '@/components/common/map-location';
+import utils from '@/tools/utils'
 
 export default {
     components: {TwoColumn, MapLocation},
@@ -456,12 +457,24 @@ export default {
           if (val.id) {
             TmsWayBill.getOneTmsWayBill(val.id).then(res => {
               this.form = res.data;
+
+              const {provenance,destination} = this.form;
+              if(provenance && provenance.includes("/")){
+                this.form.provenance = utils.formatAddress(...provenance.split('/'));
+              }
+
+              if(destination && destination.includes("/")){
+                this.form.destination = utils.formatAddress(...destination.split('/'));
+              }
+
               this.filterCustomer(this.form.orgName);
               this.filterSenderOrg(this.form.senderName);
               this.filterReceiverOrg(this.form.receiverName);
+
               if (this.form.goodsList.length === 0) {
                 this.addGoods();
               }
+
               this.$nextTick(() => {
                 this.clearMap();
                 if (!this.form.receiverAddressLongitude) {
@@ -567,6 +580,13 @@ export default {
       filterReceiverOrg: function (query) {// 过滤收货单位
         BaseInfo.query({keyWord: query}).then(res => {
           this.receiverOrgList = res.data.list;
+          const none = this.receiverOrgList.findIndex(org => org.receiverId == this.form.receiverId) == -1;
+          if (none) {
+            this.receiverOrgList.push({
+              receiverId: this.form.receiverId,
+              receiverName: this.form.receiverName,
+            })
+          }
         });
       },
       selectTab(item) {

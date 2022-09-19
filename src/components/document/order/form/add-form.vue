@@ -553,11 +553,20 @@ export default {
         if (val.id) {
           TmsOrder.getOneTmsOrder(val.id).then(res => {
             this.form = res.data;
-            this.form.provenance = utils.formatAddress(...this.form.provenance.split('/'));
-            this.form.destination = utils.formatAddress(...this.form.destination.split('/'));
+
+            const {provenance,destination} = this.form;
+            if(provenance && provenance.includes("/")){
+              this.form.provenance = utils.formatAddress(...provenance.split('/'));
+            }
+
+            if(destination && destination.includes("/")){
+              this.form.destination = utils.formatAddress(...destination.split('/'));
+            }
+
             this.filterCustomer(this.form.orgName);
             this.filterSenderOrg(this.form.senderName);
             this.filterReceiverOrg(this.form.receiverName);
+
             this.$nextTick(() => {
               this.senderOptions = [];
               this.receiverOptions = [];
@@ -682,15 +691,7 @@ export default {
           const {totalPage, list} = res.data;
           if (pageNo == 1) {
             this.receiverOrgList = list;
-          } else {
-            this.receiverOrgList = this.receiverOrgList.concat(list);
           }
-
-          if (totalPage > pageNo) {
-            this.filterReceiverOrg(receiverName, pageNo++);
-            return;
-          }
-
 
           const none = this.receiverOrgList.findIndex(org => org.receiverId == this.form.receiverId) == -1;
           if (none) {
