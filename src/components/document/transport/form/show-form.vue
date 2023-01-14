@@ -890,7 +890,19 @@ export default {
             i.collectionTime = this.$moment(collectionTime).valueOf();
           })
         });
+
         this.handOverList = res.data;
+        if (res.data.length > 0){
+          const tempData = res.data[0];
+          if (tempData.startTime){
+            this.devInfo.departTime = tempData.startTime;
+          }
+
+          if (tempData.endTime){
+            this.devInfo.arriveTime = tempData.endTime;
+          }
+        }
+
       })
     }
   },

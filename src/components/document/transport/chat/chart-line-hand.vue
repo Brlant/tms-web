@@ -131,7 +131,6 @@
             };
             if (this.devInfo) {
               if (this.devInfo.departTime) {
-                this.devInfo.departTime
                 data.markLine.data.push({
                   xAxis: this.$moment(this.devInfo.departTime).format('YYYY-MM-DD HH:mm'),
                   label: {
