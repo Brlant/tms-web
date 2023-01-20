@@ -894,11 +894,11 @@ export default {
         this.handOverList = res.data;
         if (res.data.length > 0){
           const tempData = res.data[0];
-          if (tempData.startTime){
+          if (tempData.startTime && !this.devInfo.departTime){
             this.devInfo.departTime = tempData.startTime;
           }
 
-          if (tempData.endTime){
+          if (tempData.endTime && !this.devInfo.departTime){
             this.devInfo.arriveTime = tempData.endTime;
           }
         }
