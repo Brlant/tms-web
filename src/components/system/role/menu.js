@@ -269,6 +269,14 @@ export default [
         'sort': 6,
         'children': [
           {
+            'id': 'tms-carrier-query',
+            'parentId': 'tms-carrier',
+            'label': '查询',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
             'id': 'tms-carrier-add',
             'parentId': 'tms-carrier',
             'label': '新增',
@@ -285,9 +293,17 @@ export default [
             'leaf': true
           },
           {
-            'id': 'tms-carrier-query',
+            'id': 'tms-carrier-enable',
             'parentId': 'tms-carrier',
-            'label': '查询',
+            'label': '启用',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'tms-carrier-disable',
+            'parentId': 'tms-carrier',
+            'label': '停用',
             'sort': null,
             'children': null,
             'leaf': true

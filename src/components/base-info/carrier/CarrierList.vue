@@ -21,7 +21,9 @@
         </el-form-item>
         <el-form-item class="pull-right">
           <!-- 需求给的是不带边框的按钮，这里用文字链接比较符合要求 -->
-          <el-link icon="el-icon-circle-plus-outline" :underline="false" @click="add">添加</el-link>
+          <perm label="tms-carrier-add">
+            <el-link icon="el-icon-circle-plus-outline" :underline="false" @click="add">添加</el-link>
+          </perm>
         </el-form-item>
       </el-form>
     </div>
@@ -76,30 +78,38 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column prop="remarks" label="备注"/>
         <el-table-column label="操作">
           <template v-slot="{row,$index}">
-            <el-link v-if="row.status == 2"
-                     :underline="false"
-                     @click="updateStatus(row,$index)">
-              <i class="el-icon-t-forbidden"> 停用</i>
-            </el-link>
-
-            <el-link v-else-if="row.status == 1"
-                     :underline="false"
-                     @click="updateStatus(row,$index)">
-              <i class="el-icon-success"> 启用</i>
-            </el-link>
-            <el-link v-else-if="row.status == 0"
-                     :underline="false"
-                     @click="updateStatus(row,$index)">
-              <i class="el-icon-t-shenhe"> 审核</i>
-            </el-link>
-            <el-link class="ml-15"
-                     v-if="row.status == 1"
-                     :underline="false"
-                     @click="edit(row,$index)">
-              <i class="el-icon-edit-outline"> 编辑</i>
-            </el-link>
+            <perm label="tms-carrier-disable">
+              <el-link v-if="row.status == 2"
+                      :underline="false"
+                      @click="updateStatus(row,$index)">
+                <i class="el-icon-t-forbidden"> 停用</i>
+              </el-link>
+            </perm>
+            <perm label="tms-carrier-enable">
+              <el-link v-if="row.status == 1"
+                      :underline="false"
+                      @click="updateStatus(row,$index)">
+                <i class="el-icon-success"> 启用</i>
+              </el-link>
+            </perm>
+            <perm label="tms-carrier-audit">
+              <el-link v-if="row.status == 0"
+                      :underline="false"
+                      @click="updateStatus(row,$index)">
+                <i class="el-icon-t-shenhe"> 审核</i>
+              </el-link>
+            </perm>
+            <perm label="tms-carrier-edit">
+              <el-link class="ml-15"
+                      v-if="row.status == 1"
+                      :underline="false"
+                      @click="edit(row,$index)">
+                <i class="el-icon-edit-outline"> 编辑</i>
+              </el-link>
+            </perm>
           </template>
         </el-table-column>
       </el-table>
@@ -130,12 +140,13 @@
 </template>
 
 <script>
+import Perm from '@/components/common/perm';
 import CarrierForm from '@/components/base-info/carrier/CarrierForm';
 import {Carrier} from '@/resources';
 
 export default {
   name: "CarrierList",
-  components: {CarrierForm},
+  components: {Perm,CarrierForm},
   data() {
     return {
       // 默认展示启用的数据
