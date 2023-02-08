@@ -372,7 +372,8 @@
                         <i class="el-icon-t-start"></i>
                       </a>启运销退运单
                     </span>
-
+                </perm>
+                <perm label="tms-waybill-shipment-butt" class="opera-btn">
                   <!-- 条件说明：第三方承运，待启运，未对接 -->
                   <span @click.stop="showShipmentDialog(item.id)"
                         v-if="item.carryType === 1 && item.status === '1' && !item.butt">
