@@ -50,7 +50,7 @@ $labelWidth: 180px;
                    <span v-if="form.orderNoList.indexOf(order)!==form.orderNoList.length-1">,</span>
                  </span>
             </oms-col>
-             <oms-col label="面单号" :rowSpan="span" :value="form.faceSheetNo"/>
+            <oms-col label="面单号" :rowSpan="span" :value="form.faceSheetNo"/>
             <oms-col label="运单类型" :rowSpan="span" :value="form.waybillType">
               <dict :dict-group="'bizType'" :dict-key="form.waybillType"></dict>
             </oms-col>
@@ -77,7 +77,7 @@ $labelWidth: 180px;
               {{ form.waybillCompleteTime|time }}
             </oms-col>
             <oms-col label="承运类型" :rowSpan="span" :value="form.carryType===0?'自行承运':'第三方承运'"></oms-col>
-            <oms-col label="承运商名称" :rowSpan="span" :value="form.carrierName"></oms-col>
+            <oms-col label="承运商名称" :rowSpan="span" :value="form.carryType===0?'':form.carrierName"></oms-col>
             <oms-col label="第三方承运单号" :rowSpan="span" :value="form.thirdNo"></oms-col>
             <oms-col label="是否投保" :rowSpan="span" :value="form.insure?'是':'否'"></oms-col>
             <oms-col label="投保金额（元）" :rowSpan="span" :value="form.insureAmount"></oms-col>
@@ -424,13 +424,13 @@ $labelWidth: 180px;
                 <div style="line-height: 30px;height: 30px">
                   <strong class="mr-10">运单号：{{ form.waybillNumber }}</strong>
                 </div>
-                 <div>
-                    <div v-show="handOverList.length">
-                        <chart-line-hand ref="vhDevTempLineHand" class="mt-10" :dataList="handOverList"
-                                        :devInfo="devInfo"></chart-line-hand>
-                    </div>
-                    <div v-show="!handOverList.length">暂无数据</div>
-                 </div>
+                <div>
+                  <div v-show="handOverList.length">
+                    <chart-line-hand ref="vhDevTempLineHand" class="mt-10" :dataList="handOverList"
+                                     :devInfo="devInfo"></chart-line-hand>
+                  </div>
+                  <div v-show="!handOverList.length">暂无数据</div>
+                </div>
               </el-tab-pane>
             </el-tabs>
           </div>
@@ -530,8 +530,8 @@ export default {
       rules: {},
       orderLogList: [],
       logisticsList: [],
-      handOverList:[],
-      devInfo:{},
+      handOverList: [],
+      devInfo: {},
       loadingLog: false,
       attachmentList: [],
       attachmentIdList: [],
@@ -866,44 +866,44 @@ export default {
       this.$emit('right-close');
     },
     // 获取物流信息（文字版）
-    getLogisticsList(waybillNo){
+    getLogisticsList(waybillNo) {
       this.$http.get(`/logistics/queryTmsLogisticsByNo?waybillNo=${waybillNo}`)
-      .then(res=>{
-        this.logisticsList = res.data;
-      })
-      .catch(()=>{
-        // 不处理
-      })
+        .then(res => {
+          this.logisticsList = res.data;
+        })
+        .catch(() => {
+          // 不处理
+        })
     },
-    getWaybillData(waybillNo){
+    getWaybillData(waybillNo) {
       this.$http.get(`tms-waybill/${waybillNo}/waybill`)
-      .then(res=>{
-        this.devInfo = res.data
-      })
+        .then(res => {
+          this.devInfo = res.data
+        })
     },
-    getHandoverData(waybillNo){
+    getHandoverData(waybillNo) {
       this.$http.get(`tms-waybill/handover-data/${waybillNo}`)
-      .then(res=>{
-        res.data.forEach(item => {
-          item.dataDtoList.forEach(i => {
-            let collectionTime = this.$moment(i.collectionTime).format('YYYY-MM-DD HH:mm');
-            i.collectionTime = this.$moment(collectionTime).valueOf();
-          })
-        });
+        .then(res => {
+          res.data.forEach(item => {
+            item.dataDtoList.forEach(i => {
+              let collectionTime = this.$moment(i.collectionTime).format('YYYY-MM-DD HH:mm');
+              i.collectionTime = this.$moment(collectionTime).valueOf();
+            })
+          });
 
-        this.handOverList = res.data;
-        if (res.data.length > 0){
-          const tempData = res.data[0];
-          if (tempData.startTime && !this.devInfo.departTime){
-            this.devInfo.departTime = tempData.startTime;
+          this.handOverList = res.data;
+          if (res.data.length > 0) {
+            const tempData = res.data[0];
+            if (tempData.startTime && !this.devInfo.departTime) {
+              this.devInfo.departTime = tempData.startTime;
+            }
+
+            if (tempData.endTime && !this.devInfo.departTime) {
+              this.devInfo.arriveTime = tempData.endTime;
+            }
           }
 
-          if (tempData.endTime && !this.devInfo.departTime){
-            this.devInfo.arriveTime = tempData.endTime;
-          }
-        }
-
-      })
+        })
     }
   },
 };

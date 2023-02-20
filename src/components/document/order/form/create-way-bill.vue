@@ -20,7 +20,7 @@
   }
 
   .el-form-item {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 </style>
 <template>
@@ -154,13 +154,13 @@
                 <el-table-column prop="goodsName" label="货品名称" width="200">
                 </el-table-column>
                 <el-table-column prop="weight" label="货品重量(kg)">
-                  <template slot-scope="scope">
-                    {{scope.row.weight}}
+                  <template v-slot="{row}">
+                    {{row.weight}}
                   </template>
                 </el-table-column>
                 <el-table-column prop="volume" label="货品体积(m³)">
-                  <template slot-scope="scope">
-                    {{scope.row.volume}}
+                  <template v-slot="row">
+                    {{row.volume}}
                   </template>
                 </el-table-column>
                 <el-table-column prop="specifications" label="货品规格">

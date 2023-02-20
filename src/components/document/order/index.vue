@@ -525,6 +525,10 @@ import MapPath from '../common/map-list';
     },
     autoHandle() {
       let param = Object.assign({}, this.filters, this.dialogForm);
+      if (param.carryType == 0){
+        param.carrierId = ''
+      }
+
       TmsOrder.autoCreateWayBill(param).then(() => {
         this.doing = false;
         this.$notify.success({
@@ -545,12 +549,18 @@ import MapPath from '../common/map-list';
     },
     batchHandle() {
       // 批量操作所有订单都是一样的,重新组装下参数
-      const wayBillParams = this.checkListPara.map(item => {
+      let wayBillParams = this.checkListPara.map(item => {
         return {
           orderId: item.id,
           ...this.dialogForm
         }
       });
+
+      wayBillParams.forEach(wb=>{
+        if (wb.carryType === 0) {
+          wb.carrierId = '';
+        }
+      })
 
       TmsOrder.createWayBill({wayBillParams}, this.auto)
         .then(() => {

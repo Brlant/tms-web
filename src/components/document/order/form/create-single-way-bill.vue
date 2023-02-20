@@ -108,7 +108,8 @@ $labelWidth: 220px;
                 </el-radio-group>
               </oms-col>
               <oms-col label="投保金额（元）" :rowSpan="span" :value="1" v-show="carryInfo.insure">
-                <oms-input model="text" v-model="carryInfo.insureAmount" :min="0" :max="99999999.99" placeholder="请输入投保金额,最多保留两位小数"
+                <oms-input model="text" v-model="carryInfo.insureAmount" :min="0" :max="99999999.99"
+                           placeholder="请输入投保金额,最多保留两位小数"
                            @blur="insureAmountFormat">
                   <template slot="prepend">¥</template>
                 </oms-input>
@@ -200,7 +201,7 @@ $labelWidth: 220px;
                 <el-table-column prop="goodsName" label="货品名称" width="200">
                 </el-table-column>
                 <el-table-column prop="weight" label="货品重量(kg)">
-                  <template slot-scope="scope">
+                  <template v-slot="scope">
                     {{ scope.row.weight }}
                   </template>
                 </el-table-column>
@@ -256,6 +257,8 @@ export default {
       ],
       currentTab: {},
       form: {
+        // 修改人
+        updateName:'',
         goodsList: [
           {
             goodsName: '',
@@ -279,7 +282,7 @@ export default {
       if (this.activeId === '') {
         return {
           "orderId": "", //订单id
-          "faceSheetNo":"",//面单号
+          "faceSheetNo": "",//面单号
           "carryType": 0, //承运类型
           "carrierId": "", //承运商id
           "insure": false, //是否投保
@@ -345,7 +348,7 @@ export default {
         }
 
         // 没填写投保金额
-        if (item.insure && item.insureAmount >99999999.99) {
+        if (item.insure && item.insureAmount > 99999999.99) {
           this.$notify.warning("投保金额最多99999999.99元");
           this.carryInfo.insureAmount = 99999999.99;
           error = true;
@@ -371,7 +374,15 @@ export default {
     },
     createSingleWayBill() {
       this.doing = true;
-      TmsOrder.createSingleWayBill({wayBillParams: this.wayBillParams}).then(() => {
+
+      let wayBillParams = this.wayBillParams;
+      wayBillParams.forEach(wb=>{
+        if (wb.carryType === 0) {
+          wb.carrierId = '';
+        }
+      })
+
+      TmsOrder.createSingleWayBill({wayBillParams}).then(() => {
         this.$notify.success({
           duration: 2000,
           title: '成功',
