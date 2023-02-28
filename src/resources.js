@@ -193,6 +193,10 @@ export const TmsWayBill = resource('/tms-waybill', http, {
   assessmentTmsWayBill: (id, obj) => {
     return http.put('/tms-waybill/' + id + '/quality-inspection', obj);
   },
+  // 导出发运单
+  exportShippingOrder: (params) => {
+    return http.post('/tms-waybill/export/shipping-order', params);
+  },
   autoConfirmWayBill: (params) => {
     return http.put('/tms-waybill/batch/confirm', params);
   },

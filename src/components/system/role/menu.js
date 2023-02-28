@@ -573,6 +573,14 @@ export default [
             'leaf': true
           },
           {
+            'id': 'tms-waybill-export-shipping-order',
+            'parentId': 'tms-waybill-manager',
+            'label': '导出发运单',
+            'sort': 1,
+            'children': null,
+            'leaf': true
+          },
+          {
             'id': 'tms-waybill-transfer-in',
             'parentId': 'tms-waybill-manager',
             'label': '中转入库',

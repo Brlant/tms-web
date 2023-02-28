@@ -117,6 +117,12 @@
             导出Excel
           </el-button>
         </perm>
+<!--        <perm label="tms-waybill-export-shipping-order">-->
+<!--          <el-button plain size="small" @click="exportShippingOrder" :disabled="isLoading">-->
+<!--            <f-a class="icon-small" name="export"></f-a>-->
+<!--            导出发运单-->
+<!--          </el-button>-->
+<!--        </perm>-->
       </template>
     </search-part>
 
@@ -381,6 +387,12 @@
                         <i class="el-icon-t-start"></i>
                       </a>启运
                     </span>
+                </perm>
+                <perm label="tms-waybill-export-shipping-order">
+                  <span @click="exportShippingOrderSingle(item)">
+                    <f-a class="icon-small" name="export"></f-a>
+                    导出发运单
+                  </span>
                 </perm>
               </div>
               <div>
@@ -679,7 +691,82 @@ export default {
         });
       });
     },
+    // 导出发运单-单个
+    exportShippingOrderSingle(waybill) {
+      this.$store.commit('initPrint', {
+        text: '正在导出发运单',
+        isPrinting: true,
+        moduleId: '/document/transport'
+      });
 
+      let params = Object.assign({}, {waybillIdList: [waybill.id]});
+      TmsWayBill.exportShippingOrder(params).then(res => {
+        utils.download(res.data.url, '运单表');
+        this.isLoading = false;
+        this.$store.commit('initPrint', {
+          isPrinting: false,
+          moduleId: '/document/transport'
+        });
+      }).catch(error => {
+        this.isLoading = false;
+        this.$store.commit('initPrint', {
+          isPrinting: false,
+          moduleId: '/document/transport'
+        });
+        this.$notify.error({
+          message: error.response && error.response.data && error.response.data.msg || '导出失败'
+        });
+      });
+    },
+    // 导出发运单-批量
+    exportShippingOrderBatch() {
+      if (!this.checkList.length) {
+        this.$notify.warning({
+          duration: 2000,
+          message: '请勾选需要导出的运单'
+        });
+        return;
+      }
+
+      if (this.checkList.length>1) {
+        this.$notify.warning({
+          duration: 2000,
+          message: '发运单导出不支持多选'
+        });
+        return;
+      }
+
+      this.isLoading = true;
+      this.$store.commit('initPrint', {
+        text: '正在导出发运单',
+        isPrinting: true,
+        moduleId: '/document/transport'
+      });
+
+      let params = Object.assign({}, {waybillIdList: this.waybillIdList});
+      TmsWayBill.exportShippingOrder(params).then(res => {
+        utils.download(res.data.url, '运单表');
+        this.isLoading = false;
+        this.$store.commit('initPrint', {
+          isPrinting: false,
+          moduleId: '/document/transport'
+        });
+        // 清空勾选
+        this.dataList.forEach(val => {
+          val.isChecked = false;
+        });
+      }).catch(error => {
+        this.isLoading = false;
+        this.$store.commit('initPrint', {
+          isPrinting: false,
+          moduleId: '/document/transport'
+        });
+        this.$notify.error({
+          message: error.response && error.response.data && error.response.data.msg || '导出失败'
+        });
+      });
+    },
+    // 导出运单Word
     exportFile() {
       if (!this.checkList.length) {
         this.$notify.warning({
