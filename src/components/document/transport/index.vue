@@ -389,7 +389,8 @@
                     </span>
                 </perm>
                 <perm label="tms-waybill-export-shipping-order">
-                  <span @click="exportShippingOrderSingle(item)">
+                  <span @click="exportShippingOrderSingle(item)"
+                        v-if="item.fromOriginalTdp && activeStatus === '0'">
                     <f-a class="icon-small" name="export"></f-a>
                     导出发运单
                   </span>
@@ -527,7 +528,7 @@ export default {
         thirdNo: '',
       },
       loadingData: false,
-      activeStatus: 0,
+      activeStatus: '0',
       orderType: utils.wayBillType,
       dataList: [],
       showIndex: -1,
@@ -1178,6 +1179,7 @@ export default {
         } else {
           this.dataList = res.data.list;
         }
+
         this.pager.count = res.data.count;
         this.loadingData = false;
       });
