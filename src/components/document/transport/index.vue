@@ -390,7 +390,7 @@
                 </perm>
                 <perm label="tms-waybill-export-shipping-order">
                   <span @click="exportShippingOrderSingle(item)"
-                        v-if="item.fromOriginalTdp && activeStatus === '0'">
+                        v-if="item.fromOriginalTdp && activeStatus === '0' && item.carryType === 0">
                     <f-a class="icon-small" name="export"></f-a>
                     导出发运单
                   </span>

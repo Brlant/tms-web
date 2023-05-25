@@ -12,7 +12,7 @@ const proxyTargets = {
   lxr: "http://192.168.5.10:8081", // 先锐本地
   local: "http://127.0.0.1:8081", // 本地
   xwc:'http://192.168.5.56:8081',  // 夏文超
-  yj:'http://192.168.5.59:8081'  // 杨剑
+  yj:'http://192.168.5.50:8081'  // 杨剑
 };
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: proxyTargets.un,
+        target: proxyTargets.yj,
         changOrigin: true
       }
     }
