@@ -12,6 +12,19 @@
     border-radius: 2px;
     z-index: 2;
   }
+  .isDistance{
+    position: absolute;
+    left: 5px;
+    top: 10px;
+    /* width: 100px;
+    height: 50px; */
+    padding:5px 8px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 9999;
+    /* font-size: 12px; */
+  }
 </style>
 <template>
   <div>
@@ -20,6 +33,12 @@
         <el-checkbox size="mini" v-model="isShowTemp">标题</el-checkbox>
       </div>
       <el-amap :style="mapStyle" :vid="mapRef" :zoom="10" ref="taskMap">
+        <span class="isDistance" v-if="isDistance">
+          <div>车&ensp;牌&ensp;号：{{formItem.carPlateNumber}}</div>
+          <div>启运时间：{{formItem.taskStartTime|time}}</div>
+          <div>完成时间：{{formItem.taskEndTime|time}}</div>
+          <div>总里程数：{{actualMileage}}km</div>
+        </span>
         <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
         <!--:label="marker.label"></el-amap-marker>-->
       </el-amap>
@@ -28,6 +47,7 @@
   </div>
 </template>
 <script>
+import {AMapManager} from 'vue-amap';
 import MapMixin from '@/mixins/mapMixin';
 
 export default {
@@ -56,10 +76,13 @@ export default {
     mixins: [MapMixin],
     data: function () {
       return {
+        amapManager: new AMapManager(),
         pathSimplifierIns: null,
         isShowTemp: false,
         timers: [],
-        simpleMarkers: []
+        simpleMarkers: [],
+        isDistance:false,
+        actualMileage:'',  // 地图计算的距离
       };
     },
     computed: {
@@ -89,10 +112,12 @@ export default {
           window.clearTimeout(i);
         });
         this.clearMap();
+        this.isDistance = false
+        this.actualMileage = ''
         this.pathSimplifierIns && this.pathSimplifierIns.setData([]);
         if (!val.id) return;
         this.$http.get(`/track-transportation/task/${val.id}`).then(res => {
-          let point = res.data.map(m => [m.longitude, m.latitude]);
+          let point = res.data.map(m => [m.longitude, m.latitude]) || [];
           this.pointDetails = res.data.filter(f => f.longitude && f.latitude).map((m, index) => {
             return {
               lnglat: [m.longitude, m.latitude],
@@ -100,7 +125,7 @@ export default {
               m
             };
           });
-
+          
           // 起点
           if (point.length) {
             this.drawPoint({
@@ -123,6 +148,11 @@ export default {
           });
           // 轨迹
           this.drawPath(point);
+          // 计算距离
+          if(val.status == 3 && res.data.length !=0){
+            this.countKm(res.data)
+            this.isDistance = true
+          }
         });
       },
       isShowTemp(val) {
@@ -273,7 +303,20 @@ export default {
               ${speedTitle}
               ${angleTitle}
           </div>`;
-      }
+      },
+      // 根据data中的轨迹（经纬度）计算实际距离
+    countKm(data) {
+        let list = data.filter(f => f.longitude && f.latitude).map((m, index) => {
+          return [m.longitude, m.latitude];
+        });
+        // 返回轨迹的实际长度，单位：米
+        let dis = window.AMap.GeometryUtil.distanceOfLine(list);
+        if (dis > 0) {
+          let actualMileage = dis / 1000;
+          this.actualMileage = (actualMileage.toFixed(3)) || 0.000;
+          // this.$emit("countActualMileage", actualMileage)
+        }
+      },
     }
   };
 </script>
