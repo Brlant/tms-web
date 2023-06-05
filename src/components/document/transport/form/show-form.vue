@@ -29,6 +29,9 @@ $labelWidth: 180px;
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
     <template slot="title">运单</template>
     <template slot="btn">
+      <div style="margin-bottom: 30px;">
+        <el-button type="primary" @click="confirmationReceipt()">回单确认</el-button>
+      </div>
       <el-button plain @click="close()">关闭</el-button>
     </template>
     <template slot="content">
@@ -608,6 +611,20 @@ export default {
     }
   },
   methods: {
+    // 回单确认
+    confirmationReceipt(){
+      this.$confirm('是否确认回单附件?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // TODO
+
+        
+      }).catch(()=>{
+
+      })
+    },
     // 切换地图与物流信息的面板展示
     handleDeliveryTabClick(tab, event) {
       console.log(tab, event);
