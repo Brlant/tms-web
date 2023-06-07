@@ -35,8 +35,8 @@
       <el-amap :style="mapStyle" :vid="mapRef" :zoom="10" ref="taskMap">
         <span class="isDistance" v-if="isDistance">
           <div>车&ensp;牌&ensp;号：{{formItem.carPlateNumber}}</div>
-          <div>启运时间：{{formItem.taskStartTime|time}}</div>
-          <div>完成时间：{{formItem.taskEndTime|time}}</div>
+          <div>启运时间：{{formItem.taskStartTime|minute}}</div>
+          <div>完成时间：{{formItem.taskEndTime|minute}}</div>
           <div>总里程数：{{actualMileage}}km</div>
         </span>
         <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
