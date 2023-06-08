@@ -37,7 +37,7 @@
           <div>车&ensp;牌&ensp;号：{{formItem.carPlateNumber}}</div>
           <div>启运时间：{{formItem.taskStartTime|minute}}</div>
           <div>完成时间：{{formItem.taskEndTime|minute}}</div>
-          <div>总里程数：{{actualMileage}}km</div>
+          <div>总里程数：{{formItem.totalMileage}}km</div>
         </span>
         <!--<el-amap-marker v-for="(marker, index) in markers" :key="index" :vid="index" :position="marker.position"-->
         <!--:label="marker.label"></el-amap-marker>-->
@@ -150,7 +150,7 @@ export default {
           this.drawPath(point);
           // 计算距离
           if(val.status == 3 && res.data.length !=0){
-            this.countKm(res.data)
+            // this.countKm(res.data)
             this.isDistance = true
           }
         });
