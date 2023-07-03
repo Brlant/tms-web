@@ -11,7 +11,7 @@ const proxyTargets = {
   un: "https://un-tms.cdcerp.cn", // 测试环境
   lxr: "http://192.168.5.10:8081", // 先锐本地
   local: "http://127.0.0.1:8081", // 本地
-  xwc:'http://192.168.5.56:8081',  // 夏文超
+  cjg:'http://192.168.5.29:8081',  // 陈金果
   yj:'http://192.168.5.50:8081'  // 杨剑
 };
 
@@ -24,7 +24,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: proxyTargets.un,
+        target: proxyTargets.cjg,
         changOrigin: true
       }
     }

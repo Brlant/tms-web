@@ -30,7 +30,9 @@ $labelWidth: 180px;
     <template slot="title">运单</template>
     <template slot="btn">
       <div style="margin-bottom: 30px;">
-        <el-button type="primary" @click="confirmationReceipt()">回单确认</el-button>
+        <perm label="tms-waybill-receiptConfirm">
+          <el-button type="primary" v-if="form.receiptConfirm != 1" @click="confirmationReceipt()">回单确认</el-button>
+        </perm>
       </div>
       <el-button plain @click="close()">关闭</el-button>
     </template>
@@ -582,7 +584,14 @@ export default {
   watch: {
     formItem: function (val) {
       if (val.id) {
-        TmsWayBill.getOneTmsWayBill(val.id).then(res => {
+        this.getTmsWayBillInfo(val.id)
+      }
+    }
+  },
+  methods: {
+    // 获取运单详情
+    getTmsWayBillInfo(id){
+      TmsWayBill.getOneTmsWayBill(id).then(res => {
           this.form = res.data;
           this.form.receiverAddressLongitude && this.setMarker();
           this.detailForm = {
@@ -596,7 +605,7 @@ export default {
           this.attachmentList = [];
           this.getFileList();
           // 查询日志信息
-          this.queryLog(val.id);
+          this.queryLog(id);
           if (this.form.status === '6') {
             this.assessAttachmentList = [];
             this.getAssessFileList();
@@ -607,10 +616,7 @@ export default {
           this.getWaybillData(waybillNo)
           this.getHandoverData(waybillNo)
         });
-      }
-    }
-  },
-  methods: {
+    },
     // 回单确认
     confirmationReceipt(){
       this.$confirm('是否确认回单附件?', '', {
@@ -619,10 +625,18 @@ export default {
         type: 'warning'
       }).then(() => {
         // TODO
-
-        
-      }).catch(()=>{
-
+        let params = {
+          waybillId: this.form.id
+        };
+        this.$http.get('/tms-waybill/receiptConfirm',{params}).then(()=>{
+            this.$notify.success('回单确认成功')
+            this.getTmsWayBillInfo(this.form.id)
+        }).catch(error=>{
+          this.$notify.error({
+              duration: 2000,
+              message: error.response && error.response.data && error.response.data.msg || '回单确认失败'
+          });
+        })
       })
     },
     // 切换地图与物流信息的面板展示
