@@ -31,7 +31,7 @@ $labelWidth: 180px;
     <template slot="btn">
       <div style="margin-bottom: 30px;">
         <perm label="tms-waybill-receiptConfirm">
-          <el-button type="primary" v-if="form.receiptConfirm != 1" @click="confirmationReceipt()">回单确认</el-button>
+          <el-button type="primary" v-if="form.status == 3 && form.receiptConfirm != 1" @click="confirmationReceipt()">回单确认</el-button>
         </perm>
       </div>
       <el-button plain @click="close()">关闭</el-button>
