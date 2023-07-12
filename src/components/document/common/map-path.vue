@@ -2,32 +2,12 @@
   .map-path {
     margin-bottom: 10px;
   }
-  .isDistance{
-    position: absolute;
-    left: 5px;
-    top: 10px;
-    /* width: 100px;
-    height: 50px; */
-    padding:5px 8px;
-    background: rgba(255,255,255,0.7);
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    z-index: 9999;
-    /* font-size: 12px; */
-  }
-
 </style>
 <template>
   <div>
     <div v-show="!points.length" class="empty-info mini">暂无轨迹信息</div>
     <el-amap v-show="points.length" ref="pathMap" :vid="vid" :amap-manager="amapManager"
              :style="mapStyle" :zoom="10" class="map-path">
-        <span class="isDistance" v-if="isDistance">
-          <div>车&ensp;牌&ensp;号：{{formItem.carPlateNumber}}</div>
-          <div>启运时间：{{formItem.taskStartTime|minute}}</div>
-          <div>完成时间：{{formItem.taskEndTime|minute}}</div>
-          <div>总里程数：{{formItem.totalMileage}}km</div>
-        </span>
     </el-amap>
   </div>
 </template>
@@ -57,9 +37,7 @@ export default {
       return {
         amapManager: new AMapManager(),
         pathSimplifierIns: null,
-        points: [],
-        isDistance:false,
-        actualMileage:'',  // 地图计算的距离
+        points: []
       };
     },
     watch: {
@@ -80,11 +58,6 @@ export default {
             };
           });
           this.points.length && this.drawPath(this.points);
-          // 计算距离
-          if(this.formItem.status == 3 && res.data.length !=0){
-            this.countKm(res.data)
-            this.isDistance = true
-          }
         });
       },
       // 创建轨迹线对象
@@ -145,20 +118,7 @@ export default {
           this.addMapTools();
           // this.createPathNavigator(PathSimplifier, pathSimplifierIns);
         });
-      },
-      // 根据data中的轨迹（经纬度）计算实际距离
-      countKm(data){
-        let list = data.filter(f => f.longitude && f.latitude).map((m, index) => {
-          return [m.longitude, m.latitude];
-        });
-        // 返回轨迹的实际长度，单位：米
-        let dis = window.AMap.GeometryUtil.distanceOfLine(list);
-        if (dis > 0) {
-          let actualMileage = dis / 1000;
-          this.actualMileage = (actualMileage.toFixed(3)) || 0.000;
-          // this.$emit("countActualMileage", actualMileage)
-        }
-      },
+      }
     }
   };
 </script>
