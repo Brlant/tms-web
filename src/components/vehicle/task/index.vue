@@ -275,6 +275,12 @@
       <task-map mapRef="bigTaskMap" :formItem="mapBigFormItem" vid="mapTaskBigPath"
                 :mapStyle="{height: bodyHeight}" showPoint></task-map>
     </el-dialog>
+    <el-dialog :title="'运单号: ' + mapBigFormItem.waybillNumber" :visible.sync="isShowBigMap" width="100%"
+               :fullscreen="true"
+               custom-class="custom-dialog-map">
+      <waybill-map mapRef="bigWaybillMap" :wayBillItem="mapBigFormItem" :carPlateNumber="carPlateNumber" vid="mapWaybillBigPath"
+                :mapStyle="{height: bodyHeight}" showPoint></waybill-map>
+    </el-dialog>
     <el-dialog title="地图派送" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
                custom-class="custom-dialog-map">
       <map-multiple :waybillList="multipleWaybillList" :taskIdList="taskIdList"
@@ -293,6 +299,7 @@ import StatusMixin from '@/mixins/statusMixin';
 import editForm from './form/edit-form';
 import Perm from '../../common/perm';
 import TaskMap from './form/map-car-task';
+import WaybillMap from './form/map-car-waybill';
 import MapMultiple from './form/map-multiple';
 import moment from 'moment';
 
@@ -302,6 +309,7 @@ export default {
       SearchPart,
       TaskMap,
       MapMultiple,
+      WaybillMap,
       adjustmentForm
     },
     mixins: [StatusMixin],

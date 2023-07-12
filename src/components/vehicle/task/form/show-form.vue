@@ -30,6 +30,24 @@
   .f-14 {
     font-size: 14px;
   }
+//   .mapDialog .el-dialog {
+//   .el-dialog__header {
+//     display: none;
+//   }
+//   .dj-dialog-content {
+//     padding: 0;
+//     overflow: unset;
+//   }
+// }
+</style>
+<style>
+  .mapDialog  .el-dialog__header{
+    display: none;
+  }
+  .mapDialog .el-dialog__body {
+     padding: 10px;
+     overflow: unset;
+  }
 </style>
 <template>
   <dialog-template :pageSets="pageSets" @selectTab="selectTab">
@@ -224,14 +242,21 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="" label="操作" width="80"
-                               v-if="form.status==='0'||form.status==='1'||form.status==='2'">
+              <el-table-column prop="" label="操作" width="120"
+                               v-if="form.status==='0'||form.status==='1'||form.status==='2' || form.status==='3'">
                 <template slot-scope=" scope">
                   <perm label="tms-waybill-edit" class="opera-btn btn-line-block f-12">
-                    <span @click.stop="deleteDetail(scope.row)">
+                    <span @click.stop="deleteDetail(scope.row)" v-if="form.status==='0'||form.status==='1'||form.status==='2'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
                       </a>删除
+                    </span>
+                  </perm>
+                  <perm label="tms-waybill-edit" class="opera-btn btn-line-block f-12">
+                    <span @click.stop="viewWaybillTrack(scope.row)" v-if="form.status==='3'">
+                      <a @click.pervent="" class="btn-circle btn-opera">
+                        <i class="el-icon-search"></i>
+                      </a>查看运单轨迹
                     </span>
                   </perm>
                 </template>
@@ -301,19 +326,41 @@
             </div>
           </div>
         </div>
-
+        
       </el-form>
+      <el-dialog
+        class="mapDialog"
+        :visible.sync="waybillDialogVisible"
+        width="50%"
+        append-to-body
+        :before-close="handleClose"
+        >
+          <div class="header">
+              <h3 class="tit f-dib index-tit" >
+                运单号：{{wayBillItem.waybillNumber}}
+              </h3>
+              <span @click="showBigMap(wayBillItem)" class="des-btn">
+                <a href="#" class="btn-circle" @click.prevent="">
+                  <i class="el-icon-zoom-in"></i></a>查看大图
+              </span>
+          </div>
+          <div class="content" >
+            <waybill-map :carPlateNumber="carPlateNumber" :wayBillItem="wayBillItem"></waybill-map>
+          </div>
+        </el-dialog>
     </template>
+    
   </dialog-template>
 </template>
 <script>
 import {TmsLog, TransportTask} from '@/resources';
 import TaskMap from './map-car-task';
+import WaybillMap from './map-car-waybill';
 import utils from '@/tools/utils';
 import OmsCostTime from '@/components/common/timeCost.vue';
 
 export default {
-    components: {TaskMap, OmsCostTime},
+    components: {TaskMap, OmsCostTime,WaybillMap},
     data () {
       return {
         span: 7,
@@ -349,6 +396,9 @@ export default {
         wayBillList: [],
         doing: false,
         curPosition: null,
+        waybillDialogVisible:false,  // 
+        wayBillItem:{},   //
+        carPlateNumber:'', 
         wayBillType: utils.wayBillType
       };
     },
@@ -502,6 +552,15 @@ export default {
         }).catch(() => {
 
         });
+      },
+      // 查看运单轨迹
+      viewWaybillTrack(item){
+        this.wayBillItem = item
+        this.waybillDialogVisible = true
+      },
+      handleClose(){
+        this.wayBillItem = {}
+        this.waybillDialogVisible = false
       },
       selectTab (item) {
         this.currentTab = item;
