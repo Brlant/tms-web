@@ -339,13 +339,13 @@
               <h3 class="tit f-dib index-tit" >
                 运单号：{{wayBillItem.waybillNumber}}
               </h3>
-              <span @click="showBigMap(wayBillItem)" class="des-btn">
+              <span @click="showBigMapWaybill(wayBillItem)" class="des-btn">
                 <a href="#" class="btn-circle" @click.prevent="">
                   <i class="el-icon-zoom-in"></i></a>查看大图
               </span>
           </div>
           <div class="content" >
-            <waybill-map :carPlateNumber="carPlateNumber" :wayBillItem="wayBillItem"></waybill-map>
+            <waybill-map  :wayBillItem="wayBillItem"></waybill-map>
           </div>
         </el-dialog>
     </template>
@@ -403,7 +403,7 @@ export default {
       };
     },
     computed: {},
-    props: ['formItem', 'showBigMap', 'isOverTime'],
+    props: ['formItem', 'showBigMap','showBigMapWaybill','isOverTime'],
     watch: {
       formItem: function (val) {
         this.curPosition = null;

@@ -263,7 +263,7 @@
       <component :is="currentAdjustPart" :formItem="form" @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
-      <component :is="currentPart" :formItem="form" :isOverTime="isOverTime" :showBigMap="showBigMap"
+      <component :is="currentPart" :formItem="form" :isOverTime="isOverTime" :showBigMap="showBigMap" :showBigMapWaybill = showBigMapWaybill
                  @right-close="resetRightBox"/>
     </page-right>
     <page-right :show="showEditIndex === 0" @right-close="resetRightBox" :css="{'width':'90%','padding':0}">
@@ -275,11 +275,11 @@
       <task-map mapRef="bigTaskMap" :formItem="mapBigFormItem" vid="mapTaskBigPath"
                 :mapStyle="{height: bodyHeight}" showPoint></task-map>
     </el-dialog>
-    <el-dialog :title="'运单号: ' + mapBigFormItem.waybillNumber" :visible.sync="isShowBigMap" width="100%"
+    <el-dialog :title="'运单号: ' + mapBigWaybillFormItem.waybillNumber" :visible.sync="isShowBigMapWaybill" width="100%"
                :fullscreen="true"
                custom-class="custom-dialog-map">
-      <waybill-map mapRef="bigWaybillMap" :wayBillItem="mapBigFormItem" :carPlateNumber="carPlateNumber" vid="mapWaybillBigPath"
-                :mapStyle="{height: bodyHeight}" showPoint></waybill-map>
+      <waybill-map mapRef="bigWaybillMap" :wayBillItem="mapBigWaybillFormItem"  vid="mapWaybillBigPath"
+                :mapStyle="{height: bodyHeight}" showPoint ></waybill-map>
     </el-dialog>
     <el-dialog title="地图派送" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
                custom-class="custom-dialog-map">
@@ -367,8 +367,10 @@ export default {
         currentItemId: '',
         taskIdList: [],
         isShowBigMap: false,
+        isShowBigMapWaybill: false,
         isShowMulBigMap: false,
         mapBigFormItem: {},
+        mapBigWaybillFormItem: {},
         multipleWaybillList: []
       };
     },
@@ -500,7 +502,16 @@ export default {
             this.mapBigFormItem = formItem;
           }, 300);
         });
-      },
+      }, 
+      showBigMapWaybill(formItem){
+        this.mapBigWaybillFormItem = {};
+        this.isShowBigMapWaybill = true;
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.mapBigWaybillFormItem = formItem;
+          }, 300);
+        });
+      },     
       printPreFile() {
         if (!this.taskIdList.length) {
           this.$notify.warning({
