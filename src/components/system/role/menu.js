@@ -588,6 +588,14 @@ export default [
             'children': null,
             'leaf': true
           },
+          {
+            'id': 'tms-waybill-receiptConfirm',
+            'parentId': 'tms-waybill-manager',
+            'label': '回单确认',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
         ],
         'leaf': false
       },
