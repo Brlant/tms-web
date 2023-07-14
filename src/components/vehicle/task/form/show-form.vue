@@ -242,7 +242,7 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="" label="操作" width="120"
+              <el-table-column prop="" label="操作" width="120"  v-if="form.status==='0'||form.status==='1'||form.status==='2' || form.status==='3'"
                                >
                 <template slot-scope=" scope">
                   <perm label="tms-waybill-edit" class="opera-btn btn-line-block f-12">
@@ -253,7 +253,7 @@
                     </span>
                   </perm>
                   <!-- <perm label="tms-waybill-edit" > -->
-                    <span style="cursor: pointer;" class="opera-btn btn-line-block f-12" @click.stop="viewWaybillTrack(scope.row)" v-if="scope.row.status == 3 || scope.row.status == 6">
+                    <span style="cursor: pointer;" class="opera-btn btn-line-block f-12" @click.stop="viewWaybillTrack(scope.row)" v-if="form.status==='3'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-search"></i>
                       </a>查看运单轨迹
