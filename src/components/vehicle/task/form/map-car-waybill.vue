@@ -150,10 +150,10 @@ export default {
                 // 轨迹
                 this.drawPath(point);
                 // 计算距离
-                if(val.status == 3 && res.data.length !=0){
+                // if((val.status == 3) && res.data.length !=0){
                     // this.countKm(res.data)
                     this.isDistance = true
-                }
+                // }
                 });
             },
             immediate:true
