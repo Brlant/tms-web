@@ -345,7 +345,7 @@
               </span>
           </div>
           <div class="content" >
-            <waybill-map  :wayBillItem="wayBillItem"></waybill-map>
+            <waybill-map ref="waybillMap" :wayBillItem="wayBillItem"></waybill-map>
           </div>
         </el-dialog>
     </template>
@@ -561,6 +561,7 @@ export default {
       handleClose(){
         this.wayBillItem = {}
         this.waybillDialogVisible = false
+        this.$refs.waybillMap.clearMap()
       },
       selectTab (item) {
         this.currentTab = item;
