@@ -862,6 +862,31 @@ export default [
       }, {
         id: 'tms-task-car-task-export-detail',
         label: '导出运单统计明细'
+      },
+      {
+        'id': 'tms-task-car-download',
+        'parentId': 'tms-task-manager',
+        'label': '出车任务下载',
+        'sort': 2,
+        'children': [
+          {
+            'id': 'transport-download-query',
+            'parentId': 'tms-task-car-download',
+            'label': '查询出车任务',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'transport-download-download',
+            'parentId': 'tms-task-car-download',
+            'label': '下载出车任务',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          }
+
+        ]
       }
     ],
     'leaf': false
