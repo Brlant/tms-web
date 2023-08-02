@@ -18,6 +18,8 @@
                                   range-separator="至"
                                   start-placeholder="开始日期"
                                   end-placeholder="结束日期"
+                                  format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" 
                                   :picker-options="pickerOptions">
                   </el-date-picker>
                 </oms-form-row>
@@ -30,6 +32,8 @@
                                   range-separator="至"
                                   start-placeholder="开始日期"
                                   end-placeholder="结束日期"
+                                  format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" 
                                   :picker-options="pickerOptions">
                   </el-date-picker>
                 </oms-form-row>
@@ -205,7 +209,7 @@
         return index + 1 + (pageNo - 1) * pageSize;
       },
       timesHandle() {
-        if (this.createTimes.length == 2){
+        if (this.createTimes && this.createTimes.length == 2){
           this.params.createTime1 =  this.$formatAryTime(this.createTimes, 0, 'YYYY-MM-DD 00:00:00');
           this.params.createTime2 =  this.$formatAryTime(this.createTimes, 1, 'YYYY-MM-DD 23:59:59');
         }else {
@@ -213,7 +217,7 @@
           this.params.createTime2 = '';
         }
   
-        if (this.completeTimes.length == 2){
+        if (this.completeTimes && this.completeTimes.length == 2){
           this.params.completeTime1 =  this.$formatAryTime(this.completeTimes, 0, 'YYYY-MM-DD 00:00:00');
           this.params.completeTime2 =  this.$formatAryTime(this.completeTimes, 1, 'YYYY-MM-DD 23:59:59');
         }else {
