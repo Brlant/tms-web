@@ -67,6 +67,11 @@ export const routes = [
             component: () => import('./components/vehicle/status/VehicleStatusList.vue'),
             meta: {moduleId: 'vehicle', title: '车辆状态', perm: 'tms-carmap-scan'}
           }
+          , {
+            path: '/vehicle/taskdownload',
+            component: () => import('./components/vehicle/taskdownload/index.vue'),
+            meta: {moduleId: 'vehicle', title: '车辆任务下载', perm: 'tms-task-car-download'}
+          }
         ]
       },
       {

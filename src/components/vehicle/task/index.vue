@@ -559,7 +559,13 @@ export default {
         http.post('transport-task/export/task-info', obj).then(res => {
           this.isLoading = false;
           this.$store.commit('initPrint', {isPrinting: false});
-          utils.printLocation(this, {'type': 'transport_task', 'path': res.data.url});
+          // 
+          this.$notify({
+            title: '提示',
+            message: '请到车辆任务下载页面打印',
+            type: 'info'
+          });
+          // utils.printLocation(this, {'type': 'transport_task', 'path': res.data.url});
           // 清空列表
           this.taskIdList = [];
           this.checkList = [];
@@ -661,8 +667,17 @@ export default {
         });
         let params = Object.assign({}, {taskList: this.taskIdList});
         http.post('/transport-task/export/task-info', params).then(res => {
-          utils.download(res.data.url, '派车任务表');
+          // utils.download(res.data.url, '派车任务表');
           this.isLoading = false;
+          this.$notify({
+            title: '提示',
+            message: '请到车辆任务下载页面导出',
+            type: 'info'
+          });
+
+          // this.$notify.error({
+          //   message: '请到车辆任务下载列表导出'
+          // });
           this.$store.commit('initPrint', {
             isPrinting: false,
             moduleId: '/vehicle/delivery/task'
