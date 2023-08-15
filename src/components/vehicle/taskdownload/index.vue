@@ -276,9 +276,11 @@
       },
       // 下载
       download(id) {
-        debugger
         this.isLoading = true;
-        this.$store.commit('initPrint', {isPrinting: true});
+        this.$store.commit('initPrint', { 
+          isPrinting: true,
+          text: '下载中'
+        });
         this.$http.put(`/transport-download/download/${id}`)
           .then(res => {
             const {fileUrl} = res.data;
