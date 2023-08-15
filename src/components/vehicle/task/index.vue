@@ -562,7 +562,7 @@ export default {
           // 
           this.$notify({
             title: '提示',
-            message: '请到车辆任务下载页面打印',
+            message: '请到我的下载页面打印',
             type: 'info'
           });
           // utils.printLocation(this, {'type': 'transport_task', 'path': res.data.url});
@@ -671,13 +671,10 @@ export default {
           this.isLoading = false;
           this.$notify({
             title: '提示',
-            message: '请到车辆任务下载页面导出',
+            message: '请到我的下载页面导出',
             type: 'info'
           });
 
-          // this.$notify.error({
-          //   message: '请到车辆任务下载列表导出'
-          // });
           this.$store.commit('initPrint', {
             isPrinting: false,
             moduleId: '/vehicle/delivery/task'

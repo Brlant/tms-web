@@ -70,7 +70,7 @@ export const routes = [
           , {
             path: '/vehicle/taskdownload',
             component: () => import('./components/vehicle/taskdownload/index.vue'),
-            meta: {moduleId: 'vehicle', title: '车辆任务下载', perm: 'tms-task-car-download'}
+            meta: {moduleId: 'vehicle', title: '我的下载', perm: 'tms-task-car-download'}
           }
         ]
       },
