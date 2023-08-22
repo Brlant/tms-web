@@ -113,7 +113,9 @@ export default {
                 this.timers.forEach(i => {
                     window.clearTimeout(i);
                 });
-                // this.clearMap();
+                this.$nextTick(()=>{
+                  this.clearMap();
+                })
                 this.isDistance = false
                 this.actualMileage = ''
                 this.pathSimplifierIns && this.pathSimplifierIns.setData([]);
