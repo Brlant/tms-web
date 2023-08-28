@@ -556,16 +556,10 @@ export default {
         };
         this.isLoading = true;
         this.$store.commit('initPrint', {isPrinting: true});
-        http.post('transport-task/export/task-info', obj).then(res => {
+        http.post('transport-task/print/task-info', obj).then(res => {
           this.isLoading = false;
           this.$store.commit('initPrint', {isPrinting: false});
-          // 
-          this.$notify({
-            title: '提示',
-            message: '请到我的下载页面打印',
-            type: 'info'
-          });
-          // utils.printLocation(this, {'type': 'transport_task', 'path': res.data.url});
+          utils.printLocation(this, {'type': 'transport_task', 'path': res.data.url});
           // 清空列表
           this.taskIdList = [];
           this.checkList = [];
