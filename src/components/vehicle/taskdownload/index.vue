@@ -297,7 +297,7 @@
         this.isLoading = true;
         this.$store.commit('initPrint', {isPrinting: true});
         this.$http.put(`/transport-download/download/${id}`)
-          .then(res => {;
+          .then(res => {
             this.isLoading = false;
             this.$store.commit('initPrint', {isPrinting: false});
             utils.printLocation(this, {'type': 'transport_task', 'path': res.data.fileUrl});
