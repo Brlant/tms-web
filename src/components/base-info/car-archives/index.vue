@@ -188,7 +188,7 @@
                     <goods-row label="发证日期" :span="8">
                       {{ data.carDetailDto.issuingDate|date}}
                     </goods-row>
-                    <goods-row label="强制报废日" :span="8">
+                    <goods-row label="强制报废日" :span="8" :fontColor="isOverdue(data.carDetailDto.forciblyDiscardedDay)">
                       {{ data.carDetailDto.forciblyDiscardedDay|date}}
                     </goods-row>
                   </el-col>
@@ -199,7 +199,7 @@
                     <goods-row label="车辆注册日期" :span="8">
                       {{ data.carDetailDto.createDate|date}}
                     </goods-row>
-                    <goods-row label="检验有效期" :span="8">
+                    <goods-row label="检验有效期" :span="8" :fontColor="isOverdue(data.carDetailDto.checkValidityDate)">
                       {{ data.carDetailDto.checkValidityDate|date}}
                     </goods-row>
                   </el-col>
@@ -217,12 +217,12 @@
                     <goods-row label="交强险保单号" :span="8">
                       {{ data.carDetailDto.ctaliNumber}}
                     </goods-row>
-                    <goods-row label="交强险截止日期" :span="8">
+                    <goods-row label="交强险截止日期" :span="8" :fontColor="isOverdue(data.carDetailDto.ctaliEndDate)">
                       {{ data.carDetailDto.ctaliEndDate|date}}
                     </goods-row>
                   </el-col>
                   <el-col :span="12">
-                    <goods-row label="第三责任险截止日期" :span="8">
+                    <goods-row label="第三责任险截止日期" :span="8" :fontColor="isOverdue(data.carDetailDto.thirdPartyInsuranceEndDate)">
                       {{ data.carDetailDto.thirdPartyInsuranceEndDate|date}}
                     </goods-row>
                     <goods-row label="第三责任险保单号" :span="8">
@@ -415,6 +415,17 @@ export default {
       }
     },
     methods: {
+      // 比较当前时间与传入时间相比，是否超期，超期红色，未超期黑色
+      isOverdue(periodValidity){
+        if(!periodValidity){
+          return '#333'
+        }else{
+          let nowTime = this.$moment();
+          let endtime = this.$moment(periodValidity);
+          let days = endtime.diff(nowTime, 'days',true);  // 第三个参数，是否取整，不加第三个参数，默认四色五入取整，加上true，为实际的有效时间(不取整)
+          return  days > 0 ? '#333' : '#c00'
+        }
+      }, 
       batchDeleteBlacklist: function (item) {
         this.$confirm('确认一键删除车辆' + this.currentItem.carDto.plateNumber + '的运输黑名单?', '', {
           confirmButtonText: '确定',

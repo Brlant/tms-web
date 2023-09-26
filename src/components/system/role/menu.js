@@ -106,6 +106,23 @@ export default [
         'leaf': false
       },
       {
+        'id': 'tms-driver-archives',
+        'parentId': 'tms-base-info',
+        'label': '司机档案',
+        'sort': 3,
+        'children': [
+          {
+            'id': 'tms-driver-archives-watch',
+            'parentId': 'tms-driver-archives',
+            'label': '查看司机档案',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+        ],
+        'leaf': false
+      },
+      {
         'id': 'tms-equipment-consumables',
         'parentId': 'tms-base-info',
         'label': '包装耗材',

@@ -186,12 +186,14 @@ export default {
         currentDriver: '',//车辆当前司机
       },
       doing: false,//控制搜索请求
-      // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废
+      // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废 6：异常  7：即将超期
       statusList: [
         {title: '全部', num: 0, status: ''},
         {title: '运输', num: 0, status: 1},
         {title: '空闲', num: 0, status: 2},
         {title: '维修', num: 0, status: 3},
+        {title: '即将超期', num: 0, status: 7},
+        {title: '异常', num: 0, status: 6},
         {title: '停用', num: 0, status: 4},
         {title: '报废', num: 0, status: 5},
       ],

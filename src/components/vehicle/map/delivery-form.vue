@@ -38,7 +38,7 @@
           <div class="content">
             <el-form-item label="运货车辆" prop="carId">
               <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="getCarList"
-                         :clearable="true" @change="setCarInfo(form.carId)" @click.native.once="getCarList('')"
+                         :clearable="true" @change="setCarInfo(form.carId)" @click.native="getCarList('')"
                          v-model="form.carId" popperClass="good-selects" @clear="clearCarInfo">
                 <el-option :value="car.carDto.id" :key="car.carDto.id" :label="car.carDto.plateNumber"
                            v-for="car in carList">
@@ -69,7 +69,7 @@
             <two-column>
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
-                           :clearable="true" @change="setDriverInfo(form.driveId)" @click.native.once="filterUser('')"
+                           :clearable="true" @change="setDriverInfo(form.driveId)" @click.native="filterUser('')"
                            v-model="form.driveId" popperClass="good-selects">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
                     <div style="overflow: hidden">
@@ -88,7 +88,7 @@
           </div>
           <el-form-item slot="left" label="负责人" prop="head">
             <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterHead"
-                       :clearable="true" @click.native.once="filterHead('')"
+                       :clearable="true" @click.native="filterHead('')"
                        v-model="form.head" popperClass="good-selects">
               <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in headList">
                 <div style="overflow: hidden">
@@ -355,7 +355,7 @@ export default {
       filterUser: function (query) {
         let data = Object.assign({}, {
           pageNo: 1,
-          pageSize: 20,
+          pageSize: 1000,
           objectId: 'oms-system',
           keyWord: query,
           status: 1
@@ -406,7 +406,9 @@ export default {
       },
       getCarList: function (query) {
         let param = Object.assign({}, {
-          keyword: query
+          keyword: query,
+          pageNo:1,
+          pageSize:1000,
         });
         CarArchives.query(param).then(res => {
           this.carList = res.data.list;

@@ -262,6 +262,28 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="车辆信息" style="max-width: max-content" label-width="120px" prop="carrierId">
+          <el-select v-model="dialogForm.carrierId" :disabled="dialogForm.carryType === 0" placeholder="请选择车辆"
+                     filterable
+                     size="mini">
+            <el-option v-for="item in carrierList"
+                       :key="item.carrierId"
+                       :label="item.carrierName"
+                       :value="item.carrierId">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="司机名称" style="max-width: max-content" label-width="120px" prop="carrierId">
+          <el-select v-model="dialogForm.carrierId" :disabled="dialogForm.carryType === 0" placeholder="请选择司机"
+                     filterable
+                     size="mini">
+            <el-option v-for="item in carrierList"
+                       :key="item.carrierId"
+                       :label="item.carrierName"
+                       :value="item.carrierId">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirmBeforeHandle">确认生成运单</el-button>

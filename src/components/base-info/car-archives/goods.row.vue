@@ -7,8 +7,8 @@
   <el-row :class="rowClass" class="mb2">
     <el-col :span="span" class="text-right"><span style="padding-right:10px;" v-show="label">{{label}}:</span>
     </el-col>
-    <el-col :span="24-span">
-      <slot></slot>
+    <el-col :span="24-span" :style="{color:fontColor}">
+      <slot ></slot>
     </el-col>
   </el-row>
 </template>
@@ -29,6 +29,10 @@
       rowClass: {
         type: String,
         default: ''
+      },
+      fontColor:{
+        type: String,
+        default: '#333'
       }
     }
   };
