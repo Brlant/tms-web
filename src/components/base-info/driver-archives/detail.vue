@@ -151,28 +151,33 @@
     <div class="content-right min-gutter">
       <h3>详情</h3>
       <el-row>
-        <oms-row :span="8" label="司机姓名">{{ data.extDto && data.extDto.logisticsDealer }}</oms-row>
+        <oms-row :span="8" label="司机姓名">{{ data.driverName}}</oms-row>
       </el-row>
       <el-row>
-        <oms-row :span="8" label="所属公司">{{ data.extDto && data.extDto.logisticsDealer }}</oms-row>
+        <oms-row :span="8" label="分类">
+            <dict :dict-group="'driverType'" :dict-key="''+data.driverType"></dict>
+        </oms-row>
       </el-row>
       <el-row>
-        <oms-row :span="8" label="分   类">{{ data.extDto && data.extDto.transportTimeLimit }}</oms-row>
+        <oms-row :span="8" label="所属公司">{{ data.carrierName }}</oms-row>
       </el-row>
       <el-row>
-        <oms-row :span="8" label="手机号码">{{ data.extDto && data.extDto.licensePlateNumber }}</oms-row>
+        <oms-row :span="8" label="工号">{{ data.jobNumber }}</oms-row>
       </el-row>
       <el-row>
-        <oms-row :span="8" label="身份证号码">{{ data.remarks }}</oms-row>
+        <oms-row :span="8" label="手机号码">{{ data.driverPhone}}</oms-row>
       </el-row>
       <el-row>
-        <oms-row :span="8" label="驾驶证到期日">{{ data.remarks }}</oms-row>
+        <oms-row :span="8" label="身份证号码">{{ data.driverIdentity }}</oms-row>
       </el-row>
       <el-row>
-        <oms-row :span="8" label="从业资格证到期日">{{ data.remarks }}</oms-row>
+        <oms-row :span="8" label="驾驶证到期日">{{ data.licenceEndDate | date }}</oms-row>
       </el-row>
       <el-row>
-        <oms-row :span="8" label="健康证到期日">{{ data.remarks }}</oms-row>
+        <oms-row :span="8" label="从业资格证到期日">{{ data.professionEndDate | date }}</oms-row>
+      </el-row>
+      <el-row>
+        <oms-row :span="8" label="健康证到期日">{{ data.healthEndDate | date }}</oms-row>
       </el-row>
     </div>
   </div>

@@ -10,31 +10,32 @@
     transform: translateY(-50%);
   }
 }
-  .tips{
-    color: #F56C6C;
-    width: 100%;
-    text-align: center;
-  }
+
+.tips {
+  color: #F56C6C;
+  width: 100%;
+  text-align: center;
+}
 </style>
 <template>
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
         <perm label="tms-order-generate">
-          <el-button plain size="small" @click="createWayBill" v-if="activeStatus===0||activeStatus==='0'">
+          <el-button plain size="small" @click="createWayBill" v-if="activeStatus === 0 || activeStatus === '0'">
             <f-a class="icon-small" name="wave"></f-a>
             批量生成运单
           </el-button>
         </perm>
         <perm label="tms-order-generate-single">
-          <el-button plain size="small" @click="singleCreateWayBill" v-if="activeStatus===0||activeStatus==='0'">
+          <el-button plain size="small" @click="singleCreateWayBill" v-if="activeStatus === 0 || activeStatus === '0'">
             <f-a class="icon-small" name="wave"></f-a>
             单独批量生成运单
           </el-button>
         </perm>
         <perm label="tms-order-generate">
           <el-button plain size="small" @click="autoCreateWayBill"
-                     v-if="(activeStatus===0||activeStatus==='0')&&(!checkList||checkList.length==0)">
+            v-if="(activeStatus === 0 || activeStatus === '0') && (!checkList || checkList.length == 0)">
             <f-a class="icon-small" name="wave"></f-a>
             自动生成运单
           </el-button>
@@ -53,12 +54,11 @@
         </perm>
       </template>
     </search-part>
-    <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus"/>
+    <status-list :activeStatus="activeStatus" :statusList="orderType" :checkStatus="checkStatus" />
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="3">
-          <el-checkbox @change="checkAll" v-model="isCheckAll"
-                       v-if="activeStatus===0||activeStatus==='0'"></el-checkbox>
+          <el-checkbox @change="checkAll" v-model="isCheckAll" v-if="activeStatus === 0 || activeStatus === '0'"></el-checkbox>
           订单号
         </el-col>
         <el-col :span="2">类型</el-col>
@@ -84,11 +84,11 @@
       </el-row>
       <div v-else class="order-list-body flex-list-dom">
         <div class="order-list-item" v-for="item in dataList" @click="showInfo(item)"
-             :class="[formatRowClass(item.status, orderType) ,{'active':currentItemId===item.id}]">
+          :class="[formatRowClass(item.status, orderType), { 'active': currentItemId === item.id }]">
           <el-row>
             <el-col :span="3" class="special-col R">
               <div class="el-checkbox-warp" @click.stop.prevent="checkItem(item)"
-                   v-if="activeStatus===0||activeStatus==='0'">
+                v-if="activeStatus === 0 || activeStatus === '0'">
                 <el-checkbox v-model="item.isChecked"></el-checkbox>
               </div>
               <div>
@@ -134,7 +134,7 @@
             </el-col>
             <el-col :span="2" class="R">
               <div>
-                {{ item.deliveryTime|date }}
+                {{ item.deliveryTime | date }}
               </div>
             </el-col>
             <el-col :span="2" class="R">
@@ -143,26 +143,26 @@
               </div>
             </el-col>
             <el-col :span="3" class="opera-btn">
-              <div v-if="activeStatus==='1'">
+              <div v-if="activeStatus === '1'">
                 <perm label="tms-order-edit" class="btn-line-block">
-                    <span @click.stop="edit(item)" v-if="activeStatus==='1'">
-                      <a @click.pervent="" class="btn-circle btn-opera">
-                        <i class="el-icon-t-edit"></i>
-                      </a>编辑
-                    </span>
+                  <span @click.stop="edit(item)" v-if="activeStatus === '1'">
+                    <a @click.pervent="" class="btn-circle btn-opera">
+                      <i class="el-icon-t-edit"></i>
+                    </a>编辑
+                  </span>
                 </perm>
               </div>
-              <div v-if="activeStatus!=='1'">
+              <div v-if="activeStatus !== '1'">
                 <div>
                   <perm label="tms-order-edit" class="btn-line-block">
-                    <span @click.stop="edit(item)" v-if="activeStatus==='0'">
+                    <span @click.stop="edit(item)" v-if="activeStatus === '0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-edit"></i>
                       </a>编辑
                     </span>
                   </perm>
                   <perm label="tms-order-delete" class="btn-line-block">
-                    <span @click.stop="deleteOrder(item)" v-if="activeStatus==='0'">
+                    <span @click.stop="deleteOrder(item)" v-if="activeStatus === '0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-delete"></i>
                       </a>删除
@@ -171,14 +171,14 @@
                 </div>
                 <div style="padding-top: 2px">
                   <perm label="tms-order-cancel" class="opera-btn btn-line-block">
-                    <span @click.stop="cancelOrder(item)" v-if="activeStatus==='0'">
+                    <span @click.stop="cancelOrder(item)" v-if="activeStatus === '0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-forbidden"></i>
                       </a>取消
                     </span>
                   </perm>
                   <perm label="tms-order-dismantling" class="opera-btn btn-line-block">
-                    <span @click.stop="splitOrder(item)" v-if="activeStatus==='0'">
+                    <span @click.stop="splitOrder(item)" v-if="activeStatus === '0'">
                       <a @click.pervent="" class="btn-circle btn-opera">
                         <i class="el-icon-t-basic"></i>
                       </a>拆分订单
@@ -203,41 +203,32 @@
     </div>
     <div class="text-center" v-show="dataList.length && !loadingData">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page="pager.currentPage"
-                     :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
-                     layout="total, sizes, prev, pager, next, jumper"
-                     :total="pager.count">
+        :current-page="pager.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pager.pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="pager.count">
       </el-pagination>
     </div>
 
-    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{'width':'900px','padding':0}">
-      <component :is="currentPart" :action="action" :formItem="form" @right-close="resetRightBox" @change="submit"/>
+    <page-right :show="showIndex === 0" @right-close="resetRightBox" :css="{ 'width': '900px', 'padding': 0 }">
+      <component :is="currentPart" :action="action" :formItem="form" @right-close="resetRightBox" @change="submit" />
     </page-right>
-    <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{'width':'1200px','padding':0}">
-      <component :is="currentInfoPart" :showBigMap="showBigMap" :formItem="form" @right-close="resetRightBox"/>
+    <page-right :show="showInfoIndex === 0" @right-close="resetRightBox" :css="{ 'width': '1200px', 'padding': 0 }">
+      <component :is="currentInfoPart" :showBigMap="showBigMap" :formItem="form" @right-close="resetRightBox" />
     </page-right>
-    <page-right :show="showWayBillPart" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
-      <component :is="currentWayBillPart"
-                 :carrierList="carrierList"
-                 @wayBillShow="wayBillShow"
-                 :checkList="checkListPara"
-                 @right-close="resetRightBox" @change="submit"/>
+    <page-right :show="showWayBillPart" @right-close="resetRightBox" :css="{ 'width': '1000px', 'padding': 0 }">
+      <component :is="currentWayBillPart" :carrierList="carrierList" @wayBillShow="wayBillShow" :checkList="checkListPara"
+        @right-close="resetRightBox" @change="submit" />
     </page-right>
-    <page-right :show="showSingleWayBillPart" @right-close="resetRightBox" :css="{'width':'1000px','padding':0}">
-      <component :is="currentSingleWayBillPart"
-                 :checkList="checkListPara"
-                 :carrierList="carrierList"
-                 @right-close="resetRightBox"
-                 @change="submit"
-                 @wayBillShow="wayBillShow"/>
+    <page-right :show="showSingleWayBillPart" @right-close="resetRightBox" :css="{ 'width': '1000px', 'padding': 0 }">
+      <component :is="currentSingleWayBillPart" :checkList="checkListPara" :carrierList="carrierList"
+        @right-close="resetRightBox" @change="submit" @wayBillShow="wayBillShow" />
     </page-right>
-    <page-right :show="showSplitOrderPart" @right-close="resetRightBox" :css="{'width':'1200px','padding':0}">
-      <component :is="currentSplitOrderPart" :formItem="form" @right-close="resetRightBox" @change="submit"/>
+    <page-right :show="showSplitOrderPart" @right-close="resetRightBox" :css="{ 'width': '1200px', 'padding': 0 }">
+      <component :is="currentSplitOrderPart" :formItem="form" @right-close="resetRightBox" @change="submit" />
     </page-right>
     <el-dialog :title="`运单:${activeNo} 派送信息`" :visible.sync="isShowMulBigMap" width="100%" :fullscreen="true"
-               custom-class="custom-dialog-map">
-      <map-path :activeNo="activeNo" :formItem="formItem" :mapStyle="{height: bodyHeight}" vid="mapBigPath"
-                v-show="isShowMulBigMap"></map-path>
+      custom-class="custom-dialog-map">
+      <map-path :activeNo="activeNo" :formItem="formItem" :mapStyle="{ height: bodyHeight }" vid="mapBigPath"
+        v-show="isShowMulBigMap"></map-path>
     </el-dialog>
     <el-dialog :visible.sync="dialogFormVisible" center width="25%">
       <el-form ref="dialogForm" :model="dialogForm" :rules="dialogFormRules">
@@ -248,39 +239,30 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="承运商名称" style="max-width: max-content" label-width="120px" prop="carrierId">
-          <el-select v-model="dialogForm.carrierId" :disabled="dialogForm.carryType === 0" placeholder="请选择承运商"
-                     filterable
-                     size="mini">
-            <el-option v-for="item in carrierList"
-                       :key="item.carrierId"
-                       :label="item.carrierName"
-                       :value="item.carrierId">
+          <el-select v-model="dialogForm.carrierId" :disabled="dialogForm.carryType === 0" placeholder="请选择承运商" filterable
+            size="mini" @change="chooseCarrier">
+            <el-option v-for="item in carrierList" :key="item.carrierId" :label="item.carrierName"
+              :value="item.carrierId">
               <span style="float: left" title="承运商名称">{{ item.carrierName }}</span>
               <span style="float: right; color: #8492a6; font-size: 13px" title="承运条件">{{
-                  item.transportationConditions|transName
-                }}</span>
+                item.transportationConditions | transName
+              }}</span>
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="车辆信息" style="max-width: max-content" label-width="120px" prop="carrierId">
-          <el-select v-model="dialogForm.carrierId" :disabled="dialogForm.carryType === 0" placeholder="请选择车辆"
-                     filterable
-                     size="mini">
-            <el-option v-for="item in carrierList"
-                       :key="item.carrierId"
-                       :label="item.carrierName"
-                       :value="item.carrierId">
+        <el-form-item label="车辆信息" style="max-width: max-content" label-width="120px" prop="carId">
+          <el-select v-model="dialogForm.carId" :disabled="dialogForm.carryType === 0" placeholder="请选择车辆" filterable
+            size="mini">
+            <el-option v-for="item in carList" :key="item.carDto.id" :label="item.carDto.plateNumber"
+              :value="item.carDto.id"  :disabled="item.carDto.carState == 6">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="司机名称" style="max-width: max-content" label-width="120px" prop="carrierId">
-          <el-select v-model="dialogForm.carrierId" :disabled="dialogForm.carryType === 0" placeholder="请选择司机"
-                     filterable
-                     size="mini">
-            <el-option v-for="item in carrierList"
-                       :key="item.carrierId"
-                       :label="item.carrierName"
-                       :value="item.carrierId">
+        <el-form-item label="司机名称" style="max-width: max-content" label-width="120px" prop="driverId">
+          <el-select v-model="dialogForm.driverId" :disabled="dialogForm.carryType === 0" placeholder="请选择司机" filterable
+            size="mini">
+            <el-option v-for="item in driverList" :key="item.driverId" :label="item.driverName"
+              :value="item.driverId"  :disabled="item.driverStatus == 6">
             </el-option>
           </el-select>
         </el-form-item>
@@ -290,8 +272,8 @@
         <el-button @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
-        <!-- 面单号 -->
-<!-- <el-dialog :visible.sync="surfaceFormVisible" center width="700px" :show-close="false" >
+    <!-- 面单号 -->
+    <!-- <el-dialog :visible.sync="surfaceFormVisible" center width="700px" :show-close="false" >
           <el-form ref="surface" :model="surface">
               <el-form-item label="面单号" label-width="100px">
                           <oms-input v-model="surface.faceSheetNo" placeholder="请输入面单号"></oms-input>
@@ -308,7 +290,7 @@
 <script>
 import utils from '@/tools/utils';
 import SearchPart from './search';
-import {http, TmsOrder} from '@/resources';
+import { http, TmsOrder } from '@/resources';
 import addForm from './form/add-form.vue';
 import showForm from './form/show-form.vue';
 import splitForm from './form/split-order.vue';
@@ -318,100 +300,120 @@ import StatusMixin from '@/mixins/statusMixin';
 import Perm from '@/components/common/perm';
 import MapPath from '../common/map-list';
 
-  export default {
-    components: {
-      Perm, SearchPart, addForm, wayBillForm,singleWayBillForm, MapPath
-    },
-    mixins: [StatusMixin],
-    data () {
-      return {
-        doing:false, // 确定按钮loading
-        surfaceFormVisible:false,  // 面单号弹窗
-        carrierList: [],
-        loadingData: false,
-        activeStatus: '0',
-        orderType: utils.orderType,
-        dataList: [],
-        showIndex: -1,
-        showInfoIndex: -1,
-        currentPart: null,
-        currentInfoPart: null,
-        currentWayBillPart: null,
-        currentSingleWayBillPart: null,
-        currentSplitOrderPart: null,
-        dialogComponents: {
-          0: addForm
-        },
-        dialogInfoComponents: {
-          0: showForm
-        },
-        dialogWayBillComponents: {
-          0: wayBillForm
-        },
-        dialogSingleWayBillComponents: {
-          0: singleWayBillForm
-        },
-        dialogSplitFormComponents: {
-          0: splitForm
-        },
-        pager: {
-          currentPage: 1,
-          count: 0,
-          pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
-          totalPage: 1
-        },
-        action: '',
-        form: {},
-        filters: {
-          status: 0,
-          orderNo: '',
-          waybillType: '',
-          shipmentWay: '',
-          deliveryWay:'',
-          faceSheetNo:'',
-          serviceType: '',
-          senderId: '',
-          receiverId: '',
-          startTime: '',
-          endTime: '',
-          tmsOrderNumber:'',
-          goodsTotalName:'',
-          destinationAreaCode:''
-        },
-         // 面单号
-        surface:{
-          faceSheetNo:'',
-        },
-        isCheckAll: false,
-        isLoading:false,
-        checkList: [],
-        checkListPara: [],
-        showWayBillPart: false,
-        showSingleWayBillPart: false,
-        showSplitOrderPart: false,
-        formItem: {},
-        activeNo: '',
-        isShowMulBigMap: false,
-        dialogFormVisible: false,
-        auto: false,//如果为true，表示自动生成运单
-        dialogForm: {
-          carryType: 0,
-          carrierId: '',
-        },
-        dialogFormRules: {
-          carrierId: {
-            trigger: 'change',
-            validator: (rules, value, cb) => {
-              if (this.dialogForm.carryType === 1 && !value) {
-                return cb(new Error('请选择第三方承运商'));
-              }
+export default {
+  components: {
+    Perm, SearchPart, addForm, wayBillForm, singleWayBillForm, MapPath
+  },
+  mixins: [StatusMixin],
+  data() {
+    let self = this
+    let validateInput =(rule,value,callback)=>{
+      if (self.dialogForm.carryType === 1 && !value) {
+        return callback(new Error('请选择...'));
+      }
+        return callback()
+    }
+    return {
+      doing: false, // 确定按钮loading
+      surfaceFormVisible: false,  // 面单号弹窗
+      carrierList: [],  // 承运商信息下拉
+      carList:[],  //  车辆信息下拉
+      driverList:[], // 司机信息下拉
+      loadingData: false,
+      activeStatus: '0',
+      orderType: utils.orderType,
+      dataList: [],
+      showIndex: -1,
+      showInfoIndex: -1,
+      currentPart: null,
+      currentInfoPart: null,
+      currentWayBillPart: null,
+      currentSingleWayBillPart: null,
+      currentSplitOrderPart: null,
+      dialogComponents: {
+        0: addForm
+      },
+      dialogInfoComponents: {
+        0: showForm
+      },
+      dialogWayBillComponents: {
+        0: wayBillForm
+      },
+      dialogSingleWayBillComponents: {
+        0: singleWayBillForm
+      },
+      dialogSplitFormComponents: {
+        0: splitForm
+      },
+      pager: {
+        currentPage: 1,
+        count: 0,
+        pageSize: parseInt(window.localStorage.getItem('currentPageSize'), 10) || 10,
+        totalPage: 1
+      },
+      action: '',
+      form: {},
+      filters: {
+        status: 0,
+        orderNo: '',
+        waybillType: '',
+        shipmentWay: '',
+        deliveryWay: '',
+        faceSheetNo: '',
+        serviceType: '',
+        senderId: '',
+        receiverId: '',
+        startTime: '',
+        endTime: '',
+        tmsOrderNumber: '',
+        goodsTotalName: '',
+        destinationAreaCode: ''
+      },
+      // 面单号
+      surface: {
+        faceSheetNo: '',
+      },
+      isCheckAll: false,
+      isLoading: false,
+      checkList: [],
+      checkListPara: [],
+      showWayBillPart: false,
+      showSingleWayBillPart: false,
+      showSplitOrderPart: false,
+      formItem: {},
+      activeNo: '',
+      isShowMulBigMap: false,
+      dialogFormVisible: false,
+      auto: false,//如果为true，表示自动生成运单
+      dialogForm: {
+        carryType: 0,
+        carrierId: '',
+        carId:'',
+        driverId:'',
+      },
+      dialogFormRules: {
+        carrierId:[
+          {validator:validateInput,trigger: 'change',}
+        ],
+        carId:[
+          {validator:validateInput,trigger: 'change',}
+        ],
+        driverId:[
+          {validator:validateInput,trigger: 'change',}
+        ],
+        // carrierId: {
+        //   trigger: 'change',
+        //   validator: (rules, value, cb) => {
+        //     if (this.dialogForm.carryType === 1 && !value) {
+        //       return cb(new Error('请选择第三方承运商'));
+        //     }
 
-              return cb();
-            },
-          }
-        }
-      };
-    },
+        //     return cb();
+        //   },
+        // },
+      }
+    };
+  },
   computed: {
     bodyHeight() {
       let height = parseInt(this.$store.state.bodyHeight, 10);
@@ -454,7 +456,7 @@ import MapPath from '../common/map-list';
     this.getTmsOrderPage(1);
     let id = this.$route.params.id;
     if (id !== 'list' && id !== ':id') {
-      this.showInfo({id});
+      this.showInfo({ id });
     } else {
       this.$router.push('/document/order/list');
     }
@@ -462,6 +464,40 @@ import MapPath from '../common/map-list';
     this.getCarrierList(1);
   },
   methods: {
+    // 选择承运商
+    chooseCarrier(val) {
+      this.dialogForm.carId = ''
+      this.dialogForm.driverId = ''
+      if(val){
+        // 获取车辆信息
+        this.getCarInfo()
+        // 获取司机信息
+        this.getDriverInfo()
+      }else{
+        this.carList = []
+        this.driverList = []
+      }
+    },
+    // 获取车辆信息
+    getCarInfo(query){
+      let data = {
+        plateNumber: query,
+        ascriptionCompany: this.dialogForm.carrierId
+      }
+      this.$http.post('/car-archives/queryCarByCondition', data).then(res => {
+        this.carList = res.data;
+      })
+    },
+    // 获取司机信息
+    getDriverInfo(query){
+      let data = {
+        keyWord: query,
+        carrierId: this.dialogForm.carrierId
+      }
+      this.$http.post('/driver-info/queryDriversByCarrier', data).then(res => {
+        this.driverList = res.data;
+      })
+    },
     wayBillShow(auto = false) {
       this.dialogFormVisible = true;
       this.auto = auto
@@ -471,9 +507,9 @@ import MapPath from '../common/map-list';
     },
     getCarrierList(pageNo, keyWord = '') {
       const pageSize = 20;
-      this.$http.get('/carrier/findCarrierByPage', {params: {status: 2, keyWord, pageNo, pageSize}})
+      this.$http.get('/carrier/findCarrierByPage', { params: { status: 2, keyWord, pageNo, pageSize } })
         .then(res => {
-          const {list, totalPage} = res.data;
+          const { list, totalPage } = res.data;
           this.carrierList = list;
           if (totalPage > pageNo) {
             this.getCarrierList(++pageNo);
@@ -481,6 +517,10 @@ import MapPath from '../common/map-list';
         })
         .catch(err => {
           this.carrierList = [];
+          // 清空车辆、司机
+          // TODO
+          this.carList = []
+          this.driverList = []
         })
     },
     exportOrder() {
@@ -547,7 +587,7 @@ import MapPath from '../common/map-list';
     },
     autoHandle() {
       let param = Object.assign({}, this.filters, this.dialogForm);
-      if (param.carryType == 0){
+      if (param.carryType == 0) {
         param.carrierId = ''
       }
 
@@ -578,13 +618,13 @@ import MapPath from '../common/map-list';
         }
       });
 
-      wayBillParams.forEach(wb=>{
+      wayBillParams.forEach(wb => {
         if (wb.carryType === 0) {
           wb.carrierId = '';
         }
       })
 
-      TmsOrder.createWayBill({wayBillParams}, this.auto)
+      TmsOrder.createWayBill({ wayBillParams }, this.auto)
         .then(() => {
           this.doing = false;
           this.$notify.success({

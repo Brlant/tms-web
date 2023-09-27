@@ -319,16 +319,20 @@ export default {
             transporting,
             free,
             maintain,
+            abnormal,
+            overdue,
             disable,
             useless
           } = res.data;
 
-          this.statusList[0].num = transporting + free + maintain + disable + useless;
+          this.statusList[0].num = transporting + free + maintain + disable + useless + overdue + abnormal;
           this.statusList[1].num = transporting;
           this.statusList[2].num = free;
           this.statusList[3].num = maintain;
-          this.statusList[4].num = disable;
-          this.statusList[5].num = useless;
+          this.statusList[4].num = overdue;
+          this.statusList[5].num = abnormal;
+          this.statusList[6].num = disable;
+          this.statusList[7].num = useless;
         })
         .catch(err => {
           console.log(err)
