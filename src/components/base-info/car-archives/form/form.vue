@@ -347,7 +347,7 @@ export default {
       return this.$getDict('transportationCondition');
     },
     driverType() {
-      return this.$getDict('driverType');
+      return this.$getDict('ascriptionType');
     },
   },
   props: ['formItem', 'action'],

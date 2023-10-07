@@ -147,7 +147,7 @@
                   </el-col>
                   <el-col :span="12">
                     <goods-row label="分类" :span="8">
-                      <dict :dict-group="'driverType'" :dict-key="formatStatus(data.carDto.ascriptionType)"></dict>
+                      <dict :dict-group="'ascriptionType'" :dict-key="formatStatus(data.carDto.ascriptionType)"></dict>
                     </goods-row>
                     <goods-row label="车辆承重" :span="8">
                       {{ data.carDto.loadBearing}} <span v-if="data.carDto.loadBearing">千克</span>
