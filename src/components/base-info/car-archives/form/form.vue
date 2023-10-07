@@ -223,7 +223,7 @@
   </dialog-template>
 </template>
 <script>
-import { BaseInfo, CarArchives, User,Carrier } from '@/resources';
+import { BaseInfo, CarArchives, User, Carrier } from '@/resources';
 import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
 import utils from '@/tools/utils';
 
@@ -389,8 +389,8 @@ export default {
         });
       }
       if (this.action === 'edit') {
-        if(val.carDto.ascriptionType){
-          val.carDto.ascriptionType = ''+val.carDto.ascriptionType
+        if (val.carDto.ascriptionType) {
+          val.carDto.ascriptionType = '' + val.carDto.ascriptionType
         }
         this.form.carDto = Object.assign({}, {
           id: '',
@@ -423,13 +423,13 @@ export default {
           carriageWidth: '',
           carriageHeight: ''
         }, val.carDetailDto);
-        if(val.carDto.ascriptionType){
-          if(val.carDto.ascriptionType == 1){
+        if (val.carDto.ascriptionType) {
+          if (val.carDto.ascriptionType == 1) {
             // 归属公司回显过滤
             if (this.form.carDto.ascriptionCompanyName) {
               this.filterCustomer(this.form.carDto.ascriptionCompanyName);
             }
-          }else{
+          } else {
             if (this.form.carDto.ascriptionCompanyName) {
               this.filterCarrierList(this.form.carDto.ascriptionCompanyName)
             }
@@ -449,7 +449,7 @@ export default {
   },
   methods: {
     // 分类事件  切换时需要清除掉选择的归属公司
-    exchangeType(){
+    exchangeType() {
       this.form.carDto.ascriptionCompany = ''
       this.form.carDto.ascriptionCompanyName = ''
     },
@@ -521,12 +521,20 @@ export default {
       if (!periodValidity) {
         return 1
       } else {
-        let nowTime = this.$moment();
+        let date = new Date()
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        let day = date.getDate()
+        if (month < 10) month = `0${month}`
+        if (day < 10) day = `0${day}`
+        let nowTime = `${year}-${month}-${day}`
+        let currentTime = this.$moment(nowTime);
         let endtime = this.$moment(periodValidity);
-        let days = endtime.diff(nowTime, 'days', true);  // 第三个参数，是否取整，不加第三个参数，默认四色五入取整，加上true，为实际的有效时间(不取整)
+        let days = endtime.diff(currentTime, 'days', true);  // 第三个参数，是否取整，不加第三个参数，默认四色五入取整，加上true，为实际的有效时间(不取整)
+        console.log(days,'days');
         if (days > 30) {
           return 1
-        } else if (days <= 30 && days > 0) {
+        } else if (days <= 30 && days >= 0) {
           return 2
         } else {
           return 3

@@ -423,10 +423,18 @@ export default {
         if(!periodValidity){
           return '#333'
         }else{
-          let nowTime = this.$moment();
+          // 获取当前时间 yyyy-MM-dd
+          let date = new Date()
+            let year = date.getFullYear()
+            let month = date.getMonth() + 1
+            let day = date.getDate()
+            if(month<10) month = `0${month}`
+            if(day<10) day = `0${day}`
+            let nowTime = `${year}-${month}-${day}`
+          let currentTime = this.$moment(nowTime);
           let endtime = this.$moment(periodValidity);
-          let days = endtime.diff(nowTime, 'days',true);  // 第三个参数，是否取整，不加第三个参数，默认四色五入取整，加上true，为实际的有效时间(不取整)
-          return  days > 0 ? '#333' : '#c00'
+          let days = endtime.diff(currentTime, 'days',true);  // 第三个参数，是否取整，不加第三个参数，默认四色五入取整，加上true，为实际的有效时间(不取整)
+          return  days >= 0 ? '#333' : '#c00'
         }
       }, 
       batchDeleteBlacklist: function (item) {

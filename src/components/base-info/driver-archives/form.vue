@@ -339,12 +339,19 @@ export default {
             if (!periodValidity) {
                 return 1
             } else {
-                let nowTime = this.$moment();
+                let date = new Date()
+                let year = date.getFullYear()
+                let month = date.getMonth() + 1
+                let day = date.getDate()
+                if (month < 10) month = `0${month}`
+                if (day < 10) day = `0${day}`
+                let nowTime = `${year}-${month}-${day}`
+                let currentTime = this.$moment(nowTime);
                 let endtime = this.$moment(periodValidity);
-                let days = endtime.diff(nowTime, 'days', true);  // 第三个参数，是否取整，不加第三个参数，默认四色五入取整，加上true，为实际的有效时间(不取整)
+                let days = endtime.diff(currentTime, 'days', true);  // 第三个参数，是否取整，不加第三个参数，默认四色五入取整，加上true，为实际的有效时间(不取整)
                 if (days > 30) {
                     return 1
-                } else if (days <= 30 && days > 0) {
+                } else if (days <= 30 && days >= 0) {
                     return 2
                 } else {
                     return 3
