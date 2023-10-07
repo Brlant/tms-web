@@ -149,7 +149,7 @@
                                         </perm>
                                         <perm label="driver-info-stop">
                                             <des-btn @click="forbid(row)" icon="forbidden"
-                                                v-show="row.driverStatus === 1 || row.driverStatus === 2 || row.driverStatus === 3">停用
+                                                v-show="row.driverStatus === 1  || row.driverStatus === 3">停用
                                             </des-btn>
                                             <des-btn @click="enableGoods(row)" icon="start"
                                                 v-show="row.driverStatus === 0">启用
