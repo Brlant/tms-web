@@ -15,7 +15,7 @@
         <oms-input type="text" v-model="form.phone" placeholder="请输入"></oms-input>
       </el-form-item>
       <el-form-item label="工号" prop="jobNumber" class="contact-check">
-        <oms-input type="text" v-model="form.jobNumber" placeholder="请输入"></oms-input>
+        <oms-input type="text" :disabled="action == 'edit'" v-model="form.jobNumber" placeholder="请输入"></oms-input>
       </el-form-item>
       <el-form-item label="Email">
         <oms-input type="text" v-model="form.email" placeholder="请输入"></oms-input>
