@@ -208,6 +208,14 @@ export default {
         },
     },
     data: function () {
+        var validatePhone = (rule, value, callback) => {
+            let myreg = /^[1][3,4,5,7,8,9][0-9]{9}$/
+            if(!myreg.test(value)){
+                callback(new Error('请输入正确的手机号'));
+            }else{
+                callback()
+            }
+        };
         return {
             form: {},
             rules: {
@@ -215,7 +223,9 @@ export default {
                 carrierId: [{ required: true, message: '请选择承运单位', trigger: 'change' }],
                 driverType: [{ required: true, message: '请选择司机类型', trigger: 'change' }],
                 jobNumber: [{ required: true, message: '请输入工号', trigger: 'blur' }],
-                driverPhone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+                driverPhone: [{ required: true, message: '请输入手机号', trigger: 'blur' },
+                    { validator: validatePhone, trigger: 'blur' }
+                ],
                 driverIdentity: [{required: true, message: '请输入身份证号', trigger: 'blur' }],
                 licenceEndDate: [{required: true, message: '请选择日期', trigger: 'change' }],
                 professionEndDate: [{required: true, message: '请选择日期', trigger: 'change' }],
