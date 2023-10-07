@@ -423,8 +423,12 @@ export default {
                                 });
                             });
                         } else {
+                            this.doing = false
                             this.$message.warning('工号错误，请确认')
                         }
+                    })
+                    .catch(()=>{
+                        this.doing =false
                     })
                 } else { // 委外  不校验工号
                     this.$http.post('/driver-info', self.form).then(res => {

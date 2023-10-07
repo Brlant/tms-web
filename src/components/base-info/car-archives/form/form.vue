@@ -38,7 +38,7 @@
               </el-select>
             </el-form-item>
             <!-- 自有司机 -->
-            <el-form-item slot="left" label="归属公司" v-if="form.carDto.ascriptionType == 1">
+            <!-- <el-form-item slot="left" label="归属公司" v-if="form.carDto.ascriptionType == 1">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索归属公司" :remote-method="filterCustomer"
                 :clearable="true" v-model="form.carDto.ascriptionCompany" popperClass="good-selects" style="width: 100%">
                 <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in customerList">
@@ -52,9 +52,10 @@
                   </div>
                 </el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <!-- 委外司机 -->
-            <el-form-item slot="left" label="归属公司" v-else>
+            <el-form-item slot="left" label="归属公司"  prop="carDto.ascriptionCompany"  :rules="form.carDto.ascriptionType == 2?[{ required: true, message: '请选择...', trigger: 'change' }]
+            :[{ required: false, message: '请选择...', trigger: 'change' }]">
               <el-select filterable remote placeholder="请输入名称搜索归属公司" v-model="form.carDto.ascriptionCompany"
                 :remote-method="filterCarrierList" :clearable="true" popperClass="good-selects" style="width: 100%">
                 <el-option :label="item.carrierName" :value="item.carrierId" :key="item.carrierId"
@@ -391,6 +392,19 @@ export default {
       if (this.action === 'edit') {
         if (val.carDto.ascriptionType) {
           val.carDto.ascriptionType = '' + val.carDto.ascriptionType
+          if(val.carDto.ascriptionType == 1){
+            let arr = [
+              {
+                carrierId:'GO1',
+                carrierName:'国药控股上海生物医药有限公司'
+              }
+            ]
+            this.carrierList = arr
+          }else{
+            if (this.form.carDto.ascriptionCompanyName) {
+              this.filterCarrierList(this.form.carDto.ascriptionCompanyName)
+            }
+          }
         }
         this.form.carDto = Object.assign({}, {
           id: '',
@@ -423,18 +437,6 @@ export default {
           carriageWidth: '',
           carriageHeight: ''
         }, val.carDetailDto);
-        if (val.carDto.ascriptionType) {
-          if (val.carDto.ascriptionType == 1) {
-            // 归属公司回显过滤
-            if (this.form.carDto.ascriptionCompanyName) {
-              this.filterCustomer(this.form.carDto.ascriptionCompanyName);
-            }
-          } else {
-            if (this.form.carDto.ascriptionCompanyName) {
-              this.filterCarrierList(this.form.carDto.ascriptionCompanyName)
-            }
-          }
-        }
         if (this.form.carDto.defaultDriverName) {
           this.filterUser(this.form.carDto.defaultDriverName);
         }
@@ -450,8 +452,23 @@ export default {
   methods: {
     // 分类事件  切换时需要清除掉选择的归属公司
     exchangeType() {
-      this.form.carDto.ascriptionCompany = ''
-      this.form.carDto.ascriptionCompanyName = ''
+      // 只有公司 下拉显示国药，字段也要回显
+      let arr = [
+              {
+                carrierId:'GO1',
+                carrierName:'国药控股上海生物医药有限公司'
+              }
+            ]
+        if(this.form.carDto.ascriptionType == 1){
+          this.carrierList = arr
+          this.form.carDto.ascriptionCompany = 'GO1'
+          this.form.carDto.ascriptionCompanyName = '国药控股上海生物医药有限公司'
+        }else{
+          // 委外公司  下拉显示第三方承运商
+          this.filterCarrierList('')
+          this.form.carDto.ascriptionCompany = ''
+          this.form.carDto.ascriptionCompanyName = ''
+        }
     },
     formatPrice() {// 格式化单价，保留两位小数
       this.form.carDto.perFreight = utils.autoformatDecimalPoint(this.form.carDto.perFreight);
@@ -531,7 +548,7 @@ export default {
         let currentTime = this.$moment(nowTime);
         let endtime = this.$moment(periodValidity);
         let days = endtime.diff(currentTime, 'days', true);  // 第三个参数，是否取整，不加第三个参数，默认四色五入取整，加上true，为实际的有效时间(不取整)
-        console.log(days,'days');
+        console.log(days, 'days');
         if (days > 30) {
           return 1
         } else if (days <= 30 && days >= 0) {
