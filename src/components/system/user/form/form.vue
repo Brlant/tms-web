@@ -14,6 +14,9 @@
       <el-form-item label="手机号码" prop="phone" class="contact-check">
         <oms-input type="text" v-model="form.phone" placeholder="请输入"></oms-input>
       </el-form-item>
+      <el-form-item label="工号" prop="jobNumber" class="contact-check">
+        <oms-input type="text" :disabled="action == 'edit'" v-model="form.jobNumber" placeholder="请输入"></oms-input>
+      </el-form-item>
       <el-form-item label="Email">
         <oms-input type="text" v-model="form.email" placeholder="请输入"></oms-input>
       </el-form-item>
@@ -99,6 +102,7 @@ export default {
         form: {
           name: '',
           phone: '',
+          jobNumber:'',
           email: '',
           list: []
         },
@@ -109,6 +113,9 @@ export default {
           phone: [
             {required: true, message: '请输入手机号码', trigger: 'blur'},
             {validator: checkPhone, trigger: 'blur'}
+          ],
+          jobNumber: [
+            {required: false, message: '请输入工号', trigger: 'blur'}
           ],
           list: [
             {required: true, type: 'array', message: '请选择用户角色', trigger: 'blur'}
@@ -129,6 +136,7 @@ export default {
           this.form = {
             name: '',
             phone: '',
+            jobNumber:'',
             email: '',
             list: []
           };

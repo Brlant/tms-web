@@ -23,7 +23,7 @@
                               placeholder="请选择最后更新时间" clearable>
               </el-date-picker>
             </el-form-item>
-            <el-form-item label="车辆归属公司">
+            <!-- <el-form-item label="车辆归属公司">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索归属公司" :remote-method="filterCustomer"
                          :clearable="true"
                          v-model="searchParams.ascriptionCompany" popperClass="good-selects" style="width: 100%">
@@ -38,7 +38,7 @@
                   </div>
                 </el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="车牌号码">
               <el-input v-model="searchParams.plateNumber" placeholder="请输入车牌号码" clearable></el-input>
             </el-form-item>
@@ -186,12 +186,14 @@ export default {
         currentDriver: '',//车辆当前司机
       },
       doing: false,//控制搜索请求
-      // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废
+      // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废 6：异常  7：即将超期
       statusList: [
         {title: '全部', num: 0, status: ''},
         {title: '运输', num: 0, status: 1},
         {title: '空闲', num: 0, status: 2},
         {title: '维修', num: 0, status: 3},
+        {title: '即将超期', num: 0, status: 7},
+        {title: '异常', num: 0, status: 6},
         {title: '停用', num: 0, status: 4},
         {title: '报废', num: 0, status: 5},
       ],
@@ -317,16 +319,20 @@ export default {
             transporting,
             free,
             maintain,
+            abnormal,
+            overdue,
             disable,
             useless
           } = res.data;
 
-          this.statusList[0].num = transporting + free + maintain + disable + useless;
+          this.statusList[0].num = transporting + free + maintain + disable + useless + overdue + abnormal;
           this.statusList[1].num = transporting;
           this.statusList[2].num = free;
           this.statusList[3].num = maintain;
-          this.statusList[4].num = disable;
-          this.statusList[5].num = useless;
+          this.statusList[4].num = overdue;
+          this.statusList[5].num = abnormal;
+          this.statusList[6].num = disable;
+          this.statusList[7].num = useless;
         })
         .catch(err => {
           console.log(err)

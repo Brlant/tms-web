@@ -116,6 +116,12 @@ export const routes = [
             component: () => import('./components/base-info/car-archives/index.vue'),
             meta: {moduleId: 'base-info', title: '车辆档案', perm: 'tms-car-archives-watch'}
           },
+          // 司机档案
+          {
+            path: '/base-info/driver-archives',
+            component: () => import('./components/base-info/driver-archives/index.vue'),
+            meta: {moduleId: 'base-info', title: '司机档案', perm: 'tms-driver-archives-watch'}
+          },
           {
             path: '/base-info/packaging-consumables',
             component: () => import('./components/base-info/dev/index.vue'),

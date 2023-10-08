@@ -106,6 +106,63 @@ export default [
         'leaf': false
       },
       {
+        'id': 'tms-driver-archives',
+        'parentId': 'tms-base-info',
+        'label': '司机档案',
+        'sort': 3,
+        'children': [
+          {
+            'id': 'tms-driver-archives-watch',
+            'parentId': 'tms-driver-archives',
+            'label': '查看司机档案',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'driver-info-add',
+            'parentId': 'tms-driver-archives',
+            'label': '新增司机档案',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'driver-info-edit',
+            'parentId': 'tms-driver-archives',
+            'label': '编辑司机档案',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'driver-info-stop',
+            'parentId': 'tms-driver-archives',
+            'label': '司机档案启、停用',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'driver-info-export',
+            'parentId': 'tms-driver-archives',
+            'label': '司机档案导出',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+          {
+            'id': 'driver-info-import',
+            'parentId': 'tms-driver-archives',
+            'label': '司机档案导入',
+            'sort': null,
+            'children': null,
+            'leaf': true
+          },
+        ],
+        'leaf': false
+      },
+      {
         'id': 'tms-equipment-consumables',
         'parentId': 'tms-base-info',
         'label': '包装耗材',

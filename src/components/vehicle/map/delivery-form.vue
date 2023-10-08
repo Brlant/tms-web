@@ -38,10 +38,10 @@
           <div class="content">
             <el-form-item label="运货车辆" prop="carId">
               <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="getCarList"
-                         :clearable="true" @change="setCarInfo(form.carId)" @click.native.once="getCarList('')"
+                         :clearable="true" @change="setCarInfo(form.carId)" @click.native="getCarList('')"
                          v-model="form.carId" popperClass="good-selects" @clear="clearCarInfo">
                 <el-option :value="car.carDto.id" :key="car.carDto.id" :label="car.carDto.plateNumber"
-                           v-for="car in carList">
+                           v-for="car in carList" :disabled="car.carDto.carState == 6">
                   <span style="float: left">{{ car.carDto.plateNumber }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">
                    {{ carStatusList[car.carDto.carState || 0].title }}</span>
@@ -69,15 +69,12 @@
             <two-column>
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
-                           :clearable="true" @change="setDriverInfo(form.driveId)" @click.native.once="filterUser('')"
-                           v-model="form.driveId" popperClass="good-selects">
-                  <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
-                    <div style="overflow: hidden">
-                      <span class="pull-left" style="clear: right">{{user.name}}</span>
-                      <span class="pull-right">
-                        {{user.companyDepartmentName}}
-                      </span>
-                    </div>
+                           :clearable="true" @change="setDriverInfo(form.driveId)" @click.native="filterUser('')"
+                           v-model="form.driveId" popperClass="good-selects" >
+                  <el-option :value="user.driverId" :key="user.driverId" :label="user.driverName" v-for="user in userList" :disabled="user.driverStatus == 2">
+                    <span style="float: left">{{ user.driverName }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">
+                      {{ driverStatusFn(user.driverStatus) }}</span>
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -88,7 +85,7 @@
           </div>
           <el-form-item slot="left" label="负责人" prop="head">
             <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterHead"
-                       :clearable="true" @click.native.once="filterHead('')"
+                       :clearable="true" @click.native="filterHead('')"
                        v-model="form.head" popperClass="good-selects">
               <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in headList">
                 <div style="overflow: hidden">
@@ -223,7 +220,7 @@ export default {
         list: [],
         times: [],
         carList: [],
-        // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废
+        // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废 6: 异常  7: 即将超期
         carStatusList: [
           {title: '', status: ''},
           {title: '运输', status: 1},
@@ -231,6 +228,15 @@ export default {
           {title: '维修', status: 3},
           {title: '停用', status: 4},
           {title: '报废', status: 5},
+          {title: '异常', status: 6},
+          {title: '即将超期', status: 7}, 
+        ],
+        // 司机状态 // 0-停用；1-正常；2-异常；3-即将超期
+        driverStatus:[
+          { label:'停用',value:0,},
+          { label:'正常',value:1,},
+          { label:'异常',value:2,},
+          { label:'即将超期',value:3,},
         ],
         carInfo: {},
         form: {
@@ -289,6 +295,10 @@ export default {
       // }
     },
     methods: {
+      // 司机状态回显
+      driverStatusFn(val){
+         return this.driverStatus.find(item=> item.value == val).label
+      },
       setDefaultDriver: function () {
         let conditon = {
           pageNo: 1,
@@ -353,16 +363,13 @@ export default {
         this.carInfo = {};
       },
       filterUser: function (query) {
-        let data = Object.assign({}, {
-          pageNo: 1,
-          pageSize: 20,
-          objectId: 'oms-system',
-          keyWord: query,
-          status: 1
-        });
-        User.query(data).then(res => {
-          this.userList = res.data.list;
-        });
+        let data =Object.assign({},{
+          keyWord:query,
+          driverType:1,   // 自有司机
+        })
+        this.$http.post('/driver-info/queryOwnDriver',data).then(res=>{
+          this.userList = res.data
+        })
       },
       filterHead: function (query) {
         let data = Object.assign({}, {
@@ -405,12 +412,14 @@ export default {
         });
       },
       getCarList: function (query) {
-        let param = Object.assign({}, {
-          keyword: query
-        });
-        CarArchives.query(param).then(res => {
-          this.carList = res.data.list;
-        });
+        let data = {
+          plateNumber:query,
+          ascriptionCompany:'GO1',  // 国控生物公司
+        }
+        this.$http.post('/car-archives/queryCarByCondition',data).then(res=>{
+          console.log(res.data,'Car');
+          this.carList = res.data;
+        })
       },
       setCarInfo: function (id) {
         if (id) {

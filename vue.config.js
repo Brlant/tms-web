@@ -25,7 +25,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: proxyTargets.un,
+        target: proxyTargets.cjg,
         changOrigin: true
       }
     }

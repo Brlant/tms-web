@@ -1,12 +1,13 @@
 <style lang="scss" scoped>
 $labelWidth: 220px;
+
 .content-part {
   .content-left {
     width: $labelWidth;
   }
 
   .content-right {
-    > h3 {
+    >h3 {
       left: $labelWidth;
     }
 
@@ -40,8 +41,7 @@ $labelWidth: 220px;
         <h2 class="clearfix right-title">生成运单</h2>
         <div class="dialog-left-list">
           <div class="dialog-left-item" v-for="(item, index) in dataList" :key="item.id"
-               :class="{active:activeId === index}"
-               @click="showOrder(item,index)">
+            :class="{ active: activeId === index }" @click="showOrder(item, index)">
             订单 {{ item.orderNo }}
           </div>
         </div>
@@ -55,25 +55,25 @@ $labelWidth: 220px;
           <div class="form-header-part">
             <div class="header">
               <div class="sign f-dib"></div>
-              <h3 class="tit f-dib index-tit" :class="{active: pageSets[0].key === currentTab.key}">
+              <h3 class="tit f-dib index-tit" :class="{ active: pageSets[0].key === currentTab.key }">
                 {{ pageSets[0].name }}</h3>
             </div>
             <div class="content h40">
-              <oms-col label="订单号" :rowSpan="span" :value="form.orderNo"/>
+              <oms-col label="订单号" :rowSpan="span" :value="form.orderNo" />
               <oms-col label="订单类型" :rowSpan="span" :value="form.waybillType">
                 <dict :dict-group="'bizType'" :dict-key="form.waybillType"></dict>
               </oms-col>
               <oms-col label="发运方式" :rowSpan="span" :value="form.shipmentWay">
                 <dict :dict-group="'transportationCondition'" :dict-key="form.shipmentWay"></dict>
               </oms-col>
-              <oms-col label="委托单号" :rowSpan="span" :value="form.tmsOrderNumber"/>
-              <oms-col label="创建人" :rowSpan="span" :value="form.creatorName"/>
+              <oms-col label="委托单号" :rowSpan="span" :value="form.tmsOrderNumber" />
+              <oms-col label="创建人" :rowSpan="span" :value="form.creatorName" />
               <oms-col label="创建时间" :rowSpan="span" :value="form.createTime">
-                {{ form.createTime|time }}
+                {{ form.createTime | time }}
               </oms-col>
-              <oms-col label="修改人" :rowSpan="span" :value="form.updateName"/>
+              <oms-col label="修改人" :rowSpan="span" :value="form.updateName" />
               <oms-col label="修改时间" :rowSpan="span" :value="form.updateTime">
-                {{ form.updateTime|time }}
+                {{ form.updateTime | time }}
               </oms-col>
               <oms-col label="面单号" :rowSpan="span" :value="1">
                 <oms-input model="text" v-model="carryInfo.faceSheetNo" min="0" placeholder="请输入面单号"></oms-input>
@@ -84,23 +84,42 @@ $labelWidth: 220px;
                   <el-radio :label="1">第三方承运</el-radio>
                 </el-radio-group>
               </oms-col>
-              <oms-col label="承运商名称" :rowSpan="span" :value="carryInfo.carryType == 1"
-                       v-show="carryInfo.carryType == 1">
-                <el-select v-model="carryInfo.carrierId" placeholder="请选择承运商" filterable
-                           size="mini">
-                  <el-option v-for="item in carrierList"
-                             :key="item.carrierId"
-                             :label="item.carrierName"
-                             :value="item.carrierId">
+              <oms-col label="承运商名称" :rowSpan="span" :value="carryInfo.carryType == 1" v-show="carryInfo.carryType == 1">
+                <el-select v-model="carryInfo.carrierId" placeholder="请选择承运商" filterable size="mini"
+                  @change="chooseCarrier">
+                  <el-option v-for="item in carrierList" :key="item.carrierId" :label="item.carrierName"
+                    :value="item.carrierId">
                     <span style="float: left" title="承运商名称">{{ item.carrierName }}</span>
                     <span style="float: right; color: #8492a6; font-size: 13px" title="承运条件">{{
-                        item.transportationConditions|transName
-                      }}</span>
+                      item.transportationConditions | transName
+                    }}</span>
                   </el-option>
                 </el-select>
 
               </oms-col>
-
+              <!-- 车辆信息 -->
+              <oms-col label="车辆信息" :rowSpan="span" :value="carryInfo.carryType == 1" v-show="carryInfo.carryType == 1">
+                <el-select v-model="carryInfo.carId"  placeholder="请选择车辆" filterable
+                  size="mini">
+                  <el-option v-for="item in carList" :key="item.carDto.id" :label="item.carDto.plateNumber"
+                    :value="item.carDto.id" :disabled="item.carDto.carState == 6">
+                    <span style="float: left">{{ item.carDto.plateNumber }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ carStatusList[item.carDto.carState || 0].title }}</span>
+                  </el-option>
+                </el-select>
+              </oms-col>
+              <!-- 司机信息 -->
+              <oms-col label="司机名称" :rowSpan="span" :value="carryInfo.carryType == 1" v-show="carryInfo.carryType == 1">
+                <el-select v-model="carryInfo.driverId"  placeholder="请选择司机"
+                  filterable size="mini">
+                  <el-option v-for="item in driverList" :key="item.driverId" :label="item.driverName"
+                    :value="item.driverId" :disabled="item.driverStatus == 2">
+                    <span style="float: left">{{ item.driverName }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">
+                      {{ driverStatusFn(item.driverStatus) }}</span> 
+                  </el-option>
+                </el-select>
+              </oms-col>
               <oms-col label="是否投保" :rowSpan="span" :value="1">
                 <el-radio-group v-model="carryInfo.insure" size="mini">
                   <el-radio :label="false">否</el-radio>
@@ -109,8 +128,7 @@ $labelWidth: 220px;
               </oms-col>
               <oms-col label="投保金额（元）" :rowSpan="span" :value="1" v-show="carryInfo.insure">
                 <oms-input model="text" v-model="carryInfo.insureAmount" :min="0" :max="99999999.99"
-                           placeholder="请输入投保金额,最多保留两位小数"
-                           @blur="insureAmountFormat">
+                  placeholder="请输入投保金额,最多保留两位小数" @blur="insureAmountFormat">
                   <template slot="prepend">¥</template>
                 </oms-input>
               </oms-col>
@@ -120,41 +138,41 @@ $labelWidth: 220px;
           <div class="form-header-part">
             <div class="header">
               <div class="sign f-dib"></div>
-              <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
+              <h3 class="tit f-dib index-tit" :class="{ active: pageSets[1].key === currentTab.key }">
                 {{ pageSets[1].name }}</h3>
             </div>
             <div class="content">
-              <oms-col label="货主" :rowSpan="span" :value="form.orgName"/>
-              <oms-col label="发货单位" :rowSpan="span" :value="form.senderName"/>
-              <oms-col label="发货联系人" :rowSpan="span" :value="form.senderContact"/>
-              <oms-col label="电话" :rowSpan="span" :value="form.senderContactPhone"/>
-              <oms-col label="发货地址" :rowSpan="span" :value="form.senderAddress"/>
+              <oms-col label="货主" :rowSpan="span" :value="form.orgName" />
+              <oms-col label="发货单位" :rowSpan="span" :value="form.senderName" />
+              <oms-col label="发货联系人" :rowSpan="span" :value="form.senderContact" />
+              <oms-col label="电话" :rowSpan="span" :value="form.senderContactPhone" />
+              <oms-col label="发货地址" :rowSpan="span" :value="form.senderAddress" />
             </div>
             <div class="hr mb-10 clearfix"></div>
           </div>
           <div class="form-header-part">
             <div class="header">
               <div class="sign f-dib"></div>
-              <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
+              <h3 class="tit f-dib index-tit" :class="{ active: pageSets[2].key === currentTab.key }">
                 {{ pageSets[2].name }}</h3>
             </div>
             <div class="content">
-              <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName"/>
-              <oms-col label="收货联系人" :rowSpan="span" :value="form.receiverContact"/>
-              <oms-col label="电话" :rowSpan="8" :value="form.receiverContractPhone"/>
-              <oms-col label="收货地址" :rowSpan="6" :value="form.receiverAddress"/>
+              <oms-col label="收货单位" :rowSpan="span" :value="form.receiverName" />
+              <oms-col label="收货联系人" :rowSpan="span" :value="form.receiverContact" />
+              <oms-col label="电话" :rowSpan="8" :value="form.receiverContractPhone" />
+              <oms-col label="收货地址" :rowSpan="6" :value="form.receiverAddress" />
             </div>
             <div class="hr mb-10 clearfix"></div>
           </div>
           <div class="form-header-part">
             <div class="header">
               <div class="sign f-dib"></div>
-              <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">
+              <h3 class="tit f-dib index-tit" :class="{ active: pageSets[3].key === currentTab.key }">
                 {{ pageSets[3].name }}</h3>
             </div>
             <div class="content">
-              <oms-col label="整装箱数" :rowSpan="span" :value="form.wholeBoxCount" isShow="true"/>
-              <oms-col label="散装箱数" :rowSpan="span" :value="form.bulkBoxCount" isShow="true"/>
+              <oms-col label="整装箱数" :rowSpan="span" :value="form.wholeBoxCount" isShow="true" />
+              <oms-col label="散装箱数" :rowSpan="span" :value="form.bulkBoxCount" isShow="true" />
               <!--<oms-col label="包件数" :rowSpan="span" :value="form.incubatorCount" isShow="true"/>-->
               <oms-col label="声明价格" :rowSpan="span" :value="form.goodsPrice" isShow="true">
                 <span v-if="form.goodsPrice">¥</span> {{ form.goodsPrice }}
@@ -178,22 +196,22 @@ $labelWidth: 220px;
           <div class="form-header-part">
             <div class="header">
               <div class="sign f-dib"></div>
-              <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">
+              <h3 class="tit f-dib index-tit" :class="{ active: pageSets[4].key === currentTab.key }">
                 {{ pageSets[4].name }}</h3>
             </div>
             <div class="content">
-              <oms-col label="提货时间" :rowSpan="span" :value="form.pickUpTime">{{ form.pickUpTime|date }}</oms-col>
-              <oms-col label="送达时限" :rowSpan="span" :value="form.deliveryTime">{{ form.deliveryTime|date }}</oms-col>
-              <oms-col :rowSpan="span" :value="form.provenance | formatAddress" label="始发地"/>
-              <oms-col :rowSpan="span" :value="form.destination | formatAddress" label="目的地"/>
-              <oms-col label="备注" :rowSpan="span" :value="form.remark"/>
+              <oms-col label="提货时间" :rowSpan="span" :value="form.pickUpTime">{{ form.pickUpTime | date }}</oms-col>
+              <oms-col label="送达时限" :rowSpan="span" :value="form.deliveryTime">{{ form.deliveryTime | date }}</oms-col>
+              <oms-col :rowSpan="span" :value="form.provenance | formatAddress" label="始发地" />
+              <oms-col :rowSpan="span" :value="form.destination | formatAddress" label="目的地" />
+              <oms-col label="备注" :rowSpan="span" :value="form.remark" />
               <div class="hr mb-10 clearfix"></div>
             </div>
           </div>
           <div class="form-header-part">
             <div class="header">
               <div class="sign f-dib"></div>
-              <h3 class="tit f-dib index-tit" :class="{active: pageSets[5].key === currentTab.key}">
+              <h3 class="tit f-dib index-tit" :class="{ active: pageSets[5].key === currentTab.key }">
                 {{ pageSets[5].name }}</h3>
             </div>
             <div class="content">
@@ -220,7 +238,7 @@ $labelWidth: 220px;
           <div class="form-header-part">
             <div class="header">
               <div class="sign f-dib"></div>
-              <h3 class="tit f-dib index-tit" :class="{active: pageSets[6].key === currentTab.key}">
+              <h3 class="tit f-dib index-tit" :class="{ active: pageSets[6].key === currentTab.key }">
                 {{ pageSets[6].name }}</h3>
             </div>
             <div class="content">
@@ -234,12 +252,12 @@ $labelWidth: 220px;
 </template>
 <script>
 import TwoColumn from '@dtop/dtop-web-common/packages/two-column';
-import {TmsOrder} from '@/resources';
+import { TmsOrder } from '@/resources';
 import MapPath from '../../common/map-list-new';
 import utils from '@/tools/utils'
 
 export default {
-  components: {TwoColumn, MapPath},
+  components: { TwoColumn, MapPath },
   props: ['checkList', 'carrierList'],
   data() {
     return {
@@ -247,18 +265,18 @@ export default {
       dataList: [],
       times: [],
       pageSets: [
-        {name: '基本信息', key: 0},
-        {name: '发货信息', key: 1},
-        {name: '收货信息', key: 2},
-        {name: '货品信息', key: 3},
-        {name: '其他信息', key: 4},
-        {name: '货品列表', key: 5},
-        {name: '派送信息', key: 6}
+        { name: '基本信息', key: 0 },
+        { name: '发货信息', key: 1 },
+        { name: '收货信息', key: 2 },
+        { name: '货品信息', key: 3 },
+        { name: '其他信息', key: 4 },
+        { name: '货品列表', key: 5 },
+        { name: '派送信息', key: 6 }
       ],
       currentTab: {},
       form: {
         // 修改人
-        updateName:'',
+        updateName: '',
         goodsList: [
           {
             goodsName: '',
@@ -275,6 +293,26 @@ export default {
       currentOrder: {},
       activeId: '',
       doing: false,
+      carList:[],
+      driverList:[],
+      // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废 6: 异常  7: 即将超期
+      carStatusList: [
+          {title: '', status: ''},
+          {title: '运输', status: 1},
+          {title: '空闲', status: 2},
+          {title: '维修', status: 3},
+          {title: '停用', status: 4},
+          {title: '报废', status: 5},
+          {title: '异常', status: 6},
+          {title: '即将超期', status: 7}, 
+        ],
+        // 司机状态 // 0-停用；1-正常；2-异常；3-即将超期
+        driverStatus:[
+          { label:'停用',value:0,},
+          { label:'正常',value:1,},
+          { label:'异常',value:2,},
+          { label:'即将超期',value:3,},
+        ],
     };
   },
   computed: {
@@ -285,6 +323,8 @@ export default {
           "faceSheetNo": "",//面单号
           "carryType": 0, //承运类型
           "carrierId": "", //承运商id
+          "carId": "", //车辆id
+          "driverId": "", //司机id
           "insure": false, //是否投保
           "insureAmount": 10 //投保金额
         };
@@ -306,7 +346,9 @@ export default {
             "carryType": 0,
             "insure": false,
             "insureAmount": '',
-            "carrierId": ''
+            "carrierId": '',
+            "carId": "", //车辆id
+            "driverId": "", //司机id
           }
         });
         this.showOrder(newList[0], 0);
@@ -327,6 +369,44 @@ export default {
     }
   },
   methods: {
+    // 司机状态回显
+    driverStatusFn(val){
+         return this.driverStatus.find(item=> item.value == val).label
+      },
+    // 选择承运商
+    chooseCarrier(val) {
+      this.carryInfo.carId = ''
+      this.carryInfo.driverId = ''
+      if(val){
+        // 获取车辆信息
+        this.getCarInfo()
+        // 获取司机信息
+        this.getDriverInfo()
+      }else{
+        this.carList = []
+        this.driverList = []
+      }
+    },
+    // 获取车辆信息
+    getCarInfo(query){
+      let data = {
+        plateNumber: query,
+        ascriptionCompany: this.carryInfo.carrierId
+      }
+      this.$http.post('/car-archives/queryCarByCondition', data).then(res => {
+        this.carList = res.data;
+      })
+    },
+    // 获取司机信息
+    getDriverInfo(query){
+      let data = {
+        keyWord: query,
+        carrierId: this.carryInfo.carrierId
+      }
+      this.$http.post('/driver-info/queryDriversByCarrier', data).then(res => {
+        this.driverList = res.data;
+      })
+    },
     insureAmountFormat() {// 格式化单价，保留两位小数
       this.carryInfo.insureAmount = utils.autoformatDecimalPoint(this.carryInfo.insureAmount);
     },
@@ -335,6 +415,18 @@ export default {
       for (const item of this.wayBillParams) {
         // 没选择承运商
         if (item.carryType === 1 && !item.carrierId) {
+          this.$notify.warning("包含必填项未填写");
+          error = true;
+          break;
+        }
+        // 没选择车辆
+        if (item.carryType === 1 && !item.carId) {
+          this.$notify.warning("包含必填项未填写");
+          error = true;
+          break;
+        }
+        // 没选择司机
+        if (item.carryType === 1 && !item.driverId) {
           this.$notify.warning("包含必填项未填写");
           error = true;
           break;
@@ -376,13 +468,15 @@ export default {
       this.doing = true;
 
       let wayBillParams = this.wayBillParams;
-      wayBillParams.forEach(wb=>{
+      wayBillParams.forEach(wb => {
         if (wb.carryType === 0) {
           wb.carrierId = '';
+          wb.carId =  "";//车辆id
+          wb.driverId =  ""; //司机id
         }
       })
 
-      TmsOrder.createSingleWayBill({wayBillParams}).then(() => {
+      TmsOrder.createSingleWayBill({ wayBillParams }).then(() => {
         this.$notify.success({
           duration: 2000,
           title: '成功',
