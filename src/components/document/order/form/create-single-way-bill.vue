@@ -103,6 +103,8 @@ $labelWidth: 220px;
                   size="mini">
                   <el-option v-for="item in carList" :key="item.carDto.id" :label="item.carDto.plateNumber"
                     :value="item.carDto.id" :disabled="item.carDto.carState == 6">
+                    <span style="float: left">{{ item.carDto.plateNumber }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ carStatusList[item.carDto.carState || 0].title }}</span>
                   </el-option>
                 </el-select>
               </oms-col>
@@ -111,7 +113,10 @@ $labelWidth: 220px;
                 <el-select v-model="carryInfo.driverId"  placeholder="请选择司机"
                   filterable size="mini">
                   <el-option v-for="item in driverList" :key="item.driverId" :label="item.driverName"
-                    :value="item.driverId" :disabled="item.driverStatus == 6">
+                    :value="item.driverId" :disabled="item.driverStatus == 2">
+                    <span style="float: left">{{ item.driverName }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">
+                      {{ driverStatusFn(item.driverStatus) }}</span> 
                   </el-option>
                 </el-select>
               </oms-col>
@@ -289,7 +294,25 @@ export default {
       activeId: '',
       doing: false,
       carList:[],
-      driverList:[]
+      driverList:[],
+      // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废 6: 异常  7: 即将超期
+      carStatusList: [
+          {title: '', status: ''},
+          {title: '运输', status: 1},
+          {title: '空闲', status: 2},
+          {title: '维修', status: 3},
+          {title: '停用', status: 4},
+          {title: '报废', status: 5},
+          {title: '异常', status: 6},
+          {title: '即将超期', status: 7}, 
+        ],
+        // 司机状态 // 0-停用；1-正常；2-异常；3-即将超期
+        driverStatus:[
+          { label:'停用',value:0,},
+          { label:'正常',value:1,},
+          { label:'异常',value:2,},
+          { label:'即将超期',value:3,},
+        ],
     };
   },
   computed: {
@@ -346,6 +369,10 @@ export default {
     }
   },
   methods: {
+    // 司机状态回显
+    driverStatusFn(val){
+         return this.driverStatus.find(item=> item.value == val).label
+      },
     // 选择承运商
     chooseCarrier(val) {
       this.carryInfo.carId = ''

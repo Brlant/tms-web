@@ -70,14 +70,11 @@
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
                            :clearable="true" @change="setDriverInfo(form.driveId)" @click.native="filterUser('')"
-                           v-model="form.driveId" popperClass="good-selects">
+                           v-model="form.driveId" popperClass="good-selects" >
                   <el-option :value="user.driverId" :key="user.driverId" :label="user.driverName" v-for="user in userList" :disabled="user.driverStatus == 2">
-                    <!-- <div style="overflow: hidden">
-                      <span class="pull-left" style="clear: right">{{user.name}}</span>
-                      <span class="pull-right">
-                        {{user.companyDepartmentName}}
-                      </span>
-                    </div> -->
+                    <span style="float: left">{{ user.driverName }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">
+                      {{ driverStatusFn(user.driverStatus) }}</span>
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -234,6 +231,13 @@ export default {
           {title: '异常', status: 6},
           {title: '即将超期', status: 7}, 
         ],
+        // 司机状态 // 0-停用；1-正常；2-异常；3-即将超期
+        driverStatus:[
+          { label:'停用',value:0,},
+          { label:'正常',value:1,},
+          { label:'异常',value:2,},
+          { label:'即将超期',value:3,},
+        ],
         carInfo: {},
         form: {
           driveId: '',
@@ -291,6 +295,10 @@ export default {
       // }
     },
     methods: {
+      // 司机状态回显
+      driverStatusFn(val){
+         return this.driverStatus.find(item=> item.value == val).label
+      },
       setDefaultDriver: function () {
         let conditon = {
           pageNo: 1,
