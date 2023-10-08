@@ -57,19 +57,35 @@
             <el-form-item slot="left" label="归属公司"  prop="carDto.ascriptionCompany"  :rules="form.carDto.ascriptionType == 2?[{ required: true, message: '请选择...', trigger: 'change' }]
             :[{ required: false, message: '请选择...', trigger: 'change' }]">
               <el-select filterable remote placeholder="请输入名称搜索归属公司" v-model="form.carDto.ascriptionCompany"
-                :remote-method="filterCarrierList" :clearable="true" popperClass="good-selects" style="width: 100%">
+                :remote-method="filterCarrierList" :clearable="true" popperClass="good-selects" style="width: 100%" @change="chooseCompany">
                 <el-option :label="item.carrierName" :value="item.carrierId" :key="item.carrierId"
                   v-for="item in carrierList"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item slot="right" label="默认司机">
+
+            <!--默认司机  自有车辆 -->
+            <el-form-item slot="right" label="默认司机" v-if="form.carDto.ascriptionType == 1">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索司机" :remote-method="filterUser" :clearable="true"
                 v-model="form.carDto.defaultDriver" popperClass="good-selects">
-                <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
+                <el-option :value="user.driverId" :key="user.driverId" :label="user.driverName" v-for="user in userListSelf" :disabled="user.driverStatus == 2">
                   <div style="overflow: hidden">
-                    <span class="pull-left" style="clear: right">{{ user.name }}</span>
+                    <span class="pull-left" style="clear: right">{{ user.driverName }}</span>
                     <span class="pull-right">
-                      {{ user.companyDepartmentName }}
+                      {{ driverStatusFn(user.driverStatus) }}
+                    </span>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <!--默认司机  委外车辆 -->
+            <el-form-item slot="right" label="默认司机" v-else>
+              <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索司机" :remote-method="getDriverInfo" :clearable="true"
+                v-model="form.carDto.defaultDriver" popperClass="good-selects">
+                <el-option :value="user.driverId" :key="user.driverId" :label="user.driverName" v-for="user in userListOut" :disabled="user.driverStatus == 2">
+                  <div style="overflow: hidden">
+                    <span class="pull-left" style="clear: right">{{ user.driverName }}</span>
+                    <span class="pull-right">
+                      {{ driverStatusFn(user.driverStatus) }}
                     </span>
                   </div>
                 </el-option>
@@ -328,8 +344,16 @@ export default {
       x: '',
       customerList: [], // 自有司机的归属公司
       carrierList: [],   // 委外司机的归属公司
-      userList: [],
-      currentTab: {}
+      userListSelf: [],  // 自有车辆的司机列表
+      userListOut: [],  // 委外车辆的司机列表
+      currentTab: {},
+      // 司机状态 // 0-停用；1-正常；2-异常；3-即将超期
+      driverStatus:[
+          { label:'停用',value:0,},
+          { label:'正常',value:1,},
+          { label:'异常',value:2,},
+          { label:'即将超期',value:3,},
+        ],
     };
   },
   computed: {
@@ -400,9 +424,15 @@ export default {
               }
             ]
             this.carrierList = arr
+            // 自有车辆司机
+            this.filterUser('');
           }else{
             if (this.form.carDto.ascriptionCompanyName) {
               this.filterCarrierList(this.form.carDto.ascriptionCompanyName)
+            }
+            if (this.form.carDto.defaultDriverName) {
+              // 委外车辆司机
+              this.getDriverInfo(this.form.carDto.defaultDriverName)
             }
           }
         }
@@ -437,9 +467,15 @@ export default {
           carriageWidth: '',
           carriageHeight: ''
         }, val.carDetailDto);
-        if (this.form.carDto.defaultDriverName) {
-          this.filterUser(this.form.carDto.defaultDriverName);
-        }
+        // if (this.form.carDto.defaultDriverName) {
+        //   // 自有车辆司机
+        //   if(this.form.carDto.ascriptionType == 1){
+        //     this.filterUser(this.form.carDto.defaultDriverName);
+        //   }else{
+        //     // 委外车辆司机
+        //     this.getDriverInfo(this.form.carDto.defaultDriverName)
+        //   }
+        // }
         this.form.carDto.perFreight = utils.autoformatDecimalPoint(this.form.carDto.perFreight ? this.form.carDto.perFreight.toString() : '');
         this.form.carDto.freight = utils.autoformatDecimalPoint(this.form.carDto.freight ? this.form.carDto.freight.toString() : '');
 
@@ -463,13 +499,49 @@ export default {
           this.carrierList = arr
           this.form.carDto.ascriptionCompany = 'GO1'
           this.form.carDto.ascriptionCompanyName = '国药控股上海生物医药有限公司'
+          // 默认司机 已查出默认司机
+          this.filterUser('')
         }else{
           // 委外公司  下拉显示第三方承运商
           this.filterCarrierList('')
           this.form.carDto.ascriptionCompany = ''
           this.form.carDto.ascriptionCompanyName = ''
         }
+        // 只要切换分类，默认司机的值就需要被清除
+        this.form.carDto.defaultDriver = ''
+        this.form.carDto.defaultDriverName = ''
     },
+    // 归属公司事件 // 默认司机存在两个，所以改变归属公司加不加判断无所谓
+    chooseCompany(){
+      this.getDriverInfo('')
+    },
+    // 司机 自有车辆
+    filterUser: function (query) {
+        let data =Object.assign({},{
+          keyWord:query,
+          driverType:1,   
+        })
+        this.$http.post('/driver-info/queryOwnDriver',data).then(res=>{
+          this.userListSelf = res.data
+        })
+      },
+      // 司机  委外车辆
+    getDriverInfo(query){
+      if(!this.form.carDto.ascriptionCompany){
+        return
+      }
+      let data = {
+        keyWord: query,
+        carrierId: this.form.carDto.ascriptionCompany
+      }
+      this.$http.post('/driver-info/queryDriversByCarrier', data).then(res => {
+        this.userListOut = res.data;
+      })
+    },
+    // 司机状态回显
+    driverStatusFn(val){
+         return this.driverStatus.find(item=> item.value == val).label
+      },
     formatPrice() {// 格式化单价，保留两位小数
       this.form.carDto.perFreight = utils.autoformatDecimalPoint(this.form.carDto.perFreight);
       this.form.carDto.freight = utils.autoformatDecimalPoint(this.form.carDto.freight);
@@ -510,6 +582,18 @@ export default {
     },
     // 过滤归属公司 委外司机 
     filterCarrierList: function (query) {
+      // 无分类车辆时
+      if(!this.form.carDto.ascriptionType){   
+        this.carrierList = []
+        return
+      }
+      // 自有车辆时
+      if(this.form.carDto.ascriptionType == 1){
+        let arr = [{ carrierId:'GO1',carrierName:'国药控股上海生物医药有限公司'}]
+        this.carrierList = arr
+        return
+      }
+      // 委外车辆时
       let params = {
         status: '', // ''全部  0待审核 2启用 1禁用
         carrierName: query, // 承运商名称（模糊查询）
@@ -522,16 +606,16 @@ export default {
         this.carrierList = list;
       })
     },
-    filterUser: function (query) {
-      let data = Object.assign({}, {
-        objectId: 'oms-system',
-        keyWord: query,
-        status: 1
-      });
-      User.query(data).then(res => {
-        this.userList = res.data.list;
-      });
-    },
+    // filterUser: function (query) {
+    //   let data = Object.assign({}, {
+    //     objectId: 'oms-system',
+    //     keyWord: query,
+    //     status: 1
+    //   });
+    //   User.query(data).then(res => {
+    //     this.userList = res.data.list;
+    //   });
+    // },
     // 比较当前时间与传入时间相比，是否超期，超期红色，未超期黑色
     isOverdue(periodValidity) {
       // 1,大于30天，2,0到30以内 3,小于0

@@ -23,7 +23,7 @@
                               placeholder="请选择最后更新时间" clearable>
               </el-date-picker>
             </el-form-item>
-            <el-form-item label="车辆归属公司">
+            <!-- <el-form-item label="车辆归属公司">
               <el-select filterable remote placeholder="请输入名称/拼音首字母缩写/系统代码搜索归属公司" :remote-method="filterCustomer"
                          :clearable="true"
                          v-model="searchParams.ascriptionCompany" popperClass="good-selects" style="width: 100%">
@@ -38,7 +38,7 @@
                   </div>
                 </el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="车牌号码">
               <el-input v-model="searchParams.plateNumber" placeholder="请输入车牌号码" clearable></el-input>
             </el-form-item>
