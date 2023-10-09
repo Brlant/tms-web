@@ -103,6 +103,9 @@
             <oms-col label="结束时间" :rowSpan="span" :value="form.taskEndTime" isShow="true">
               {{form.taskEndTime|time}}
             </oms-col>
+            <oms-col label="运输条件" :rowSpan="span" :value="form.transportConditionId" v-if="!form.areaInfoList || form.areaInfoList.length ==0">
+              <dict :dict-group="'transportationCondition'" :dict-key="''+form.transportConditionId"></dict>
+            </oms-col>
             <el-col :span="24">
               <div>
                 <oms-row label="集货区" :span="3">
@@ -116,11 +119,44 @@
           </div>
           <div class="hr mb-10 clearfix"></div>
         </div>
-        <div class="form-header-part">
+        <!-- 区域信息 -->
+        <div class="form-header-part" v-if="form.areaInfoList && form.areaInfoList.length !=0">
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
               {{pageSets[1].name}}
+            </h3>
+            <!-- <span @click="showAdd" class="btn-circle" v-show="form.status==='0'"><i
+              class="el-icon-t-plus"></i> </span> -->
+          </div>
+          <div class="content">
+            <el-table
+              :data="form.areaInfoList"
+              border
+              style="width: 100%">
+              <el-table-column
+                prop="areaName"
+                label="区域名称">
+              </el-table-column>
+              <el-table-column
+                prop="transportConditionId"
+                label="运输条件">
+                <template slot-scope="scope">
+                  <dict :dict-group="'transportationCondition'" :dict-key="''+scope.row.transportConditionId"></dict>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="waybillNos"
+                label="承运单号">
+                </el-table-column>
+              </el-table>
+          </div>
+        </div>
+        <div class="form-header-part">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
+              {{pageSets[2].name}}
             </h3>
             <span @click="showAdd" class="btn-circle" v-show="form.status==='0'"><i
               class="el-icon-t-plus"></i> </span>
@@ -267,8 +303,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[2].key === currentTab.key}">
-              {{pageSets[2].name}}
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">
+              {{pageSets[3].name}}
             </h3>
             <span @click="showBigMap(form)" class="des-btn">
                <a href="#" class="btn-circle" @click.prevent="">
@@ -282,8 +318,8 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">
-              {{pageSets[3].name}}</h3>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[4].key === currentTab.key}">
+              {{pageSets[4].name}}</h3>
           </div>
           <div class="content">
             <div v-if="loadingLog">
@@ -368,9 +404,10 @@ export default {
         times: [],
         pageSets: [
           {name: '任务信息', key: 0},
-          {name: '运单明细', key: 1},
-          {name: '派送轨迹', key: 2},
-          {name: '操作日志', key: 3}
+          {name: '区域信息', key: 1,showFlag:true},
+          {name: '运单明细', key: 2},
+          {name: '派送轨迹', key: 3},
+          {name: '操作日志', key: 4}
         ],
         currentTab: {},
         form: {
@@ -402,7 +439,8 @@ export default {
         wayBillType: utils.wayBillType
       };
     },
-    computed: {},
+    computed: {
+    },
     props: ['formItem', 'showBigMap','showBigMapWaybill','isOverTime'],
     watch: {
       formItem: function (val) {
@@ -410,6 +448,10 @@ export default {
         this.selectTab(this.pageSets[0]);
         if (val.id) {
           TransportTask.getOneTransportTask(val.id).then(res => {
+            if(res.data.areaInfoList && res.data.areaInfoList.length != 0){
+              let obj = {name: '区域信息', key: 1,showFlag:false}
+              this.$set(this.pageSets,1,obj)
+            }
             this.form = res.data;
             this.form.totalCount = val.totalCount;
             // 设置当前车辆的经纬度

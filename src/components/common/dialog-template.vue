@@ -36,8 +36,9 @@
         <slot name="title"></slot>
       </h2>
       <ul v-if="pageSets.length>0">
+        <!-- showFlag 作为显示或者不显示此条目的标签,  默认pageSets数组中元素中无showFlag为显示该标签 -->
         <li class="list-style" v-for="(item, key) in pageSets" @click="selectTab(item, key)"
-            v-bind:class="{ 'active' : index == key}"><span>{{ item.name }}</span>
+            v-bind:class="{ 'active' : index == key}" v-if="!item.showFlag"><span>{{ item.name }}</span>
         </li>
       </ul>
       <div class="btn-group-lt-bm-part">

@@ -279,7 +279,7 @@
 
     <page-right :show="showIndex !== -1" @right-close="resetRightBox"
                 :css="{'width':'1000px','padding':0, 'z-index': 1000}">
-      <component :is="currentPart" :checkList="orderIdList" @right-close="resetRightBox" @change="submit"/>
+      <component :is="currentPart"  :tackerList="tackerList" :checkList="orderIdList" @right-close="resetRightBox" @change="submit"/>
     </page-right>
   </div>
 </template>
@@ -329,6 +329,7 @@ export default {
           endTime: '',
           goodsAreaIdList:[]
         },
+        tackerList:[],
         orderIdList: [],
         totalTicket: 0,
         totalIncubatorCount: 0,
@@ -445,6 +446,7 @@ export default {
         this.getWayBillOrderList(1);
         // 清空勾选的运单列表
         this.orderIdList = [];
+        this.tackerList = [];
         this.totalIncubatorCount = 0;
         this.incubatorCount = 0;
         this.preIncubatorCount = 0;
@@ -533,24 +535,57 @@ export default {
       resetRightBox() {
         this.showIndex = -1;
       },
-      showPart(index, str = '请选择需要生成派送任务的运单') { // 请勾选需要自动排单的运单
-        let {checkList, $notify, dialogComponents} = this;
-        if (!checkList.length) {
-          $notify.warning({
-            duration: 2000,
-            message: str
-          });
-          return;
+      // 判断派送的列表是否多运输条件
+      isAllEqual(){
+        let {checkList} = this;
+        if(checkList.length > 1 ){
+          let flag = true
+          for(let i=1; i<checkList.length;i++){
+            if(checkList[i].shipmentWay !== checkList[0].shipmentWay){
+              flag = false
+              break
+            }
+          }
+          return flag
         }
-        this.showIndex = index;
-        this.currentPart = dialogComponents[index];
-        this.$nextTick(() => {
-          this.orderIdList = index === 0 ? checkList.map(m => m.id) : checkList.slice();
-        });
+        return true
+      },
+      showPart(index, str = '请选择需要生成派送任务的运单') { // 请勾选需要自动排单的运单
+        // 生成派送时判断是否多运单多运输条件
+        if(index === 0 && !this.isAllEqual()){
+          this.$confirm('已勾选运单运输条件不一致，是否确认同车运输?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(()=>{
+            this.generageDelivery(index,str) 
+          })
+        }else{
+          this.generageDelivery(index,str)
+        } 
+      },
+      // 
+      generageDelivery(index,str){
+        let {checkList, $notify, dialogComponents} = this;
+          if (!checkList.length) {
+            $notify.warning({
+              duration: 2000,
+              message: str
+            });
+            return;
+          }
+          // 勾选的运单号数据
+          this.tackerList = checkList
+          this.showIndex = index;
+          this.currentPart = dialogComponents[index];
+          this.$nextTick(() => {
+            this.orderIdList = index === 0 ? checkList.map(m => m.id) : checkList.slice();
+          });
       },
       searchResult(search) {
         // 清空勾选的运单列表
         this.orderIdList = [];
+        this.tackerList = [];
         this.totalIncubatorCount = 0;
         this.incubatorCount = 0;
         this.preIncubatorCount = 0;
