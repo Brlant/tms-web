@@ -306,9 +306,12 @@ export default {
       pageSets: [
         {name: '车辆选择', key: 0},
         {name: '外勤客服信息', key: 1},
-        {name: '派送信息', key: 2}
+        {name: '派送信息', key: 2},
+        { name: '区域信息', key: 3, showFlag: true },
       ],
-      currentTab: {}
+      currentTab: {},
+      acceptList: [],
+      transportationConditionArr: [],  // 运输条件 字典全部数据
     };
   },
   computed: {
@@ -487,16 +490,13 @@ export default {
       this.carInfo = {};
     },
     filterUser: function (query) {
-      let data = Object.assign({}, {
-        pageNo: 1,
-        pageSize: 20,
-        objectId: 'oms-system',
-        keyWord: query,
-        status: 1
-      });
-      User.query(data).then(res => {
-        this.userList = res.data.list;
-      });
+      let data =Object.assign({},{
+        keyWord:query,
+        driverType:1,   // 自有司机
+      })
+      this.$http.post('/driver-info/queryOwnDriver',data).then(res=>{
+        this.userList = res.data
+      })
     },
     filterHead: function (query) {
       let data = Object.assign({}, {
