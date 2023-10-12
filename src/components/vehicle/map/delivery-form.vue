@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
 .content-part {
   .content-right {
-    >h3 {
+    > h3 {
       left: 0;
     }
 
@@ -38,11 +38,11 @@
           </div>
           <div class="content">
             <el-form-item label="运货车辆" prop="carId">
-              <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="getCarList" :clearable="true"
-                @change="setCarInfo(form.carId)" @click.native.once="getCarList('')" v-model="form.carId"
-                popperClass="good-selects" @clear="clearCarInfo">
+              <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="getCarList"
+                         :clearable="true" @change="setCarInfo(form.carId)" @click.native="getCarList('')"
+                         v-model="form.carId" popperClass="good-selects" @clear="clearCarInfo">
                 <el-option :value="car.carDto.id" :key="car.carDto.id" :label="car.carDto.plateNumber"
-                  v-for="car in carList">
+                           v-for="car in carList" :disabled="car.carDto.carState == 6">
                   <span style="float: left">{{ car.carDto.plateNumber }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">
                     {{ carStatusList[car.carDto.carState || 0].title }}</span>
@@ -69,16 +69,14 @@
             </div>
             <two-column>
               <el-form-item slot="left" label="司机" prop="driveId">
-                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser" :clearable="true"
-                  @change="setDriverInfo(form.driveId)" @click.native.once="filterUser('')" v-model="form.driveId"
-                  popperClass="good-selects">
-                  <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
-                    <div style="overflow: hidden">
-                      <span class="pull-left" style="clear: right">{{ user.name }}</span>
-                      <span class="pull-right">
-                        {{ user.companyDepartmentName }}
-                      </span>
-                    </div>
+                <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
+                           :clearable="true" @change="setDriverInfo(form.driveId)" @click.native="filterUser('')"
+                           v-model="form.driveId" popperClass="good-selects">
+                  <el-option :value="user.driverId" :key="user.driverId" :label="user.driverName"
+                             v-for="user in userList" :disabled="user.driverStatus == 2">
+                    <span style="float: left">{{ user.driverName }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">
+                      {{ driverStatusFn(user.driverStatus) }}</span>
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -88,8 +86,9 @@
             </two-column>
           </div>
           <el-form-item slot="left" label="负责人" prop="head">
-            <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterHead" :clearable="true"
-              @click.native.once="filterHead('')" v-model="form.head" popperClass="good-selects">
+            <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterHead"
+                       :clearable="true" @click.native="filterHead('')"
+                       v-model="form.head" popperClass="good-selects">
               <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in headList">
                 <div style="overflow: hidden">
                   <span class="pull-left" style="clear: right">{{ user.name }}</span>
@@ -105,7 +104,9 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{ active: pageSets[1].key === currentTab.key }">{{ pageSets[1].name }}
+            <h3 class="tit f-dib index-tit" :class="{ active: pageSets[1].key === currentTab.key }">{{
+                pageSets[1].name
+              }}
               <span @click="addTallyClerk" class="btn-circle"><i class="el-icon-t-plus"></i> </span>
             </h3>
           </div>
@@ -114,8 +115,8 @@
               <two-column>
                 <el-form-item slot="left" label="外勤客服">
                   <el-select filterable remote placeholder="请输入名称/拼音搜索" :remote-method="filterTallyClerk"
-                    @click.native.once="filterTallyClerk('')" :clearable="true" v-model="hj.userId"
-                    popperClass="good-selects">
+                             @click.native.once="filterTallyClerk('')" :clearable="true" v-model="hj.userId"
+                             popperClass="good-selects">
                     <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in tallyClerkList">
                       <div style="overflow: hidden">
                         <span class="pull-left" style="clear: right">{{ user.name }}</span>
@@ -140,7 +141,9 @@
         <div class="form-header-part">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{ active: pageSets[2].key === currentTab.key }">{{ pageSets[2].name }}
+            <h3 class="tit f-dib index-tit" :class="{ active: pageSets[2].key === currentTab.key }">{{
+                pageSets[2].name
+              }}
             </h3>
           </div>
           <div class="content">
@@ -151,21 +154,21 @@
               <el-form-item :slot="form.type ? 'right' : 'left'" label="任务类型">
                 <el-select placeholder="请选择任务类型" v-model="form.type">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
-                    v-for="item in deliveryTaskTypeList"></el-option>
+                             v-for="item in deliveryTaskTypeList"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item :slot="form.type ? 'left' : 'right'" label="运输条件" prop="transportConditionId"
-                v-if="carInfo.type != 3">
+                            v-if="carInfo.type != 3">
                 <el-select placeholder="请选择运输条件" v-model="form.transportConditionId">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
-                    v-for="item in transportationConditionList"></el-option>
+                             v-for="item in transportationConditionList"></el-option>
                 </el-select>
               </el-form-item>
             </two-column>
             <two-column>
               <el-form-item slot="left" label="承运商">
                 <el-select filterable remote placeholder="名称/拼音/系统代码搜索承运商" :remote-method="filterTaskCarriers"
-                  :clearable="true" v-model="form.taskCarriers" popperClass="good-selects">
+                           :clearable="true" v-model="form.taskCarriers" popperClass="good-selects">
                   <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in orgList">
                     <div style="overflow: hidden">
                       <span class="pull-left" style="clear: right">{{ org.name }}</span>
@@ -180,13 +183,13 @@
               </el-form-item>
               <el-form-item slot="right" label="包件数" prop="incubatorCount">
                 <oms-input type="number" :min="0" v-model="form.incubatorCount" placeholder="请输入包件数"
-                  @blur="setIncubatorCount(form.incubatorCount)"></oms-input>
+                           @blur="setIncubatorCount(form.incubatorCount)"></oms-input>
               </el-form-item>
             </two-column>
             <two-column>
               <el-form-item slot="left" label="载重" prop="goodsWeight">
                 <oms-input v-model="form.carLoadBearing" placeholder="请输入车辆载重"
-                  @blur="setGoodsWeight(form.carLoadBearing)">
+                           @blur="setGoodsWeight(form.carLoadBearing)">
                   <template slot="append">kg</template>
                 </oms-input>
               </el-form-item>
@@ -206,7 +209,9 @@
         <div class="form-header-part" v-if="!pageSets[3].showFlag">
           <div class="header">
             <div class="sign f-dib"></div>
-            <h3 class="tit f-dib index-tit" :class="{ active: pageSets[3].key === currentTab.key }">{{ pageSets[3].name }}
+            <h3 class="tit f-dib index-tit" :class="{ active: pageSets[3].key === currentTab.key }">{{
+                pageSets[3].name
+              }}
             </h3>
           </div>
           <div class="content">
@@ -216,18 +221,18 @@
               <el-table-column prop="transportConditionId" label="运输条件" width="180">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.transportConditionId" placeholder="请选择..."
-                    @change="areaTransport(scope.row.transportConditionId, scope.$index)">
+                             @change="areaTransport(scope.row.transportConditionId, scope.$index)">
                     <el-option :label="item.label" :value="item.key" :key="item.key"
-                      v-for="item in transportationConditionList"></el-option>
+                               v-for="item in transportationConditionList"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
               <el-table-column prop="ids" label="承运单号">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.ids" placeholder="请选择..." multiple
-                    @change="areaWaybillNumber(scope.row.ids, scope.$index)">
+                             @change="areaWaybillNumber(scope.row.ids, scope.$index)">
                     <el-option :label="item.waybillNumber" :value="item.id" :key="item.id"
-                      v-for="(item, index) in acceptList" :disabled="item.disabled">
+                               v-for="(item, index) in acceptList" :disabled="item.disabled">
                       <span style="float: left">{{ item.waybillNumber }}</span>
                       <span style="float: right;font-size: 13px">
                         <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
@@ -244,7 +249,7 @@
   </dialog-template>
 </template>
 <script>
-import { BaseInfo, CarArchives, TransportTask, User } from '@/resources';
+import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
 import utils from '@/tools/utils';
 
 export default {
@@ -252,29 +257,38 @@ export default {
     return {
       rules: {
         'carId': [
-          { required: true, message: '请选择运货车辆', trigger: 'change' }
+          {required: true, message: '请选择运货车辆', trigger: 'change'}
         ],
         'driveId': [
-          { required: true, message: '请选择司机', trigger: 'change' }
+          {required: true, message: '请选择司机', trigger: 'change'}
         ],
         'head': [
-          { required: true, message: '请选择负责人', trigger: 'change' }
+          {required: true, message: '请选择负责人', trigger: 'change'}
         ],
         'transportConditionId': [
-          { required: true, message: '请选择运输条件', trigger: 'change' }
+          {required: true, message: '请选择运输条件', trigger: 'change'}
         ]
       },
       list: [],
       times: [],
       carList: [],
-      // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废
+      // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废 6: 异常  7: 即将超期
       carStatusList: [
-        { title: '', status: '' },
-        { title: '运输', status: 1 },
-        { title: '空闲', status: 2 },
-        { title: '维修', status: 3 },
-        { title: '停用', status: 4 },
-        { title: '报废', status: 5 },
+        {title: '', status: ''},
+        {title: '运输', status: 1},
+        {title: '空闲', status: 2},
+        {title: '维修', status: 3},
+        {title: '停用', status: 4},
+        {title: '报废', status: 5},
+        {title: '异常', status: 6},
+        {title: '即将超期', status: 7},
+      ],
+      // 司机状态 // 0-停用；1-正常；2-异常；3-即将超期
+      driverStatus: [
+        {label: '停用', value: 0,},
+        {label: '正常', value: 1,},
+        {label: '异常', value: 2,},
+        {label: '即将超期', value: 3,},
       ],
       carInfo: {},
       form: {
@@ -282,8 +296,7 @@ export default {
         driverPhone: '',
         head: '',
         orderIdList: [],
-        clerkDtoList: [{ userId: '', userPhone: '' }],
-        areaInfoList: [],  // 区域信息表格
+        clerkDtoList: [{userId: '', userPhone: ''}]
       },
       doing: false,
       userList: [],
@@ -291,14 +304,11 @@ export default {
       tallyClerkList: [],
       orgList: [],
       pageSets: [
-        { name: '车辆选择', key: 0 },
-        { name: '外勤客服信息', key: 1 },
-        { name: '派送信息', key: 2 },
-        { name: '区域信息', key: 3, showFlag: true },
+        {name: '车辆选择', key: 0},
+        {name: '外勤客服信息', key: 1},
+        {name: '派送信息', key: 2}
       ],
-      currentTab: {},
-      acceptList: [],
-      transportationConditionArr: [],  // 运输条件 字典全部数据
+      currentTab: {}
     };
   },
   computed: {
@@ -331,11 +341,11 @@ export default {
           head: '',
           orderIdList: [],
           areaInfoList: [
-            { areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true },
-            { areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true },
-            { areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true },
+            {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
+            {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true},
+            {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true},
           ],
-          clerkDtoList: [{ userId: '', userPhone: '' }]
+          clerkDtoList: [{userId: '', userPhone: ''}]
         };
         this.acceptList = this.tackerList.map(item => item)
         this.carInfo = {};
@@ -409,6 +419,10 @@ export default {
         this.form.areaInfoList[index].isConsistent = true
       }
     },
+    // 司机状态回显
+    driverStatusFn(val) {
+      return this.driverStatus.find(item => item.value == val).label
+    },
     setDefaultDriver: function () {
       let conditon = {
         pageNo: 1,
@@ -426,7 +440,7 @@ export default {
         conditon.status = 0;
       }
       let params = JSON.parse(JSON.stringify(conditon));
-      this.$http.get('/transport-task', { params }).then((res) => {
+      this.$http.get('/transport-task', {params}).then((res) => {
         this.form.driveId = res.data.list[0].driveId;
         this.form.driverPhone = res.data.list[0].driverPhone;
         this.form.head = res.data.list[0].head;
@@ -457,12 +471,12 @@ export default {
     addTallyClerk: function () {
       let tpl = {};
       // 计算排序值
-      tpl = Object.assign(tpl, { userId: '', userPhone: '' });
+      tpl = Object.assign(tpl, {userId: '', userPhone: ''});
       this.form.clerkDtoList.splice(0, 0, tpl);
       this.filterTallyClerk();
     },
     filterTaskCarriers: function (query) {// 过滤承运商
-      BaseInfo.query({ keyWord: query }).then(res => {
+      BaseInfo.query({keyWord: query}).then(res => {
         this.orgList = res.data.list;
       });
     },
@@ -516,7 +530,7 @@ export default {
             let index = userIdList.indexOf(val.userId);
             if (index === -1 && val.userId) {
               User.queryInfo(val.userId).then(res => {
-                userList.push({ id: val.userId, name: res.data.name });
+                userList.push({id: val.userId, name: res.data.name});
               });
             }
           }
@@ -540,25 +554,25 @@ export default {
             //若为三温车
             if (val.carDto.type == 3) {
               let arr = [
-                { name: '车辆选择', key: 0 },
-                { name: '外勤客服信息', key: 1 },
-                { name: '派送信息', key: 2 },
-                { name: '区域信息', key: 3, showFlag: false },
+                {name: '车辆选择', key: 0},
+                {name: '外勤客服信息', key: 1},
+                {name: '派送信息', key: 2},
+                {name: '区域信息', key: 3, showFlag: false},
               ]
               this.pageSets = arr
               // 还要清空区域信息内容
-              let areaInfoList = [ 
-                { areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true },
-                { areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true },
-                { areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true },
+              let areaInfoList = [
+                {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
+                {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true},
+                {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true},
               ]
               this.form.areaInfoList = areaInfoList
             } else {
               let arr = [
-                { name: '车辆选择', key: 0 },
-                { name: '外勤客服信息', key: 1 },
-                { name: '派送信息', key: 2 },
-                { name: '区域信息', key: 3, showFlag: true },
+                {name: '车辆选择', key: 0},
+                {name: '外勤客服信息', key: 1},
+                {name: '派送信息', key: 2},
+                {name: '区域信息', key: 3, showFlag: true},
               ]
               this.pageSets = arr
             }
@@ -620,7 +634,7 @@ export default {
                 }).then(() => {
                   this.sure()
                 })
-              }      
+              }
             } else {
               this.$notify.warning({
                 message: '三温车必须填写一个及以上区域信息，请确认'
@@ -628,7 +642,7 @@ export default {
               return
             }
           } else {
-            // 
+            //
             this.form.areaInfoList = []
             this.sure()
           }
@@ -638,7 +652,7 @@ export default {
       });
 
     },
-    // 
+    //
     sure() {
       this.doing = true;
       TransportTask.save(this.form).then(res => {

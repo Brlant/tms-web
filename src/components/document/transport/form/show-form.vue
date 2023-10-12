@@ -191,6 +191,8 @@ $labelWidth: 180px;
                   </div>
                 </template>
               </el-table-column>
+              <el-table-column prop="approvalNumber" label="批准文号/医疗器械注册证号/备案凭证号" width="120">
+              </el-table-column>
               <el-table-column prop="batchNumber" label="批号" width="100">
               </el-table-column>
               <el-table-column prop="specifications" label="货品规格" width="100">

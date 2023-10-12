@@ -137,8 +137,10 @@ export default {
         {label: '维修', value: 3},
         {label: '停用', value: 4},
         {label: '报废', value: 5},
+        {label: '异常', value: 6},
+        {label: '即将超期', value: 7},
       ],
-      // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废
+      // 车辆状态1，运输、2：空闲、 3：维修 4：停用  5：报废 6：异常  7：即将超期
       statusList: [
         {title: '全部', num: 0, status: ''},
         {title: '运输', num: 0, status: 1},
@@ -146,6 +148,8 @@ export default {
         {title: '维修', num: 0, status: 3},
         {title: '停用', num: 0, status: 4},
         {title: '报废', num: 0, status: 5},
+        {title: '异常', num: 0, status: 6},
+        {title: '即将超期', num: 0, status: 7},
       ],
       currentTab: {},
       form: {
