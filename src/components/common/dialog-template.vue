@@ -100,7 +100,6 @@ export default {
     },
     pageSets: {
       handler(val) {
-        debugger
         if (val && val.lengh > 0) {
           val && this.$emit('selectTab', this.pageSets[0]);
         }

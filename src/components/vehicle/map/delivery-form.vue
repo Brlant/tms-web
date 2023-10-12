@@ -616,7 +616,7 @@ export default {
               })
               if (num != infoNum) {
                 this.$notify.warning({
-                  message: '有运单未分配存放区域，请确认'
+                  message: '存在未分配区域的运单，请确认'  
                 });
                 return
               }
@@ -627,7 +627,7 @@ export default {
               if (flag) {
                 this.sure()
               } else {
-                this.$confirm('已选订单内运输条件不一致是否确认同车运输。确认后可急需运输?', '提示', {
+                this.$confirm('已勾选运单运输条件与区域温度不一致，是否确认同运输?', '提示', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
                   type: 'warning'
