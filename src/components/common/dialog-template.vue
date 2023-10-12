@@ -100,7 +100,10 @@ export default {
     },
     pageSets: {
       handler(val) {
-        val && this.$emit('selectTab', this.pageSets[0]);
+        debugger
+        if (val && val.lengh > 0) {
+          val && this.$emit('selectTab', this.pageSets[0]);
+        }
       },
       immediate: true // 初始化tab时，直接选中第一个
     }
@@ -115,6 +118,10 @@ export default {
       this.dialogWarp = this.$el.getElementsByClassName('el-scrollbar__wrap')[0];
     },
     selectTab(item, key) {
+      if (!item){
+        return
+      }
+
       this.index = key;
       this.title = item.name;
       this.isClickLeftTab = true;
