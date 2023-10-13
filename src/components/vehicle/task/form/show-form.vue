@@ -103,7 +103,7 @@
             <oms-col label="结束时间" :rowSpan="span" :value="form.taskEndTime" isShow="true">
               {{form.taskEndTime|time}}
             </oms-col>
-            <oms-col label="运输条件" :rowSpan="span" :value="form.transportConditionId" v-if="!form.areaInfoList || form.areaInfoList.length ==0">
+            <oms-col label="运输条件" :rowSpan="span" :value="form.transportConditionId" v-if="carInfo.type != 3">
               <dict :dict-group="'transportationCondition'" :dict-key="''+form.transportConditionId"></dict>
             </oms-col>
             <el-col :span="24">
@@ -120,7 +120,7 @@
           <div class="hr mb-10 clearfix"></div>
         </div>
         <!-- 区域信息 -->
-        <div class="form-header-part" v-if="form.areaInfoList && form.areaInfoList.length !=0">
+        <div class="form-header-part" v-if="carInfo.type == 3">
           <div class="header">
             <div class="sign f-dib"></div>
             <h3 class="tit f-dib index-tit" :class="{active: pageSets[1].key === currentTab.key}">
@@ -389,7 +389,7 @@
   </dialog-template>
 </template>
 <script>
-import {TmsLog, TransportTask} from '@/resources';
+import {TmsLog, TransportTask,CarArchives} from '@/resources';
 import TaskMap from './map-car-task';
 import WaybillMap from './map-car-waybill';
 import utils from '@/tools/utils';
@@ -436,6 +436,7 @@ export default {
         waybillDialogVisible:false,  // 
         wayBillItem:{},   //
         carPlateNumber:'', 
+        carInfo: {},  // 当前车辆信息
         wayBillType: utils.wayBillType
       };
     },
@@ -448,11 +449,9 @@ export default {
         this.selectTab(this.pageSets[0]);
         if (val.id) {
           TransportTask.getOneTransportTask(val.id).then(res => {
-            if(res.data.areaInfoList && res.data.areaInfoList.length != 0){
-              let obj = {name: '区域信息', key: 1,showFlag:false}
-              this.$set(this.pageSets,1,obj)
-            }
             this.form = res.data;
+            // TODO
+            this.getCarList(this.form.carPlateNumber,true); 
             this.form.totalCount = val.totalCount;
             // 设置当前车辆的经纬度
             this.setCurPosition();
@@ -469,6 +468,29 @@ export default {
       }
     },
     methods: {
+      getCarList: function (query,flag) {
+        let param = Object.assign({}, {
+          keyword: query
+        });
+        CarArchives.query(param).then(res => {
+          this.carList = res.data.list;
+            if(flag){
+              this.carList.forEach(val => {
+                if (val.carDto.id === this.form.carId) {
+                  this.carInfo = val.carDto;
+                }
+              })
+              console.log(this.carInfo.type,'this.carInfo.type');
+              if(this.carInfo.type == 3){
+                let obj = {name: '区域信息', key: 1,showFlag:false}
+                this.$set(this.pageSets,1,obj)
+              }else{
+                let temObj = {name:'区域信息', key: 1,showFlag:true}
+                this.$set(this.pageSets,1,temObj)
+              }
+            }
+        });  
+      },
       getPackFlag: function (val) {
         if (val) {
           return '已包';

@@ -30,7 +30,7 @@
           </div>
           <div class="content">
             <el-form-item label="运货车辆" prop="carId">
-              <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="getCarList"
+              <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="(query)=>{getCarList(query,false)}"
                          :clearable="true" @change="setCarInfo(form.carId)"
                          v-model="form.carId" popperClass="good-selects" @clear="clearCarInfo">
                 <el-option :value="car.carDto.id" :key="car.carDto.id" :label="car.carDto.plateNumber"
@@ -183,6 +183,51 @@
             <el-form-item label="派送要求">
               <oms-input v-model="form.remark" type="textarea" placeholder="请输入派送要求"></oms-input>
             </el-form-item>
+            <two-column>
+              <el-form-item slot="left" label="运输条件" prop="transportConditionId" v-if="carInfo.type != 3">
+                <el-select placeholder="请选择运输条件" v-model="form.transportConditionId">
+                  <el-option :label="item.label" :value="item.key" :key="item.key"
+                             v-for="item in transportationConditionList"></el-option>
+                </el-select>
+              </el-form-item>
+            </two-column>
+          </div>
+          <div class="hr mb-10"></div>
+        </div>
+        <div class="form-header-part" v-if="carInfo.type == 3">
+          <div class="header">
+            <div class="sign f-dib"></div>
+            <h3 class="tit f-dib index-tit" :class="{active: pageSets[3].key === currentTab.key}">{{pageSets[3].name}}
+            </h3>
+          </div>
+          <div class="content">
+            <el-table :data="form.areaInfoList" border style="width: 100%">
+              <el-table-column prop="areaName" label="区域名称" width="180">
+              </el-table-column>
+              <el-table-column prop="transportConditionId" label="运输条件" width="180">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.transportConditionId" placeholder="请选择..." clearable 
+                             @change="areaTransport(scope.row.transportConditionId, scope.$index)">
+                    <el-option :label="item.label" :value="item.key" :key="item.key"
+                               v-for="item in transportationConditionList"></el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column prop="ids" label="承运单号">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.ids" placeholder="请选择..." multiple
+                             @change="areaWaybillNumber(scope.row.ids, scope.$index)">
+                    <el-option :label="item.waybillNumber" :value="item.id" :key="item.id"
+                               v-for="(item, index) in waybillList" :disabled="item.disabled">
+                      <span style="float: left">{{ item.waybillNumber }}</span>
+                      <span style="float: right;font-size: 13px">
+                        <dict :dict-group="'transportationCondition'" :dict-key="item.shipmentWay"></dict>
+                      </span>
+                    </el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </div>
       </el-form>
@@ -203,14 +248,22 @@ export default {
           ],
           'driveId': [
             {required: true, message: '请选择司机', trigger: 'change'}
+          ],
+          'transportConditionId': [
+            {required: true, message: '请选择运输条件', trigger: 'change'}
           ]
         },
         list: [],
         times: [],
         carList: [],
-        carInfo: {},
+        carInfo: {},  // 当前车辆信息
         form: {
           orderIdList: [],
+          areaInfoList: [
+            {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
+            {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true},
+            {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true},
+          ],
           tallyClerkDtoList: [{
             id: '',
             index: '',
@@ -227,15 +280,26 @@ export default {
         pageSets: [
           {name: '车辆选择', key: 0},
           {name: '外勤客服信息', key: 1},
-          {name: '派送信息', key: 2}
+          {name: '派送信息', key: 2},
+          {name: '区域信息', key: 3,showFlag:true},
         ],
-        currentTab: {}
+        currentTab: {},
+        waybillList:[],  //当前任务中的运单数据
       };
     },
     computed: {
       deliveryTaskTypeList() {
-        return this.$getDict('deliveryTaskType');
-      }
+        return this.$getDict('deliveryTaskType') || []
+      },
+      transportationConditionList() {
+        let arr = this.$getDict('transportationCondition') || []
+        let array = arr.filter(item => {
+          return this.waybillList.find(prop => {
+            return prop.shipmentWay == item.key
+          })
+        })
+        return array
+      },
     },
     props: ['formItem'],
     watch: {
@@ -259,10 +323,30 @@ export default {
       formItem: function (val) {
         if (val.id) {
           TransportTask.getOneTransportTask(val.id).then(res => {
+            this.waybillList = res.data.waybillList
+            // 对区域信息数据进行处理，增加isConsistent字段  isConsistent是代表当前行字段是否存在已选择的承运单号的运输条件与当前行的运输条件是否一致
+            if(res.data.areaInfoList.length !=0){
+              res.data.areaInfoList.forEach(item=>{
+                  if(item.transportConditionId && item.ids.length !=0){
+                    let transportConditionId = item.transportConditionId  // 获取当前行的运输条件
+                    let arr = this.waybillList.filter(i => item.ids.includes(i.id))  // 获取当前行承运单号的所有信息列表
+                    if (arr.length != 0) {
+                      let flag = arr.every(j => {
+                        return j.shipmentWay == transportConditionId
+                      })
+                      item.isConsistent = flag
+                    } else {
+                      item.isConsistent = true
+                    }
+                  }else{
+                    item.isConsistent = true
+                  }
+              })
+            }
             this.form = res.data;
             this.filterUser(this.form.driverName);
             this.filterHead(this.form.headName);
-            this.getCarList(this.form.carPlateNumber);
+            this.getCarList(this.form.carPlateNumber,true);  
             this.filterTaskCarriers(this.form.taskCarriersName);
             if (this.form.tallyClerkDtoList.length !== 0) {
               this.form.tallyClerkDtoList.forEach(val => {
@@ -274,9 +358,60 @@ export default {
             }
           });
         }
+      },     
+        //去除已经选中的运单号  // 承运单号列表
+      'form.areaInfoList': {
+        handler: function (val) {
+          if (val.length != 0 && this.waybillList.length !=0) {
+            let list = JSON.parse(JSON.stringify(this.waybillList))
+            this.waybillList = []
+            list.forEach((item) => {
+              let i = val.find((i) => i.ids.includes(item.id))
+              item.disabled = i ? true : false
+            })
+            this.waybillList = list
+          }
+        },
+        deep: true
       }
     },
     methods: {
+      // 区域信息-承运单号
+      areaWaybillNumber(val, index) {
+        // 先判断当前行的运输条件是否存在
+        if (this.form.areaInfoList[index].transportConditionId) {
+          let transportConditionId = this.form.areaInfoList[index].transportConditionId  // 获取当前行的运输条件
+          let arr = this.waybillList.filter(item => val.includes(item.id))
+          if (arr.length != 0) {
+            let flag = arr.every(item => {
+              return item.shipmentWay == transportConditionId
+            })
+            this.form.areaInfoList[index].isConsistent = flag
+          } else {
+            this.form.areaInfoList[index].isConsistent = true
+          }
+        } else {  // 不存在直接置为true
+          this.form.areaInfoList[index].isConsistent = true
+        }
+      },
+      // 区域信息-运输条件
+      areaTransport(val, index) {
+        // 先判断当前行的承运单号是否存在
+        if (this.form.areaInfoList[index].ids.length != 0) {
+          let ids = this.form.areaInfoList[index].ids  // 获取当前行的承运单号
+          let arr = this.waybillList.filter(item => ids.includes(item.id))
+          if (arr.length != 0) {
+            let flag = arr.every(item => {
+              return item.shipmentWay == val
+            })
+            this.form.areaInfoList[index].isConsistent = flag
+          } else {
+            this.form.areaInfoList[index].isConsistent = true
+          }
+        } else {
+          this.form.areaInfoList[index].isConsistent = true
+        }
+      },
       selectTab(item) {
         this.currentTab = item;
       },
@@ -376,19 +511,58 @@ export default {
           this.tallyClerkList = res.data.list;
         });
       },
-      getCarList: function (query) {
+      getCarList: function (query,flag) {
         let param = Object.assign({}, {
           keyword: query
         });
         CarArchives.query(param).then(res => {
           this.carList = res.data.list;
-        });
+            if(flag){
+              this.carList.forEach(val => {
+                if (val.carDto.id === this.form.carId) {
+                  this.carInfo = val.carDto;
+                }
+              })
+              if(this.carInfo.type == 3){
+                let obj = {name:'区域信息', key: 3,showFlag:false}
+                this.$set(this.pageSets,3,obj)
+              }else{
+                let temObj = {name:'区域信息', key: 3,showFlag:true}
+                this.$set(this.pageSets,3,temObj)
+              }
+            }
+        });  
       },
       setCarInfo: function (id) {
         if (id) {
           this.carList.forEach(val => {
             if (val.carDto.id === id) {
               this.carInfo = val.carDto;
+              //若为三温车
+              if (val.carDto.type == 3) {
+                let arr = [
+                  {name: '车辆选择', key: 0},
+                  {name: '外勤客服信息', key: 1},
+                  {name: '派送信息', key: 2},
+                  {name: '区域信息', key: 3, showFlag: false},
+                ]
+                this.pageSets = arr
+                // 还要清空区域信息内容
+                let areaInfoList = [
+                  {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
+                  {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true},
+                  {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true},
+                ]
+                this.form.areaInfoList = areaInfoList
+              } else {
+                let arr = [
+                  {name: '车辆选择', key: 0},
+                  {name: '外勤客服信息', key: 1},
+                  {name: '派送信息', key: 2},
+                  {name: '区域信息', key: 3, showFlag: true},
+                ]
+                this.pageSets = arr
+              }
             }
           });
         }
@@ -417,7 +591,6 @@ export default {
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
-            this.doing = true;
             // 处理外勤客服列表
             if (this.form.tallyClerkDtoList) {
               let list = [];
@@ -428,27 +601,71 @@ export default {
               });
               this.form.tallyClerkDtoList = list;
             }
-            TransportTask.update(this.form.id, this.form).then(res => {
-              this.$notify.success({
-                duration: 2000,
-                name: '成功',
-                message: '编辑派送任务成功'
-              });
-              this.doing = false;
-              this.$emit('change', res.data);
-              this.$emit('right-close');
-            }).catch(error => {
-              this.$notify.error({
-                message: error.response&&error.response.data && error.response.data.msg || '编辑派送任务失败'
-              });
-              this.doing = false;
-            });
-
+            // 若为三温车 校验区域信息？
+            if (this.carInfo.type == 3) {
+              // 判断区域信息至少填写了一条数据，然后再判断承运单号下拉框里面
+              if (this.form.areaInfoList.some((val) => val.transportConditionId != '' && val.ids.length > 0)) {
+                // 获取勾选的运单号数量
+                let infoNum = this.waybillList.length
+                let num = 0
+                this.form.areaInfoList.forEach(item => {
+                  num += item.ids.length
+                })
+                if (num != infoNum) {
+                  this.$notify.warning({
+                    message: '存在未分配区域的运单，请确认'  
+                  });
+                  return
+                }
+                // 判断
+                let flag = this.form.areaInfoList.every(item => {
+                  return item.isConsistent == true
+                })
+                if (flag) {
+                  this.sure()
+                } else {
+                  this.$confirm('已勾选运单运输条件与区域温度不一致，是否确认同运输?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                  }).then(() => {
+                    this.sure()
+                  })
+                }
+              } else {
+                this.$notify.warning({
+                  message: '三温车必须填写一个及以上区域信息，请确认'
+                });
+                return
+              }
+            } else {
+              //
+              this.form.areaInfoList = []
+              this.sure()
+            }
           } else {
 
           }
         });
 
+      },
+      sure() {
+        this.doing = true;
+        TransportTask.update(this.form.id, this.form).then(res => {
+          this.$notify.success({
+            duration: 2000,
+            name: '成功',
+            message: '编辑派送任务成功'
+          });
+          this.doing = false;
+          this.$emit('change', res.data);
+          this.$emit('right-close');
+        }).catch(error => {
+          this.$notify.error({
+            message: error.response&&error.response.data && error.response.data.msg || '编辑派送任务失败'
+          });
+          this.doing = false;
+        });
       }
     }
   };

@@ -220,7 +220,7 @@
               </el-table-column>
               <el-table-column prop="transportConditionId" label="运输条件" width="180">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.transportConditionId" placeholder="请选择..."
+                  <el-select v-model="scope.row.transportConditionId" placeholder="请选择..." clearable
                              @change="areaTransport(scope.row.transportConditionId, scope.$index)">
                     <el-option :label="item.label" :value="item.key" :key="item.key"
                                v-for="item in transportationConditionList"></el-option>
