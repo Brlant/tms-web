@@ -70,7 +70,7 @@
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
                            :clearable="true" @change="setDriverInfo(form.driveId)" @click.native="filterUser('')"
-                           v-model="form.driveId" popperClass="good-selects" >
+                           v-model="form.driveId" popperClass="good-selects" @clear="clearDriveInfo">
                   <el-option :value="user.driverId" :key="user.driverId" :label="user.driverName" v-for="user in userList" :disabled="user.driverStatus == 2">
                     <span style="float: left">{{ user.driverName }}</span>
                     <span style="float: right; color: #8492a6; font-size: 13px">
@@ -242,6 +242,7 @@ export default {
         form: {
           driveId: '',
           driverPhone: '',
+          jobNumber:'',
           head: '',
           orderIdList: [],
           clerkDtoList: [{userId: '', userPhone: ''}]
@@ -272,12 +273,13 @@ export default {
             driveId: '',
             driverPhone: '',
             head: '',
+            jobNumber:'',
             orderIdList: [],
             clerkDtoList: [{userId: '', userPhone: ''}]
           };
           this.carInfo = {};
           this.form.orderIdList = val;
-          this.setDefaultDriver();
+          // this.setDefaultDriver();
         },
         deep: true
       }
@@ -360,7 +362,13 @@ export default {
         this.form.carId = '';
         this.form.driveId = '';
         this.form.driverPhone = '';
+        this.form.jobNumber = ''
         this.carInfo = {};
+      },
+      clearDriveInfo: function () {
+        this.form.driveId = '';
+        this.form.driverPhone = '';
+        this.form.jobNumber = ''
       },
       filterUser: function (query) {
         let data =Object.assign({},{
@@ -413,11 +421,10 @@ export default {
       },
       getCarList: function (query) {
         let data = {
-          plateNumber:query,
+          keyword:query,
           ascriptionCompany:'GO1',  // 国控生物公司
         }
         this.$http.post('/car-archives/queryCarByCondition',data).then(res=>{
-          console.log(res.data,'Car');
           this.carList = res.data;
         })
       },
@@ -433,9 +440,10 @@ export default {
       setDriverInfo: function (id) {
         if (id) {
           this.userList.forEach(val => {
-            if (val.id === id) {
-              this.form.driveId = val.id;
-              this.form.driverPhone = val.phone;
+            if (id === val.driverId) {
+              this.form.driveId = val.driverId;
+              this.form.driverPhone = val.driverPhone;
+              this.form.jobNumber = val.jobNumber
             }
           });
         }
