@@ -71,9 +71,8 @@
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
                            :clearable="true" @change="setDriverInfo(form.driveId)" @click.native="filterUser('')"
-                           v-model="form.driveId" popperClass="good-selects">
-                  <el-option :value="user.driverId" :key="user.driverId" :label="user.driverName"
-                             v-for="user in userList" :disabled="user.driverStatus == 2">
+                           v-model="form.driveId" popperClass="good-selects" @clear="clearDriveInfo">
+                  <el-option :value="user.driverId" :key="user.driverId" :label="user.driverName" v-for="user in userList" :disabled="user.driverStatus == 2">
                     <span style="float: left">{{ user.driverName }}</span>
                     <span style="float: right; color: #8492a6; font-size: 13px">
                       {{ driverStatusFn(user.driverStatus) }}</span>
@@ -253,394 +252,404 @@ import {BaseInfo, CarArchives, TransportTask, User} from '@/resources';
 import utils from '@/tools/utils';
 
 export default {
-  data() {
-    return {
-      rules: {
-        'carId': [
-          {required: true, message: '请选择运货车辆', trigger: 'change'}
+    data () {
+      return {
+        rules: {
+          'carId': [
+            {required: true, message: '请选择运货车辆', trigger: 'change'}
+          ],
+          'driveId': [
+            {required: true, message: '请选择司机', trigger: 'change'}
+          ],
+          'head': [
+            {required: true, message: '请选择负责人', trigger: 'change'}
+          ],
+          'transportConditionId': [
+            {required: true, message: '请选择运输条件', trigger: 'change'}
+          ]
+        },
+        list: [],
+        times: [],
+        carList: [],
+        // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废 6: 异常  7: 即将超期
+        carStatusList: [
+          {title: '', status: ''},
+          {title: '运输', status: 1},
+          {title: '空闲', status: 2},
+          {title: '维修', status: 3},
+          {title: '停用', status: 4},
+          {title: '报废', status: 5},
+          {title: '异常', status: 6},
+          {title: '即将超期', status: 7}, 
         ],
-        'driveId': [
-          {required: true, message: '请选择司机', trigger: 'change'}
+        // 司机状态 // 0-停用；1-正常；2-异常；3-即将超期
+        driverStatus:[
+          { label:'停用',value:0,},
+          { label:'正常',value:1,},
+          { label:'异常',value:2,},
+          { label:'即将超期',value:3,},
         ],
-        'head': [
-          {required: true, message: '请选择负责人', trigger: 'change'}
-        ],
-        'transportConditionId': [
-          {required: true, message: '请选择运输条件', trigger: 'change'}
-        ]
-      },
-      list: [],
-      times: [],
-      carList: [],
-      // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废 6: 异常  7: 即将超期
-      carStatusList: [
-        {title: '', status: ''},
-        {title: '运输', status: 1},
-        {title: '空闲', status: 2},
-        {title: '维修', status: 3},
-        {title: '停用', status: 4},
-        {title: '报废', status: 5},
-        {title: '异常', status: 6},
-        {title: '即将超期', status: 7},
-      ],
-      // 司机状态 // 0-停用；1-正常；2-异常；3-即将超期
-      driverStatus: [
-        {label: '停用', value: 0,},
-        {label: '正常', value: 1,},
-        {label: '异常', value: 2,},
-        {label: '即将超期', value: 3,},
-      ],
-      carInfo: {},
-      form: {
-        driveId: '',
-        driverPhone: '',
-        head: '',
-        orderIdList: [],
-        clerkDtoList: [{userId: '', userPhone: ''}]
-      },
-      doing: false,
-      userList: [],
-      headList: [],
-      tallyClerkList: [],
-      orgList: [],
-      pageSets: [
-        {name: '车辆选择', key: 0},
-        {name: '外勤客服信息', key: 1},
-        {name: '派送信息', key: 2},
-        { name: '区域信息', key: 3, showFlag: true },
-      ],
-      currentTab: {},
-      acceptList: [],
-      transportationConditionArr: [],  // 运输条件 字典全部数据
-    };
-  },
-  computed: {
-    deliveryTaskTypeList() {
-      return this.$getDict('deliveryTaskType');
-    },
-    // 派送信息-运输条件 过滤筛选
-    transportationConditionList() {
-      let arr = this.$getDict('transportationCondition');
-      this.transportationConditionArr = JSON.parse(JSON.stringify(arr))
-      let array = arr.filter(item => {
-        return this.tackerList.find(prop => {
-          return prop.shipmentWay == item.key
-        })
-      })
-      // 若已勾选订单均为相同运输条件，则运输条件默认显示已选运单运输条件
-      if (array.length == 1) {
-        this.form.transportConditionId = array[0].key
-      }
-      return array
-    },
-  },
-  props: ['checkList', 'tackerList'],
-  watch: {
-    checkList: {
-      handler: function (val) {
-        this.form = {
+        carInfo: {},
+        form: {
           driveId: '',
           driverPhone: '',
+          jobNumber:'',
           head: '',
           orderIdList: [],
-          areaInfoList: [
-            {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
-            {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true},
-            {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true},
-          ],
           clerkDtoList: [{userId: '', userPhone: ''}]
-        };
-        this.acceptList = this.tackerList.map(item => item)
-        this.carInfo = {};
-        this.form.orderIdList = val;
-        this.setDefaultDriver();
-      },
-      deep: true
-    },
-    //去除已经选中的运单号  // 承运单号列表
-    'form.areaInfoList': {
-      handler: function (val) {
-        if (val.length != 0) {
-          let list = JSON.parse(JSON.stringify(this.acceptList))
-          this.acceptList = []
-          list.forEach((item) => {
-            let i = val.find((i) => i.ids.includes(item.id))
-            item.disabled = i ? true : false
-          })
-          this.acceptList = list
-        }
-      },
-      deep: true
-    }
-    // carInfo: function (val) {
-    //   if (val) {
-    //     this.form.carPlateNumber = val.plateNumber;
-    //     if (val.defaultDriver) {
-    //       this.filterUser(val.defaultDriverName);
-    //       this.filterHead(val.headName);
-    //       this.form.driveId = val.defaultDriver;
-    //     } else {
-    //       this.form.driveId = '';
-    //     }
-    //   }
-    // }
-  },
-  methods: {
-    // 区域信息-承运单号
-    areaWaybillNumber(val, index) {
-      // 先判断当前行的运输条件是否存在
-      if (this.form.areaInfoList[index].transportConditionId) {
-        let transportConditionId = this.form.areaInfoList[index].transportConditionId  // 获取当前行的运输条件
-        let arr = this.acceptList.filter(item => val.includes(item.id))
-        if (arr.length != 0) {
-          let flag = arr.every(item => {
-            return item.shipmentWay == transportConditionId
-          })
-          this.form.areaInfoList[index].isConsistent = flag
-        } else {
-          this.form.areaInfoList[index].isConsistent = true
-        }
-      } else {  // 不存在直接置为true
-        this.form.areaInfoList[index].isConsistent = true
-      }
-    },
-    // 区域信息-运输条件
-    areaTransport(val, index) {
-      // 先判断当前行的承运单号是否存在
-      if (this.form.areaInfoList[index].ids.length != 0) {
-        let ids = this.form.areaInfoList[index].ids  // 获取当前行的承运单号
-        let arr = this.acceptList.filter(item => ids.includes(item.id))
-        if (arr.length != 0) {
-          let flag = arr.every(item => {
-            return item.shipmentWay == val
-          })
-          this.form.areaInfoList[index].isConsistent = flag
-        } else {
-          this.form.areaInfoList[index].isConsistent = true
-        }
-      } else {
-        this.form.areaInfoList[index].isConsistent = true
-      }
-    },
-    // 司机状态回显
-    driverStatusFn(val) {
-      return this.driverStatus.find(item => item.value == val).label
-    },
-    setDefaultDriver: function () {
-      let conditon = {
-        pageNo: 1,
-        pageSize: 1,
-        status: 3
+        },
+        doing: false,
+        userList: [],
+        headList: [],
+        tallyClerkList: [],
+        orgList: [],
+        pageSets: [
+          {name: '车辆选择', key: 0},
+          {name: '外勤客服信息', key: 1},
+          {name: '派送信息', key: 2},
+          { name: '区域信息', key: 3, showFlag: true },
+        ],
+        currentTab: {},
+        acceptList: [],
+        transportationConditionArr: [],  // 运输条件 字典全部数据
       };
-      let statusCount = utils.carTaskType;
-      if (statusCount['2'].num > 0) {
-        conditon.status = 2;
-      }
-      if (statusCount['1'].num > 0) {
-        conditon.status = 1;
-      }
-      if (statusCount['0'].num > 0) {
-        conditon.status = 0;
-      }
-      let params = JSON.parse(JSON.stringify(conditon));
-      this.$http.get('/transport-task', {params}).then((res) => {
-        this.form.driveId = res.data.list[0].driveId;
-        this.form.driverPhone = res.data.list[0].driverPhone;
-        this.form.head = res.data.list[0].head;
-        this.filterUser(res.data.list[0].driverName);
-        this.filterHead(res.data.list[0].headName);
-      });
     },
-    selectTab(item) {
-      this.currentTab = item;
+    computed: {
+      deliveryTaskTypeList () {
+        return this.$getDict('deliveryTaskType');
+      },
+      // 派送信息-运输条件 过滤筛选
+      transportationConditionList() {
+        let arr = this.$getDict('transportationCondition');
+        this.transportationConditionArr = JSON.parse(JSON.stringify(arr))
+        let array = arr.filter(item => {
+          return this.tackerList.find(prop => {
+            return prop.shipmentWay == item.key
+          })
+        })
+        // 若已勾选订单均为相同运输条件，则运输条件默认显示已选运单运输条件
+        if (array.length == 1) {
+          this.form.transportConditionId = array[0].key
+        }
+        return array
+      },
     },
-    remove: function (item) {
-      let index = this.form.clerkDtoList.indexOf(item);
-      // 移除删除项
-      this.form.clerkDtoList.splice(index, 1);
-    },
-    setIncubatorCount: function (value) {
-      if (!value || isNaN(value)) return;
-      this.form.incubatorCount = parseInt(value, 10);
-    },
-    setGoodsWeight: function (value) {
-      if (!value || isNaN(value)) return;
-      this.form.goodsWeight = parseFloat(value);
-    },
-    setGoodsVolume: function (value) {
-      if (!value || isNaN(value)) return;
-      this.form.goodsVolume = parseFloat(value);
-    },
-    addTallyClerk: function () {
-      let tpl = {};
-      // 计算排序值
-      tpl = Object.assign(tpl, {userId: '', userPhone: ''});
-      this.form.clerkDtoList.splice(0, 0, tpl);
-      this.filterTallyClerk();
-    },
-    filterTaskCarriers: function (query) {// 过滤承运商
-      BaseInfo.query({keyWord: query}).then(res => {
-        this.orgList = res.data.list;
-      });
-    },
-    clearCarInfo: function () {
-      this.form.carId = '';
-      this.form.driveId = '';
-      this.form.driverPhone = '';
-      this.carInfo = {};
-    },
-    filterUser: function (query) {
-      let data =Object.assign({},{
-        keyWord:query,
-        driverType:1,   // 自有司机
-      })
-      this.$http.post('/driver-info/queryOwnDriver',data).then(res=>{
-        this.userList = res.data
-      })
-    },
-    filterHead: function (query) {
-      let data = Object.assign({}, {
-        pageNo: 1,
-        pageSize: 20,
-        objectId: 'oms-system',
-        keyWord: query,
-        status: 1
-      });
-      User.query(data).then(res => {
-        this.headList = res.data.list;
-      });
-    },
-    filterTallyClerk: function (query) {
-      let data = Object.assign({}, {
-        pageNo: 1,
-        pageSize: 20,
-        objectId: 'oms-system',
-        keyWord: query,
-        status: 1
-      });
-      User.query(data).then(res => {
-        let userList = res.data.list;
-        // 判断已选择的数据列表里是否存在
-        let userIdList = [];
-        userList.forEach(res => {
-          userIdList.push(res.id);
-        });
-        this.form.clerkDtoList.forEach(val => {
-          if (val.userId !== '') {
-            let index = userIdList.indexOf(val.userId);
-            if (index === -1 && val.userId) {
-              User.queryInfo(val.userId).then(res => {
-                userList.push({id: val.userId, name: res.data.name});
-              });
-            }
+    props: ['checkList', 'tackerList'],
+    watch: {
+      checkList: {
+        handler: function (val) {
+          this.form = {
+            driveId: '',
+            driverPhone: '',
+            head: '',
+            jobNumber:'',
+            orderIdList: [],
+            areaInfoList: [
+              {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
+              {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true},
+              {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true},
+            ],
+            clerkDtoList: [{userId: '', userPhone: ''}]
+          };
+          this.acceptList = this.tackerList.map(item => item)
+          this.carInfo = {};
+          this.form.orderIdList = val;
+          // this.setDefaultDriver();
+        },
+        deep: true
+      },
+      //去除已经选中的运单号  // 承运单号列表
+      'form.areaInfoList': {
+        handler: function (val) {
+          if (val.length != 0) {
+            let list = JSON.parse(JSON.stringify(this.acceptList))
+            this.acceptList = []
+            list.forEach((item) => {
+              let i = val.find((i) => i.ids.includes(item.id))
+              item.disabled = i ? true : false
+            })
+            this.acceptList = list
           }
-        });
-        this.tallyClerkList = userList;
-      });
-    },
-    getCarList: function (query) {
-      let param = Object.assign({}, {
-        keyword: query
-      });
-      CarArchives.query(param).then(res => {
-        this.carList = res.data.list;
-      });
-    },
-    setCarInfo: function (id) {
-      if (id) {
-        this.carList.forEach(val => {
-          if (val.carDto.id === id) {
-            this.carInfo = val.carDto;
-            //若为三温车
-            if (val.carDto.type == 3) {
-              let arr = [
-                {name: '车辆选择', key: 0},
-                {name: '外勤客服信息', key: 1},
-                {name: '派送信息', key: 2},
-                {name: '区域信息', key: 3, showFlag: false},
-              ]
-              this.pageSets = arr
-              // 还要清空区域信息内容
-              let areaInfoList = [
-                {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
-                {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true},
-                {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true},
-              ]
-              this.form.areaInfoList = areaInfoList
-            } else {
-              let arr = [
-                {name: '车辆选择', key: 0},
-                {name: '外勤客服信息', key: 1},
-                {name: '派送信息', key: 2},
-                {name: '区域信息', key: 3, showFlag: true},
-              ]
-              this.pageSets = arr
-            }
-          }
-        });
+        },
+        deep: true
       }
+      // carInfo: function (val) {
+      //   if (val) {
+      //     this.form.carPlateNumber = val.plateNumber;
+      //     if (val.defaultDriver) {
+      //       this.filterUser(val.defaultDriverName);
+      //       this.filterHead(val.headName);
+      //       this.form.driveId = val.defaultDriver;
+      //     } else {
+      //       this.form.driveId = '';
+      //     }
+      //   }
+      // }
     },
-    setDriverInfo: function (id) {
-      if (id) {
-        this.userList.forEach(val => {
-          if (val.id === id) {
-            this.form.driveId = val.id;
-            this.form.driverPhone = val.phone;
+    methods: {
+       // 区域信息-承运单号
+      areaWaybillNumber(val, index) {
+        // 先判断当前行的运输条件是否存在
+        if (this.form.areaInfoList[index].transportConditionId) {
+          let transportConditionId = this.form.areaInfoList[index].transportConditionId  // 获取当前行的运输条件
+          let arr = this.acceptList.filter(item => val.includes(item.id))
+          if (arr.length != 0) {
+            let flag = arr.every(item => {
+              return item.shipmentWay == transportConditionId
+            })
+            this.form.areaInfoList[index].isConsistent = flag
+          } else {
+            this.form.areaInfoList[index].isConsistent = true
           }
+        } else {  // 不存在直接置为true
+          this.form.areaInfoList[index].isConsistent = true
+        }
+      },
+      // 区域信息-运输条件
+      areaTransport(val, index) {
+        // 先判断当前行的承运单号是否存在
+        if (this.form.areaInfoList[index].ids.length != 0) {
+          let ids = this.form.areaInfoList[index].ids  // 获取当前行的承运单号
+          let arr = this.acceptList.filter(item => ids.includes(item.id))
+          if (arr.length != 0) {
+            let flag = arr.every(item => {
+              return item.shipmentWay == val
+            })
+            this.form.areaInfoList[index].isConsistent = flag
+          } else {
+            this.form.areaInfoList[index].isConsistent = true
+          }
+        } else {
+          this.form.areaInfoList[index].isConsistent = true
+        }
+      },
+      // 司机状态回显
+      driverStatusFn(val){
+         return this.driverStatus.find(item=> item.value == val).label
+      },
+      setDefaultDriver: function () {
+        let conditon = {
+          pageNo: 1,
+          pageSize: 1,
+          status: 3
+        };
+        let statusCount = utils.carTaskType;
+        if (statusCount['2'].num > 0) {
+          conditon.status = 2;
+        }
+        if (statusCount['1'].num > 0) {
+          conditon.status = 1;
+        }
+        if (statusCount['0'].num > 0) {
+          conditon.status = 0;
+        }
+        let params = JSON.parse(JSON.stringify(conditon));
+        this.$http.get('/transport-task', {params}).then((res) => {
+          this.form.driveId = res.data.list[0].driveId;
+          this.form.driverPhone = res.data.list[0].driverPhone;
+          this.form.head = res.data.list[0].head;
+          this.filterUser(res.data.list[0].driverName);
+          this.filterHead(res.data.list[0].headName);
         });
-      }
-    },
-
-    save(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid && this.doing === false) {
-          // 处理外勤客服列表
-          if (this.form.clerkDtoList) {
-            let list = [];
-            this.form.clerkDtoList.forEach(val => {
-              if (val.userId !== '') {
-                list.push(val);
+      },
+      selectTab (item) {
+        this.currentTab = item;
+      },
+      remove: function (item) {
+        let index = this.form.clerkDtoList.indexOf(item);
+        // 移除删除项
+        this.form.clerkDtoList.splice(index, 1);
+      },
+      setIncubatorCount: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.incubatorCount = parseInt(value, 10);
+      },
+      setGoodsWeight: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.goodsWeight = parseFloat(value);
+      },
+      setGoodsVolume: function (value) {
+        if (!value || isNaN(value)) return;
+        this.form.goodsVolume = parseFloat(value);
+      },
+      addTallyClerk: function () {
+        let tpl = {};
+        // 计算排序值
+        tpl = Object.assign(tpl, {userId: '', userPhone: ''});
+        this.form.clerkDtoList.splice(0, 0, tpl);
+        this.filterTallyClerk();
+      },
+      filterTaskCarriers: function (query) {// 过滤承运商
+        BaseInfo.query({keyWord: query}).then(res => {
+          this.orgList = res.data.list;
+        });
+      },
+      clearCarInfo: function () {
+        this.form.carId = '';
+        this.form.driveId = '';
+        this.form.driverPhone = '';
+        this.form.jobNumber = ''
+        this.carInfo = {};
+      },
+      clearDriveInfo: function () {
+        this.form.driveId = '';
+        this.form.driverPhone = '';
+        this.form.jobNumber = ''
+      },
+      filterUser: function (query) {
+        let data =Object.assign({},{
+          keyWord:query,
+          driverType:1,   // 自有司机
+        })
+        this.$http.post('/driver-info/queryOwnDriver',data).then(res=>{
+          this.userList = res.data
+        })
+      },
+      filterHead: function (query) {
+        let data = Object.assign({}, {
+          pageNo: 1,
+          pageSize: 20,
+          objectId: 'oms-system',
+          keyWord: query,
+          status: 1
+        });
+        User.query(data).then(res => {
+          this.headList = res.data.list;
+        });
+      },
+      filterTallyClerk: function (query) {
+        let data = Object.assign({}, {
+          pageNo: 1,
+          pageSize: 20,
+          objectId: 'oms-system',
+          keyWord: query,
+          status: 1
+        });
+        User.query(data).then(res => {
+          let userList = res.data.list;
+          // 判断已选择的数据列表里是否存在
+          let userIdList = [];
+          userList.forEach(res => {
+            userIdList.push(res.id);
+          });
+          this.form.clerkDtoList.forEach(val => {
+            if (val.userId !== '') {
+              let index = userIdList.indexOf(val.userId);
+              if (index === -1 && val.userId) {
+                User.queryInfo(val.userId).then(res => {
+                  userList.push({id: val.userId, name: res.data.name});
+                });
               }
-            });
-            this.form.clerkDtoList = list;
-          }
-          // 若为三温车 校验区域信息
-          if (this.carInfo.type == 3) {
-            // 判断区域信息至少填写了一条数据，然后再判断承运单号下拉框里面
-            if (this.form.areaInfoList.some((val) => val.transportConditionId != '' && val.ids.length > 0)) {
-              // 获取勾选的运单号数量
-              let infoNum = this.acceptList.length
-              let num = 0
-              this.form.areaInfoList.forEach(item => {
-                num += item.ids.length
-              })
-              if (num != infoNum) {
+            }
+          });
+          this.tallyClerkList = userList;
+        });
+      },
+      getCarList: function (query) {
+        let data = {
+          keyword:query,
+          ascriptionCompany:'GO1',  // 国控生物公司
+        }
+        this.$http.post('/car-archives/queryCarByCondition',data).then(res=>{
+          console.log(res.data,'Car');
+          this.carList = res.data;
+        })
+      },
+      setCarInfo: function (id) {
+        if (id) {
+          this.carList.forEach(val => {
+            if (val.carDto.id === id) {
+              this.carInfo = val.carDto;
+              //若为三温车
+              if (val.carDto.type == 3) {
+                let arr = [
+                  {name: '车辆选择', key: 0},
+                  {name: '外勤客服信息', key: 1},
+                  {name: '派送信息', key: 2},
+                  {name: '区域信息', key: 3, showFlag: false},
+                ]
+                this.pageSets = arr
+                // 还要清空区域信息内容
+                let areaInfoList = [
+                  {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
+                  {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true},
+                  {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true},
+                ]
+                this.form.areaInfoList = areaInfoList
+              } else {
+                let arr = [
+                  {name: '车辆选择', key: 0},
+                  {name: '外勤客服信息', key: 1},
+                  {name: '派送信息', key: 2},
+                  {name: '区域信息', key: 3, showFlag: true},
+                ]
+                this.pageSets = arr
+              }
+            }
+          });
+        }
+      },
+      setDriverInfo: function (id) {
+        if (id) {
+          this.userList.forEach(val => {
+            if (id === val.driverId) {
+              this.form.driveId = val.driverId;
+              this.form.driverPhone = val.driverPhone;
+              this.form.jobNumber = val.jobNumber
+            }
+          });
+        }
+      },
+      save (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid && this.doing === false) {
+            // 处理外勤客服列表
+            if (this.form.clerkDtoList) {
+              let list = [];
+              this.form.clerkDtoList.forEach(val => {
+                if (val.userId !== '') {
+                  list.push(val);
+                }
+              });
+              this.form.clerkDtoList = list;
+            }
+             // 若为三温车 校验区域信息
+            if (this.carInfo.type == 3) {
+              // 判断区域信息至少填写了一条数据，然后再判断承运单号下拉框里面
+              if (this.form.areaInfoList.some((val) => val.transportConditionId != '' && val.ids.length > 0)) {
+                // 获取勾选的运单号数量
+                let infoNum = this.acceptList.length
+                let num = 0
+                this.form.areaInfoList.forEach(item => {
+                  num += item.ids.length
+                })
+                if (num != infoNum) {
+                  this.$notify.warning({
+                    message: '存在未分配区域的运单，请确认'  
+                  });
+                  return
+                }
+                // 判断
+                let flag = this.form.areaInfoList.every(item => {
+                  return item.isConsistent == true
+                })
+                if (flag) {
+                  this.sure()
+                } else {
+                  this.$confirm('已勾选运单运输条件与区域温度不一致，是否确认同运输?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                  }).then(() => {
+                    this.sure()
+                  })
+                }
+              } else {
                 this.$notify.warning({
-                  message: '存在未分配区域的运单，请确认'  
+                  message: '三温车必须填写一个及以上区域信息，请确认'
                 });
                 return
               }
-              // 判断
-              let flag = this.form.areaInfoList.every(item => {
-                return item.isConsistent == true
-              })
-              if (flag) {
-                this.sure()
-              } else {
-                this.$confirm('已勾选运单运输条件与区域温度不一致，是否确认同运输?', '提示', {
-                  confirmButtonText: '确定',
-                  cancelButtonText: '取消',
-                  type: 'warning'
-                }).then(() => {
-                  this.sure()
-                })
-              }
-            } else {
-              this.$notify.warning({
-                message: '三温车必须填写一个及以上区域信息，请确认'
-              });
-              return
-            }
           } else {
             //
             this.form.areaInfoList = []

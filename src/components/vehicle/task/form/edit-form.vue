@@ -34,7 +34,10 @@
                          :clearable="true" @change="setCarInfo(form.carId)"
                          v-model="form.carId" popperClass="good-selects" @clear="clearCarInfo">
                 <el-option :value="car.carDto.id" :key="car.carDto.id" :label="car.carDto.plateNumber"
-                           v-for="car in carList">
+                           v-for="car in carList" :disabled="car.carDto.carState == 6">
+                  <span style="float: left">{{ car.carDto.plateNumber }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">
+                   {{ carStatusList[car.carDto.carState || 0].title }}</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -60,14 +63,11 @@
               <el-form-item slot="left" label="司机" prop="driveId">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
                            :clearable="true" @change="setDriverInfo(form.driveId)"
-                           v-model="form.driveId" popperClass="good-selects">
-                  <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
-                    <div style="overflow: hidden">
-                      <span class="pull-left" style="clear: right">{{user.name}}</span>
-                      <span class="pull-right">
-                        {{user.companyDepartmentName}}
-                      </span>
-                    </div>
+                           v-model="form.driveId" popperClass="good-selects" @clear="clearDriveInfo">
+                  <el-option :value="user.driverId" :key="user.driverId" :label="user.driverName" v-for="user in userList" :disabled="user.driverStatus == 2">
+                    <span style="float: left">{{ user.driverName }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">
+                      {{ driverStatusFn(user.driverStatus) }}</span>
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -256,7 +256,25 @@ export default {
         list: [],
         times: [],
         carList: [],
-        carInfo: {},  // 当前车辆信息
+        // 车辆状态 1，运输、2：空闲、 3：维修 4：停用  5：报废 6: 异常  7: 即将超期
+        carStatusList: [
+          {title: '', status: ''},
+          {title: '运输', status: 1},
+          {title: '空闲', status: 2},
+          {title: '维修', status: 3},
+          {title: '停用', status: 4},
+          {title: '报废', status: 5},
+          {title: '异常', status: 6},
+          {title: '即将超期', status: 7}, 
+        ],
+        // 司机状态 // 0-停用；1-正常；2-异常；3-即将超期
+        driverStatus:[
+          { label:'停用',value:0,},
+          { label:'正常',value:1,},
+          { label:'异常',value:2,},
+          { label:'即将超期',value:3,},
+        ],
+        carInfo: {}, // 当前车辆信息
         form: {
           orderIdList: [],
           areaInfoList: [
@@ -412,6 +430,10 @@ export default {
           this.form.areaInfoList[index].isConsistent = true
         }
       },
+      // 司机状态回显
+      driverStatusFn(val){
+         return this.driverStatus.find(item=> item.value == val).label
+      },
       selectTab(item) {
         this.currentTab = item;
       },
@@ -449,7 +471,14 @@ export default {
         this.form.driveId = '';
         this.form.driverPhone = '';
         this.form.driverName = '';
+        this.form.jobNumber = '';
         this.carInfo = {};
+      },
+      clearDriveInfo: function () {
+        this.form.driveId = '';
+        this.form.driverName = '';
+        this.form.driverPhone = '';
+        this.form.jobNumber = ''
       },
       filterHead: function (query) {
         let data = Object.assign({}, {
@@ -468,20 +497,13 @@ export default {
         });
       },
       filterUser: function (query) {
-        let data = Object.assign({}, {
-          pageNo: 1,
-          pageSize: 20,
-          objectId: 'oms-system',
-          keyWord: query,
-          status: 1
-        });
-        User.query(data).then(res => {
-          if (res.data.list.length === 0) {
-            this.userList.push({id: this.form.driveId, name: this.form.driverName});
-          } else {
-            this.userList = res.data.list;
-          }
-        });
+        let data =Object.assign({},{
+          keyWord:query,
+          driverType:1,   // 自有司机
+        })
+        this.$http.post('/driver-info/queryOwnDriver',data).then(res=>{
+          this.userList = res.data
+        })
       },
       filterTallyClerk: function (query) {
         let data = Object.assign({}, {
@@ -512,12 +534,13 @@ export default {
         });
       },
       getCarList: function (query,flag) {
-        let param = Object.assign({}, {
-          keyword: query
-        });
-        CarArchives.query(param).then(res => {
-          this.carList = res.data.list;
-            if(flag){
+        let data = {
+          keyword:query,
+          ascriptionCompany:'GO1',  // 国控生物公司
+        }
+        this.$http.post('/car-archives/queryCarByCondition',data).then(res=>{
+          this.carList = res.data;
+          if(flag){
               this.carList.forEach(val => {
                 if (val.carDto.id === this.form.carId) {
                   this.carInfo = val.carDto;
@@ -531,7 +554,7 @@ export default {
                 this.$set(this.pageSets,3,temObj)
               }
             }
-        });  
+        })
       },
       setCarInfo: function (id) {
         if (id) {
@@ -580,10 +603,11 @@ export default {
       setDriverInfo: function (id) {
         if (id) {
           this.userList.forEach(val => {
-            if (val.id === id) {
-              this.form.driveId = val.id;
-              this.form.driverPhone = val.phone;
-              this.form.driverName = val.name;
+            if (id === val.driverId) {
+              this.form.driveId = val.driverId;
+              this.form.driverPhone = val.driverPhone;
+              this.form.driverName = val.driverName;
+              this.form.jobNumber = val.jobNumber
             }
           });
         }
