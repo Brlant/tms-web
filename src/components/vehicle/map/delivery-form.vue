@@ -551,7 +551,6 @@ export default {
           ascriptionCompany:'GO1',  // 国控生物公司
         }
         this.$http.post('/car-archives/queryCarByCondition',data).then(res=>{
-          console.log(res.data,'Car');
           this.carList = res.data;
         })
       },
@@ -634,6 +633,8 @@ export default {
                   return item.isConsistent == true
                 })
                 if (flag) {
+                  //三温车 需要清除掉运输条件
+                  this.form.transportConditionId = ''
                   this.sure()
                 } else {
                   this.$confirm('已勾选运单运输条件与区域温度不一致，是否确认同运输?', '提示', {
@@ -641,6 +642,8 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                   }).then(() => {
+                    //三温车 需要清除掉运输条件
+                    this.form.transportConditionId = ''
                     this.sure()
                   })
                 }
@@ -651,7 +654,7 @@ export default {
                 return
               }
           } else {
-            //
+            // 非三温车，需要清除区域信息
             this.form.areaInfoList = []
             this.sure()
           }

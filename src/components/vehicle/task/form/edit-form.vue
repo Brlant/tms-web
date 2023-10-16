@@ -327,17 +327,17 @@ export default {
         },
         deep: true
       },
-      carInfo: function (val) {
-        if (val) {
-          this.form.carPlateNumber = val.plateNumber;
-          if (val.defaultDriver) {
-            this.filterUser(val.defaultDriverName);
-            this.form.driveId = val.defaultDriver;
-          } else {
-            this.form.driveId = '';
-          }
-        }
-      },
+      // carInfo: function (val) {
+      //   if (val) {
+      //     this.form.carPlateNumber = val.plateNumber;
+      //     if (val.defaultDriver) {
+      //       this.filterUser(val.defaultDriverName);
+      //       this.form.driveId = val.defaultDriver;
+      //     } else {
+      //       this.form.driveId = '';
+      //     }
+      //   }
+      // },
       formItem: function (val) {
         if (val.id) {
           TransportTask.getOneTransportTask(val.id).then(res => {
@@ -646,6 +646,8 @@ export default {
                   return item.isConsistent == true
                 })
                 if (flag) {
+                  //三温车 需要清除掉运输条件
+                  this.form.transportConditionId = ''
                   this.sure()
                 } else {
                   this.$confirm('已勾选运单运输条件与区域温度不一致，是否确认同运输?', '提示', {
@@ -653,6 +655,8 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                   }).then(() => {
+                    //三温车 需要清除掉运输条件
+                    this.form.transportConditionId = ''
                     this.sure()
                   })
                 }
@@ -663,7 +667,7 @@ export default {
                 return
               }
             } else {
-              //
+              // 非三温车，需要清除区域信息
               this.form.areaInfoList = []
               this.sure()
             }
