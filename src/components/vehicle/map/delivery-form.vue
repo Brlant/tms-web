@@ -621,8 +621,14 @@ export default {
             }
              // 若为三温车 校验区域信息
             if (this.carInfo.type == 3) {
-              // 判断区域信息至少填写了一条数据，然后再判断承运单号下拉框里面
-              if (this.form.areaInfoList.some((val) => val.transportConditionId != '' && val.ids.length > 0)) {
+              // 判断区域信息至少填写了一条数据，然后再判断承运单号下拉框里面(有运单号就必须填写运输条件)
+              let flag = true
+              this.form.areaInfoList.forEach(item=>{
+                if(item.ids.length>0 && !item.transportConditionId){
+                  flag = false
+                }
+              })
+              if (flag) {
                 // 获取勾选的运单号数量
                 let infoNum = this.acceptList.length
                 let num = 0
