@@ -294,6 +294,7 @@ export default {
           driveId: '',
           driverPhone: '',
           jobNumber:'',
+          transportConditionId:'',
           head: '',
           orderIdList: [],
           clerkDtoList: [{userId: '', userPhone: ''}]
@@ -322,13 +323,15 @@ export default {
       transportationConditionList() {
         let arr = this.$getDict('transportationCondition');
         this.transportationConditionArr = JSON.parse(JSON.stringify(arr))
-        let array = arr.filter(item => {
+        let array = []
+        array = arr.filter(item => {
           return this.tackerList.find(prop => {
             return prop.shipmentWay == item.key
           })
         })
         // 若已勾选订单均为相同运输条件，则运输条件默认显示已选运单运输条件
         if (array.length == 1) {
+          console.log();
           this.form.transportConditionId = array[0].key
         }
         return array
@@ -343,6 +346,7 @@ export default {
             driverPhone: '',
             head: '',
             jobNumber:'',
+            transportConditionId:"",
             orderIdList: [],
             areaInfoList: [
               {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
@@ -351,6 +355,9 @@ export default {
             ],
             clerkDtoList: [{userId: '', userPhone: ''}]
           };
+          this.$nextTick(()=>{
+            this.$refs.form && this.$refs.form.clearValidate();
+          })
           this.acceptList = this.tackerList.map(item => item)
           this.carInfo = {};
           this.form.orderIdList = val;
