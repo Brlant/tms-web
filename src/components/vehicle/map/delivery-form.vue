@@ -644,7 +644,7 @@ export default {
                 return
               } else if (this.form.areaInfoList.some((val) => val.isAll == 2)){ // 存在填了一条完整的信息
                   // 获取勾选的运单号数量
-                let infoNum = this.waybillList.length
+                let infoNum = this.acceptList.length
                 let num = 0
                 this.form.areaInfoList.forEach(item => {
                   num += item.ids.length
