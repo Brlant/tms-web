@@ -30,7 +30,7 @@
           </div>
           <div class="content">
             <el-form-item label="运货车辆" prop="carId">
-              <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :remote-method="(query)=>{getCarList(query,false)}"
+              <el-select filterable remote placeholder="请输入车牌号搜索运货车辆" :disabled="form.status !=0 && form.status !=1" :remote-method="(query)=>{getCarList(query,false)}"
                          :clearable="true" @change="setCarInfo(form.carId)"
                          v-model="form.carId" popperClass="good-selects" @clear="clearCarInfo">
                 <el-option :value="car.carDto.id" :key="car.carDto.id" :label="car.carDto.plateNumber"
@@ -185,7 +185,7 @@
             </el-form-item>
             <two-column>
               <el-form-item slot="left" label="运输条件" prop="transportConditionId" v-if="carInfo.type != 3">
-                <el-select placeholder="请选择运输条件" v-model="form.transportConditionId">
+                <el-select placeholder="请选择运输条件" v-model="form.transportConditionId" :disabled="form.status !=0 && form.status !=1">
                   <el-option :label="item.label" :value="item.key" :key="item.key"
                              v-for="item in transportationConditionList"></el-option>
                 </el-select>
@@ -278,9 +278,9 @@ export default {
         form: {
           orderIdList: [],
           areaInfoList: [
-            {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
-            {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true},
-            {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true},
+            {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true,isAll:0},//isConsistent 运单号与榆树条件是否一致 isAll 代表运输条件与运单号是否填写 0都没填 1填了一个 2都填了
+            {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true,isAll:0},
+            {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true,isAll:0},
           ],
           tallyClerkDtoList: [{
             id: '',
@@ -345,6 +345,7 @@ export default {
             // 对区域信息数据进行处理，增加isConsistent字段  isConsistent是代表当前行字段是否存在已选择的承运单号的运输条件与当前行的运输条件是否一致
             if(res.data.areaInfoList.length !=0){
               res.data.areaInfoList.forEach(item=>{
+                  // 承运单号与属于条件是否一致
                   if(item.transportConditionId && item.ids.length !=0){
                     let transportConditionId = item.transportConditionId  // 获取当前行的运输条件
                     let arr = this.waybillList.filter(i => item.ids.includes(i.id))  // 获取当前行承运单号的所有信息列表
@@ -358,6 +359,14 @@ export default {
                     }
                   }else{
                     item.isConsistent = true
+                  }
+                  // 运输条件和承运单号是否有值判断
+                  if(!item.transportConditionId && item.ids.length == 0){  // 0
+                    item.isAll = 0
+                  } else if(item.transportConditionId && item.ids.length > 0){  // 2
+                    item.isAll = 2
+                  } else {
+                    item.isAll = 1
                   }
               })
             }
@@ -396,9 +405,9 @@ export default {
     methods: {
       // 区域信息-承运单号
       areaWaybillNumber(val, index) {
+        let transportConditionId = this.form.areaInfoList[index].transportConditionId  // 获取当前行的运输条件
         // 先判断当前行的运输条件是否存在
-        if (this.form.areaInfoList[index].transportConditionId) {
-          let transportConditionId = this.form.areaInfoList[index].transportConditionId  // 获取当前行的运输条件
+        if (transportConditionId) {
           let arr = this.waybillList.filter(item => val.includes(item.id))
           if (arr.length != 0) {
             let flag = arr.every(item => {
@@ -411,12 +420,20 @@ export default {
         } else {  // 不存在直接置为true
           this.form.areaInfoList[index].isConsistent = true
         }
+        // 
+        if(!transportConditionId && val.length == 0){
+          this.form.areaInfoList[index].isAll = 0
+        }else if(transportConditionId && val.length > 0){
+          this.form.areaInfoList[index].isAll = 2
+        }else {
+          this.form.areaInfoList[index].isAll = 1
+        }
       },
       // 区域信息-运输条件
       areaTransport(val, index) {
+        let ids = this.form.areaInfoList[index].ids  // 获取当前行的承运单号
         // 先判断当前行的承运单号是否存在
-        if (this.form.areaInfoList[index].ids.length != 0) {
-          let ids = this.form.areaInfoList[index].ids  // 获取当前行的承运单号
+        if (ids.length != 0) {
           let arr = this.waybillList.filter(item => ids.includes(item.id))
           if (arr.length != 0) {
             let flag = arr.every(item => {
@@ -428,6 +445,14 @@ export default {
           }
         } else {
           this.form.areaInfoList[index].isConsistent = true
+        }
+        // 
+        if(!val && ids.length == 0){
+          this.form.areaInfoList[index].isAll = 0
+        }else if(val && ids.length > 0){
+          this.form.areaInfoList[index].isAll = 2
+        }else {
+          this.form.areaInfoList[index].isAll = 1
         }
       },
       // 司机状态回显
@@ -572,9 +597,9 @@ export default {
                 this.pageSets = arr
                 // 还要清空区域信息内容
                 let areaInfoList = [
-                  {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true},
-                  {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true},
-                  {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true},
+                  {areaName: 'A区', transportConditionId: '', ids: [], isConsistent: true,isAll:0},
+                  {areaName: 'B区', transportConditionId: '', ids: [], isConsistent: true,isAll:0},
+                  {areaName: 'C区', transportConditionId: '', ids: [], isConsistent: true,isAll:0},
                 ]
                 this.form.areaInfoList = areaInfoList
               } else {
@@ -627,15 +652,13 @@ export default {
             }
             // 若为三温车 校验区域信息？
             if (this.carInfo.type == 3) {
-              let flag = true
-              this.form.areaInfoList.forEach(item=>{
-                if(item.ids.length>0 && !item.transportConditionId){
-                  flag = false
-                }
-              })
-              // 判断区域信息至少填写了一条数据，然后再判断承运单号下拉框里面(有运单号就必须填写运输条件)
-              if (flag) {
-                // 获取勾选的运单号数量
+              if (this.form.areaInfoList.some((val) => val.isAll == 1)) {  // 存在填了一条未完整的信息
+                this.$notify.warning({
+                  message: '启用区域时必选运输条件及运单号，请确认'
+                });
+                return
+              } else if (this.form.areaInfoList.some((val) => val.isAll == 2)){ // 存在填了一条完整的信息
+                  // 获取勾选的运单号数量
                 let infoNum = this.waybillList.length
                 let num = 0
                 this.form.areaInfoList.forEach(item => {
@@ -666,12 +689,57 @@ export default {
                     this.sure()
                   })
                 }
-              } else {
+              } else {  // 一条的信息都没填
                 this.$notify.warning({
                   message: '三温车必须填写一个及以上区域信息，请确认'
                 });
                 return
               }
+              // let flag = true
+              // this.form.areaInfoList.forEach(item=>{
+              //   if(item.ids.length>0 && !item.transportConditionId){
+              //     flag = false
+              //   }
+              // })
+              // // 判断区域信息至少填写了一条数据，然后再判断承运单号下拉框里面(有运单号就必须填写运输条件)
+              // if (flag) {
+              //   // 获取勾选的运单号数量
+              //   let infoNum = this.waybillList.length
+              //   let num = 0
+              //   this.form.areaInfoList.forEach(item => {
+              //     num += item.ids.length
+              //   })
+              //   if (num != infoNum) {
+              //     this.$notify.warning({
+              //       message: '存在未分配区域的运单，请确认'  
+              //     });
+              //     return
+              //   }
+              //   // 判断
+              //   let flag = this.form.areaInfoList.every(item => {
+              //     return item.isConsistent == true
+              //   })
+              //   if (flag) {
+              //     //三温车 需要清除掉运输条件
+              //     this.form.transportConditionId = ''
+              //     this.sure()
+              //   } else {
+              //     this.$confirm('已勾选运单运输条件与区域温度不一致，是否确认同运输?', '提示', {
+              //       confirmButtonText: '确定',
+              //       cancelButtonText: '取消',
+              //       type: 'warning'
+              //     }).then(() => {
+              //       //三温车 需要清除掉运输条件
+              //       this.form.transportConditionId = ''
+              //       this.sure()
+              //     })
+              //   }
+              // } else {
+              //   this.$notify.warning({
+              //     message: '三温车必须填写一个及以上区域信息，请确认'
+              //   });
+              //   return
+              // }
             } else {
               // 非三温车，需要清除区域信息
               this.form.areaInfoList = []
