@@ -325,7 +325,7 @@ $labelWidth: 180px;
               {{ form.signPerson }}
             </el-form-item>
             <el-form-item label="附件:">
-              <oms-upload :fileList="attachmentList" @change="changeFiles"
+              <oms-upload :fileList="attachmentList" 
                           :formData="{ objectId: form.id, objectType: 'waybill'}"></oms-upload>
             </el-form-item>
           </div>
@@ -885,12 +885,19 @@ export default {
     changeFiles: function (fileList) {
       let ids = [];
       fileList.forEach(file => {
-        ids.push(file.attachmentId);
+        if(file.attachmentId){
+          ids.push(file.attachmentId);
+        }
       });
-      this.form.attachmentIdList = ids;
-      // 绑定附件
-      TmsWayBill.update(this.form.id, {attachmentIdList: ids}).then(res => {
-      });
+      // if(ids.length){
+        this.form.attachmentIdList = ids;
+        // 绑定附件
+        TmsWayBill.update(this.form.id, {attachmentIdList: ids}).then(res => {
+          console.log('1111');
+        }).catch(()=>{
+          console.log('222222');
+        })
+      // }
     },
     selectTab(item) {
       this.currentTab = item;
