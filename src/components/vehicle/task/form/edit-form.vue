@@ -206,7 +206,7 @@
               </el-table-column>
               <el-table-column prop="transportConditionId" label="运输条件" width="180">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.transportConditionId" placeholder="请选择..." clearable 
+                  <el-select v-model="scope.row.transportConditionId" placeholder="请选择..." clearable  :disabled="form.status !=0 && form.status !=1"
                              @change="areaTransport(scope.row.transportConditionId, scope.$index)">
                     <el-option :label="item.label" :value="item.key" :key="item.key"
                                v-for="item in transportationConditionList"></el-option>
@@ -215,7 +215,7 @@
               </el-table-column>
               <el-table-column prop="ids" label="承运单号">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.ids" placeholder="请选择..." multiple
+                  <el-select v-model="scope.row.ids" placeholder="请选择..." multiple  :disabled="form.status !=0 && form.status !=1"
                              @change="areaWaybillNumber(scope.row.ids, scope.$index)">
                     <el-option :label="item.waybillNumber" :value="item.id" :key="item.id"
                                v-for="(item, index) in waybillList" :disabled="item.disabled">
