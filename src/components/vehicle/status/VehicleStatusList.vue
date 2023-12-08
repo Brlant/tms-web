@@ -124,13 +124,13 @@
         <el-table-column prop="lastUpdateBy" label="最后更新人"/>
         <el-table-column label="状态">
           <template v-slot="{row}">
-            {{ statusList[row.carState].title }}
+            {{ row.carStateName }}
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template v-slot="{row,$index}">
             <el-button type="text"
-              @click="viewTransDetails(row)">
+                       @click="viewTransDetails(row)">
               <i class="el-icon-t-detail">运输记录详情</i>
             </el-button>
           </template>
@@ -280,7 +280,14 @@ export default {
       VehicleArchives.query(this.listParams)
         .then(res => {
           const {list, count, totalPage} = res.data;
-          this.list = list.map(item => item.carDto);
+          this.list = list.map(item => {
+            let carDto = item.carDto
+            let carState = carDto.carState;
+            let carStateName = this.statusList.find(s => s.status === carState).title || '';
+            carDto.carStateName = carStateName
+
+            return carDto;
+          });
           this.page.count = count;
           this.updateCount(count);
           this.getCount();
